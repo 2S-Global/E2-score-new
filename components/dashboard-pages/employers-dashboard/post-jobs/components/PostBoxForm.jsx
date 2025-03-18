@@ -141,45 +141,45 @@ const PostBoxForm = () => {
 
         {/* <!-- Input --> */}
         <div className="form-group col-lg-12 col-md-12">
-  <label>Job Expiry Date</label>
-  <div className="d-flex gap-3">
-    {/* Day Dropdown */}
-    <select className="form-select" name="expiryDay">
-      <option value="">Day</option>
-      {[...Array(31).keys()].map((day) => (
-        <option key={day + 1} value={day + 1}>
-          {day + 1}
-        </option>
-      ))}
-    </select>
+          <label>Job Expiry Date</label>
+          <div className="d-flex gap-3">
+            {/* Day Dropdown */}
+            <select className="form-select" name="expiryDay">
+              <option value="">Day</option>
+              {[...Array(31).keys()].map((day) => (
+                <option key={day + 1} value={day + 1}>
+                  {day + 1}
+                </option>
+              ))}
+            </select>
 
-    {/* Month Dropdown */}
-    <select className="form-select" name="expiryMonth">
-      <option value="">Month</option>
-      {[
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-      ].map((month, index) => (
-        <option key={index + 1} value={index + 1}>
-          {month}
-        </option>
-      ))}
-    </select>
+            {/* Month Dropdown */}
+            <select className="form-select" name="expiryMonth">
+              <option value="">Month</option>
+              {[
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+              ].map((month, index) => (
+                <option key={index + 1} value={index + 1}>
+                  {month}
+                </option>
+              ))}
+            </select>
 
-    {/* Year Dropdown */}
-    <select className="form-select" name="expiryYear">
-      <option value="">Year</option>
-      {[...Array(10).keys()].map((i) => {
-        const year = new Date().getFullYear() + i; // Current year + 10 years ahead
-        return (
-          <option key={year} value={year}>
-            {year}
-          </option>
-        );
-      })}
-    </select>
-  </div>
-</div>
+            {/* Year Dropdown */}
+            <select className="form-select" name="expiryYear">
+              <option value="">Year</option>
+              {[...Array(10).keys()].map((i) => {
+                const year = new Date().getFullYear() + i; // Current year + 10 years ahead
+                return (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+        </div>
 
 
         {/* <!-- Input --> */}
@@ -216,8 +216,22 @@ const PostBoxForm = () => {
           />
         </div>
 
-       
-{/* 
+        {/* brance dropdown */}
+        <div className="form-group col-lg-6 col-md-12">
+          <label>Branch</label>
+          <select className="chosen-single form-select">
+            <option>Select</option>
+            <option>Melbourne Branch</option>
+            <option>Sydney Branch</option>
+            <option>Brisbane Branch</option>
+            <option>Canberra Branch</option>
+          </select>
+        </div>
+
+
+
+
+        {/* 
         <div className="form-group col-lg-3 col-md-12">
           <label>Latitude</label>
           <input type="text" name="name" placeholder="Melbourne" />
