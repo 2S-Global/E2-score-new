@@ -221,10 +221,11 @@ const PostBoxForm = () => {
           <label>Branch</label>
           <select className="chosen-single form-select">
             <option>Select</option>
-            <option>Melbourne Branch</option>
-            <option>Sydney Branch</option>
-            <option>Brisbane Branch</option>
-            <option>Canberra Branch</option>
+            <option>Kolkata Branch</option>
+            <option>Mumbai Branch</option>
+            <option>Delhi Branch</option>
+
+
           </select>
         </div>
 

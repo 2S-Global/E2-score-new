@@ -19,6 +19,7 @@ import MenuToggler from "../../MenuToggler";
 /* component */
 import AccountBox from "./components/account";
 import KycBox from "./components/KycBox";
+import BranchBox from "./components/brance";
 
 const CompanyProfile = () => {
     const [activeTab, setActiveTab] = useState("profile"); // Default active tab
@@ -35,7 +36,7 @@ const CompanyProfile = () => {
         pincode: "122002",
         gstin: "29ABCDE1234F1Z5",
     };
-    
+
 
 
 
@@ -63,7 +64,7 @@ const CompanyProfile = () => {
 
                     {/* Tabs Navigation */}
                     <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-                
+
                         <button
                             style={{
                                 padding: "10px 15px",
@@ -106,7 +107,7 @@ const CompanyProfile = () => {
                             onClick={() => setActiveTab("kyc")}
                         >
                             KYC
-                            </button>
+                        </button>
                         <button
                             style={{
                                 padding: "10px 15px",
@@ -121,7 +122,24 @@ const CompanyProfile = () => {
                         >
                             Social Network
                         </button>
-                   {/*      <button
+
+                        <button
+                            style={{
+                                padding: "10px 15px",
+                                border: "none",
+                                background: activeTab === "brance" ? "#007bff" : "#eee",
+                                color: activeTab === "brance" ? "white" : "black",
+                                cursor: "pointer",
+                                transition: "0.3s",
+                                fontWeight: "bold",
+                            }}
+                            onClick={() => setActiveTab("brance")}
+                        >
+                            Branch
+                        </button>
+
+
+                        {/*      <button
                             style={{
                                 padding: "10px 15px",
                                 border: "none",
@@ -142,7 +160,7 @@ const CompanyProfile = () => {
                         <div className="col-lg-12">
                             <div className="ls-widget">
                                 <div className="tabs-box">
-                              
+
                                     {activeTab === "profile" && (
                                         <div>
                                             <div className="widget-title">
@@ -151,15 +169,15 @@ const CompanyProfile = () => {
                                             <MyProfile />
                                         </div>
                                     )}
-                                    
+
                                     {activeTab === "kyc" && (
                                         <div>
                                             <div className="widget-title">
                                                 <h4>KYC</h4>
-                                                
+
                                             </div>
                                             <div className="widget-content">
-                                                <KycBox companyDetails={companyDetails}/>
+                                                <KycBox companyDetails={companyDetails} />
                                             </div>
                                         </div>
                                     )}
@@ -175,13 +193,13 @@ const CompanyProfile = () => {
                                         </div>
                                     )}
 
-                                {activeTab === "account" && (
+                                    {activeTab === "account" && (
                                         <div>
                                             <div className="widget-title">
                                                 <h4>Account Details</h4>
                                             </div>
                                             <div className="widget-content">
-                                            <AccountBox />
+                                                <AccountBox />
                                             </div>
                                         </div>
                                     )}
@@ -194,6 +212,13 @@ const CompanyProfile = () => {
                                             <div className="widget-content">
                                                 <ContactInfoBox />
                                             </div>
+                                        </div>
+                                    )}
+
+
+                                    {activeTab === "brance" && (
+                                        <div>
+                                            <BranchBox />
                                         </div>
                                     )}
                                 </div>
