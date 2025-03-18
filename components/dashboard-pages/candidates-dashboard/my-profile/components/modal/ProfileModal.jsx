@@ -21,7 +21,7 @@ const ProfileModal = ({ show, onClose }) => {
 
             {/* Modal Header */}
             <div className="modal-header">
-              <h5 className="modal-title">Online profiles
+              <h5 className="modal-title">Online profiles From Github
               </h5>
               <button type="button" className="btn-close" onClick={onClose}></button>
             </div>
