@@ -1,0 +1,156 @@
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+@import "~bootstrap/scss/bootstrap";
+@import "public/scss/main.scss";
+
+.stepper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.step {
+  position: relative;
+  flex: 1;
+  background: #8c82fc;
+  color: white;
+  padding: 15px 30px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%);
+  transition: 0.3s;
+}
+
+/* 2nd, 3rd, and 4th steps - Add left arrow */
+.step:nth-child(n+2) {
+  clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%, 5% 50%);
+}
+
+/* Last step remains the same */
+.step:last-child {
+  clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%, 5% 50%);
+}
+
+.step.active {
+  background: #5dd5c4;
+}
+
+.step-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.step-icon {
+  width: 35px;
+  height: 35px;
+  background: white;
+  color: #5dd5c4;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.step.active .step-icon {
+  background: white;
+  color: #5dd5c4;
+}
+
+.step-label {
+  color: white;
+}
+
+.step:not(.active) {
+  opacity: 0.6;
+}
+
+::placeholder {
+  color: #c7c5c5 !important;
+  font-size: 15px !important;
+}
+
+
+
+.user-sidebar .navigation li a {
+  padding: 10px 25px;
+  text-decoration: none;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.resume-container {
+  padding: 20px;
+  border-radius: 8px;
+  background: #f9f9f9;
+  text-align: left;
+}
+
+.resume-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.resume-details {
+  margin-top: 10px;
+}
+
+.resume-file {
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.upload-date {
+  color: gray;
+  font-size: 14px;
+}
+
+.resume-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.resume-actions a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+}
+
+.upload-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.upload-container {
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+
+.upload-input {
+  display: none;
+}
+
+.upload-label {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #007bff;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+}

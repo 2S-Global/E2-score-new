@@ -1,0 +1,121 @@
+import React, { useState } from "react";
+import { Sparkles } from "lucide-react"; // AI suggestion icon
+import "bootstrap/dist/css/bootstrap.min.css";
+
+const ResumeHeadline = ({ show, onClose }) => {
+  const [headline, setHeadline] = useState("");
+  const [isGenerated, setIsGenerated] = useState(false); // Track button presses
+
+  if (!show) return null;
+
+  const handleGenerateHeadline = () => {
+    if (isGenerated) {
+      setHeadline(""); // Clear text if pressed again
+      setIsGenerated(false);
+    } else {
+      setHeadline("Experienced Software Developer skilled in React, Node.js, and system design.");
+      setIsGenerated(true);
+    }
+  };
+
+  return (
+    <>
+      <style>
+        {`
+          .custom-textarea::placeholder {
+            color: #c7c5c5!important;
+            font-size: 15px !important;
+          }
+
+          .suggestion-btn {
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background-color: #e8f0fe;
+            color: #1a73e8;
+            border-radius: 20px;
+            padding: 6px 12px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+          }
+
+          .suggestion-btn:hover {
+            background-color: #d2e3fc;
+          }
+
+          .suggestion-btn svg {
+            width: 16px;
+            height: 16px;
+          }
+        `}
+      </style>
+
+      <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            
+            {/* Modal Header */}
+            <div className="modal-header">
+              <h5 className="modal-title">Resume Headline</h5>
+              <button type="button" className="btn-close" onClick={onClose}></button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="modal-body">
+              <p style={{ color: 'black' }}>
+                It is the first thing recruiters notice in your profile. Write a concise headline introducing yourself to employers. (Minimum 5 words)
+              </p>
+
+              {/* Textarea Input with AI Button */}
+              <div className="mb-3 position-relative">
+                <textarea
+                  className="form-control custom-textarea"
+                  placeholder="Minimum 5 words. Sample headlines: Sales Manager well versed in Excel and Dynamics CRM. Senior-level Interior Designer with expertise in 3D modeling."
+                  value={headline}
+                  onChange={(e) => {
+                    setHeadline(e.target.value);
+                    setIsGenerated(false); // Reset when user types
+                  }}
+                  maxLength={250}
+                  style={{ height: "100px", paddingBottom: "40px" }} 
+                />
+
+                {/* "Help me write" AI Suggestion Button */}
+                <button className="suggestion-btn" onClick={handleGenerateHeadline}>
+                  <Sparkles />
+                  {isGenerated ? "Clear" : "Help me write"}
+                </button>
+
+                <small className="text-muted d-block text-end">
+                  {250 - headline.length} character(s) left
+                </small>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" onClick={onClose}>
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                disabled={headline.trim().split(" ").length < 5}
+              >
+                Save
+              </button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default ResumeHeadline;
