@@ -4,19 +4,21 @@ import { useRouter } from "next/navigation";
 
 const Profilepic = ({ show, onClose, imageSrc }) => {
   const [selectedImage, setSelectedImage] = useState(imageSrc || "/default-profile.png");
-  const [file, setFile] = useState < File | null > (null);
-  const [error, setError] = useState < string | null > (null);
-  const [success, setSuccess] = useState < string | null > (null);
+  const [file, setFile] = useState(null);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [token, setToken] = useState < string | null > (null);
+
 
   const router = useRouter();
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
-  // Fetch token on component mount
-  useEffect(() => {
-    setToken(localStorage.getItem("token"));
-  }, []);
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.log("No token");
+
+  }
+
 
   // Handle file selection
   const handleFileChange = (event) => {
@@ -25,6 +27,9 @@ const Profilepic = ({ show, onClose, imageSrc }) => {
       const imageUrl = URL.createObjectURL(file);
       setSelectedImage(imageUrl);
       setFile(file);
+
+      // Revoke object URL on component unmount to prevent memory leaks
+      return () => URL.revokeObjectURL(imageUrl);
     }
   };
 
@@ -37,7 +42,6 @@ const Profilepic = ({ show, onClose, imageSrc }) => {
 
     if (!token) {
       setError("Authorization token is missing. Please log in.");
-      //  router.push("/login");
       return;
     }
 
@@ -62,6 +66,7 @@ const Profilepic = ({ show, onClose, imageSrc }) => {
       setLoading(false);
     }
   };
+  console.log(error);
 
   return (
     <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
@@ -99,7 +104,7 @@ const Profilepic = ({ show, onClose, imageSrc }) => {
                 onChange={handleFileChange}
               />
               <button className="btn btn-danger" onClick={() => {
-                setSelectedImage("/images/resource/default-profile.png");
+                setSelectedImage("/default-profile.png");
                 setFile(null);
               }}>
                 Delete Photo
@@ -127,6 +132,7 @@ const Profilepic = ({ show, onClose, imageSrc }) => {
       </div>
     </div>
   );
+
 };
 
 export default Profilepic;
