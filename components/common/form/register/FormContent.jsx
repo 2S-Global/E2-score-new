@@ -1,17 +1,69 @@
+import React, { useState } from "react";
+import axios from "axios";
+
 const FormContent = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  console.log("API URL:", apiurl);
+
+
+  // Handle input changes
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      const response = await axios.post(`${apiurl}/api/users/register`, formData);
+      console.log("Response:", response.data);
+      setSuccess("Registration successful!");
+    } catch (err) {
+      console.error("Error:", err.response?.data || err.message);
+      setError(err.response?.data?.message || "Registration failed. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <form method="post" action="add-parcel.html">
-      
+    <form onSubmit={handleSubmit}>
       <div className="form-group">
         <label>Full Name</label>
-        <input type="text" name="name" placeholder="Name" required />
+        <input
+          type="text"
+          name="name"
+          placeholder="Name"
+          required
+          value={formData.name}
+          onChange={handleChange}
+        />
       </div>
-      {/* name */}
+
       <div className="form-group">
         <label>Email Address</label>
-        <input type="email" name="username" placeholder="Username" required />
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter your email address"
+          required
+          value={formData.email}
+          onChange={handleChange}
+        />
       </div>
-      {/* Email */}
 
       <div className="form-group">
         <label>Password</label>
@@ -20,16 +72,20 @@ const FormContent = () => {
           type="password"
           name="password"
           placeholder="Password"
+          required
+          value={formData.password}
+          onChange={handleChange}
         />
       </div>
-      {/* password */}
+
+      {error && <p className="text-danger">{error}</p>}
+      {success && <p className="text-success">{success}</p>}
 
       <div className="form-group">
-        <button className="theme-btn btn-style-one" type="submit">
-          Register
+        <button className="theme-btn btn-style-one" type="submit" disabled={loading}>
+          {loading ? "Registering..." : "Register"}
         </button>
       </div>
-      {/* login */}
     </form>
   );
 };
