@@ -8,7 +8,7 @@ const CircularProgress = ({ progress, imageSrc }) => {
   const openModalRH = () => setIsModalOpen(true);
   const closeModalRH = () => setIsModalOpen(false);
 
-  const radius = 95; // Increased radius
+  const radius = 100; // Increased radius
   const strokeWidth = 10;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (progress / 100) * circumference;
@@ -45,7 +45,7 @@ const CircularProgress = ({ progress, imageSrc }) => {
         {/* Profile Image with Hover Effect & Click to Open Modal */}
         <div
           className="position-absolute top-50 start-50 translate-middle border border-white shadow-lg rounded-circle overflow-hidden"
-          style={{ width: "150px", height: "150px", cursor: "pointer" }}
+          style={{ width: "110px", height: "110px", cursor: "pointer" }}
           onClick={openModalRH}
         >
           <img src={imageSrc || "/images/resource/candidate-1.png"} alt="Profile" className="w-100 h-100 object-cover" />
