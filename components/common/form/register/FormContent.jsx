@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useRouter } from 'next/navigation';
 
 const FormContent = () => {
   const [formData, setFormData] = useState({
@@ -10,7 +11,8 @@ const FormContent = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-
+  const [token, setToken] = useState(null);
+  const router = useRouter();
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   console.log("API URL:", apiurl);
 
@@ -29,8 +31,35 @@ const FormContent = () => {
 
     try {
       const response = await axios.post(`${apiurl}/api/users/register`, formData);
-      console.log("Response:", response.data);
+      console.log("Response:", response);
       setSuccess("Registration successful!");
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+
+      //close the modal
+      // Close the modal manually
+      const modal = document.getElementById("loginPopupModal");
+      if (modal) {
+        modal.classList.remove("show");
+        modal.style.display = "none";
+      }
+
+      // Remove the modal backdrop if it exists
+      document.querySelectorAll(".modal-backdrop").forEach((backdrop) => {
+        backdrop.remove();
+      });
+
+      // Enable scrolling if Bootstrap disabled it
+      document.body.classList.remove("modal-open");
+      document.body.style.overflow = "auto";
+
+
+
+      router.push('/candidates-dashboard/dashboard');
+
+
+
+
     } catch (err) {
       console.error("Error:", err.response?.data || err.message);
       setError(err.response?.data?.message || "Registration failed. Try again.");

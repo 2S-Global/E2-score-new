@@ -35,7 +35,7 @@ const Index = () => {
           <BreadCrumb title="Hello, Abhishek!!" />
           {/* breadCrumb */}
           {/* Score  section*/}
-          <ScoreSection/>
+          <ScoreSection />
 
           <MenuToggler />
           {/* Collapsible sidebar button */}
