@@ -3,44 +3,99 @@
 import Link from "next/link";
 import LoginWithSocial from "./LoginWithSocial";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import React, { useState } from "react";
 
 const FormContent = () => {
   const router = useRouter();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
-  const handleLogin = (path) => {
-    // Close the modal manually
-    const modal = document.getElementById("loginPopupModal");
-    if (modal) {
-      modal.classList.remove("show");
-      modal.style.display = "none";
-    }
-
-    // Remove the modal backdrop if it exists
-    document.querySelectorAll(".modal-backdrop").forEach((backdrop) => {
-      backdrop.remove();
-    });
-
-    // Enable scrolling if Bootstrap disabled it
-    document.body.classList.remove("modal-open");
-    document.body.style.overflow = "auto";
-
-    // Navigate after closing modal
-    router.push(path);
+  // Handle input changes
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      const response = await axios.post(`${apiurl}/api/users/login`, formData);
+      console.log("Response:", response);
+      setSuccess("Log In successful!");
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+
+      //close the modal
+      // Close the modal manually
+      const modal = document.getElementById("loginPopupModal");
+      if (modal) {
+        modal.classList.remove("show");
+        modal.style.display = "none";
+      }
+
+      // Remove the modal backdrop if it exists
+      document.querySelectorAll(".modal-backdrop").forEach((backdrop) => {
+        backdrop.remove();
+      });
+
+      // Enable scrolling if Bootstrap disabled it
+      document.body.classList.remove("modal-open");
+      document.body.style.overflow = "auto";
+
+
+
+      router.push('/candidates-dashboard/dashboard');
+
+
+
+
+    } catch (err) {
+      console.error("Error:", err.response?.data || err.message);
+      setError(err.response?.data?.message || "Registration failed. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <div className="form-inner">
       <h3>Login to E²-Score</h3>
 
-      <form method="post">
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Username</label>
-          <input type="text" name="username" placeholder="Username" required />
+          <label>Email Address</label>
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email address"
+            required
+            value={formData.email}
+            onChange={handleChange}
+          />
         </div>
 
         <div className="form-group">
           <label>Password</label>
-          <input type="password" name="password" placeholder="Password" required />
+          <input
+            id="password-field"
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            value={formData.password}
+            onChange={handleChange}
+          />
         </div>
 
         <div className="form-group">
@@ -56,6 +111,13 @@ const FormContent = () => {
         </div>
 
         <div className="form-group">
+          <button className="theme-btn btn-style-one" type="submit" disabled={loading}>
+            {loading ? "Logging..." : "Log in"}
+          </button>
+        </div>
+
+
+        {/* <div className="form-group">
           <button
             className="theme-btn btn-style-one"
             type="button"
@@ -71,7 +133,8 @@ const FormContent = () => {
           >
             Log In (as Employer)
           </button>
-        </div>
+        </div> */}
+
       </form>
 
       <div className="bottom-box">

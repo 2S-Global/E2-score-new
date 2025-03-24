@@ -28,9 +28,8 @@ const DashboardCandidatesHeader = () => {
     return (
         // <!-- Main Header-->
         <header
-            className={`main-header header-shaddow  ${
-                navbar ? "fixed-header " : ""
-            }`}
+            className={`main-header header-shaddow  ${navbar ? "fixed-header " : ""
+                }`}
         >
             <div className="container-fluid">
                 {/* <!-- Main box --> */}
@@ -90,14 +89,13 @@ const DashboardCandidatesHeader = () => {
                             <ul className="dropdown-menu">
                                 {candidatesMenuData.map((item) => (
                                     <li
-                                        className={`${
-                                            isActiveLink(
-                                                item.routePath,
-                                                usePathname()
-                                            )
-                                                ? "active"
-                                                : ""
-                                        } mb-1`}
+                                        className={`${isActiveLink(
+                                            item.routePath,
+                                            usePathname()
+                                        )
+                                            ? "active"
+                                            : ""
+                                            } mb-1`}
                                         key={item.id}
                                     >
                                         <Link href={item.routePath}>

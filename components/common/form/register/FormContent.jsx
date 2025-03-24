@@ -11,17 +11,12 @@ const FormContent = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [token, setToken] = useState(null);
   const router = useRouter();
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
-  console.log("API URL:", apiurl);
-
-
   // Handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
