@@ -26,7 +26,7 @@ const ProfileCard = ({ name, degree, university, location, phone, email, gender,
         <div className="">
           <h4 className="fw-bold mb-1 d-flex align-items-center">
             {name} &nbsp;
-            <span style={{ fontSize: "15px", fontWeight: "normal", lineHeight: "1.5", verticalAlign: "middle" }}>
+            <span style={{ fontSize: "15px", fontWeight: "normal", lineHeight: "1.5", verticalAlign: "middle", paddingTop: "2px" }}>
               ({gender}) &nbsp;
             </span>
             <i className="la la-pencil-alt fs-5" onClick={openModalRH} style={{ cursor: "pointer" }}></i>
