@@ -2,16 +2,16 @@
 
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Sparkles } from "lucide-react"; 
+import { Sparkles } from "lucide-react";
 
 const EmploymentModal = ({ show, onClose }) => {
   const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState("");
   const [error, setError] = useState("");
   const [description, setDescription] = useState("");
-   const [isGenerated, setIsGenerated] = useState(false); // Track button presses
-  
-   const handleGenerateHeadline = () => {
+  const [isGenerated, setIsGenerated] = useState(false); // Track button presses
+
+  const handleGenerateHeadline = () => {
     if (isGenerated) {
       setDescription(""); // Clear text if pressed again
       setIsGenerated(false);
@@ -52,8 +52,8 @@ const EmploymentModal = ({ show, onClose }) => {
   if (!show) return null;
 
   return (<>
-   <style>
-{`
+    <style>
+      {`
   .custom-textarea::placeholder {
     color: #c7c5c5!important;
     font-size: 15px !important;
@@ -86,7 +86,7 @@ const EmploymentModal = ({ show, onClose }) => {
             height: 16px;
           }
 `}
-</style>
+    </style>
     <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
@@ -109,188 +109,188 @@ const EmploymentModal = ({ show, onClose }) => {
               ))}
             </div>
             <form>
-               
-                <div className="mb-3">
-  <label className="form-label">Is this your current employment?</label>
-  
-  <div className="d-flex align-items-center gap-3">
-    <div className="form-check">
-      <input 
-        className="form-check-input" 
-        type="radio" 
-        name="currentEmployment" 
-        id="currentYes" 
-        value="yes" 
-      />
-      <label className="form-check-label" htmlFor="currentYes">
-        Yes
-      </label>
-    </div>
 
-    <div className="form-check">
-      <input 
-        className="form-check-input" 
-        type="radio" 
-        name="currentEmployment" 
-        id="currentNo" 
-        value="no" 
-      />
-      <label className="form-check-label" htmlFor="currentNo">
-        No
-      </label>
-    </div>
-  </div>
-</div>
+              <div className="mb-3">
+                <label className="form-label">Is this your current employment?</label>
 
-<div className="mb-3">
-  <label className="form-label">Employment type</label>
-  
-  <div className="d-flex align-items-center gap-3">
-    <div className="form-check">
-      <input 
-        className="form-check-input" 
-        type="radio" 
-        name="currentEmployment" 
-        id="currentYes" 
-        value="yes" 
-      />
-      <label className="form-check-label" htmlFor="currentYes">
-        Full Time
-      </label>
-    </div>
+                <div className="d-flex align-items-center gap-3">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="currentEmployment"
+                      id="currentYes"
+                      value="yes"
+                    />
+                    <label className="form-check-label" htmlFor="currentYes">
+                      Yes
+                    </label>
+                  </div>
 
-    <div className="form-check">
-      <input 
-        className="form-check-input" 
-        type="radio" 
-        name="currentEmployment" 
-        id="currentNo" 
-        value="no" 
-      />
-      <label className="form-check-label" htmlFor="currentNo">
-        Part Time
-      </label>
-    </div>
-  </div>
-</div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="currentEmployment"
+                      id="currentNo"
+                      value="no"
+                    />
+                    <label className="form-check-label" htmlFor="currentNo">
+                      No
+                    </label>
+                  </div>
+                </div>
+              </div>
 
-{/* total Experience year and month drop down */}
-<div className="mb-3">
-  <label className="form-label">Total Experience</label>
+              <div className="mb-3">
+                <label className="form-label">Employment type</label>
 
-  <div className="d-flex gap-3">
-    {/* Years Dropdown */}
-    <select className="form-select" name="experienceYears">
-      <option value="">Years</option>
-      {[...Array(50).keys()].map((year) => (
-        <option key={year} value={year}>{year} {year === 1 ? "Year" : "Years"}</option>
-      ))}
-    </select>
+                <div className="d-flex align-items-center gap-3">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="currentEmployment"
+                      id="currentYes"
+                      value="yes"
+                    />
+                    <label className="form-check-label" htmlFor="currentYes">
+                      Full Time
+                    </label>
+                  </div>
 
-    {/* Months Dropdown */}
-    <select className="form-select" name="experienceMonths">
-      <option value="">Months</option>
-      {[...Array(12).keys()].map((month) => (
-        <option key={month} value={month}>{month} {month === 1 ? "Month" : "Months"}</option>
-      ))}
-    </select>
-  </div>
-</div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="currentEmployment"
+                      id="currentNo"
+                      value="no"
+                    />
+                    <label className="form-check-label" htmlFor="currentNo">
+                      Part Time
+                    </label>
+                  </div>
+                </div>
+              </div>
 
-{/* Company name */}
-<div className="mb-3">
-  <label className="form-label">Company name</label>
-  <input type="text" className="form-control custom-textarea" placeholder="Enter your company name" />
-</div>
-{/* Job Title */}
-<div className="mb-3">
-  <label className="form-label">Job title</label>
-  <input type="text" className="form-control custom-textarea" placeholder="Enter your job title" />
-</div>
+              {/* total Experience year and month drop down */}
+              <div className="mb-3">
+                <label className="form-label">Total Experience</label>
 
-{/* Joining Date*/}
-<div className="mb-3">
-  <label className="form-label">Joining Date</label>
-  
-  <div className="d-flex gap-3">
-    {/* Years Dropdown (2000 - 2025) */}
-    <select className="form-select" name="joiningYears">
-      <option value="">Year</option>
-      {[...Array(26).keys()].map((i) => {
-        const year = 2000 + i;
-        return (
-          <option key={year} value={year}>
-            {year}
-          </option>
-        );
-      })}
-    </select>
+                <div className="d-flex gap-3">
+                  {/* Years Dropdown */}
+                  <select className="form-select" name="experienceYears">
+                    <option value="">Years</option>
+                    {[...Array(50).keys()].map((year) => (
+                      <option key={year} value={year}>{year} {year === 1 ? "Year" : "Years"}</option>
+                    ))}
+                  </select>
 
-    {/* Months Dropdown (Jan - Dec) */}
-    <select className="form-select" name="joiningMonths">
-      <option value="">Month</option>
-      {[
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-      ].map((month, index) => (
-        <option key={index + 1} value={index + 1}>
-          {month}
-        </option>
-      ))}
-    </select>
-  </div>
-</div>
-{/* Worked till */}
-<div className="mb-3">
-  <label className="form-label">Joining Date</label>
-  
-  <div className="d-flex gap-3">
-    {/* Years Dropdown (2000 - 2025) */}
-    <select className="form-select" name="joiningYears">
-      <option value="">Year</option>
-      {[...Array(26).keys()].map((i) => {
-        const year = 2000 + i;
-        return (
-          <option key={year} value={year}>
-            {year}
-          </option>
-        );
-      })}
-    </select>
+                  {/* Months Dropdown */}
+                  <select className="form-select" name="experienceMonths">
+                    <option value="">Months</option>
+                    {[...Array(12).keys()].map((month) => (
+                      <option key={month} value={month}>{month} {month === 1 ? "Month" : "Months"}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
 
-    {/* Months Dropdown (Jan - Dec) */}
-    <select className="form-select" name="joiningMonths">
-      <option value="">Month</option>
-      {[
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-      ].map((month, index) => (
-        <option key={index + 1} value={index + 1}>
-          {month}
-        </option>
-      ))}
-    </select>
-  </div>
-</div>
-{/* Job profile */}
-<div className="mb-3">
-  <label className="form-label">Job profile</label>
-  <textarea className="form-control" 
-  value={description}
-  onChange={(e) => {
-    setDescription(e.target.value);
-    setIsGenerated(false); // Reset when user types
-  }}
-  
-  
-  rows="3" placeholder="Enter your job profile" />
+              {/* Company name */}
+              <div className="mb-3">
+                <label className="form-label">Company name</label>
+                <input type="text" className="form-control custom-textarea" placeholder="Enter your company name" />
+              </div>
+              {/* Job Title */}
+              <div className="mb-3">
+                <label className="form-label">Job title</label>
+                <input type="text" className="form-control custom-textarea" placeholder="Enter your job title" />
+              </div>
 
-  {/* "Help me write" AI Suggestion Button */}
-                  <button type="button" className="suggestion-btn" onClick={handleGenerateHeadline}>
-                    <Sparkles />
-                    {isGenerated ? "Clear" : "Help me write"}
-                  </button>
-</div>
+              {/* Joining Date*/}
+              <div className="mb-3">
+                <label className="form-label">Joining Date</label>
+
+                <div className="d-flex gap-3">
+                  {/* Years Dropdown (2000 - 2025) */}
+                  <select className="form-select" name="joiningYears">
+                    <option value="">Year</option>
+                    {[...Array(26).keys()].map((i) => {
+                      const year = 2000 + i;
+                      return (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      );
+                    })}
+                  </select>
+
+                  {/* Months Dropdown (Jan - Dec) */}
+                  <select className="form-select" name="joiningMonths">
+                    <option value="">Month</option>
+                    {[
+                      "January", "February", "March", "April", "May", "June",
+                      "July", "August", "September", "October", "November", "December"
+                    ].map((month, index) => (
+                      <option key={index + 1} value={index + 1}>
+                        {month}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              {/* Worked till */}
+              <div className="mb-3">
+                <label className="form-label">Leaving Date</label>
+
+                <div className="d-flex gap-3">
+                  {/* Years Dropdown (2000 - 2025) */}
+                  <select className="form-select" name="joiningYears">
+                    <option value="">Year</option>
+                    {[...Array(26).keys()].map((i) => {
+                      const year = 2000 + i;
+                      return (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      );
+                    })}
+                  </select>
+
+                  {/* Months Dropdown (Jan - Dec) */}
+                  <select className="form-select" name="joiningMonths">
+                    <option value="">Month</option>
+                    {[
+                      "January", "February", "March", "April", "May", "June",
+                      "July", "August", "September", "October", "November", "December"
+                    ].map((month, index) => (
+                      <option key={index + 1} value={index + 1}>
+                        {month}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              {/* Job profile */}
+              <div className="mb-3">
+                <label className="form-label">Job profile</label>
+                <textarea className="form-control"
+                  value={description}
+                  onChange={(e) => {
+                    setDescription(e.target.value);
+                    setIsGenerated(false); // Reset when user types
+                  }}
+
+
+                  rows="3" placeholder="Enter your job profile" />
+
+                {/* "Help me write" AI Suggestion Button */}
+                <button type="button" className="suggestion-btn" onClick={handleGenerateHeadline}>
+                  <Sparkles />
+                  {isGenerated ? "Clear" : "Help me write"}
+                </button>
+              </div>
 
 
 
@@ -299,7 +299,7 @@ const EmploymentModal = ({ show, onClose }) => {
 
             </form>
 
-            
+
           </div>
 
           {/* Footer Buttons */}
@@ -310,7 +310,7 @@ const EmploymentModal = ({ show, onClose }) => {
         </div>
       </div>
     </div>
-    </>
+  </>
   );
 };
 
