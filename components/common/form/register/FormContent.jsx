@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from 'next/navigation';
-
+//new component
+import MessageComponent from "../../ResponseMsg";
 const FormContent = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -27,36 +28,15 @@ const FormContent = () => {
     try {
       const response = await axios.post(`${apiurl}/api/users/register`, formData);
       console.log("Response:", response);
+      //check if response is successful
+      if (response.status !== 200) {
+        throw new Error(response.data.message || "An error occurred");
+      }
       setSuccess("Registration successful!");
       const token = response.data.token;
       localStorage.setItem('token', token);
-
-      //close the modal
-      // Close the modal manually
-      const modal = document.getElementById("loginPopupModal");
-      if (modal) {
-        modal.classList.remove("show");
-        modal.style.display = "none";
-      }
-
-      // Remove the modal backdrop if it exists
-      document.querySelectorAll(".modal-backdrop").forEach((backdrop) => {
-        backdrop.remove();
-      });
-
-      // Enable scrolling if Bootstrap disabled it
-      document.body.classList.remove("modal-open");
-      document.body.style.overflow = "auto";
-
-
-
       router.push('/candidates-dashboard/dashboard');
-
-
-
-
     } catch (err) {
-      console.error("Error:", err.response?.data || err.message);
       setError(err.response?.data?.message || "Registration failed. Try again.");
     } finally {
       setLoading(false);
@@ -65,6 +45,9 @@ const FormContent = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+      {/* display error */}
+      <MessageComponent error={error} success={success} />
+
       <div className="form-group">
         <label>Full Name</label>
         <input
@@ -102,8 +85,8 @@ const FormContent = () => {
         />
       </div>
 
-      {error && <p className="text-danger">{error}</p>}
-      {success && <p className="text-success">{success}</p>}
+      {/*  {error && <p className="text-danger">{error}</p>}
+      {success && <p className="text-success">{success}</p>} */}
 
       <div className="form-group">
         <button className="theme-btn btn-style-one" type="submit" disabled={loading}>
