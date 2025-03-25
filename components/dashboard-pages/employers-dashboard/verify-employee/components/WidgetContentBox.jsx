@@ -54,10 +54,6 @@ const WidgetContentBox = () => {
                 <option value="other">Other</option>
               </select>
             </div>
-
-
-
-
           </div>
           <div className="row">
             {/* Full Name Input */}
