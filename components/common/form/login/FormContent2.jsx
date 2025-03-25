@@ -36,7 +36,7 @@ const FormContent2 = () => {
       const response = await axios.post(`${apiurl}/api/auth/login`, formData);
 
       //check if response is successful
-      if (response.status !== 200) {
+      if (!response.data.success) {
         throw new Error(response.data.message || "An error occurred");
       }
       setSuccess("Log In successful!");
