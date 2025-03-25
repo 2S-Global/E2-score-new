@@ -77,10 +77,22 @@ const WidgetContentBox = () => {
                 className="form-control"
               />
             </div>
-            {/* Phone no */}
+            {/* pan */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-              <label>Phone Number</label>
-              <input type="number" name="name" placeholder="Enter Employee Name" className="form-control" />
+              <label htmlFor={`upload-pan`}>Upload PAN</label>
+              <div className="uploadButton d-flex align-items-center">
+                <input
+                  className="uploadButton-input"
+                  type="file"
+                  name={`pan-attachment`}
+                  accept="image/*"
+                  id={`upload-pan`}
+                  required
+                />
+                <label className="uploadButton-button ripple-effect" htmlFor={`upload-pan`}>
+                  {`Browse Pan..`}
+                </label>
+              </div>
             </div>
 
           </div>
