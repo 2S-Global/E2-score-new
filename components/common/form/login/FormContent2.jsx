@@ -1,27 +1,108 @@
+"use client";
 import Link from "next/link";
 import LoginWithSocial from "./LoginWithSocial";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import React, { useState } from "react";
 
+
+//new component
+import MessageComponent from "../../ResponseMsg";
 const FormContent2 = () => {
+
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+
+  // Handle input changes
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      const response = await axios.post(`${apiurl}/api/users/login`, formData);
+      console.log("Response:", response);
+      //check if response is successful
+      if (response.status !== 200) {
+        throw new Error(response.data.message || "An error occurred");
+      }
+      setSuccess("Log In successful!");
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+
+      //close the modal
+      // Close the modal manually
+      const modal = document.getElementById("loginPopupModal");
+      if (modal) {
+        modal.classList.remove("show");
+        modal.style.display = "none";
+      }
+
+      // Remove the modal backdrop if it exists
+      document.querySelectorAll(".modal-backdrop").forEach((backdrop) => {
+        backdrop.remove();
+      });
+
+      // Enable scrolling if Bootstrap disabled it
+      document.body.classList.remove("modal-open");
+      document.body.style.overflow = "auto";
+
+
+
+      router.push('/candidates-dashboard/dashboard');
+
+
+
+
+    } catch (err) {
+      setError(err.response?.data?.message || "Registration failed. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="form-inner">
       <h3>Login to E²-Score</h3>
-
+      <MessageComponent error={error} success={success} />
       {/* <!--Login Form--> */}
-      <form method="post">
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Username</label>
-          <input type="text" name="username" placeholder="Username" required />
+          <label>Email Address</label>
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email address"
+            required
+            value={formData.email}
+            onChange={handleChange}
+          />
         </div>
         {/* name */}
 
         <div className="form-group">
           <label>Password</label>
           <input
+            id="password-field"
             type="password"
             name="password"
             placeholder="Password"
             required
+            value={formData.password}
+            onChange={handleChange}
           />
         </div>
         {/* password */}
@@ -41,13 +122,10 @@ const FormContent2 = () => {
         </div>
         {/* forgot password */}
 
+
         <div className="form-group">
-          <button
-            className="theme-btn btn-style-one"
-            type="submit"
-            name="log-in"
-          >
-            Log In
+          <button className="theme-btn btn-style-one" type="submit" disabled={loading}>
+            {loading ? "Logging..." : "Log in"}
           </button>
         </div>
         {/* login */}
