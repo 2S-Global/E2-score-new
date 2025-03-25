@@ -27,13 +27,68 @@ const WidgetContentBox = () => {
                 className="form-control"
               />
             </div>
-
-            {/* Submit Button */}
-            <div className="form-group col-lg-12 d-flex justify-content-start mt-3">
-              <button type="submit" className="theme-btn btn-style-one">
-                Save
-              </button>
+            {/* Phone no */}
+            <div className="form-group col-lg-6 col-md-12 d-flex flex-column">
+              <label>Phone Number</label>
+              <input type="number" name="name" placeholder="Enter Employee Name" className="form-control" />
             </div>
+            {/* Email */}
+            <div className="form-group col-lg-6 col-md-12 d-flex flex-column">
+              <label>Email</label>
+              <input type="email" name="name" placeholder="Enter Employee Email" className="form-control" />
+            </div>
+            {/* Address */}
+            <div className="form-group col-lg-6 col-md-12 d-flex flex-column">
+              <label>Address</label>
+              <input type="text" name="address" placeholder="Enter Employee Address" className="form-control" />
+            </div>
+            {/* Gender */}
+            <div className="form-group col-lg-6 col-md-12 d-flex flex-column">
+              <label htmlFor="gender">Gender</label>
+              <select className="form-control" id="gender" name="gender">
+                <option value="">
+                  Select Gender
+                </option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+
+
+
+          </div>
+          <div className="row">
+            {/* Full Name Input */}
+            <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
+              <label>Full Name</label>
+              <input type="text" name="name" placeholder="Enter Employee Name" className="form-control" />
+            </div>
+
+            {/* Date of Birth Input with Date Picker */}
+            <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
+              <label>Date of Birth</label>
+              <DatePicker
+                selected={dob}
+                onChange={(date) => setDob(date)}
+                placeholderText="Select Date of Birth"
+                dateFormat="dd/MM/yyyy"
+                className="form-control"
+              />
+            </div>
+            {/* Phone no */}
+            <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
+              <label>Phone Number</label>
+              <input type="number" name="name" placeholder="Enter Employee Name" className="form-control" />
+            </div>
+
+          </div>
+          {/* Submit Button */}
+          <div className="form-group col-lg-12 d-flex justify-content-start mt-3">
+            <button type="submit" className="theme-btn btn-style-one">
+              Save
+            </button>
           </div>
         </form>
       </div>
