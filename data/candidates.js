@@ -309,7 +309,7 @@ module.exports = [
     {
         id: 18,
         avatar: "/images/resource/candidate-1.png",
-        name: "Darlene Robertson",
+        name: "Abhishek Dey",
         designation: "Ui Designer",
         location: "London, UK",
         hourlyRate: "44",
