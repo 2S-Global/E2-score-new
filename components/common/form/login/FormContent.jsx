@@ -32,40 +32,26 @@ const FormContent = () => {
     setSuccess(null);
 
     try {
-      const response = await axios.post(`${apiurl}/api/users/login`, formData);
-      console.log("Response:", response);
+      const response = await axios.post(`${apiurl}/api/auth/login`, formData);
+
       //check if response is successful
       if (response.status !== 200) {
         throw new Error(response.data.message || "An error occurred");
       }
       setSuccess("Log In successful!");
       const token = response.data.token;
-      localStorage.setItem('token', token);
+      const role = response.data.role;
 
-      //close the modal
-      // Close the modal manually
-      const modal = document.getElementById("loginPopupModal");
-      if (modal) {
-        modal.classList.remove("show");
-        modal.style.display = "none";
+
+      //save token to local storage
+      if (role == "1") {
+        localStorage.setItem('token', token);
+        router.push('/candidates-dashboard/dashboard');
       }
-
-      // Remove the modal backdrop if it exists
-      document.querySelectorAll(".modal-backdrop").forEach((backdrop) => {
-        backdrop.remove();
-      });
-
-      // Enable scrolling if Bootstrap disabled it
-      document.body.classList.remove("modal-open");
-      document.body.style.overflow = "auto";
-
-
-
-      router.push('/candidates-dashboard/dashboard');
-
-
-
-
+      else if (role == "2") {
+        localStorage.setItem('Admin_token', token);
+        router.push('/employers-dashboard/dashboard');
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed. Try again.");
     } finally {

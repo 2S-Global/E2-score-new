@@ -31,7 +31,7 @@ const FormContentcom = () => {
     setSuccess(null);
 
     try {
-      const response = await axios.post(`${apiurl}/api/users/company-register`, formData);
+      const response = await axios.post(`${apiurl}/api/auth/company-register`, formData);
       console.log("Response:", response);
       //check if response is successful
       if (response.status !== 200) {

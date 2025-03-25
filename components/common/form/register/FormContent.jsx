@@ -26,7 +26,7 @@ const FormContent = () => {
     setSuccess(null);
 
     try {
-      const response = await axios.post(`${apiurl}/api/users/register`, formData);
+      const response = await axios.post(`${apiurl}/api/auth/register`, formData);
       console.log("Response:", response);
       //check if response is successful
       if (response.status !== 200) {
