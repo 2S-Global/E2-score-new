@@ -1,13 +1,13 @@
 "use client";
 import dynamic from "next/dynamic";
-import ShortlistedResumes from "@/components/dashboard-pages/employers-dashboard/shortlisted-resumes";
+import Verifyemployee from "@/components/dashboard-pages/employers-dashboard/verify-employee";
 
 
 
 const index = () => {
     return (
         <>
-            <ShortlistedResumes />
+            <Verifyemployee />
         </>
     );
 };
