@@ -1,8 +1,22 @@
+"use client";
+
+
 import FormContent2 from "../../common/form/login/FormContent2";
 import MobileMenu from "../../header/MobileMenu";
 import Header from "./Header";
+import { useEffect } from "react";
+import FormContent from "../../common/form/login/FormContent";
+const Index = () => {
+  useEffect(() => {
+    // Disable scrolling
+    document.body.style.overflow = "hidden";
 
-const index = () => {
+    return () => {
+      // Enable scrolling when component unmounts
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
   return (
     <>
       <Header />
@@ -19,7 +33,7 @@ const index = () => {
         <div className="outer-box">
           {/* <!-- Login Form --> */}
           <div className="login-form default-form">
-            <FormContent2 />
+            <FormContent />
           </div>
           {/* <!--End Login Form --> */}
         </div>
@@ -29,4 +43,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

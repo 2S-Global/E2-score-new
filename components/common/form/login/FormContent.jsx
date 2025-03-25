@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import React, { useState } from "react";
 
+//new component
+import MessageComponent from "../../ResponseMsg";
+
 const FormContent = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -31,6 +34,10 @@ const FormContent = () => {
     try {
       const response = await axios.post(`${apiurl}/api/users/login`, formData);
       console.log("Response:", response);
+      //check if response is successful
+      if (response.status !== 200) {
+        throw new Error(response.data.message || "An error occurred");
+      }
       setSuccess("Log In successful!");
       const token = response.data.token;
       localStorage.setItem('token', token);
@@ -60,7 +67,6 @@ const FormContent = () => {
 
 
     } catch (err) {
-      console.error("Error:", err.response?.data || err.message);
       setError(err.response?.data?.message || "Registration failed. Try again.");
     } finally {
       setLoading(false);
@@ -71,6 +77,9 @@ const FormContent = () => {
   return (
     <div className="form-inner">
       <h3>Login to E²-Score</h3>
+      {/* display error */}
+      <MessageComponent error={error} success={success} />
+
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
