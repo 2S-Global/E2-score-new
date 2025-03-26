@@ -3,9 +3,15 @@ import React from "react";
 const DocumentUpload = ({ label, name, fileId }) => {
     return (
         <div className="row">
+            {/* headeing */}
+            <div className="col-lg-12 col-md-12">
+                <h3 className="text-center mb-4" style={{ textDecoration: "underline" }}>
+                    {label}
+                </h3>
+            </div>
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
                 <label>{label}</label>
-                <input type="text" name={name} placeholder={`Enter ${label} Name`} className="form-control" />
+                <input type="text" name={name} placeholder={`Enter Name on ${label}`} className="form-control" />
             </div>
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
                 <label>{label} Number</label>

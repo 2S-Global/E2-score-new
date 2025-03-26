@@ -13,13 +13,18 @@ const WidgetContentBox = () => {
       <div className="row">
         <form className="default-form">
           <div className="row">
+            <div className="col-lg-12 col-md-12">
+              <h3 className="text-center mb-4" style={{ textDecoration: "underline" }}>
+                Personal Details
+              </h3>
+            </div>
             {/* Full Name Input */}
-            <div className="form-group col-lg-6 col-md-12 d-flex flex-column">
+            <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
               <label>Full Name</label>
               <input type="text" name="name" placeholder="Enter Employee Name" className="form-control" />
             </div>
             {/* Date of Birth Input with Date Picker */}
-            <div className="form-group col-lg-6 col-md-12 d-flex flex-column">
+            <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
               <label>Date of Birth</label>
               <DatePicker
                 selected={dob}
@@ -30,22 +35,22 @@ const WidgetContentBox = () => {
               />
             </div>
             {/* Phone no */}
-            <div className="form-group col-lg-6 col-md-12 d-flex flex-column">
+            <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
               <label>Phone Number</label>
               <input type="number" name="name" placeholder="Enter Employee Name" className="form-control" />
             </div>
             {/* Email */}
-            <div className="form-group col-lg-6 col-md-12 d-flex flex-column">
+            <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
               <label>Email</label>
               <input type="email" name="name" placeholder="Enter Employee Email" className="form-control" />
             </div>
             {/* Address */}
-            <div className="form-group col-lg-6 col-md-12 d-flex flex-column">
+            <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
               <label>Address</label>
               <input type="text" name="address" placeholder="Enter Employee Address" className="form-control" />
             </div>
             {/* Gender */}
-            <div className="form-group col-lg-6 col-md-12 d-flex flex-column">
+            <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
               <label htmlFor="gender">Gender</label>
               <select className="form-control" id="gender" name="gender">
                 <option value="">
@@ -61,7 +66,7 @@ const WidgetContentBox = () => {
           <DocumentUpload label="Aadhaar" name="aadhaar" placeholder="Enter Employee Name" fileId="upload-aadhaar" />
           <DocumentUpload label="Voter ID" name="voter" placeholder="Enter Employee Name" fileId="upload-voter" />
           <DocumentUpload label="Driving License" name="license" placeholder="Enter Employee Name" fileId="upload-license" />
-          <DocumentUpload label="Passport" name="passport" placeholder="Enter Employee Name" fileId="upload-passport" />
+          <DocumentUpload label="Passport File" name="passport" placeholder="Enter Employee Name" fileId="upload-passport" />
 
 
 
