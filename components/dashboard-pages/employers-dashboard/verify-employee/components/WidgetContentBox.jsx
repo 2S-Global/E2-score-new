@@ -1,83 +1,152 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import axios from "axios";
 import DocumentUpload from "./document";
 
+import { format } from "date-fns"; // Import from date-fns
 
 const WidgetContentBox = () => {
-  const [dob, setDob] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    dob: null,
+    phone: "",
+    email: "",
+    address: "",
+    gender: "",
+    panname: "",
+    aadhaarname: "",
+    votername: "",
+    licensename: "",
+    passportname: "",
+    pannumber: "",
+    aadhaarnumber: "",
+    voternumber: "",
+    licensenumber: "",
+    passportnumber: "",
+    pandoc: null,
+    aadhaardoc: null,
+    voterdoc: null,
+    licensenumdoc: null,
+    passportdoc: null,
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleDateChange = (date) => {
+    if (date) {
+      const formattedDate = format(date, "dd/MM/yyyy"); // Convert to "dd/MM/yyyy"
+      setFormData({ ...formData, dob: formattedDate });
+    }
+  };
+
+  const handleFileChange = (docType, file) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [`${docType}doc`]: file || null, // Ensure null when file is removed
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formDataToSend = new FormData();
+    Object.keys(formData).forEach((key) => {
+      if (formData[key] instanceof File) {
+        formDataToSend.append(key, formData[key]);
+      } else if (formData[key]) {
+        formDataToSend.append(key, formData[key]);
+      }
+    });
+
+    formDataToSend.forEach((value, key) => {
+      console.log(key, value);
+    });
+
+    /* try {
+      const response = await axios.post("YOUR_API_ENDPOINT", formDataToSend, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      console.log("Form submitted successfully:", response.data);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } */
+  };
 
   return (
     <div className="widget-content">
       <div className="row">
-        <form className="default-form">
+        <form className="default-form" onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-lg-12 col-md-12">
               <h3 className="text-center mb-4" style={{ textDecoration: "underline" }}>
                 Personal Details
               </h3>
             </div>
-            {/* Full Name Input */}
+
+            {/* Full Name */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
               <label>Full Name</label>
-              <input type="text" name="name" placeholder="Enter Employee Name" className="form-control" />
+              <input type="text" name="name" className="form-control" value={formData.name} onChange={handleChange} />
             </div>
-            {/* Date of Birth Input with Date Picker */}
+
+            {/* Date of Birth */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
               <label>Date of Birth</label>
-              <DatePicker
-                selected={dob}
-                onChange={(date) => setDob(date)}
-                placeholderText="Select Date of Birth"
-                dateFormat="dd/MM/yyyy"
-                className="form-control"
-              />
+              <DatePicker selected={formData.dob} onChange={handleDateChange} dateFormat="dd/MM/yyyy" className="form-control" />
             </div>
-            {/* Phone no */}
+
+            {/* Phone Number */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
               <label>Phone Number</label>
-              <input type="number" name="name" placeholder="Enter Employee Name" className="form-control" />
+              <input type="number" name="phone" className="form-control" value={formData.phone} onChange={handleChange} />
             </div>
+
             {/* Email */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
               <label>Email</label>
-              <input type="email" name="name" placeholder="Enter Employee Email" className="form-control" />
+              <input type="email" name="email" className="form-control" value={formData.email} onChange={handleChange} />
             </div>
+
             {/* Address */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
               <label>Address</label>
-              <input type="text" name="address" placeholder="Enter Employee Address" className="form-control" />
+              <input type="text" name="address" className="form-control" value={formData.address} onChange={handleChange} />
             </div>
+
             {/* Gender */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-              <label htmlFor="gender">Gender</label>
-              <select className="form-control" id="gender" name="gender">
-                <option value="">
-                  Select Gender
-                </option>
+              <label>Gender</label>
+              <select className="form-control" name="gender" value={formData.gender} onChange={handleChange}>
+                <option value="">Select Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
               </select>
             </div>
           </div>
-          <DocumentUpload label="PAN" name="pan" placeholder="Enter Employee Name" fileId="upload-pan" />
-          <DocumentUpload label="Aadhaar" name="aadhaar" placeholder="Enter Employee Name" fileId="upload-aadhaar" />
-          <DocumentUpload label="Voter ID" name="voter" placeholder="Enter Employee Name" fileId="upload-voter" />
-          <DocumentUpload label="Driving License" name="license" placeholder="Enter Employee Name" fileId="upload-license" />
-          <DocumentUpload label="Passport File" name="passport" placeholder="Enter Employee Name" fileId="upload-passport" />
 
-
-
-
-
-
+          {/* Document Uploads */}
+          <DocumentUpload label="PAN" name="pan" fileId="upload-pan"
+            valuename={formData.panname} numbername={formData.pannumber}
+            onFileChange={handleFileChange} onfieldChange={handleChange} />
+          <DocumentUpload label="Aadhaar" name="aadhaar" fileId="upload-aadhaar"
+            valuename={formData.aadhaarname} numbername={formData.aadhaarnumber}
+            onFileChange={handleFileChange} onfieldChange={handleChange} />
+          <DocumentUpload label="Voter ID" name="voter" fileId="upload-voter"
+            valuename={formData.votername} numbername={formData.voternumber}
+            onFileChange={handleFileChange} onfieldChange={handleChange} />
+          <DocumentUpload label="Driving License" name="license" fileId="upload-license"
+            valuename={formData.licensename} numbername={formData.licensenumber}
+            onFileChange={handleFileChange} onfieldChange={handleChange} />
+          <DocumentUpload label="Passport" name="passport" fileId="upload-passport"
+            valuename={formData.passportname} numbername={formData.passportnumber}
+            onFileChange={handleFileChange} onfieldChange={handleChange} />
           {/* Submit Button */}
           <div className="form-group col-lg-12 d-flex justify-content-start mt-3">
-            <button type="submit" className="theme-btn btn-style-one">
-              Save
-            </button>
+            <button type="submit" className="theme-btn btn-style-one">Save</button>
           </div>
         </form>
       </div>

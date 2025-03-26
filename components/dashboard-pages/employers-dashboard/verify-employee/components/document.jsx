@@ -1,28 +1,76 @@
-import React from "react";
+import React, { useState } from "react";
 
-const DocumentUpload = ({ label, name, fileId }) => {
+const DocumentUpload = ({ label, name, fileId, onFileChange,
+    valuename, numbername, onfieldChange
+}) => {
+    const [documentData, setDocumentData] = useState({
+        docName: "",
+        docNumber: "",
+        file: null,
+        filePreview: null,
+    });
+    const handleFileSelect = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const fileURL = URL.createObjectURL(file);
+            setDocumentData({
+                ...documentData,
+                file,
+                filePreview: fileURL,
+            });
+
+            if (onFileChange) {
+                onFileChange(name, file);
+            }
+        }
+    };
     return (
         <div className="row">
-            {/* headeing */}
+            {/* Heading */}
             <div className="col-lg-12 col-md-12">
                 <h3 className="text-center mb-4" style={{ textDecoration: "underline" }}>
                     {label}
                 </h3>
             </div>
+
+            {/* Name Input */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-                <label>{label}</label>
-                <input type="text" name={name} placeholder={`Enter Name on ${label}`} className="form-control" />
+                <label>{label} Name</label>
+                <input type="text" name={`${name}name`} placeholder={`Enter Name on ${label}`} className="form-control"
+                    value={valuename} onChange={onfieldChange} />
             </div>
+
+            {/* Document Number Input */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
                 <label>{label} Number</label>
-                <input type="text" name={`${name}-number`} placeholder={`Enter ${label} Number`} className="form-control" />
+                <input type="text" name={`${name}number`} placeholder={`Enter ${label} Number`} className="form-control"
+                    value={numbername} onChange={onfieldChange} />
             </div>
+
+            {/* File Upload */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
                 <label htmlFor={fileId}>Upload {label}</label>
                 <div className="uploadButton d-flex align-items-center">
-                    <input className="uploadButton-input" type="file" name={`${name}-attachment`} accept="image/*" id={fileId} required />
-                    <label className="uploadButton-button ripple-effect" htmlFor={fileId} style={{ width: "100%", height: "60px" }}>
-                        Browse {label}..
+                    <input
+                        className="uploadButton-input"
+                        type="file"
+                        name="file"
+                        accept="image/*,application/pdf"
+                        id={fileId}
+                        onChange={handleFileSelect}
+                    />
+                    <label
+                        className="uploadButton-button ripple-effect"
+                        htmlFor={fileId}
+                        style={{ width: "100%", height: "60px", cursor: "pointer" }}
+                    >
+                        {documentData.file ? (
+                            <span onClick={() => window.open(documentData.filePreview, "_blank")}>
+                                {documentData.file.name}
+                            </span>
+                        ) : (
+                            `Browse ${label}..`
+                        )}
                     </label>
                 </div>
             </div>
