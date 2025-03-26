@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import ShortlistedResumes from "@/components/dashboard-pages/employers-dashboard/list-verified-employee";
+import ShortlistedResumes from "@/components/dashboard-pages/employers-dashboard/list-verified-employee/details";
 
 
 
