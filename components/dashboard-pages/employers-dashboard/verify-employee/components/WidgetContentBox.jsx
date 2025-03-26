@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import DocumentUpload from "./document";
+
+
 const WidgetContentBox = () => {
   const [dob, setDob] = useState(null);
 
@@ -15,7 +18,6 @@ const WidgetContentBox = () => {
               <label>Full Name</label>
               <input type="text" name="name" placeholder="Enter Employee Name" className="form-control" />
             </div>
-
             {/* Date of Birth Input with Date Picker */}
             <div className="form-group col-lg-6 col-md-12 d-flex flex-column">
               <label>Date of Birth</label>
@@ -55,43 +57,17 @@ const WidgetContentBox = () => {
               </select>
             </div>
           </div>
-          <div className="row">
-            {/* Full Name Input */}
-            <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-              <label>Full Name</label>
-              <input type="text" name="name" placeholder="Enter Employee Name" className="form-control" />
-            </div>
+          <DocumentUpload label="PAN" name="pan" placeholder="Enter Employee Name" fileId="upload-pan" />
+          <DocumentUpload label="Aadhaar" name="aadhaar" placeholder="Enter Employee Name" fileId="upload-aadhaar" />
+          <DocumentUpload label="Voter ID" name="voter" placeholder="Enter Employee Name" fileId="upload-voter" />
+          <DocumentUpload label="Driving License" name="license" placeholder="Enter Employee Name" fileId="upload-license" />
+          <DocumentUpload label="Passport" name="passport" placeholder="Enter Employee Name" fileId="upload-passport" />
 
-            {/* Date of Birth Input with Date Picker */}
-            <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-              <label>Date of Birth</label>
-              <DatePicker
-                selected={dob}
-                onChange={(date) => setDob(date)}
-                placeholderText="Select Date of Birth"
-                dateFormat="dd/MM/yyyy"
-                className="form-control"
-              />
-            </div>
-            {/* pan */}
-            <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-              <label htmlFor={`upload-pan`}>Upload PAN</label>
-              <div className="uploadButton d-flex align-items-center">
-                <input
-                  className="uploadButton-input"
-                  type="file"
-                  name={`pan-attachment`}
-                  accept="image/*"
-                  id={`upload-pan`}
-                  required
-                />
-                <label className="uploadButton-button ripple-effect" htmlFor={`upload-pan`}>
-                  {`Browse Pan..`}
-                </label>
-              </div>
-            </div>
 
-          </div>
+
+
+
+
           {/* Submit Button */}
           <div className="form-group col-lg-12 d-flex justify-content-start mt-3">
             <button type="submit" className="theme-btn btn-style-one">
