@@ -1,33 +1,48 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const PaymentDetails = () => {
     const [payments, setPayments] = useState([]);
+    const [subTotal, setSubTotal] = useState(0);
+    const [gst, setGst] = useState(0);
+    const [total, setTotal] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const apiurl = process.env.NEXT_PUBLIC_API_URL;
+    const token = localStorage.getItem("Admin_token");
 
-    // Simulating API call
     useEffect(() => {
-        const samplePayments = [
-            {
-                id: 1,
-                name: "Avik Ghosh",
-                mobile: "8697744701",
-                payFor: "PAN, Aadhaar, Driving Licence",
-                amount: 500,
-            },
-            {
-                id: 2,
-                name: "Rohit Sharma",
-                mobile: "9876543210",
-                payFor: "Passport",
-                amount: 500,
-            },
-        ];
-        setPayments(samplePayments);
+        const fetchPayments = async () => {
+            try {
+                const response = await axios.get(
+                    `${apiurl}/api/usercart/list_user_cart`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                if (response.data.success) {
+                    setPayments(response.data.data);
+                    setSubTotal(parseFloat(response.data.overall_billing.subtotal));
+                    setGst(parseFloat(response.data.overall_billing.gst));
+                    setTotal(parseFloat(response.data.overall_billing.total));
+                } else {
+                    setError("Failed to fetch data.");
+                }
+            } catch (err) {
+                setError("Error fetching data. Please try again.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPayments();
     }, []);
 
-    const subTotal = 1000;
-    const gst = 180; // 18% GST
-    const total = 1180;
+    if (loading) return <p className="text-center">Loading...</p>;
+    if (error) return <p className="text-danger text-center">{error}</p>;
 
     return (
         <div className="container">
@@ -46,8 +61,8 @@ const PaymentDetails = () => {
                         <tr key={payment.id}>
                             <td>{index + 1}</td>
                             <td>{payment.name}</td>
-                            <td>{payment.mobile}</td>
-                            <td>{payment.payFor}</td>
+                            <td>{payment.mobile || "N/A"}</td>
+                            <td>{payment.payFor || "N/A"}</td>
                             <td>{payment.amount} INR</td>
                         </tr>
                     ))}
@@ -56,7 +71,7 @@ const PaymentDetails = () => {
 
             <div className="p-3 bg-light rounded">
                 <p className="d-flex justify-content-between mb-1">
-                    <span>Sub-Total :</span> <span>{subTotal} INR</span>
+                    <span>Sub-Total :</span> <span>{subTotal.toFixed(2)} INR</span>
                 </p>
                 <p className="d-flex justify-content-between mb-1">
                     <span>GST (18%) :</span> <span>{gst.toFixed(2)} INR</span>
