@@ -90,6 +90,9 @@ const WidgetContentBox = () => {
         setSuccess(response.data.message);
         router.push('/employers-dashboard/paynow');
       }
+      else {
+        setError(response.data.error);
+      }
 
     } catch (err) {
       console.error("Error submitting form:", err);
@@ -111,49 +114,61 @@ const WidgetContentBox = () => {
             <div className="col-lg-12 col-md-12">
               <h3 className="text-center mb-4" style={{ textDecoration: "underline" }}>
                 Personal Details
-
               </h3>
             </div>
 
             {/* Full Name */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-              <label>Full Name</label>
-              <input type="text" name="name" className="form-control" value={formData.name} onChange={handleChange} />
+              <label>
+                Full Name <span style={{ color: "red" }}>*</span>
+              </label>
+              <input type="text" name="name" className="form-control" value={formData.name} onChange={handleChange} required />
             </div>
 
             {/* Date of Birth */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-              <label>Date of Birth</label>
+              <label>
+                Date of Birth <span style={{ color: "red" }}>*</span>
+              </label>
               <DatePicker
                 selected={formData.dob ? new Date(formData.dob) : null}
                 onChange={handleDateChange}
                 dateFormat="dd/MM/yyyy"
                 className="form-control"
+                required
               />
             </div>
 
             {/* Phone Number */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-              <label>Phone Number</label>
+              <label>
+                Phone Number
+              </label>
               <input type="number" name="phone" className="form-control" value={formData.phone} onChange={handleChange} />
             </div>
 
             {/* Email */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-              <label>Email</label>
-              <input type="email" name="email" className="form-control" value={formData.email} onChange={handleChange} />
+              <label>
+                Email <span style={{ color: "red" }}>*</span>
+              </label>
+              <input type="email" name="email" className="form-control" value={formData.email} onChange={handleChange} required />
             </div>
 
             {/* Address */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-              <label>Address</label>
+              <label>
+                Address
+              </label>
               <input type="text" name="address" className="form-control" value={formData.address} onChange={handleChange} />
             </div>
 
             {/* Gender */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-              <label>Gender</label>
-              <select className="form-control" name="gender" value={formData.gender} onChange={handleChange}>
+              <label>
+                Gender
+              </label>
+              <select className="form-control" name="gender" value={formData.gender} onChange={handleChange} >
                 <option value="">Select Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -161,6 +176,7 @@ const WidgetContentBox = () => {
               </select>
             </div>
           </div>
+
 
           {/* Document Uploads */}
           <DocumentUpload label="PAN" name="pan" fileId="upload-pan"
