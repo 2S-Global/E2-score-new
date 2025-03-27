@@ -70,19 +70,19 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                         )
 
                         //api call
-                        let adhar_response = await axios.post(
-                            `${apiurl}/api/verify/verifyAadhaar`,
-                            {
-                                candidate_aadhaar_number,
-                                id,
-                            },
-                            {
-                                headers: {
-                                    Authorization: `Bearer ${token}`,
-                                },
-                            }
-                        );
-                        console.log("Aadhaare Verify Response:", adhar_response.data);
+                        /*    let adhar_response = await axios.post(
+                               `${apiurl}/api/verify/verifyAadhaar`,
+                               {
+                                   candidate_aadhaar_number,
+                                   id,
+                               },
+                               {
+                                   headers: {
+                                       Authorization: `Bearer ${token}`,
+                                   },
+                               }
+                           );
+                           console.log("Aadhaare Verify Response:", adhar_response.data); */
                     }
 
 
