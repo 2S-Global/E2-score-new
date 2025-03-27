@@ -1,5 +1,5 @@
 import React from "react";
-import ProfileDetails from "./ProfileDetails";
+
 import { CheckCircle, XCircle, MapPin } from "lucide-react";
 
 const userData = [

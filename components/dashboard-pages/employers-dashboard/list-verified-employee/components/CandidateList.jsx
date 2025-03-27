@@ -139,6 +139,7 @@ const Candidatelist = [
         email: "sourav.banerjee@gmail.com",
         gender: "male",
     },
+
 ];
 
 export default Candidatelist;
