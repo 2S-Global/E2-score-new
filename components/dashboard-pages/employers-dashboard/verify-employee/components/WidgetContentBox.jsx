@@ -35,6 +35,7 @@ const WidgetContentBox = () => {
 
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const token = localStorage.getItem("Admin_token");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const router = useRouter();
@@ -58,6 +59,9 @@ const WidgetContentBox = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
 
     const formDataToSend = new FormData();
     Object.keys(formData).forEach((key) => {
@@ -90,6 +94,9 @@ const WidgetContentBox = () => {
     } catch (err) {
       console.error("Error submitting form:", err);
       setError(err.response?.data?.message || "Failed. Try again.");
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -172,8 +179,10 @@ const WidgetContentBox = () => {
             valuename={formData.passportname} numbername={formData.passportnumber}
             onFileChange={handleFileChange} onfieldChange={handleChange} />
           {/* Submit Button */}
-          <div className="form-group col-lg-12 d-flex justify-content-start mt-3">
-            <button type="submit" className="theme-btn btn-style-one">Submit</button>
+          <div className="form-group">
+            <button className="theme-btn btn-style-one" type="submit" disabled={loading}>
+              {loading ? "Submitting..." : "Submit"}
+            </button>
           </div>
         </form>
       </div>
