@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { MapPin, CheckCircle, XCircle, Eye } from "lucide-react";
-import Candidatelist from "./Candidatelist";
+import Candidatelist from "@/components/dashboard-pages/employers-dashboard/list-verified-employee/components/CandidateList";
 
 const Applicants = () => {
   return (
