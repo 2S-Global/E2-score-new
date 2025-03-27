@@ -85,6 +85,95 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                            console.log("Aadhaare Verify Response:", adhar_response.data); */
                     }
 
+                    if (payment.dl_name && payment.dl_number && payment.candidate_dob) {
+                        let customer_dl_number = payment.dl_number;
+                        let name_to_match = payment.dl_name;
+                        let candidate_dob_og = payment.candidate_dob; // Example: "2000-03-27"
+                        let dob = new Date(candidate_dob_og);
+                        let customer_dob = dob.getDate().toString().padStart(2, '0') + "-" +
+                            (dob.getMonth() + 1).toString().padStart(2, '0') + "-" +
+                            dob.getFullYear();
+                        let id = payment._id;
+                        console.log(
+                            `Payment ID: ${id}, Customer DL Number: ${customer_dl_number}, DL Name: ${name_to_match}, Candidate DOB: ${customer_dob} `
+                        )
+                        //api call
+                        /*      let dl_response = await axios.post(
+                                 `${apiurl}/api/verify/verifyDL`,
+                                 { id,
+                                     customer_dl_number,
+                                     name_to_match,
+                                     customer_dob
+                                 },
+                                 {
+                                     headers: {
+                                         Authorization: `Bearer ${token}`,
+                                     },
+                                 }
+                             );
+                             console.log("DL Verify Response:", dl_response.data); */
+                    }
+
+                    if (payment.epic_name && payment.epic_number) {
+                        let epic_number = payment.epic_number;
+                        let id = payment._id;
+                        let epic_name = payment.epic_number
+                        console.log(
+                            `Payment ID: ${id}, Epic Number: ${epic_number}, Epic Name: ${epic_name}`
+                        )
+                        //api call
+                        /*  let epic_response = await axios.post(
+                            `${apiurl}/api/verify/verifyEPIC`,
+                            {
+                                id,
+                                epic_number,
+                                epic_name
+                            },
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                },
+                            }
+                        );
+                        console.log("Epic Verify Response:", epic_response.data);
+*/
+
+                    }
+                    if (payment.passport_name && payment.passport_file_number) {
+                        let customer_file_number = payment.passport_file_number;
+                        let candidate_name = payment.passport_name;
+                        let id = payment._id;
+                        let candidate_dob_og = payment.candidate_dob; // Example: "2000-03-27"
+                        let dob = new Date(candidate_dob_og);
+                        let candidate_dob = dob.getDate().toString().padStart(2, '0') + "-" +
+                            (dob.getMonth() + 1).toString().padStart(2, '0') + "-" +
+                            dob.getFullYear();
+                        console.log(
+                            `Payment ID: ${id}, Customer Passport Number: ${customer_file_number}, Candidate Name: ${candidate_name}, Candidate DOB: ${candidate_dob} `
+                        )
+                        //api call
+                        /*     let passport_response = await axios.post(
+                            `${apiurl}/api/verify/verifyPassport`,
+                            {
+                                id,
+                                customer_file_number,
+                                candidate_name,
+                                candidate_dob
+                            },
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                },
+                            }
+                        );
+                        console.log("Passport Verify Response:", passport_response.data); */
+
+                    }
+
+
+
+
+
 
 
 
