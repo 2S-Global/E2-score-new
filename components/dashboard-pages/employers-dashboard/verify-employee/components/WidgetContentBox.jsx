@@ -3,8 +3,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import DocumentUpload from "./document";
-
+import { useRouter } from "next/navigation";
 import { format } from "date-fns"; // Import from date-fns
+
+import MessageComponent from "@/components/common/ResponseMsg";
 
 const WidgetContentBox = () => {
   const [formData, setFormData] = useState({
@@ -31,14 +33,19 @@ const WidgetContentBox = () => {
     passportdoc: null,
   });
 
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const token = localStorage.getItem("Admin_token");
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const router = useRouter();
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleDateChange = (date) => {
     if (date) {
-      const formattedDate = format(date, "dd/MM/yyyy"); // Convert to "dd/MM/yyyy"
-      setFormData({ ...formData, dob: formattedDate });
+      setFormData({ ...formData, dob: date }); // Store raw Date object
     }
   };
 
@@ -56,33 +63,48 @@ const WidgetContentBox = () => {
     Object.keys(formData).forEach((key) => {
       if (formData[key] instanceof File) {
         formDataToSend.append(key, formData[key]);
+      } else if (formData[key] instanceof Date) {
+        formDataToSend.append(key, format(formData[key], "yyyy-MM-dd")); // Convert Date to string
       } else if (formData[key]) {
         formDataToSend.append(key, formData[key]);
       }
     });
 
-    formDataToSend.forEach((value, key) => {
-      console.log(key, value);
-    });
+    try {
+      const response = await axios.post(
+        `${apiurl}/api/usercart/add_user_cart`,
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    /* try {
-      const response = await axios.post("YOUR_API_ENDPOINT", formDataToSend, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      console.log("Form submitted successfully:", response.data);
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    } */
+      if (response.status === 201) {
+        setSuccess(response.data.message);
+        router.push('/employers-dashboard/paynow');
+      }
+
+    } catch (err) {
+      console.error("Error submitting form:", err);
+      setError(err.response?.data?.message || "Failed. Try again.");
+    }
   };
+
 
   return (
     <div className="widget-content">
       <div className="row">
+
         <form className="default-form" onSubmit={handleSubmit}>
+          <MessageComponent error={error} success={success} />
           <div className="row">
             <div className="col-lg-12 col-md-12">
               <h3 className="text-center mb-4" style={{ textDecoration: "underline" }}>
                 Personal Details
+
               </h3>
             </div>
 
@@ -95,7 +117,12 @@ const WidgetContentBox = () => {
             {/* Date of Birth */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
               <label>Date of Birth</label>
-              <DatePicker selected={formData.dob} onChange={handleDateChange} dateFormat="dd/MM/yyyy" className="form-control" />
+              <DatePicker
+                selected={formData.dob ? new Date(formData.dob) : null}
+                onChange={handleDateChange}
+                dateFormat="dd/MM/yyyy"
+                className="form-control"
+              />
             </div>
 
             {/* Phone Number */}
