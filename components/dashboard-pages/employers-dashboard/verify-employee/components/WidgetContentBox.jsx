@@ -146,7 +146,7 @@ const WidgetContentBox = () => {
             onFileChange={handleFileChange} onfieldChange={handleChange} />
           {/* Submit Button */}
           <div className="form-group col-lg-12 d-flex justify-content-start mt-3">
-            <button type="submit" className="theme-btn btn-style-one">Save</button>
+            <button type="submit" className="theme-btn btn-style-one">Submit</button>
           </div>
         </form>
       </div>
