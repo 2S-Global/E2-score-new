@@ -30,8 +30,8 @@ const ProfilesumerySection = () => {
           <div className="widget-title">
             <h4>Profile summary</h4>
             {/* Open modal using an onClick function */}
-            <span 
-              onClick={openModalRH} 
+            <span
+              onClick={openModalRH}
               style={{
                 cursor: "pointer",
                 float: "right",
