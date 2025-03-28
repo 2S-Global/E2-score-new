@@ -40,6 +40,8 @@ const index = () => {
                 <div className="widget-title">
                   <h4>Add Employee Details</h4>
                   {/*  <WidgetToFilterBox /> */}
+                  {/* Add a button */}
+
                 </div>
                 {/* End widget top filter box */}
                 <WidgetContentBox />
