@@ -86,24 +86,28 @@ const WidgetContentBox = () => {
                     <div className="mt-2">
                       <div className="d-flex align-items-center mb-1">
                         <span className="fw-bold me-2">Full Name:</span>
-                        <span className="text-break">Avik Ghosh</span>
+                        <span className="text-break">{user?.pan_response.result.user_full_name}</span>
                       </div>
                       <div className="d-flex align-items-center mb-1">
                         <span className="fw-bold me-2">Number:</span>
-                        <span className="text-break">AMPPG7969P</span>
+                        <span className="text-break">{user?.pan_response.result.pan_number}</span>
                       </div>
                       <div className="d-flex align-items-center mb-1">
                         <span className="fw-bold me-2">Type:</span>
-                        <span className="text-break">Person</span>
+                        <span className="text-break">{user?.pan_response.result.pan_type}</span>
                       </div>
                       <div className="d-flex align-items-center mb-1">
                         <span className="fw-bold me-2">Verified:</span>
-                        <CheckCircle size={16} className="text-success" />
+                        {user?.pan_response?.response_code == 100 ? (
+                          <CheckCircle size={16} className="text-success" />
+                        ) : (
+                          <XCircle size={16} className="text-danger" />
+                        )}
                       </div>
                       <div className="d-flex align-items-center mb-1">
                         <span className="fw-bold me-2">Address:</span>
                         <MapPin size={16} className="me-1" />
-                        <span className="text-break">Lueilwitz, Wisoky and Leuschke</span>
+                        <span className="text-break">{user?.candidate_address}</span>
                       </div>
                     </div>
                   </div>
@@ -191,24 +195,28 @@ const WidgetContentBox = () => {
                     <div className="mt-2">
                       <div className="d-flex align-items-center mb-1">
                         <span className="fw-bold me-2">Full Name:</span>
-                        <span className="text-break">Avik Ghosh</span>
+                        <span className="text-break">{user?.dl_response.result.user_full_name}</span>
                       </div>
                       <div className="d-flex align-items-center mb-1">
                         <span className="fw-bold me-2">DL Number:</span>
-                        <span className="text-break">KTF2559334</span>
+                        <span className="text-break">{user?.dl_response.result.dl_number}</span>
                       </div>
                       <div className="d-flex align-items-center mb-1">
                         <span className="fw-bold me-2">Verified:</span>
-                        <CheckCircle size={16} className="text-success" />
+                        {user?.dl_response?.response_code == 100 ? (
+                          <CheckCircle size={16} className="text-success" />
+                        ) : (
+                          <XCircle size={16} className="text-danger" />
+                        )}
                       </div>
                       <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">Cover:</span>
+                        <span className="fw-bold me-2">Cover:(st)</span>
                         <span className="text-break">LMV</span>
                       </div>
 
                       <div className="d-flex align-items-center mb-1">
                         <span className="fw-bold me-2">Expiry Date:</span>
-                        <span className="text-break">06-03-2033</span>
+                        <span className="text-break">{user?.dl_response.result.expiry_date}</span>
                       </div>
 
                     </div>
