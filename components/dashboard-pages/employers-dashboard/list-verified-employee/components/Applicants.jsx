@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { MapPin, CheckCircle, XCircle, Eye,HelpCircle  } from "lucide-react";
+import { MapPin, CheckCircle, XCircle, Eye, HelpCircle } from "lucide-react";
 import axios from "axios";
 
 const Applicants = () => {
@@ -59,60 +59,60 @@ const Applicants = () => {
               <div className="d-flex justify-content-between align-items-center mb-2">
                 <h6 className="fw-bold text-truncate m-0">{candidate.candidate_name}</h6>
                 <span className="text-muted small d-flex align-items-center">
-            {candidate.candidate_mobile}
+                  {candidate.candidate_mobile}
                 </span>
               </div>
 
               {/* Verification List */}
               <ul className="list-group list-group-flush flex-grow-1">
-  {[
-    {
-      label: "PAN",
-      response: candidate.pan_response,
-    },
-    {
-      label: "Aadhar",
-      response: candidate.aadhar_response,
-    },
-    {
-      label: "Voter",
-      response: candidate.epic_response,
-    },
-    {
-      label: "License",
-      response: candidate.dl_response,
-    },
-    {
-      label: "Passport",
-      response: candidate.passport_response,
-    },
-  ].map((item, index) => {
-    let statusIcon;
-// console.log(item.response.request_id);
-    if (item.response) {
-      if (item.response.response_code === "100") {
-        statusIcon = <CheckCircle size={14} className="text-success" title="Valid Authentication" />;
-      } else if (item.response.response_code === "101") {
-        statusIcon = <XCircle size={14} className="text-danger" title="Invalid Authentication" />;
-      } else {
-        statusIcon = <HelpCircle size={14} className="text-warning" title="Not Applied" />;
-      }
-    } else {
-      statusIcon = <HelpCircle size={14} className="text-warning" title="Not Applied" />;
-    }
+                {[
+                  {
+                    label: "PAN",
+                    response: candidate.pan_response,
+                  },
+                  {
+                    label: "Aadhar",
+                    response: candidate.aadhar_response,
+                  },
+                  {
+                    label: "Voter",
+                    response: candidate.epic_response,
+                  },
+                  {
+                    label: "License",
+                    response: candidate.dl_response,
+                  },
+                  {
+                    label: "Passport",
+                    response: candidate.passport_response,
+                  },
+                ].map((item, index) => {
+                  let statusIcon;
+                  // console.log(item.response.request_id);
+                  if (item.response) {
+                    if (item.response.response_code === "100") {
+                      statusIcon = <CheckCircle size={14} className="text-success" title="Valid Authentication" />;
+                    } else if (item.response.response_code === "101") {
+                      statusIcon = <XCircle size={14} className="text-danger" title="Invalid Authentication" />;
+                    } else {
+                      statusIcon = <HelpCircle size={14} className="text-warning" title="Not Applied" />;
+                    }
+                  } else {
+                    statusIcon = <HelpCircle size={14} className="text-warning" title="Not Applied" />;
+                  }
 
-    return (
-      <li key={`${item.response?.request_id || item.label}`} className="list-group-item d-flex justify-content-between align-items-center p-1 small">
-        {item.label} Status {statusIcon}
-      </li>
-    );
-  })}
-</ul>
+                  return (
+                    <li key={`${item.response?.request_id || item.label}`} className="list-group-item d-flex justify-content-between align-items-center p-1 small">
+                      {item.label} Status {statusIcon}
+                    </li>
+                  );
+                })}
+              </ul>
 
               {/* Button */}
               <div className="text-end mt-2">
                 <button className="btn btn-outline-primary btn-sm w-100">
-                  <Link href={`/employers-dashboard/list-verified-employee/details?id=${candidate.id}`}>
+                  <Link href={`/employers-dashboard/list-verified-employee/details?id=${candidate._id}`}>
                     <Eye size={14} className="me-1" /> View Application
                   </Link>
                 </button>
