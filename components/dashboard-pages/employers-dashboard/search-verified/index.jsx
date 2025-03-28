@@ -4,7 +4,7 @@ import LoginPopup from "../../../common/form/login/LoginPopup";
 import DashboardEmployerSidebar from "../../../header/DashboardEmployerSidebar";
 import BreadCrumb from "../../BreadCrumb";
 import CopyrightFooter from "../../CopyrightFooter";
-import WidgetContentBox from "./components/WidgetContentBox";
+
 import MenuToggler from "../../MenuToggler";
 
 import SearchBox from "./components/SearchBox";
@@ -30,7 +30,7 @@ const index = () => {
       {/* <!-- Dashboard --> */}
       <section className="user-dashboard">
         <div className="dashboard-outer">
-          <BreadCrumb title="Verify an Employee!" />
+          <BreadCrumb title="Search an Employee!" />
           {/* breadCrumb */}
 
           <MenuToggler />
@@ -47,23 +47,6 @@ const index = () => {
                 </div>
                 {/* End widget top filter box */}
                 <SearchBox />
-              </div>
-              {/* <!-- applicants Widget --> */}
-            </div>
-          </div>
-
-
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="applicants-widget ls-widget">
-                <div className="widget-title">
-                  <h4>Add Employee Details</h4>
-                  {/*  <WidgetToFilterBox /> */}
-                  {/* Add a button */}
-
-                </div>
-                {/* End widget top filter box */}
-                <WidgetContentBox />
               </div>
               {/* <!-- applicants Widget --> */}
             </div>
