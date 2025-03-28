@@ -225,7 +225,7 @@ const WidgetContentBox = () => {
                     <div className="mt-2">
                       <div className="d-flex align-items-center mb-1">
                         <span className="fw-bold me-2">Full Name:</span>
-                        <span className="text-break">{user?.passport_response.result.name_on_passport}</span>
+                        <span className="text-break">{user?.passport_response.result.name_on_passport} {user?.passport_response.result.customer_last_name}</span>
                       </div>
                       <div className="d-flex align-items-center mb-1">
                         <span className="fw-bold me-2">Passport Number:</span>
