@@ -169,14 +169,14 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                     //final api call
                     try {
                         const id = payment._id;
-                        const final_response = await axios.post(
-                            `${apiurl}/api/verify/cloneAndMoveRecordById`,
-                            {
-                                id,
-                            },
-                            { headers: { Authorization: `Bearer ${token}`, }, }
-                        );
-                        console.log("Final response: ", final_response.data);
+                        /*  const final_response = await axios.post(
+                             `${apiurl}/api/verify/cloneAndMoveRecordById`,
+                             {
+                                 id,
+                             },
+                             { headers: { Authorization: `Bearer ${token}`, }, }
+                         );
+                         console.log("Final response: ", final_response.data); */
                     }
                     catch (error) {
                         console.error("Error while verifying documents:", error);
