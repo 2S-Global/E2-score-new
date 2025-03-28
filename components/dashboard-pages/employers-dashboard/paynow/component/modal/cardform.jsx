@@ -38,9 +38,9 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                     //console.log("PAN Name:", payment.pan_name);
 
                     if (payment.pan_name && payment.pan_number) {
-                        let customer_pan_number = payment.pan_number;
-                        let pan_name = payment.pan_name;
-                        let id = payment._id;
+                        const customer_pan_number = payment.pan_number;
+                        const pan_name = payment.pan_name;
+                        const id = payment._id;
                         console.log(
                             `Payment ID: ${id}, Customer PAN Number: ${customer_pan_number}, PAN Name: ${pan_name}`
                         )
@@ -61,9 +61,9 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                         console.log("PAN Verify Response:", pan_response.data);
                     }
                     if (payment.aadhar_name && payment.aadhar_number) {
-                        let candidate_aadhaar_number = payment.aadhar_number;
-                        let id = payment._id;
-                        let aadhar_name = payment.aadhar_name;
+                        const candidate_aadhaar_number = payment.aadhar_number;
+                        const id = payment._id;
+                        const aadhar_name = payment.aadhar_name;
                         console.log(
                             `Payment ID: ${id}, Candidate Aadhaar Number: ${candidate_aadhaar_number}, Aadhaar Name: ${aadhar_name}`
                         )
@@ -84,14 +84,14 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                         console.log("Aadhaare Verify Response:", adhar_response.data);
                     }
                     if (payment.dl_name && payment.dl_number && payment.candidate_dob) {
-                        let customer_dl_number = payment.dl_number;
-                        let name_to_match = payment.dl_name;
-                        let candidate_dob_og = payment.candidate_dob; // Example: "2000-03-27"
-                        let dob = new Date(candidate_dob_og);
-                        let customer_dob = dob.getDate().toString().padStart(2, '0') + "-" +
+                        const customer_dl_number = payment.dl_number;
+                        const name_to_match = payment.dl_name;
+                        const candidate_dob_og = payment.candidate_dob; // Example: "2000-03-27"
+                        const dob = new Date(candidate_dob_og);
+                        const customer_dob = dob.getDate().toString().padStart(2, '0') + "-" +
                             (dob.getMonth() + 1).toString().padStart(2, '0') + "-" +
                             dob.getFullYear();
-                        let id = payment._id;
+                        const id = payment._id;
                         console.log(
                             `Payment ID: ${id}, Customer DL Number: ${customer_dl_number}, DL Name: ${name_to_match}, Candidate DOB: ${customer_dob} `
                         )
@@ -113,14 +113,14 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                         console.log("DL Verify Response:", dl_response.data);
                     }
                     if (payment.epic_name && payment.epic_number) {
-                        let epic_number = payment.epic_number;
-                        let id = payment._id;
-                        let epic_name = payment.epic_number
+                        const epic_number = payment.epic_number;
+                        const id = payment._id;
+                        const epic_name = payment.epic_number
                         console.log(
                             `Payment ID: ${id}, Epic Number: ${epic_number}, Epic Name: ${epic_name}`
                         )
                         //api call
-                        let epic_response = await axios.post(
+                        const epic_response = await axios.post(
                             `${apiurl}/api/verify/verifyEPIC`,
                             {
                                 id,
@@ -136,12 +136,12 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                         console.log("Epic Verify Response:", epic_response.data);
                     }
                     if (payment.passport_name && payment.passport_file_number) {
-                        let customer_file_number = payment.passport_file_number;
-                        let candidate_name = payment.passport_name;
-                        let id = payment._id;
-                        let candidate_dob_og = payment.candidate_dob; // Example: "2000-03-27"
-                        let dob = new Date(candidate_dob_og);
-                        let candidate_dob = dob.getDate().toString().padStart(2, '0') + "-" +
+                        const customer_file_number = payment.passport_file_number;
+                        const candidate_name = payment.passport_name;
+                        const id = payment._id;
+                        const candidate_dob_og = payment.candidate_dob; // Example: "2000-03-27"
+                        const dob = new Date(candidate_dob_og);
+                        const candidate_dob = dob.getDate().toString().padStart(2, '0') + "-" +
                             (dob.getMonth() + 1).toString().padStart(2, '0') + "-" +
                             dob.getFullYear();
                         console.log(
@@ -168,7 +168,7 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
 
                     //final api call
                     try {
-                        let id = payment._id;
+                        const id = payment._id;
                         const final_response = await axios.post(
                             `${apiurl}/api/verify/cloneAndMoveRecordById`,
                             {
