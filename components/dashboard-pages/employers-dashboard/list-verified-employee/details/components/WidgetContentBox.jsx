@@ -229,22 +229,28 @@ const WidgetContentBox = () => {
                       </div>
                       <div className="d-flex align-items-center mb-1">
                         <span className="fw-bold me-2">Passport Number:</span>
-                        <span className="text-break">KTF2559334</span>
+                        <span className="text-break">{user?.passport_response.result.passport_number}</span>
                       </div>
                       <div className="d-flex align-items-center mb-1">
                         <span className="fw-bold me-2">Verified:</span>
-                        <CheckCircle size={16} className="text-success" />
+                        {user?.passport_response?.response_code == 100 ? (
+                          <CheckCircle size={16} className="text-success" />
+                        ) : (
+                          <XCircle size={16} className="text-danger" />
+                        )}
+
+
                       </div>
                       <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">Country:</span>
-                        <MapPin size={16} className="me-1" />
-                        <span className="text-break">India</span>
+                        <span className="fw-bold me-2">Passport Applied Date:</span>
+
+                        <span className="text-break">{user?.passport_response.result.passport_applied_date}</span>
                       </div>
 
                       <div className="d-flex align-items-center mb-1">
                         <span className="fw-bold me-2">Address:</span>
                         <MapPin size={16} className="me-1" />
-                        <span className="text-break">Lueilwitz, Wisoky and Leuschke</span>
+                        <span className="text-break">{user?.candidate_address}</span>
                       </div>
                     </div>
                   </div>
