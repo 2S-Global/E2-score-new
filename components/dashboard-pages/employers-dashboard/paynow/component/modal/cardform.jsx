@@ -37,118 +37,134 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                 response.data.data.forEach(async (payment) => {
                     //console.log("PAN Name:", payment.pan_name);
 
-                    let verificationPromises = [];
-
                     if (payment.pan_name && payment.pan_number) {
                         let customer_pan_number = payment.pan_number;
                         let pan_name = payment.pan_name;
                         let id = payment._id;
-
-                        console.log(`Payment ID: ${id}, Customer PAN Number: ${customer_pan_number}, PAN Name: ${pan_name}`);
-
-                        verificationPromises.push(
-                            axios.post(`${apiurl}/api/verify/verifyPAN`, {
-                                customer_pan_number,
+                        console.log(
+                            `Payment ID: ${id}, Customer PAN Number: ${customer_pan_number}, PAN Name: ${pan_name}`
+                        )
+                        //api call
+                        let pan_response = await axios.post(
+                            `${apiurl}/api/verify/verifyPAN`,
+                            {
+                                customer_pan_number: customer_pan_number,
                                 pan_holder_name: pan_name,
-                                id,
-                            }, {
-                                headers: { Authorization: `Bearer ${token}` },
-                            }).then(response => console.log("PAN Verify Response:", response.data))
-                                .catch(error => console.error("PAN Verification Failed:", error.message))
+                                id: id
+                            },
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                },
+                            }
                         );
+                        console.log("PAN Verify Response:", pan_response.data);
                     }
-
                     if (payment.aadhar_name && payment.aadhar_number) {
                         let candidate_aadhaar_number = payment.aadhar_number;
                         let id = payment._id;
                         let aadhar_name = payment.aadhar_name;
+                        console.log(
+                            `Payment ID: ${id}, Candidate Aadhaar Number: ${candidate_aadhaar_number}, Aadhaar Name: ${aadhar_name}`
+                        )
 
-                        console.log(`Payment ID: ${id}, Candidate Aadhaar Number: ${candidate_aadhaar_number}, Aadhaar Name: ${aadhar_name}`);
-
-                        verificationPromises.push(
-                            axios.post(`${apiurl}/api/verify/verifyAadhaar`, {
+                        //api call
+                        let adhar_response = await axios.post(
+                            `${apiurl}/api/verify/verifyAadhaar`,
+                            {
                                 customer_aadhaar_number: candidate_aadhaar_number,
-                                id,
-                            }, {
-                                headers: { Authorization: `Bearer ${token}` },
-                            }).
-                                then(response =>
-                                    console.log("Aadhaar Verify Response:", response.data)
-                                )
-                                .catch(error => console.error("Aadhaar Verification Failed:", error.message))
+                                id: id,
+                            },
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                },
+                            }
                         );
+                        console.log("Aadhaare Verify Response:", adhar_response.data);
                     }
-
                     if (payment.dl_name && payment.dl_number && payment.candidate_dob) {
                         let customer_dl_number = payment.dl_number;
                         let name_to_match = payment.dl_name;
-                        let candidate_dob_og = payment.candidate_dob;
+                        let candidate_dob_og = payment.candidate_dob; // Example: "2000-03-27"
                         let dob = new Date(candidate_dob_og);
-                        let customer_dob = `${dob.getDate().toString().padStart(2, '0')}-${(dob.getMonth() + 1).toString().padStart(2, '0')}-${dob.getFullYear()}`;
+                        let customer_dob = dob.getDate().toString().padStart(2, '0') + "-" +
+                            (dob.getMonth() + 1).toString().padStart(2, '0') + "-" +
+                            dob.getFullYear();
                         let id = payment._id;
-
-                        console.log(`Payment ID: ${id}, Customer DL Number: ${customer_dl_number}, DL Name: ${name_to_match}, Candidate DOB: ${customer_dob}`);
-
-                        verificationPromises.push(
-                            axios.post(`${apiurl}/api/verify/verifyDL`, {
+                        console.log(
+                            `Payment ID: ${id}, Customer DL Number: ${customer_dl_number}, DL Name: ${name_to_match}, Candidate DOB: ${customer_dob} `
+                        )
+                        //api call
+                        let dl_response = await axios.post(
+                            `${apiurl}/api/verify/verifyDL`,
+                            {
                                 id,
-                                customer_dl_number,
-                                name_to_match,
-                                customer_dob
-                            }, {
-                                headers: { Authorization: `Bearer ${token}` },
-                            }).then(response => console.log("DL Verify Response:", response.data))
-                                .catch(error => console.error("DL Verification Failed:", error.message))
+                                customer_dl_number: customer_dl_number,
+                                name_to_match: name_to_match,
+                                customer_dob: customer_dob
+                            },
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                },
+                            }
                         );
+                        console.log("DL Verify Response:", dl_response.data);
                     }
-
                     if (payment.epic_name && payment.epic_number) {
                         let epic_number = payment.epic_number;
                         let id = payment._id;
-                        let epic_name = payment.epic_name;
-
-                        console.log(`Payment ID: ${id}, Epic Number: ${epic_number}, Epic Name: ${epic_name}`);
-
-                        verificationPromises.push(
-                            axios.post(`${apiurl}/api/verify/verifyEPIC`, {
+                        let epic_name = payment.epic_number
+                        console.log(
+                            `Payment ID: ${id}, Epic Number: ${epic_number}, Epic Name: ${epic_name}`
+                        )
+                        //api call
+                        let epic_response = await axios.post(
+                            `${apiurl}/api/verify/verifyEPIC`,
+                            {
                                 id,
                                 customer_epic_number: epic_number,
                                 name_to_match: epic_name
-                            }, {
-                                headers: { Authorization: `Bearer ${token}` },
-                            }).then(response => console.log("Epic Verify Response:", response.data))
-                                .catch(error => console.error("EPIC Verification Failed:", error.message))
+                            },
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                },
+                            }
                         );
+                        console.log("Epic Verify Response:", epic_response.data);
                     }
-
-                    if (payment.passport_name && payment.passport_file_number && payment.candidate_dob) {
+                    if (payment.passport_name && payment.passport_file_number) {
                         let customer_file_number = payment.passport_file_number;
                         let candidate_name = payment.passport_name;
                         let id = payment._id;
-                        let candidate_dob_og = payment.candidate_dob;
+                        let candidate_dob_og = payment.candidate_dob; // Example: "2000-03-27"
                         let dob = new Date(candidate_dob_og);
-                        let candidate_dob = `${dob.getDate().toString().padStart(2, '0')}-${(dob.getMonth() + 1).toString().padStart(2, '0')}-${dob.getFullYear()}`;
-
-                        console.log(`Payment ID: ${id}, Customer Passport Number: ${customer_file_number}, Candidate Name: ${candidate_name}, Candidate DOB: ${candidate_dob}`);
-
-                        verificationPromises.push(
-                            axios.post(`${apiurl}/api/verify/verifyPassport`, {
+                        let candidate_dob = dob.getDate().toString().padStart(2, '0') + "-" +
+                            (dob.getMonth() + 1).toString().padStart(2, '0') + "-" +
+                            dob.getFullYear();
+                        console.log(
+                            `Payment ID: ${id}, Customer Passport Number: ${customer_file_number}, Candidate Name: ${candidate_name}, Candidate DOB: ${candidate_dob} `
+                        )
+                        //api call
+                        let passport_response = await axios.post(
+                            `${apiurl}/api/verify/verifyPassport`,
+                            {
                                 id,
-                                customer_file_number,
+                                customer_file_number: customer_file_number,
                                 name_to_match: candidate_name,
                                 customer_dob: candidate_dob
-                            }, {
-                                headers: { Authorization: `Bearer ${token}` },
-                            }).then(response => console.log("Passport Verify Response:", response.data))
-                                .catch(error => console.error("Passport Verification Failed:", error.message))
+                            },
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                },
+                            }
                         );
+                        console.log("Passport Verify Response:", passport_response.data);
+
                     }
-
-                    // Execute all promises concurrently
-                    Promise.all(verificationPromises)
-                        .then(() => console.log("All verifications completed"))
-                        .catch(error => console.error("Some verifications failed:", error.message));
-
 
                     //final api call
                     try {
@@ -165,8 +181,6 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                     catch (error) {
                         console.error("Error while verifying documents:", error);
                     }
-
-                    // verificationPromises = [];
                 });
             } else {
                 setError("Failed to fetch data.");
