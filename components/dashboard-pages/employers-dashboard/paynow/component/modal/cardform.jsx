@@ -37,7 +37,7 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                 response.data.data.forEach(async (payment) => {
                     //console.log("PAN Name:", payment.pan_name);
 
-                    const verificationPromises = [];
+                    let verificationPromises = [];
 
                     if (payment.pan_name && payment.pan_number) {
                         let customer_pan_number = payment.pan_number;
@@ -53,8 +53,8 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                                 id,
                             }, {
                                 headers: { Authorization: `Bearer ${token}` },
-                            })/* .then(response => console.log("PAN Verify Response:", response.data))
-                                .catch(error => console.error("PAN Verification Failed:", error.message)) */
+                            }).then(response => console.log("PAN Verify Response:", response.data))
+                                .catch(error => console.error("PAN Verification Failed:", error.message))
                         );
                     }
 
@@ -71,11 +71,11 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                                 id,
                             }, {
                                 headers: { Authorization: `Bearer ${token}` },
-                            })/* .
-                            then(response => 
-                                console.log("Aadhaar Verify Response:", response.data)
-                            )
-                                .catch(error => console.error("Aadhaar Verification Failed:", error.message)) */
+                            }).
+                                then(response =>
+                                    console.log("Aadhaar Verify Response:", response.data)
+                                )
+                                .catch(error => console.error("Aadhaar Verification Failed:", error.message))
                         );
                     }
 
@@ -97,8 +97,8 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                                 customer_dob
                             }, {
                                 headers: { Authorization: `Bearer ${token}` },
-                            })/* .then(response => console.log("DL Verify Response:", response.data))
-                                .catch(error => console.error("DL Verification Failed:", error.message)) */
+                            }).then(response => console.log("DL Verify Response:", response.data))
+                                .catch(error => console.error("DL Verification Failed:", error.message))
                         );
                     }
 
@@ -116,8 +116,8 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                                 name_to_match: epic_name
                             }, {
                                 headers: { Authorization: `Bearer ${token}` },
-                            })/* .then(response => console.log("Epic Verify Response:", response.data))
-                                .catch(error => console.error("EPIC Verification Failed:", error.message)) */
+                            }).then(response => console.log("Epic Verify Response:", response.data))
+                                .catch(error => console.error("EPIC Verification Failed:", error.message))
                         );
                     }
 
@@ -139,8 +139,8 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                                 customer_dob: candidate_dob
                             }, {
                                 headers: { Authorization: `Bearer ${token}` },
-                            })/* .then(response => console.log("Passport Verify Response:", response.data))
-                                .catch(error => console.error("Passport Verification Failed:", error.message)) */
+                            }).then(response => console.log("Passport Verify Response:", response.data))
+                                .catch(error => console.error("Passport Verification Failed:", error.message))
                         );
                     }
 
@@ -160,11 +160,13 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                             },
                             { headers: { Authorization: `Bearer ${token}`, }, }
                         );
-                        /*  console.log("Final response: ", final_response.data); */
+                        console.log("Final response: ", final_response.data);
                     }
                     catch (error) {
                         console.error("Error while verifying documents:", error);
                     }
+
+                    // verificationPromises = [];
                 });
             } else {
                 setError("Failed to fetch data.");
