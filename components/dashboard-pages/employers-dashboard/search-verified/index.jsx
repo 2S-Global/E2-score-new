@@ -7,7 +7,7 @@ import CopyrightFooter from "../../CopyrightFooter";
 
 import MenuToggler from "../../MenuToggler";
 
-import SearchBox from "./components/SearchBox";
+import SearchBox from "@/components/dashboard-pages/employers-dashboard/search-verified/components/searchbox";
 
 const index = () => {
   return (
