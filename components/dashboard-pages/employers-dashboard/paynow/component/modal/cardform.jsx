@@ -243,17 +243,17 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
             }
 
             //final api call
-            try {
-                const finalid = pendingcandidate._id;
-                const final_response = await axios.post(`${apiurl}/api/verify/cloneAndMoveRecordById`,
-                    { id: finalid },
-                    { headers: { Authorization: `Bearer ${token}`, }, }
-                );
-                console.log("Final response: ", final_response.data);
-            }
-            catch (error) {
-                console.error("Error while verifying documents:", error);
-            }
+            /*  try {
+                 const finalid = pendingcandidate._id;
+                 const final_response = await axios.post(`${apiurl}/api/verify/cloneAndMoveRecordById`,
+                     { id: finalid },
+                     { headers: { Authorization: `Bearer ${token}`, }, }
+                 );
+                 console.log("Final response: ", final_response.data);
+             }
+             catch (error) {
+                 console.error("Error while verifying documents:", error);
+             } */
 
 
         } catch (error) {
