@@ -29,7 +29,7 @@ const UsersList = ({ users }) => {
                             </thead>
                             <tbody>
                                 {users.map((candidate, index) => (
-                                    <tr key={candidate.id || index}>
+                                    <tr key={candidate._id || index}>
                                         <td>{index + 1}</td> {/* Serial Number */}
                                         <td><strong>{candidate.candidate_name}</strong></td> {/* Fixed key */}
                                         <td>{candidate.candidate_mobile}</td> {/* Fixed key */}
