@@ -52,7 +52,7 @@ const Applicants = () => {
   return (
     <div className="row">
       {candidates.map((candidate) => (
-        <div key={candidate.id} className="col-lg-6 col-md-12 col-sm-12 mb-3">
+        <div key={candidate._id} className="col-lg-6 col-md-12 col-sm-12 mb-3">
           <div className="card shadow-sm border-0 h-100">
             <div className="card-body p-3 d-flex flex-column">
               {/* Name & Location */}
@@ -65,34 +65,15 @@ const Applicants = () => {
 
               {/* Verification List */}
               <ul className="list-group list-group-flush flex-grow-1">
-                {[
-                  {
-                    label: "PAN",
-                    response: candidate.pan_response,
-                  },
-                  {
-                    label: "Aadhar",
-                    response: candidate.aadhar_response,
-                  },
-                  {
-                    label: "Voter",
-                    response: candidate.epic_response,
-                  },
-                  {
-                    label: "License",
-                    response: candidate.dl_response,
-                  },
-                  {
-                    label: "Passport",
-                    response: candidate.passport_response,
-                  },
-                ].map((item, index) => {
+                {["PAN", "Aadhar", "Voter", "License", "Passport"].map((label, index) => {
+                  const responseKey = label.toLowerCase() + "_response";
+                  const response = candidate[responseKey];
                   let statusIcon;
-                  // console.log(item.response.request_id);
-                  if (item.response) {
-                    if (item.response.response_code === "100") {
+
+                  if (response) {
+                    if (response.response_code === "100") {
                       statusIcon = <CheckCircle size={14} className="text-success" title="Valid Authentication" />;
-                    } else if (item.response.response_code === "101") {
+                    } else if (response.response_code === "101") {
                       statusIcon = <XCircle size={14} className="text-danger" title="Invalid Authentication" />;
                     } else {
                       statusIcon = <HelpCircle size={14} className="text-warning" title="Not Applied" />;
@@ -102,8 +83,8 @@ const Applicants = () => {
                   }
 
                   return (
-                    <li key={`${item.response?.request_id || item.label}`} className="list-group-item d-flex justify-content-between align-items-center p-1 small">
-                      {item.label} Status {statusIcon}
+                    <li key={`${label}-${candidate.id}`} className="list-group-item d-flex justify-content-between align-items-center p-1 small">
+                      {label} Status {statusIcon}
                     </li>
                   );
                 })}
@@ -111,11 +92,11 @@ const Applicants = () => {
 
               {/* Button */}
               <div className="text-end mt-2">
-                <button className="btn btn-outline-primary btn-sm w-100">
-                  <Link href={`/employers-dashboard/list-verified-employee/details?id=${candidate._id}`}>
+                <Link href={`/employers-dashboard/list-verified-employee/details?id=${candidate._id}`} passHref>
+                  <button className="btn btn-outline-primary btn-sm w-100">
                     <Eye size={14} className="me-1" /> View Application
-                  </Link>
-                </button>
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
