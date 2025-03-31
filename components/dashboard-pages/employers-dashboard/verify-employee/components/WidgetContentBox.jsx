@@ -188,7 +188,7 @@ const WidgetContentBox = () => {
           <DocumentUpload label="Aadhaar" name="aadhaar" fileId="upload-aadhaar"
             valuename={formData.aadhaarname} numbername={formData.aadhaarnumber}
             onFileChange={handleFileChange} onfieldChange={handleChange} />
-          <DocumentUpload label="D.L" name="license" fileId="upload-license"
+          <DocumentUpload label="Driving License" name="license" fileId="upload-license"
             valuename={formData.licensename} numbername={formData.licensenumber}
             onFileChange={handleFileChange} onfieldChange={handleChange} />
           <DocumentUpload label="Passport" name="passport" fileId="upload-passport"

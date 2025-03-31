@@ -27,12 +27,6 @@ const DocumentUpload = ({ label, name, fileId, onFileChange,
     return (
         <div className="row">
             {/* Heading */}
-            <div className="col-lg-12 col-md-12">
-                <h5 className="text-center mb-2" style={{ textDecoration: "underline" }}>
-                    {label}
-                </h5>
-            </div>
-
             {/* Name Input */}
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
                 <label>{label} Name</label>
