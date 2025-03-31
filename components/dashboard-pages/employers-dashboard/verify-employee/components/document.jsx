@@ -28,7 +28,7 @@ const DocumentUpload = ({ label, name, fileId, onFileChange,
         <div className="row">
             {/* Heading */}
             <div className="col-lg-12 col-md-12">
-                <h3 className="text-center mb-4" style={{ textDecoration: "underline" }}>
+                <h3 className="text-center mb-2" style={{ textDecoration: "underline" }}>
                     {label}
                 </h3>
             </div>
