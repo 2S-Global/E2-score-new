@@ -6,6 +6,7 @@ import MessageComponent from "@/components/common/ResponseMsg";
 
 import PanDetails from "./documents/pandetails";
 import AdharDetails from "./documents/adhardetails";
+import DlDetails from "./documents/dldetails";
 
 const WidgetContentBox = () => {
   const [userid, setUserid] = useState(null);
@@ -100,55 +101,28 @@ const WidgetContentBox = () => {
  */}
 
 
-            {/* Epic */}
-            {
-              user?.epic_response && (
-                <div className="col-md-4 mb-4">
-                  <div className="p-3 shadow-sm rounded bg-light"> {/* Simple box with padding and background */}
-                    <h5 className="fw-bold text-dark mb-2">EPIC</h5>
-                    <div className="mt-2">
-                      <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">Full Name:</span>
-                        <span className="text-break">Avik Ghosh</span>
-                      </div>
-                      <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">EPIC:</span>
-                        <span className="text-break">KTF2559334</span>
-                      </div>
-                      <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">Verified:</span>
-                        <CheckCircle size={16} className="text-success" />
-                      </div>
-                      <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">Constituency Name:</span>
-                        <MapPin size={16} className="me-1" />
-                        <span className="text-break">Rajarhat New Town</span>
-                      </div>
-
-                      <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">Address:</span>
-                        <MapPin size={16} className="me-1" />
-                        <span className="text-break">Lueilwitz, Wisoky and Leuschke</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )
-            }
+            
             {/* dl */}
-            {
+           {/*  {
               user?.dl_response && (
+ */}
+                <DlDetails user={user} />
+
+
+
+
+
                 <div className="col-md-4 mb-4">
                   <div className="p-3 shadow-sm rounded bg-light"> {/* Simple box with padding and background */}
-                    <h5 className="fw-bold text-dark mb-2">DL</h5>
+                    <h5 className="fw-bold text-dark mb-2">Driving License</h5>
                     <div className="mt-2">
                       <div className="d-flex align-items-center mb-1">
                         <span className="fw-bold me-2">Full Name:</span>
-                        <span className="text-break">{user?.dl_response.result.user_full_name}</span>
+                        <span className="text-break">{user?.dl_response?.result?.user_full_name}</span>
                       </div>
                       <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">DL Number:</span>
-                        <span className="text-break">{user?.dl_response.result.dl_number}</span>
+                        <span className="fw-bold me-2">Driving License Number:</span>
+                        <span className="text-break">{user?.dl_response?.result.dl_number}</span>
                       </div>
                       <div className="d-flex align-items-center mb-1">
                         <span className="fw-bold me-2">Verified:</span>
@@ -165,17 +139,19 @@ const WidgetContentBox = () => {
 
                       <div className="d-flex align-items-center mb-1">
                         <span className="fw-bold me-2">Expiry Date:</span>
-                        <span className="text-break">{user?.dl_response.result.expiry_date}</span>
+                        <span className="text-break">{user?.dl_response?.result?.expiry_date}</span>
                       </div>
 
                     </div>
                   </div>
                 </div>
-              )
-            }
+           {/*    )
+            } */}
             {/* passport */}
             {
               user?.passport_response && (
+
+
                 <div className="col-md-4 mb-4">
                   <div className="p-3 shadow-sm rounded bg-light"> {/* Simple box with padding and background */}
                     <h5 className="fw-bold text-dark mb-2">Passport</h5>
@@ -218,6 +194,42 @@ const WidgetContentBox = () => {
                         <span className="fw-bold me-2">Address:</span>
                         <MapPin size={16} className="me-1" />
                         <span className="text-break">{user?.candidate_address}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            }
+
+            {/* Epic */}
+            {
+              user?.epic_response && (
+                <div className="col-md-4 mb-4">
+                  <div className="p-3 shadow-sm rounded bg-light"> {/* Simple box with padding and background */}
+                    <h5 className="fw-bold text-dark mb-2">EPIC</h5>
+                    <div className="mt-2">
+                      <div className="d-flex align-items-center mb-1">
+                        <span className="fw-bold me-2">Full Name:</span>
+                        <span className="text-break">Avik Ghosh</span>
+                      </div>
+                      <div className="d-flex align-items-center mb-1">
+                        <span className="fw-bold me-2">EPIC:</span>
+                        <span className="text-break">KTF2559334</span>
+                      </div>
+                      <div className="d-flex align-items-center mb-1">
+                        <span className="fw-bold me-2">Verified:</span>
+                        <CheckCircle size={16} className="text-success" />
+                      </div>
+                      <div className="d-flex align-items-center mb-1">
+                        <span className="fw-bold me-2">Constituency Name:</span>
+                        <MapPin size={16} className="me-1" />
+                        <span className="text-break">Rajarhat New Town</span>
+                      </div>
+
+                      <div className="d-flex align-items-center mb-1">
+                        <span className="fw-bold me-2">Address:</span>
+                        <MapPin size={16} className="me-1" />
+                        <span className="text-break">Lueilwitz, Wisoky and Leuschke</span>
                       </div>
                     </div>
                   </div>
