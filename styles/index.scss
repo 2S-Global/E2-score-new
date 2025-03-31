@@ -177,6 +177,7 @@ a {
   box-sizing: border-box;
   border-radius: 8px;
   transition: all 300ms ease;
+  margin-bottom: 5px;
 }
 .default-form .form-group select {
   position: relative;
@@ -192,6 +193,7 @@ a {
   box-sizing: border-box;
   border-radius: 8px;
   transition: all 300ms ease;
+  margin-bottom: 5px;
 }
 .form-control {
   display: block;
@@ -215,7 +217,7 @@ a {
   font-family: Flaticon;
   content: "";
   color: #9fa9b8;
-  font-size: 10px;
+  font-size: 8px;
   transition: .3s;
   padding-top: 10px;
 }
@@ -234,6 +236,9 @@ a {
   color: #1b2032;
   font-size: 14px;
   border: 2px dashed #ced4e1;
-  padding-bottom: 13px;
+  padding-bottom: 15px;
   
+}
+.widget-content .default-form .form-group {
+  margin-bottom: 10px;
 }
