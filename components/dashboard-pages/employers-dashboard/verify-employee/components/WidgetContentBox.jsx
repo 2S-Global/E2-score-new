@@ -185,15 +185,16 @@ const WidgetContentBox = () => {
           <DocumentUpload label="Aadhaar" name="aadhaar" fileId="upload-aadhaar"
             valuename={formData.aadhaarname} numbername={formData.aadhaarnumber}
             onFileChange={handleFileChange} onfieldChange={handleChange} />
-          <DocumentUpload label="Voter ID" name="voter" fileId="upload-voter"
-            valuename={formData.votername} numbername={formData.voternumber}
-            onFileChange={handleFileChange} onfieldChange={handleChange} />
           <DocumentUpload label="Driving License" name="license" fileId="upload-license"
             valuename={formData.licensename} numbername={formData.licensenumber}
             onFileChange={handleFileChange} onfieldChange={handleChange} />
           <DocumentUpload label="Passport" name="passport" fileId="upload-passport"
             valuename={formData.passportname} numbername={formData.passportnumber}
             onFileChange={handleFileChange} onfieldChange={handleChange} />
+          <DocumentUpload label="Voter ID" name="voter" fileId="upload-voter"
+            valuename={formData.votername} numbername={formData.voternumber}
+            onFileChange={handleFileChange} onfieldChange={handleChange} />
+
           {/* Submit Button */}
           <div className="form-group">
             <button className="theme-btn btn-style-one" type="submit" disabled={loading}>
