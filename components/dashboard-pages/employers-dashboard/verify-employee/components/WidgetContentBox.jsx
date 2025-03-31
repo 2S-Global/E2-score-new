@@ -106,13 +106,16 @@ const WidgetContentBox = () => {
 
   return (
     <div className="widget-content">
-      <div className="row">
+        <div className="col-lg-12 col-md-12 py-1">
+           <h4>Add Employee Details</h4>
+        </div>
 
+      <div className="row">
         <form className="default-form" onSubmit={handleSubmit}>
           <MessageComponent error={error} success={success} />
           <div className="row">
             <div className="col-lg-12 col-md-12">
-              <h3 className="text-center mb-4" style={{ textDecoration: "underline" }}>
+              <h3 className="text-center mb-2" style={{ textDecoration: "underline" }}>
                 Personal Details
               </h3>
             </div>

@@ -62,7 +62,7 @@ const DocumentUpload = ({ label, name, fileId, onFileChange,
                     <label
                         className="uploadButton-button ripple-effect"
                         htmlFor={fileId}
-                        style={{ width: "100%", height: "60px", cursor: "pointer" }}
+                        style={{ width: "100%", height: "40px", cursor: "pointer" }}
                     >
                         {documentData.file ? (
                             <span onClick={() => window.open(documentData.filePreview, "_blank")}>
