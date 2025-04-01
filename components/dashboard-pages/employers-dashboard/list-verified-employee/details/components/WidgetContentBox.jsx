@@ -4,9 +4,10 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
 
-import PanDetails from "./documents/pandetails";
-import AdharDetails from "./documents/adhardetails";
-import DlDetails from "./documents/dldetails";
+import PanDetails from "./documents/pancard";
+import AdharDetails from "./documents/adharcard";
+import DlDetails from "./documents/dlcard";
+import PassDetails from "./documents/passportcard";
 
 const WidgetContentBox = () => {
   const [userid, setUserid] = useState(null);
@@ -82,7 +83,13 @@ const WidgetContentBox = () => {
           </form>
 
           <div className="row">
-            <h4 className="text-primary mb-3">Verification Details</h4>
+          <h4 className="text-primary mb-3">
+  Verification Details 
+  <small style={{ fontSize: "12px", color: "black" }}> ( Verified at: {new Date(user.createdAt).toLocaleDateString("en-GB")} )</small>
+</h4>
+
+
+
             {/* PAN */}
             {/* {
                user?.pan_response && ( */}
@@ -90,15 +97,24 @@ const WidgetContentBox = () => {
             {/*    ) 
             }
  */}
+
+
+         {/* passport */}
+         {/*    {
+              user?.passport_response && ( */}
+              <PassDetails user={user} />
+          {/*  )
+        } */}
             {/* adhare */}
             {/* {
               user?.aadhar_response && ( */}
-
-
             <AdharDetails user={user} />
             {/*   )
             }
  */}
+
+ 
+       
 
 
             
@@ -108,98 +124,9 @@ const WidgetContentBox = () => {
  */}
                 <DlDetails user={user} />
 
-
-
-
-
-                <div className="col-md-4 mb-4">
-                  <div className="p-3 shadow-sm rounded bg-light"> {/* Simple box with padding and background */}
-                    <h5 className="fw-bold text-dark mb-2">Driving License</h5>
-                    <div className="mt-2">
-                      <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">Full Name:</span>
-                        <span className="text-break">{user?.dl_response?.result?.user_full_name}</span>
-                      </div>
-                      <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">Driving License Number:</span>
-                        <span className="text-break">{user?.dl_response?.result.dl_number}</span>
-                      </div>
-                      <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">Verified:</span>
-                        {user?.dl_response?.response_code == 100 ? (
-                          <CheckCircle size={16} className="text-success" />
-                        ) : (
-                          <XCircle size={16} className="text-danger" />
-                        )}
-                      </div>
-                      <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">Cover:(st)</span>
-                        <span className="text-break">LMV</span>
-                      </div>
-
-                      <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">Expiry Date:</span>
-                        <span className="text-break">{user?.dl_response?.result?.expiry_date}</span>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
            {/*    )
             } */}
-            {/* passport */}
-            {
-              user?.passport_response && (
-
-
-                <div className="col-md-4 mb-4">
-                  <div className="p-3 shadow-sm rounded bg-light"> {/* Simple box with padding and background */}
-                    <h5 className="fw-bold text-dark mb-2">Passport</h5>
-                    <div className="mt-2">
-                      <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">Verified:</span>
-                        {user?.passport_response?.response_code == 100 ? (
-                          <img
-                            src="/images/resource/verified.png"
-                            alt="Verified"
-                            style={{ width: "100px", height: "20px" }}
-
-                          />
-                        ) : (<img
-                          src="/images/resource/unverified.png"
-                          alt="Not Verified"
-                          style={{ width: "100px", height: "20px" }}
-
-                        />
-                        )}
-
-
-                      </div>
-                      <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">Full Name:</span>
-                        <span className="text-break">{user?.passport_response.result.name_on_passport} {user?.passport_response.result.customer_last_name}</span>
-                      </div>
-                      <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">Passport Number:</span>
-                        <span className="text-break">{user?.passport_response.result.passport_number}</span>
-                      </div>
-
-                      <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">Passport Applied Date:</span>
-
-                        <span className="text-break">{user?.passport_response.result.passport_applied_date}</span>
-                      </div>
-
-                      <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">Address:</span>
-                        <MapPin size={16} className="me-1" />
-                        <span className="text-break">{user?.candidate_address}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )
-            }
+            
 
             {/* Epic */}
             {

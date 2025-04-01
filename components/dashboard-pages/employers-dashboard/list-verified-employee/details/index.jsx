@@ -29,12 +29,6 @@ const index = () => {
       {/* <!-- Dashboard --> */}
       <section className="user-dashboard">
         <div className="dashboard-outer">
-          <BreadCrumb title="Verified Employee Details!" />
-          {/* breadCrumb */}
-
-          <MenuToggler />
-          {/* Collapsible sidebar button */}
-
           <div className="row">
             <div className="col-lg-12">
               <div className="applicants-widget ls-widget">
