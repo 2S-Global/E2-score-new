@@ -33,10 +33,6 @@ const AdharDetails = ({ user }) => {
                         <span className="fw-bold me-2">Gender:</span>
                         <span className="text-break">{user?.aadhaar_response?.result?.user_gender || "N/A"}</span>
                       </div>
-                      <div className="d-flex align-items-center mb-1">
-                        <span className="fw-bold me-2">Last Digits:</span>
-                        <span className="text-break">  {user?.aadhaar_response?.result?.last_digits || "N/A"}</span>
-                      </div>
                     </div>
                   </div>
                 </div>

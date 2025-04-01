@@ -37,7 +37,12 @@ const DlDetails = ({ user }) => {
               style={{ maxWidth: "150px", maxHeight: "150px" }}
             />
           ) : (
-            <span className="text-muted">No Image Available</span>
+            <img
+              src="/images/resource/no_user.png"
+              alt="Profile"
+              className="img-thumbnail rounded"
+              style={{ maxWidth: "150px", maxHeight: "150px" }}
+            />
           )}
         </div>
         
