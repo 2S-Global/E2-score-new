@@ -9,6 +9,7 @@ import AdharDetails from "./documents/adharcard";
 import DlDetails from "./documents/dlcard";
 import PassDetails from "./documents/passportcard";
 import EpicDetails from "./documents/epiccard";
+import { DocumentsTable } from "./documents/table";
 
 const WidgetContentBox = () => {
   const [userid, setUserid] = useState(null);
@@ -64,6 +65,26 @@ const WidgetContentBox = () => {
       { label: "Gender", value: user.candidate_gender ? user.candidate_gender.charAt(0).toUpperCase() + user.candidate_gender.slice(1) : "" }
     ]
     : [];
+
+    const handleClick = async (documentType) => {
+      console.log("Clicked on:", documentType);
+      
+      // Find the element by ID and scroll to its top
+      const element = document.getElementById(documentType);
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth", // Smooth scroll
+          block: "start",     // Align to the start (top) of the element
+          inline: "start"     // Align to the start (left) of the element (if horizontally scrolled)
+        });
+      }
+    };
+    
+    
+
+
+
+
   return (
     <div className="widget-content p-4 border rounded shadow-sm bg-white">
       <h4 className="mb-3 text-primary">User Information</h4>
@@ -86,9 +107,20 @@ const WidgetContentBox = () => {
   Verification Details 
   <small style={{ fontSize: "12px", color: "black" }}> ( Verified at: {new Date(user.createdAt).toLocaleDateString("en-GB")} )</small>
 </h4>
+
+            <div className="col-md-12 mb-3">
+              <DocumentsTable user={user} 
+              handleclick={handleClick}
+              />
+            </div>
+
+          
+
+
             {/* PAN */}
             {/* {
                user?.pan_response && ( */}
+              
             <PanDetails user={user} />
             {/*    ) 
             }
@@ -96,13 +128,17 @@ const WidgetContentBox = () => {
          {/* passport */}
          {/*    {
               user?.passport_response && ( */}
+            
               <PassDetails user={user} />
+              
           {/*  )
         } */}
             {/* adhare */}
             {/* {
               user?.aadhar_response && ( */}
+           
             <AdharDetails user={user} />
+           
             {/*   )
             }
  */}
@@ -110,8 +146,9 @@ const WidgetContentBox = () => {
             {/* dl */}
            {/*  {
               user?.dl_response && (
- */}
+ */}            
                 <DlDetails user={user} />
+                
 
            {/*    )
             } */}
@@ -120,7 +157,9 @@ const WidgetContentBox = () => {
             {/* Epic */}
            {/*  {
               user?.epic_response && ( */}
+           
                 <EpicDetails user={user} />
+              
              {/*  )
             } */}
           </div>

@@ -29,17 +29,17 @@ const index = () => {
       {/* <!-- Dashboard --> */}
       <section className="user-dashboard">
         <div className="dashboard-outer">
-          <BreadCrumb title="Verified Employee List!" />
-          {/* breadCrumb */}
+          {/* <BreadCrumb title="Verified Employee List!" />
 
-          <MenuToggler />
+
+          <MenuToggler /> */}
           {/* Collapsible sidebar button */}
 
           <div className="row">
             <div className="col-lg-12">
               <div className="applicants-widget ls-widget">
                 <div className="widget-title">
-                  <h4>Verified Employee List</h4>
+                  <h4>Download Center</h4>
                   {/* <WidgetToFilterBox /> */}
                 </div>
                 {/* End widget top filter box */}

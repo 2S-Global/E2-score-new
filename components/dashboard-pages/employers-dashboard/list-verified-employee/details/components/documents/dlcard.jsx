@@ -6,7 +6,7 @@ const DlDetails = ({ user }) => {
     const presentAddress = dl.user_address?.find((addr) => addr.type === "Present");
     return (
      
-        <div className="col-md-6 mb-4">
+        <div className="col-md-6 mb-4" id="dl_response">
         <div className="p-3 shadow-sm rounded bg-light"> {/* Simple box with padding and background */}
         <div className="d-flex align-items-center mb-3">
                     <h5 className="fw-bold text-dark mb-0 me-2">Driving License</h5>
