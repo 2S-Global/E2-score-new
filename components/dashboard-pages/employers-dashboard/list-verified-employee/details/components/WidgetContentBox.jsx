@@ -57,19 +57,13 @@ const WidgetContentBox = () => {
       { label: "Email", value: user.candidate_email || "" },
       { label: "Address", value: user.candidate_address || "" },
       { label: "Gender", value: user.candidate_gender ? user.candidate_gender.charAt(0).toUpperCase() + user.candidate_gender.slice(1) : "" }
-
-
-
     ]
     : [];
-
   return (
     <div className="widget-content p-4 border rounded shadow-sm bg-white">
       <h4 className="mb-3 text-primary">User Information</h4>
-
       {loading && <p>Loading...</p>}
       {error && <p className="text-danger">{error}</p>}
-
       {!loading && !error && user && (
         <>
           <form className="default-form">
@@ -82,15 +76,11 @@ const WidgetContentBox = () => {
               ))}
             </div>
           </form>
-
           <div className="row">
           <h4 className="text-primary mb-3">
   Verification Details 
   <small style={{ fontSize: "12px", color: "black" }}> ( Verified at: {new Date(user.createdAt).toLocaleDateString("en-GB")} )</small>
 </h4>
-
-
-
             {/* PAN */}
             {/* {
                user?.pan_response && ( */}
@@ -98,8 +88,6 @@ const WidgetContentBox = () => {
             {/*    ) 
             }
  */}
-
-
          {/* passport */}
          {/*    {
               user?.passport_response && ( */}
@@ -114,11 +102,6 @@ const WidgetContentBox = () => {
             }
  */}
 
- 
-       
-
-
-            
             {/* dl */}
            {/*  {
               user?.dl_response && (
@@ -135,26 +118,8 @@ const WidgetContentBox = () => {
                 <EpicDetails user={user} />
              {/*  )
             } */}
-
-
-
-
           </div>
         </>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       )}
     </div>
   );
