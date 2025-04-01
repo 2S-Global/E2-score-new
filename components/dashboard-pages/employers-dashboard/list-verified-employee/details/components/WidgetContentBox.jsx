@@ -52,7 +52,12 @@ const WidgetContentBox = () => {
   const userData = user
     ? [
       { label: "Full Name", value: user.candidate_name || "" },
-      { label: "Date of Birth", value: user.candidate_dob || "" },
+      { 
+        label: "Date of Birth", 
+        value: user.candidate_dob 
+          ? new Date(user.candidate_dob).toLocaleDateString("en-GB") 
+          : "" 
+      },
       { label: "Phone Number", value: user.candidate_mobile || "" },
       { label: "Email", value: user.candidate_email || "" },
       { label: "Address", value: user.candidate_address || "" },
