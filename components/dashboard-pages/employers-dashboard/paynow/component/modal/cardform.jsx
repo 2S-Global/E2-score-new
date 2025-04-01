@@ -13,12 +13,6 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
     const [amount, setAmount] = useState(mainamount);
     const [token, setToken] = useState(null);
     const [payments, setPayments] = useState([]);
-
-
-
-    const [pendingcandidates, setAllPendingCandidate] = useState([]);
-
-
     const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
     useEffect(() => {
@@ -28,96 +22,70 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
 
 
 
-    useEffect(() => {
-        fetchAllPendingCandidate();
-    }, [token, apiurl]);
-
-
-
-
-    const fetchAllPendingCandidate = async () => {
+    const handlePayNow = async () => { // Add 'async' here
         try {
-
             const response = await axios.get(`${apiurl}/api/usercart/list_user_cart_all`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
 
-            console.log("ALL CANDIDATE LIST ==>:", response.data.data);
-            setAllPendingCandidate(response.data.data);
-        } catch (error) {
-            console.error("Error fetching CANDIDATE:", error);
-        } finally {
-            // setLoading(false);
-        }
-    };
+            if (response.data.success) {
+                setPayments(response.data.data);
+                console.log("Updated Payments:", response.data.data);
 
+                response.data.data.forEach(async (payment) => {
+                    //console.log("PAN Name:", payment.pan_name);
 
-
-    const triggerVerificationAPIs = async (pendingcandidate) => {
-        try {
-            // Ensure selected_verifications exists
-            if (!pendingcandidate.selected_verifications) {
-                console.warn(`No verification types found for ${pendingcandidate.candidate_name}`);
-                return;
-            }
-
-            // Split verification types correctly
-            const verificationTypes = pendingcandidate.selected_verifications.split(/\s*,\s*/);
-
-            // console.log(`Verification types for ${pendingcandidate.candidate_name}:`, verificationTypes);
-
-            for (const verificationType of verificationTypes) {
-                switch (verificationType.trim()) {  // Trim spaces to avoid mismatches
-
-                    case "PAN":
-
-
-
-                        const customer_pan_number = pendingcandidate.pan_number;
-                        const pan_name = pendingcandidate.pan_name;
-                        const id = pendingcandidate._id;
+                    if (payment.pan_name && payment.pan_number) {
+                        const customer_pan_number = payment.pan_number;
+                        const pan_name = payment.pan_name;
+                        const id = payment._id;
                         console.log(
                             `Payment ID: ${id}, Customer PAN Number: ${customer_pan_number}, PAN Name: ${pan_name}`
                         )
                         //api call
                         console.log("Calling pan Api:", customer_pan_number)
-                        let pan_response = await axios.post(`${apiurl}/api/verify/verifyPAN`,
-                            {
-                                customer_pan_number: customer_pan_number,
-                                pan_holder_name: pan_name,
-                                id: id
-                            },
-                            {
-                                headers: {
-                                    Authorization: `Bearer ${token}`,
-                                },
-                            }
-                        );
-                        console.log("PAN Verify Response:", pan_response.data);
+                        /*    let pan_response = await axios.post(
+                              `${apiurl}/api/verify/verifyPAN`,
+                              {
+                                  customer_pan_number: customer_pan_number,
+                                  pan_holder_name: pan_name,
+                                  id: id
+                              },
+                              {
+                                  headers: {
+                                      Authorization: `Bearer ${token}`,
+                                  },
+                              }
+                          );
+                          console.log("PAN Verify Response:", pan_response.data); */
+                    }
+                    else {
+                        console.log("No PAN payment ID:", payment._id, payment.candidate_name);
+                    }
 
 
-                        console.log(`PAN Verification for ${pendingcandidate.candidate_name}`);
-                        break;
 
-                    case "Aadhar":
 
-                        const candidate_aadhaar_number = pendingcandidate.aadhar_number;
-                        const aadharid = pendingcandidate._id;
-                        const aadhar_name = pendingcandidate.aadhar_name;
 
+
+                    if (payment.aadhar_name && payment.aadhar_number) {
+                        const candidate_aadhaar_number = payment.aadhar_number;
+                        const id = payment._id;
+                        const aadhar_name = payment.aadhar_name;
                         console.log(
-                            `Payment ID: ${aadharid}, Candidate Aadhaar Number: ${candidate_aadhaar_number}, Aadhaar Name: ${aadhar_name}`
+                            `Payment ID: ${id}, Candidate Aadhaar Number: ${candidate_aadhaar_number}, Aadhaar Name: ${aadhar_name}`
                         )
 
                         //api call
                         console.log("Calling aadhaar Api:", candidate_aadhaar_number)
 
-                        let adhar_response = await axios.post(`${apiurl}/api/verify/verifyAadhaar`,
+                        /* let adhar_response = await axios.post(
+                            `${apiurl}/api/verify/verifyAadhaar`,
                             {
                                 customer_aadhaar_number: candidate_aadhaar_number,
-                                id: aadharid,
+                                id: id,
                             },
                             {
                                 headers: {
@@ -125,164 +93,151 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                                 },
                             }
                         );
-                        console.log("Aadhaare Verify Response:", adhar_response.data);
+                        console.log("Aadhaare Verify Response:", adhar_response.data); */
+                    }
+                    else {
+                        console.log("No Aadhaar payment ID:", payment._id, payment.candidate_name);
+                    }
 
 
-                        console.log(`Aadhaar Verification for ${pendingcandidate.candidate_name}`);
-                        break;
-
-                    case "EPIC":
 
 
 
-                        const epic_number = pendingcandidate.epic_number;
-                        const epicid = pendingcandidate._id;
-                        const epic_name = pendingcandidate.epic_number
-                        console.log(
-                            `Payment ID: ${epicid}, Epic Number: ${epic_number}, Epic Name: ${epic_name}`
-                        )
-                        //api call
-                        console.log("Calling epic Api:", epic_number, epic_name)
-                        const epic_response = await axios.post(
-                            `${apiurl}/api/verify/verifyEPIC`,
-                            {
-                                id: epicid,
-                                customer_epic_number: epic_number,
-                                name_to_match: epic_name
-                            },
-                            {
-                                headers: {
-                                    Authorization: `Bearer ${token}`,
-                                },
-                            }
-                        );
-                        console.log("Epic Verify Response:", epic_response.data);
 
 
-                        console.log(`EPIC Verification for ${pendingcandidate.candidate_name}`);
-                        break;
-
-                    case "Driving Licence":
 
 
-                        const customer_dl_number = pendingcandidate.dl_number;
-                        const name_to_match = pendingcandidate.dl_name;
-                        const candidate_dob_og = pendingcandidate.candidate_dob; // Example: "2000-03-27"
+                    if (payment.dl_name && payment.dl_number && payment.candidate_dob) {
+                        const customer_dl_number = payment.dl_number;
+                        const name_to_match = payment.dl_name;
+                        const candidate_dob_og = payment.candidate_dob; // Example: "2000-03-27"
                         const dob = new Date(candidate_dob_og);
                         const customer_dob = dob.getDate().toString().padStart(2, '0') + "-" +
                             (dob.getMonth() + 1).toString().padStart(2, '0') + "-" +
                             dob.getFullYear();
-                        const dlid = pendingcandidate._id;
+                        const id = payment._id;
                         console.log(
-                            `Payment ID: ${dlid}, Customer DL Number: ${customer_dl_number}, DL Name: ${name_to_match}, Candidate DOB: ${customer_dob} `
+                            `Payment ID: ${id}, Customer DL Number: ${customer_dl_number}, DL Name: ${name_to_match}, Candidate DOB: ${customer_dob} `
                         )
                         //api call
                         console.log(
                             "Calling dl Api:", customer_dl_number, name_to_match, customer_dob
                         );
-                        let dl_response = await axios.post(
-                            `${apiurl}/api/verify/verifyDL`,
-                            {
-                                id: dlid,
-                                customer_dl_number: customer_dl_number,
-                                name_to_match: name_to_match,
-                                customer_dob: customer_dob
-                            },
-                            {
-                                headers: {
-                                    Authorization: `Bearer ${token}`,
-                                },
-                            }
-                        );
-                        console.log("DL Verify Response:", dl_response.data);
-
-
-
-                        console.log(`Driving Licence Verification for ${pendingcandidate.candidate_name}`);
-                        break;
-
-                    case "Passport":
-
-                        const customer_file_number = pendingcandidate.passport_file_number;
-                        const candidate_name = pendingcandidate.passport_name;
-                        const passportid = pendingcandidate._id;
-                        const passportcandidate_dob_og = pendingcandidate.candidate_dob; // Example: "2000-03-27"
-                        const passportdob = new Date(passportcandidate_dob_og);
-                        const candidate_dob = passportdob.getDate().toString().padStart(2, '0') + "-" +
-                            (passportdob.getMonth() + 1).toString().padStart(2, '0') + "-" +
-                            passportdob.getFullYear();
+                        /*   let dl_response = await axios.post(
+                              `${apiurl}/api/verify/verifyDL`,
+                              {
+                                  id,
+                                  customer_dl_number: customer_dl_number,
+                                  name_to_match: name_to_match,
+                                  customer_dob: customer_dob
+                              },
+                              {
+                                  headers: {
+                                      Authorization: `Bearer ${token}`,
+                                  },
+                              }
+                          );
+                          console.log("DL Verify Response:", dl_response.data); */
+                    }
+                    else {
+                        console.log("No DL payment ID:", payment._id, payment.candidate_name);
+                    }
+                    if (payment.epic_name && payment.epic_number) {
+                        const epic_number = payment.epic_number;
+                        const id = payment._id;
+                        const epic_name = payment.epic_number
                         console.log(
-                            `Payment ID: ${passportid}, Customer Passport Number: ${customer_file_number}, Candidate Name: ${candidate_name}, Candidate DOB: ${candidate_dob} `
+                            `Payment ID: ${id}, Epic Number: ${epic_number}, Epic Name: ${epic_name}`
+                        )
+                        //api call
+                       /*  console.log("Calling epic Api:", epic_number, epic_name)
+                          const epic_response = await axios.post(
+                              `${apiurl}/api/verify/verifyEPIC`,
+                              {
+                                  id,
+                                  customer_epic_number: epic_number,
+                                  name_to_match: epic_name
+                              },
+                              {
+                                  headers: {
+                                      Authorization: `Bearer ${token}`,
+                                  },
+                              }
+                          );
+                          console.log("Epic Verify Response:", epic_response.data); */
+                    }
+                    else {
+                        console.log("No Epic payment ID:", payment._id, payment.candidate_name);
+                    }
+                    if (payment.passport_name && payment.passport_file_number) {
+                        const customer_file_number = payment.passport_file_number;
+                        const candidate_name = payment.passport_name;
+                        const id = payment._id;
+                        const candidate_dob_og = payment.candidate_dob; // Example: "2000-03-27"
+                        const dob = new Date(candidate_dob_og);
+                        const candidate_dob = dob.getDate().toString().padStart(2, '0') + "-" +
+                            (dob.getMonth() + 1).toString().padStart(2, '0') + "-" +
+                            dob.getFullYear();
+                        console.log(
+                            `Payment ID: ${id}, Customer Passport Number: ${customer_file_number}, Candidate Name: ${candidate_name}, Candidate DOB: ${candidate_dob} `
                         )
                         //api call
                         console.log(
                             "Calling passport Api:", customer_file_number, candidate_name, candidate_dob
                         );
-                        let passport_response = await axios.post(
-                            `${apiurl}/api/verify/verifyPassport`,
-                            {
-                                id: passportid,
-                                customer_file_number: customer_file_number,
-                                name_to_match: candidate_name,
-                                customer_dob: candidate_dob
-                            },
-                            {
-                                headers: {
-                                    Authorization: `Bearer ${token}`,
-                                },
-                            }
-                        );
-                        console.log("Passport Verify Response:", passport_response.data);
+                         /*  let passport_response = await axios.post(
+                              `${apiurl}/api/verify/verifyPassport`,
+                              {
+                                  id,
+                                  customer_file_number: customer_file_number,
+                                  name_to_match: candidate_name,
+                                  customer_dob: candidate_dob
+                              },
+                              {
+                                  headers: {
+                                      Authorization: `Bearer ${token}`,
+                                  },
+                              }
+                          );
+                          console.log("Passport Verify Response:", passport_response.data);
+ */
+                    }
+                    else {
+                        console.log("No Passport payment ID:", payment._id, payment.candidate_name);
+                    }
 
-                        console.log(`Passport Verification for ${pendingcandidate.candidate_name}`);
-                        break;
+                    //final api call
+                    console.log(
+                        "Calling Final Api:", payment._id, payment.candidate_name
+                    );
+                   /*  try {
+                        const id = payment._id;
+                         const final_response = await axios.post(
+                             `${apiurl}/api/verify/cloneAndMoveRecordById`,
+                             {
+                                 id,
+                             },
+                             { headers: { Authorization: `Bearer ${token}`, }, }
+                         );
+                         console.log("Final response: ", final_response.data);
+                    }
+                    catch (error) {
+                        console.error("Error while verifying documents:", error);
+                    } */
 
-                    default:
-                        console.warn(`Unknown verification type: "${verificationType}"`);
-                }
+                    //empty payment
+                    payment = null;
+                });
+            } else {
+                setError("Failed to fetch data.");
             }
-
-            //final api call
-            /*  try {
-                 const finalid = pendingcandidate._id;
-                 const final_response = await axios.post(`${apiurl}/api/verify/cloneAndMoveRecordById`,
-                     { id: finalid },
-                     { headers: { Authorization: `Bearer ${token}`, }, }
-                 );
-                 console.log("Final response: ", final_response.data);
-             }
-             catch (error) {
-                 console.error("Error while verifying documents:", error);
-             } */
-
-
-        } catch (error) {
-            console.error(`Error triggering verification APIs for ${pendingcandidate.candidate_name}:`, error);
+        } catch (err) {
+            console.error("Error fetching data:", err);
+            setError("Error fetching data. Please try again.");
+        } finally {
+            setLoading(false);
         }
     };
-
-
-
-
-
-
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-
-
-        if (pendingcandidates.length > 0) {
-            // Wait for all API calls to complete before navigation
-            await Promise.all(pendingcandidates.map((pendingcandidate) => triggerVerificationAPIs(pendingcandidate)));
-
-            // Navigate to another page after completion
-            router.push("/lisdomesticusers");
-        } else {
-            console.warn("No users available for verification.");
-        }
-    };
-
-
 
 
 
@@ -389,7 +344,7 @@ const CardPaymentForm = ({ show, onClose, mainamount }) => {
                         {/* Modal Footer */}
                         <div className="modal-footer">
                             <div className="d-flex justify-content-start">
-                                <button className="btn btn-primary me-2" onClick={handleSubmit}>
+                                <button className="btn btn-primary me-2" onClick={handlePayNow}>
                                     Pay Now (INR {amount})
                                 </button>
                                 <button className="btn btn-secondary" onClick={onClose}>

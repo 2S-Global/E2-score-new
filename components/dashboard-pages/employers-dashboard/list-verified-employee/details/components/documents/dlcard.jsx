@@ -41,7 +41,7 @@ const DlDetails = ({ user }) => {
               src="/images/resource/no_user.png"
               alt="Profile"
               className="img-thumbnail rounded"
-              style={{ maxWidth: "150px", maxHeight: "150px" }}
+              style={{ Width: "50px", Height: "50px" }}
             />
           )}
         </div>
@@ -67,7 +67,6 @@ const DlDetails = ({ user }) => {
 
 
       </div>
-
       {/* Address Details */}
       <div className="row mt-3">
         {["Permanent", "Present"].map((type) => {
@@ -90,8 +89,6 @@ const DlDetails = ({ user }) => {
           );
         })}
       </div>
-
-      {/* Validity Details */}
       {/* Validity Details */}
 <div className="row mt-3">
   <div className="col-md-6 mb-2">
@@ -105,8 +102,6 @@ const DlDetails = ({ user }) => {
       : "N/A"}
   </div>
 </div>
-
-
       {/* Endorsement Details */}
       <div className="row mt-3">
         <div className="col-md-6 mb-2"><strong>Endorsement Number:</strong> {dl.endorse_number !== "NA" ? dl.endorse_number : "N/A"}</div>
