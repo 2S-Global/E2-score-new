@@ -49,8 +49,8 @@ const DlDetails = ({ user }) => {
         {/* Basic Details */}
         <div className="col-md-9">
           <div className="row">
-            <div className="col-md-6 mb-2"><strong>Full Name:</strong> {user?.dl_response?.result?.user_full_name || "N/A"}</div>
-            <div className="col-md-6 mb-2"><strong>DL Number:</strong> {user?.dl_response?.result?.dl_number || "N/A"}</div>
+            <div className="col-md-12 mb-2"><strong>Full Name:</strong> {user?.dl_response?.result?.user_full_name || "N/A"}</div>
+            <div className="col-md-12 mb-2"><strong>DL Number:</strong> {user?.dl_response?.result?.dl_number || "N/A"}</div>
             <div className="col-md-12 mb-2"><strong>Date of Birth:</strong> {user?.dl_response?.result?.user_dob || "N/A"}</div>
               </div>
         </div>
