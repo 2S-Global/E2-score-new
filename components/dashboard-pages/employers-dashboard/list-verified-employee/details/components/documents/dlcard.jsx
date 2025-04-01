@@ -87,10 +87,20 @@ const DlDetails = ({ user }) => {
       </div>
 
       {/* Validity Details */}
-      <div className="row mt-3">
-        <div className="col-md-6 mb-2"><strong>Non-Transport Validity:</strong> {dl.non_transport_validity?.from || "N/A"} to {dl.non_transport_validity?.to || "N/A"}</div>
-        <div className="col-md-6 mb-2"><strong>Transport Validity:</strong> {dl.transport_validity?.from !== "NA" ? `${dl.transport_validity.from} to ${dl.transport_validity.to}` : "N/A"}</div>
-      </div>
+      {/* Validity Details */}
+<div className="row mt-3">
+  <div className="col-md-6 mb-2">
+    <strong>Non-Transport Validity:</strong>{" "}
+    {dl.non_transport_validity ? `${dl.non_transport_validity.from || "N/A"} to ${dl.non_transport_validity.to || "N/A"}` : "N/A"}
+  </div>
+  <div className="col-md-6 mb-2">
+    <strong>Transport Validity:</strong>{" "}
+    {dl.transport_validity && dl.transport_validity.from !== "NA" 
+      ? `${dl.transport_validity.from} to ${dl.transport_validity.to || "N/A"}`
+      : "N/A"}
+  </div>
+</div>
+
 
       {/* Endorsement Details */}
       <div className="row mt-3">
@@ -100,7 +110,7 @@ const DlDetails = ({ user }) => {
 
       {/* Vehicle Categories */}
       <div className="mt-3">
-        <h6 className="fw-bold">Vehicle Categories</h6>
+        <h6 className="fw-bold mb-2">Vehicle Categories</h6>
         {dl.vehicle_category_details?.length > 0 ? (
           <ul className="list-group">
             {dl.vehicle_category_details.map((vehicle, index) => (
