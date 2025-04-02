@@ -49,8 +49,9 @@ const RazorpayPayment = ({ amount, razorpayKey, onSuccess }) => {
 
     return (
         <button className="btn btn-primary btn-sm" onClick={handlePayment} disabled={!isRazorpayLoaded}>
-            {isRazorpayLoaded ? "Pay with Razorpay" : "Loading..."}
+        {isRazorpayLoaded ? `Pay (${amount?.toFixed(2)} INR)` : "Loading..."}
         </button>
+
     );
 };
 
