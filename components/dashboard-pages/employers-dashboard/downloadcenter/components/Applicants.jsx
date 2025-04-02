@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DataTable from "react-data-table-component";
-import { CheckCircle, XCircle, HelpCircle, Eye, Loader, MinusCircle  ,Clock2 } from "lucide-react";
+import { CheckCircle, XCircle, HelpCircle, Eye, Loader, MinusCircle,Clock2,Download  } from "lucide-react";
 import Link from "next/link";
 
 const Applicants = () => {
@@ -10,6 +10,7 @@ const Applicants = () => {
   const [error, setError] = useState(null);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+  
   useEffect(() => {
     const fetchCandidates = async () => {
       try {
@@ -40,17 +41,39 @@ const Applicants = () => {
     fetchCandidates();
   }, [API_URL]);
 
-  // Handle status icons based on the field value
-  const renderProcessingIcon = (fieldValue) => {
-    if (fieldValue) {
-      return <Clock2 size={25} className="text-info" title="Processing" />;
-    } else {
-      return <MinusCircle size={18} className="text-muted" title="Not Provided" />;
+  const handleDownload = async (fileUrl) => {
+    if (!fileUrl) {
+      alert("No file available for download");
+      return;
     }
+  }
+
+  const renderProcessingIcon = (docNumber, docName, response) => {
+    // If document number OR name exists, check the response
+    if (docNumber || docName) {
+      if (response) {
+        switch (response.response_code) {
+          case "100":
+            return <CheckCircle size={14} className="text-success" title="Valid Authentication" />;
+          case "101":
+            return <XCircle size={14} className="text-danger" title="Invalid Authentication" />;
+          default:
+            return <MinusCircle size={14} className="text-warning" title="Not Applied" />;
+        }
+      }
+      // If document exists but no response, show processing
+      return <Clock2 size={14} className="text-info" title="Processing" />;
+    }
+  
+    // If neither number nor name is provided, mark as "Not Provided"
+    return <MinusCircle size={14} className="text-muted" title="Not Provided" />;
   };
+  
+
+
 
   // DataTable columns configuration
-  const columns = [
+  const columns = [ 
     {
       name: "Candidate Name",
       selector: (row) => row.candidate_name,
@@ -63,32 +86,49 @@ const Applicants = () => {
     },
     {
       name: "PAN Status",
-      selector: (row) => renderProcessingIcon(row.pan_number),
-      cell: (row) => renderProcessingIcon(row.pan_number),
+      selector: (row) => renderProcessingIcon(row.pan_number, row.pan_name, row.pan_response),
+      cell: (row) => renderProcessingIcon(row.pan_number, row.pan_name, row.pan_response),
     },
     {
       name: "Passport Status",
-      selector: (row) => renderProcessingIcon(row.passport_file_number),
-      cell: (row) => renderProcessingIcon(row.passport_file_number),
+      selector: (row) => renderProcessingIcon(row.passport_file_number, row.passport_name, row.passport_response),
+      cell: (row) => renderProcessingIcon(row.passport_file_number, row.passport_name, row.passport_response),
     },
     {
       name: "Aadhaar Status",
-      selector: (row) => renderProcessingIcon(row.aadhar_number),
-      cell: (row) => renderProcessingIcon(row.aadhar_number),
+      selector: (row) => renderProcessingIcon(row.aadhar_number, row.aadhar_name, row.aadhaar_response),
+      cell: (row) => renderProcessingIcon(row.aadhar_number, row.aadhar_name, row.aadhaar_response),
     },
     {
       name: "DL Status",
-      selector: (row) => renderProcessingIcon(row.dl_number),
-      cell: (row) => renderProcessingIcon(row.dl_number),
+      selector: (row) => renderProcessingIcon(row.dl_number, row.dl_name, row.dl_response),
+      cell: (row) => renderProcessingIcon(row.dl_number, row.dl_name, row.dl_response),
     },
-  
     {
       name: "Epic Status",
-      selector: (row) => renderProcessingIcon(row.epic_number),
-      cell: (row) => renderProcessingIcon(row.epic_number),
+      selector: (row) => renderProcessingIcon(row.epic_number, row.epic_name, row.epic_response),
+      cell: (row) => renderProcessingIcon(row.epic_number, row.epic_name, row.epic_response),
     },
- 
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="d-flex gap-2">
+          <button
+            onClick={() => handleDownload(row.file_url)}
+            className="btn btn-link p-0"
+            title="Download File"
+            disabled={row.all_verified === 0} // Disable when all_verified = 0
+            style={{ opacity: row.all_verified === 0 ? 0.5 : 1, cursor: row.all_verified === 0 ? "not-allowed" : "pointer" }}
+          >
+            <Download size={20} className={row.all_verified === 0 ? "text-muted" : "text-success"} />
+          </button>
+        </div>
+      ),
+      ignoreRowClick: true,
+      button: 1,
+    },
   ];
+  
 
   // Custom styles for centering content in the DataTable
   const customStyles = {
@@ -120,6 +160,8 @@ const Applicants = () => {
   if (error) return <p className="text-danger text-center mt-3">Error: {error}</p>;
 
   return (
+
+    
     <div className="container mt-4">
       <DataTable
         title="Applicants"

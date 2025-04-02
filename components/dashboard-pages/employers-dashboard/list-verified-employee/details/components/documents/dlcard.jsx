@@ -28,26 +28,27 @@ const DlDetails = ({ user }) => {
                 <div className="mt-2">
                 <div className="row">
         {/* Profile Image */}
-        <div className="col-md-3 text-center mb-3">
-          {user?.dl_response?.result?.user_image ? (
-            <img
-              src={`data:image/jpeg;base64,${user?.dl_response?.result?.user_image}`}
-              alt="Profile"
-              className="img-thumbnail rounded"
-              style={{ maxWidth: "150px", maxHeight: "150px" }}
-            />
-          ) : (
-            <img
-              src="/images/resource/no_user.png"
-              alt="Profile"
-              className="img-thumbnail rounded"
-              style={{ Width: "50px", Height: "50px" }}
-            />
-          )}
-        </div>
+        <div className="col-md-3 text-center mb-3" style={{ overflow: "hidden" }}>
+  {user?.dl_response?.result?.user_image ? (
+    <img
+      src={`data:image/jpeg;base64,${user?.dl_response?.result?.user_image}`}
+      alt="Profile"
+      className="img-thumbnail rounded"
+      style={{ maxWidth: "150px", maxHeight: "150px" }}
+    />
+  ) : (
+    <img
+      src="/images/resource/no_user.png"
+      alt="Profile"
+      className="img-thumbnail rounded"
+      style={{ width: "50px", height: "50px", maxWidth: "100%" }}
+    />
+  )}
+</div>
+
         
         {/* Basic Details */}
-        <div className="col-md-9">
+        <div className="col-md-9 p-3">
           <div className="row">
             <div className="col-md-12 mb-2"><strong>Full Name:</strong> {user?.dl_response?.result?.user_full_name || "N/A"}</div>
             <div className="col-md-12 mb-2"><strong>DL Number:</strong> {user?.dl_response?.result?.dl_number || "N/A"}</div>

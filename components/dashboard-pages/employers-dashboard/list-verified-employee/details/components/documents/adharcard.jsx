@@ -2,7 +2,7 @@ import React from "react";
 
 const AdharDetails = ({ user }) => {
     return (
-        <div id="aadhar_response" className="col-md-4 mb-4">
+        <div id="aadhaar_response" className="col-md-4 mb-4">
                   <div className="p-3 shadow-sm rounded bg-light"> {/* Simple box with padding and background */}
                   <div className="d-flex align-items-center mb-3">
                     <h5 className="fw-bold text-dark mb-0 me-2">Aadhaar</h5>

@@ -22,7 +22,7 @@ export const DocumentsTable = ({ user , handleclick  }) => {
             {[
               "pan_response",
               "passport_response",
-              "aadhar_response",
+              "aadhaar_response",
               "dl_response",
               "epic_response",
             ].map((key, index) => (
