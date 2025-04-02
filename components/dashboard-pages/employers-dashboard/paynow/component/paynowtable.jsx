@@ -7,6 +7,9 @@ import MessageComponent from "@/components/common/ResponseMsg";
 
 import { Trash2 } from 'lucide-react';
 
+import Razorpay from "razorpay";
+import RazorpayPayment from "@/components/common/payments/RazorpayPayment";
+
 const PaymentDetails = () => {
     const [payments, setPayments] = useState([]);
     const [subTotal, setSubTotal] = useState(0);
@@ -19,6 +22,8 @@ const PaymentDetails = () => {
     const [token, setToken] = useState(null);
 
     const apiurl = process.env.NEXT_PUBLIC_API_URL;
+
+    const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY;
 
     useEffect(() => {
         const storedToken = localStorage.getItem("Admin_token");
@@ -112,7 +117,13 @@ const PaymentDetails = () => {
             setError("Error deleting payment. Please try again.");
         }
     };
-    
+
+    const handlePaymentSuccess = (response) => {
+        console.log("Payment successful!", response);
+        alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
+    };
+
+
     
     if (loading) return <p className="text-center">Loading...</p>;
 
@@ -165,6 +176,13 @@ const PaymentDetails = () => {
                         Pay Now ({total?.toFixed(2)} INR)
                     </button>
                 </div>
+                <div className="d-flex justify-content-end mt-3">
+                <RazorpayPayment
+                    amount={total}
+                    razorpayKey={razorpayKey}
+                    onSuccess={handlePaymentSuccess}
+                />
+            </div>
             </div>
 
             {isModalOpen && (
