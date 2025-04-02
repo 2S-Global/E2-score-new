@@ -123,7 +123,7 @@ const PaymentDetails = () => {
         console.log("Payment IDs:", pids); 
         alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
     
-        // API call
+        // API call success
         const paymentData = {
             razorpay_response: response,
             amount: pay,
