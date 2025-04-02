@@ -71,7 +71,7 @@ const PaymentDetails = () => {
     
         console.log("Deleting payment with ID:", id);
         try {
-            const response = await axios.post(
+            const Dlt_response = await axios.post(
                 `${apiurl}/api/usercart/deleteUser`,
                 { id },
                 {
@@ -81,8 +81,23 @@ const PaymentDetails = () => {
                 }
             );
     
-            console.log("Delete response:", response.data);
-            if (response.data.code == 200) {
+            console.log("Delete response:", Dlt_response.data);
+            if (Dlt_response.data.updatedCart?.success) {
+                console.log("Payment deleted successfully.");
+                setPayments(Dlt_response.data.updatedCart.data);
+                setSubTotal(parseFloat(Dlt_response.data.updatedCart.overall_billing.subtotal) || 0);
+                setGst(parseFloat(Dlt_response.data.updatedCart.overall_billing.gst) || 0);
+                setTotal(parseFloat(Dlt_response.data.updatedCart.overall_billing.total) || 0);
+
+                console.log("Updated totals:", {
+                    subTotal: Dlt_response.data.updatedCart.overall_billing.subtotal,
+                    gst: Dlt_response.data.updatedCart.overall_billing.gst,
+                    total: Dlt_response.data.updatedCart.overall_billing.total,
+                });
+                
+
+
+                
                 
                 
              
