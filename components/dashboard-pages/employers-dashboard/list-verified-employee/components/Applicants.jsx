@@ -28,7 +28,7 @@ const Applicants = () => {
         setCandidates(response.data);
         
       } catch (error) {
-        console.error("Error fetching candidates:", error.response?.data || error);
+        //console.error("Error fetching candidates:", error.response?.data || error);
         setError(error.response?.data?.message || "Internal Server Error");
       } finally {
         setLoading(false);

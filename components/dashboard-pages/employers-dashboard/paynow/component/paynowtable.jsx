@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CardPaymentForm from "./modal/cardform";
-
+import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
 
 import { Trash2 } from 'lucide-react';
@@ -24,7 +24,7 @@ const PaymentDetails = () => {
     const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
     const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY;
-
+    const router = useRouter();
     useEffect(() => {
         const storedToken = localStorage.getItem("Admin_token");
         console.log("Fetched token:", storedToken); // Debugging
@@ -133,7 +133,11 @@ const PaymentDetails = () => {
         try {
             const paymentResponse = await axios.post(
                 `${apiurl}/api/verify/paynow`,
-                paymentData,
+                {
+                    razorpay_response: response,
+            amount: pay,
+            paymentIds: pids,
+                },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -141,6 +145,16 @@ const PaymentDetails = () => {
                 }
             );
             console.log("Payment response:", paymentResponse.data);
+            /* if code 200 */
+            if(paymentResponse.status === 200) {
+                setSuccess(paymentResponse.data.message);
+                router.push('/employers-dashboard/download-center');
+
+            }
+
+
+
+
         } catch (err) {
             console.error("Error processing payment:", err);
             setError("Error processing payment. Please try again.");
