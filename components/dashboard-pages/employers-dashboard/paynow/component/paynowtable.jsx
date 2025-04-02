@@ -118,14 +118,22 @@ const PaymentDetails = () => {
         }
     };
 
-    const handlePaymentSuccess = (response) => {
-        console.log("Payment successful!", response);
+    const handlePaymentSuccess = (response , pay , pids ) => {
+        console.log("Payment successful!", response, "payment ", pay);
+        console.log("Payment IDs:", pids); 
         alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
+
     };
 
 
     
     if (loading) return <p className="text-center">Loading...</p>;
+
+    const paymentIdsString = payments.map(payment => payment.id).join(", ");
+    console.log("Payment IDs:", paymentIdsString);
+
+    
+    
 
     return (
         <>
@@ -176,6 +184,7 @@ const PaymentDetails = () => {
                     amount={total}
                     razorpayKey={razorpayKey}
                     onSuccess={handlePaymentSuccess}
+                    paymentIds={paymentIdsString}
                 />
             </div>
             </div>

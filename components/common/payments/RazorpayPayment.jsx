@@ -1,7 +1,19 @@
 import React, { useEffect, useState } from "react";
 
-const RazorpayPayment = ({ amount, razorpayKey, onSuccess }) => {
+const RazorpayPayment = ({ amount, razorpayKey, onSuccess , paymentIds }) => {
     const [isRazorpayLoaded, setIsRazorpayLoaded] = useState(false);
+    const pay = amount;
+    if(paymentIds){
+        const pids = paymentIds;
+    }
+    else{
+        const pids = "";
+    }
+
+
+
+
+
     useEffect(() => {
         if (window.Razorpay) {
             setIsRazorpayLoaded(true);
@@ -31,7 +43,7 @@ const RazorpayPayment = ({ amount, razorpayKey, onSuccess }) => {
             handler: function (response) {
                // alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
                 console.log(response);
-                if (onSuccess) onSuccess(response);
+                if (onSuccess) onSuccess(response , pay  , pids);
             },
             prefill: {
                 name: "User Name",
