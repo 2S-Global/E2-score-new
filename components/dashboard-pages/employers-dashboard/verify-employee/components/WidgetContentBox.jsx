@@ -103,6 +103,30 @@ const WidgetContentBox = () => {
     }
   };
 
+  const fileId = "upload-passport";
+
+   const [documentData, setDocumentData] = useState({
+          docName: "",
+          docNumber: "",
+          file: null,
+          filePreview: null,
+      });
+      const handleFileSelect = (e) => {
+          const file = e.target.files[0];
+          if (file) {
+              const fileURL = URL.createObjectURL(file);
+              setDocumentData({
+                  ...documentData,
+                  file,
+                  filePreview: fileURL,
+              });
+  
+              if (onFileChange) {
+                  onFileChange(name, file);
+              }
+          }
+      };
+
 
   return (
     <div className="widget-content">
@@ -191,10 +215,55 @@ const WidgetContentBox = () => {
           <DocumentUpload label="Driving License" name="license" fileId="upload-license"
             valuename={formData.licensename} numbername={formData.licensenumber}
             onFileChange={handleFileChange} onfieldChange={handleChange} />
-          <DocumentUpload label="Passport File" name="passport" fileId="upload-passport"
-            valuename={formData.passportname} numbername={formData.passportnumber}
-            onFileChange={handleFileChange} onfieldChange={handleChange} />
-          <DocumentUpload label="Epic ID (Voter)" name="voter" fileId="upload-voter"
+
+        <div className="row">
+            {/* Heading */}
+            {/* Name Input */}
+            <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
+                <label>Passport Name</label>
+                <input type="text" name="passportname" placeholder="Enter Name on Passport" className="form-control"
+                    value={formData.passportname} onChange={handleChange} />
+            </div>
+
+            {/* Document Number Input passportnumber */}
+            <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
+                <label>Passport File Number</label>
+                <input type="text" name="passportnumber" placeholder="Enter Name on Passport" className="form-control"
+                    value={formData.passportnumber} onChange={handleChange} />
+         
+            </div>
+
+            {/* File Upload */}
+            <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
+                <label htmlFor={fileId}>Upload Passport File</label>
+                <div className="uploadButton d-flex align-items-center">
+                    <input
+                        className="uploadButton-input"
+                        type="file"
+                        name="file"
+                        accept="image/*,application/pdf"
+                        id={fileId}
+                        onChange={handleFileSelect}
+                    />
+                    <label
+                        className="uploadButton-button ripple-effect"
+                        htmlFor={fileId}
+                        style={{ width: "100%", height: "40px", cursor: "pointer" }}
+                    >
+                        {documentData.file ? (
+                            <span onClick={() => window.open(documentData.filePreview, "_blank")}>
+                                {documentData.file.name}
+                            </span>
+                        ) : (
+                            `Browse Passport File`
+                        )}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+
+          <DocumentUpload label="Epic (Voter)" name="voter" fileId="upload-voter"
             valuename={formData.votername} numbername={formData.voternumber}
             onFileChange={handleFileChange} onfieldChange={handleChange} />
 

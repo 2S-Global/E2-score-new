@@ -82,31 +82,10 @@ const PaymentDetails = () => {
             );
     
             console.log("Delete response:", response.data);
-            if (response.status === 200) {
-                setPayments((prevPayments) => {
-                    console.log("Previous Payments:", prevPayments);
-    
-                    // FIX: Correct filtering logic
-                    const updatedPayments = prevPayments.filter(payment => payment.id !== id && payment._id !== id);
-    
-                    console.log("Updated Payments (after filter):", updatedPayments);
-    
-                    // Recalculate totals after deletion
-                    const newSubTotal = updatedPayments.reduce((sum, p) => sum + (parseFloat(p.amount) || 0), 0);
-                    const newGst = newSubTotal * 0.18;
-                    const newTotal = newSubTotal + newGst;
-    
-                    console.log("New Subtotal:", newSubTotal);
-                    console.log("New GST:", newGst);
-                    console.log("New Total:", newTotal);
-    
-                    // Update state
-                    setSubTotal(newSubTotal);
-                    setGst(newGst);
-                    setTotal(newTotal);
-    
-                    return updatedPayments;
-                });
+            if (response.data.code == 200) {
+                
+                
+             
             }
         } catch (err) {
             console.error("Error deleting payment:", err);

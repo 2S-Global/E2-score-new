@@ -63,7 +63,7 @@ const DocumentUpload = ({ label, name, fileId, onFileChange,
                                 {documentData.file.name}
                             </span>
                         ) : (
-                            `Browse ${label}..`
+                            `Browse ${label}`
                         )}
                     </label>
                 </div>
