@@ -118,12 +118,35 @@ const PaymentDetails = () => {
         }
     };
 
-    const handlePaymentSuccess = (response , pay , pids ) => {
+    const handlePaymentSuccess = async (response, pay, pids) => {
         console.log("Payment successful!", response, "payment ", pay);
         console.log("Payment IDs:", pids); 
         alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
-
+    
+        // API call
+        const paymentData = {
+            razorpay_response: response,
+            amount: pay,
+            paymentIds: pids,
+        };
+    
+        try {
+            const paymentResponse = await axios.post(
+                `${apiurl}/api/verify/paynow`,
+                paymentData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            console.log("Payment response:", paymentResponse.data);
+        } catch (err) {
+            console.error("Error processing payment:", err);
+            setError("Error processing payment. Please try again.");
+        }
     };
+    
 
 
     

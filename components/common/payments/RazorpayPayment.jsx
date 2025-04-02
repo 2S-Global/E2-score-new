@@ -3,11 +3,12 @@ import React, { useEffect, useState } from "react";
 const RazorpayPayment = ({ amount, razorpayKey, onSuccess , paymentIds }) => {
     const [isRazorpayLoaded, setIsRazorpayLoaded] = useState(false);
     const pay = amount;
+    let pids = "";
     if(paymentIds){
-        const pids = paymentIds;
+         pids = paymentIds;
     }
     else{
-        const pids = "";
+        pids = "";
     }
 
 
