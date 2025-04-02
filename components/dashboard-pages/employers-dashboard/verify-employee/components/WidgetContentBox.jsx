@@ -191,10 +191,10 @@ const WidgetContentBox = () => {
           <DocumentUpload label="Driving License" name="license" fileId="upload-license"
             valuename={formData.licensename} numbername={formData.licensenumber}
             onFileChange={handleFileChange} onfieldChange={handleChange} />
-          <DocumentUpload label="Passport" name="passport" fileId="upload-passport"
+          <DocumentUpload label="Passport File" name="passport" fileId="upload-passport"
             valuename={formData.passportname} numbername={formData.passportnumber}
             onFileChange={handleFileChange} onfieldChange={handleChange} />
-          <DocumentUpload label="Voter ID" name="voter" fileId="upload-voter"
+          <DocumentUpload label="Epic ID (Voter)" name="voter" fileId="upload-voter"
             valuename={formData.votername} numbername={formData.voternumber}
             onFileChange={handleFileChange} onfieldChange={handleChange} />
 

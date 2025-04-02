@@ -3,6 +3,8 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CardPaymentForm from "./modal/cardform";
 
+import { Trash2 } from 'lucide-react';
+
 const PaymentDetails = () => {
     const [payments, setPayments] = useState([]);
     const [subTotal, setSubTotal] = useState(0);
@@ -35,7 +37,7 @@ const PaymentDetails = () => {
 
     useEffect(() => {
         if (!token) return;
-
+    
         const fetchPayments = async () => {
             try {
                 console.log("Fetching payments..."); // Debugging
@@ -44,7 +46,7 @@ const PaymentDetails = () => {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-
+    
                 if (response.data.success) {
                     setPayments(response.data.data);
                     setSubTotal(parseFloat(response.data.overall_billing.subtotal) || 0);
@@ -60,10 +62,59 @@ const PaymentDetails = () => {
                 setLoading(false);
             }
         };
-
+    
         fetchPayments();
-    }, [token]);
-
+    }, [token]); // Runs when `token` changes
+    
+    const handleDelete = async (id) => {
+        if (!token) return;
+    
+        console.log("Deleting payment with ID:", id);
+        try {
+            const response = await axios.post(
+                `${apiurl}/api/usercart/deleteUser`,
+                { id },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+    
+            console.log("Delete response:", response.data);
+            if (response.status === 200) {
+                setPayments((prevPayments) => {
+                    console.log("Previous Payments:", prevPayments);
+    
+                    // FIX: Correct filtering logic
+                    const updatedPayments = prevPayments.filter(payment => payment.id !== id && payment._id !== id);
+    
+                    console.log("Updated Payments (after filter):", updatedPayments);
+    
+                    // Recalculate totals after deletion
+                    const newSubTotal = updatedPayments.reduce((sum, p) => sum + (parseFloat(p.amount) || 0), 0);
+                    const newGst = newSubTotal * 0.18;
+                    const newTotal = newSubTotal + newGst;
+    
+                    console.log("New Subtotal:", newSubTotal);
+                    console.log("New GST:", newGst);
+                    console.log("New Total:", newTotal);
+    
+                    // Update state
+                    setSubTotal(newSubTotal);
+                    setGst(newGst);
+                    setTotal(newTotal);
+    
+                    return updatedPayments;
+                });
+            }
+        } catch (err) {
+            console.error("Error deleting payment:", err);
+            setError("Error deleting payment. Please try again.");
+        }
+    };
+    
+    
     if (loading) return <p className="text-center">Loading...</p>;
     if (error) return <p className="text-danger text-center">{error}</p>;
 
@@ -78,6 +129,7 @@ const PaymentDetails = () => {
                             <th>Mobile Number</th>
                             <th>Pay For</th>
                             <th>Amount</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -88,6 +140,10 @@ const PaymentDetails = () => {
                                 <td>{payment.mobile || "N/A"}</td>
                                 <td>{payment.payFor || "N/A"}</td>
                                 <td>{payment.amount} INR</td>
+                                <td>
+                                <Trash2  size={16} className="text-danger" onClick={() => handleDelete(payment.id)} />
+
+                                </td>
                             </tr>
                         ))}
                     </tbody>
