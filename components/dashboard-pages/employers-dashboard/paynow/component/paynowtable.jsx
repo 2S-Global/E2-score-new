@@ -3,6 +3,8 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CardPaymentForm from "./modal/cardform";
 
+import MessageComponent from "@/components/common/ResponseMsg";
+
 import { Trash2 } from 'lucide-react';
 
 const PaymentDetails = () => {
@@ -12,6 +14,7 @@ const PaymentDetails = () => {
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+     const [success, setSuccess] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [token, setToken] = useState(null);
 
@@ -94,7 +97,9 @@ const PaymentDetails = () => {
                     gst: Dlt_response.data.updatedCart.overall_billing.gst,
                     total: Dlt_response.data.updatedCart.overall_billing.total,
                 });
-                
+
+                setSuccess(Dlt_response.data.message);
+
 
 
                 
@@ -110,10 +115,10 @@ const PaymentDetails = () => {
     
     
     if (loading) return <p className="text-center">Loading...</p>;
-    if (error) return <p className="text-danger text-center">{error}</p>;
 
     return (
         <>
+         <MessageComponent error={error} success={success} />
             <div className="container">
                 <table className="table table-bordered">
                     <thead className="table-light">
