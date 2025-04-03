@@ -50,7 +50,7 @@ module.exports = [
   },
   {
     id: 8,
-    name: "Search Verified Employee",
+    name: "Search Employee",
     icon: "la-search",
     routePath: "/employers-dashboard/search-employee",
     active: "",
