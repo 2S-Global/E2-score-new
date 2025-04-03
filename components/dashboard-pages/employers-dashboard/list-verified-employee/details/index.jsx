@@ -7,7 +7,7 @@ import CopyrightFooter from "../../../CopyrightFooter";
 
 import WidgetContentBox from "./components/WidgetContentBox";
 import MenuToggler from "../../../MenuToggler";
-
+import DownloadPDF from "@/components/dashboard-pages/employers-dashboard/pdf component/DownloadPDF";
 const index = () => {
   return (
     <div className="page-wrapper dashboard">
@@ -32,6 +32,7 @@ const index = () => {
           <div className="row">
             <div className="col-lg-12">
               <div className="applicants-widget ls-widget">
+              <DownloadPDF />
                 <WidgetContentBox />
               </div>
               {/* <!-- applicants Widget --> */}
