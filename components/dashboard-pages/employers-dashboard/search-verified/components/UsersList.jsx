@@ -47,7 +47,7 @@ const UsersList = ({ users }) => {
                       response: candidate.dl_response,
                     },
                     ,
-                    { label: "Voter", response: candidate.epic_response },
+                    { label: "Epic", response: candidate.epic_response },
                   ].map((item, idx) => (
                     <td
                       style={{ textAlign: "center" }}
