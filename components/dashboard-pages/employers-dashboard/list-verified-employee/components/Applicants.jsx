@@ -179,17 +179,6 @@ const Applicants = () => {
 
   return (
     <div className="container mt-4">
-      {/* Search Input */}
-      <div className="mb-3">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Search by Candidate Name..."
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-        />
-      </div>
-
       {/* DataTable */}
       <DataTable
         title="Applicants"

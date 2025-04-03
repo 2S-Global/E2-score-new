@@ -1,5 +1,14 @@
 import React from "react";
-import { CheckCircle, XCircle, HelpCircle, Eye } from "lucide-react";
+import {
+  CheckCircle,
+  XCircle,
+  HelpCircle,
+  Eye,
+  BadgeAlert,
+  BadgeCheck,
+  FileText,
+  OctagonAlert,
+} from "lucide-react";
 import Link from "next/link";
 
 const UsersList = ({ users }) => {
@@ -15,10 +24,10 @@ const UsersList = ({ users }) => {
                 <th style={{ textAlign: "center" }}>Name</th>
                 <th style={{ textAlign: "center" }}>Phone</th>
                 <th style={{ textAlign: "center" }}>PAN Status</th>
-                <th style={{ textAlign: "center" }}>Aadhar Status</th>
-                <th style={{ textAlign: "center" }}>Voter Status</th>
-                <th style={{ textAlign: "center" }}>License Status</th>
                 <th style={{ textAlign: "center" }}>Passport Status</th>
+                <th style={{ textAlign: "center" }}>Aadhar Status</th>
+                <th style={{ textAlign: "center" }}>Driving LicenseStatus</th>
+                <th style={{ textAlign: "center" }}>Epic Status</th>
                 <th style={{ textAlign: "center" }}>Verified Date</th>
                 <th style={{ textAlign: "center" }}>Action</th>
               </tr>
@@ -41,7 +50,7 @@ const UsersList = ({ users }) => {
                       label: "Passport",
                       response: candidate.passport_response,
                     },
-                    { label: "Aadhar", response: candidate.aadhar_response },
+                    { label: "Aadhar", response: candidate.aadhaar_response },
                     {
                       label: "Driving License",
                       response: candidate.dl_response,
@@ -83,8 +92,8 @@ const UsersList = ({ users }) => {
 const renderStatusIcon = (response) => {
   if (response?.response_code === "100") {
     return (
-      <CheckCircle
-        size={14}
+      <BadgeCheck
+        size={20}
         className="text-success"
         title="Valid Authentication"
       />
@@ -92,14 +101,14 @@ const renderStatusIcon = (response) => {
   }
   if (response?.response_code === "101") {
     return (
-      <XCircle
-        size={14}
-        className="text-danger"
+      <BadgeAlert
+        size={20}
+        className="text-warning"
         title="Invalid Authentication"
       />
     );
   }
-  return <HelpCircle size={14} className="text-warning" title="Not Applied" />;
+  return <OctagonAlert size={20} className="text-danger" title="Not Applied" />;
 };
 
 export default UsersList;
