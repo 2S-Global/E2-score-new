@@ -11,26 +11,28 @@ const UsersList = ({ users }) => {
           <table className="table table-bordered table-striped">
             <thead className="table-dark">
               <tr>
-                <th>Sl</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>PAN Status</th>
-                <th>Aadhar Status</th>
-                <th>Voter Status</th>
-                <th>License Status</th>
-                <th>Passport Status</th>
-                <th>Verified Date</th>
-                <th>Action</th>
+                <th style={{ textAlign: "center" }}>Sl</th>
+                <th style={{ textAlign: "center" }}>Name</th>
+                <th style={{ textAlign: "center" }}>Phone</th>
+                <th style={{ textAlign: "center" }}>PAN Status</th>
+                <th style={{ textAlign: "center" }}>Aadhar Status</th>
+                <th style={{ textAlign: "center" }}>Voter Status</th>
+                <th style={{ textAlign: "center" }}>License Status</th>
+                <th style={{ textAlign: "center" }}>Passport Status</th>
+                <th style={{ textAlign: "center" }}>Verified Date</th>
+                <th style={{ textAlign: "center" }}>Action</th>
               </tr>
             </thead>
             <tbody>
               {users.map((candidate, index) => (
                 <tr key={candidate._id || `user-${index}`}>
-                  <td>{index + 1}</td>
-                  <td>
+                  <td style={{ textAlign: "center" }}>{index + 1}</td>
+                  <td style={{ textAlign: "center" }}>
                     <strong>{candidate.candidate_name}</strong>
                   </td>
-                  <td>{candidate.candidate_mobile}</td>
+                  <td style={{ textAlign: "center" }}>
+                    {candidate.candidate_mobile}
+                  </td>
 
                   {/* Mapping over status responses */}
                   {[
@@ -43,15 +45,18 @@ const UsersList = ({ users }) => {
                       response: candidate.passport_response,
                     },
                   ].map((item, idx) => (
-                    <td key={`${candidate._id}-${item.label}`}>
+                    <td
+                      style={{ textAlign: "center" }}
+                      key={`${candidate._id}-${item.label}`}
+                    >
                       {renderStatusIcon(item.response)}
                     </td>
                   ))}
-                  <td>
+                  <td style={{ textAlign: "center" }}>
                     {new Date(candidate.updatedAt).toLocaleDateString("en-GB")}
                   </td>
 
-                  <td>
+                  <td style={{ textAlign: "center" }}>
                     <Link
                       href={`/employers-dashboard/list-verified-employee/details?id=${candidate._id}`}
                     >
