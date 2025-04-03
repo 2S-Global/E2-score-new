@@ -38,8 +38,7 @@ const KycPage = () => {
           <div className="row">
             <div className="col-lg-12">
               {/* <!-- Ls widget --> */}
-              <KycBox/>
-              
+              <KycBox />
             </div>
           </div>
           {/* End .row */}

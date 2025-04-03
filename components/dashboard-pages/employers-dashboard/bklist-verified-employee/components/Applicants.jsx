@@ -47,7 +47,6 @@ const Applicants = () => {
                   <Link href="/employers-dashboard/list-verified-employee/details?id=1">
                     <Eye size={14} className="me-1" /> View Application
                   </Link>
-
                 </button>
               </div>
             </div>

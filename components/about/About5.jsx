@@ -27,10 +27,7 @@ const About5 = () => {
                   Ipsum. There are many variations of passages
                 </div>
               </div>
-              <Link
-                href="/candidates-list-v3"
-                className="theme-btn -blue"
-              >
+              <Link href="/candidates-list-v3" className="theme-btn -blue">
                 Search Candidate
               </Link>
             </div>

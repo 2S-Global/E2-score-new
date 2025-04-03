@@ -2,8 +2,6 @@
 import dynamic from "next/dynamic";
 import Cart from "@/components/shop/cart";
 
-
-
 const index = () => {
   return (
     <>

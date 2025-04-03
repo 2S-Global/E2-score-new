@@ -62,10 +62,7 @@ const index = () => {
           </div>
 
           <div className="btn-box">
-            <Link
-              href="/job-list"
-              className="theme-btn btn-style-one bg-blue"
-            >
+            <Link href="/job-list" className="theme-btn btn-style-one bg-blue">
               <span className="btn-title">Load More Listing</span>
             </Link>
           </div>

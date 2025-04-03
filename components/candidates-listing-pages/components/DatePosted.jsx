@@ -1,5 +1,4 @@
-
-'use client'
+"use client";
 import { useDispatch, useSelector } from "react-redux";
 import { addDatePostCheck } from "../../../features/candidate/candidateSlice";
 import { addDatePost } from "../../../features/filter/candidateFilterSlice";

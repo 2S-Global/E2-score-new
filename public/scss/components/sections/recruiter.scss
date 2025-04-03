@@ -6,11 +6,11 @@ Recruiter Section
 
 ***/
 
-.recruiter-section{
+.recruiter-section {
   position: relative;
 }
 
-.recruiter-section .outer-box{
+.recruiter-section .outer-box {
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -23,7 +23,7 @@ Recruiter Section
   align-items: center;
 }
 
-.recruiter-section .image-column{
+.recruiter-section .image-column {
   position: relative;
   width: 50%;
   -webkit-box-flex: 0;
@@ -31,18 +31,18 @@ Recruiter Section
   flex: 0 0 50%;
 }
 
-.recruiter-section .image-column .image{
+.recruiter-section .image-column .image {
   position: relative;
   display: block;
   margin-bottom: 0;
 }
 
-.recruiter-section .image-column .image img{
+.recruiter-section .image-column .image img {
   width: 100%;
   border-radius: 0 30px 30px 0;
 }
 
-.recruiter-section .content-column{
+.recruiter-section .content-column {
   position: relative;
   width: 50%;
   -webkit-box-flex: 0;
@@ -51,17 +51,17 @@ Recruiter Section
   padding: 100px 0;
 }
 
-.recruiter-section .content-column .inner-column{
+.recruiter-section .content-column .inner-column {
   position: relative;
   padding-left: 140px;
 }
 
-.recruiter-section .content-column .sec-title{
+.recruiter-section .content-column .sec-title {
   margin-bottom: 0;
   max-width: 420px;
 }
 
-.recruiter-section .content-column .theme-btn{
+.recruiter-section .content-column .theme-btn {
   margin-top: 18px;
   min-width: 180px;
 }

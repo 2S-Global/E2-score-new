@@ -1,11 +1,9 @@
-'use client'
+"use client";
 
 import { useRouter } from "next/navigation";
 
-
-
 const SearchForm4 = () => {
-  const router = useRouter()
+  const router = useRouter();
   const handleSubmit = (event) => {
     event.preventDefault();
   };

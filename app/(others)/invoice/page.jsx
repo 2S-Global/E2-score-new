@@ -6,7 +6,6 @@ import Invoice from "@/components/pages-menu/invoice";
 const index = () => {
   return (
     <>
-      
       <Invoice />
     </>
   );

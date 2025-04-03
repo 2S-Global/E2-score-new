@@ -24,7 +24,7 @@ const Pagination = () => {
           <span className={className} onClick={() => setCurrentPage(page)}>
             {page}
           </span>
-        </li>
+        </li>,
       );
     }
 

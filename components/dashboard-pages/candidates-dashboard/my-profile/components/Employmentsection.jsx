@@ -6,7 +6,13 @@ const Employsection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expanded, setExpanded] = useState({}); // Track expanded descriptions
 
-  const keyskill = ["Web Development", "Software Development", "Java", "Javascript", "CSS"];
+  const keyskill = [
+    "Web Development",
+    "Software Development",
+    "Java",
+    "Javascript",
+    "CSS",
+  ];
 
   const userdata = [
     {
@@ -17,7 +23,7 @@ const Employsection = () => {
       duration: "Jun 2023 to Present (1 Year and 8 months)",
       notice_period: "1 Month",
       description:
-        "I have a strong foundation in web development and have recently completed my certification in JavaScript. I am eager to learn and grow in the field. I am looking for a challenging role that will allow me to use my skills to their full potential."
+        "I have a strong foundation in web development and have recently completed my certification in JavaScript. I am eager to learn and grow in the field. I am looking for a challenging role that will allow me to use my skills to their full potential.",
     },
     {
       role: "Software Engineer",
@@ -26,7 +32,7 @@ const Employsection = () => {
       is_verified: true,
       duration: "Jan 2021 to May 2023 (2 Years 4 Months)",
       description:
-        "Designed and implemented scalable backend services using Node.js and Azure. Worked on improving system architecture and optimizing API response times."
+        "Designed and implemented scalable backend services using Node.js and Azure. Worked on improving system architecture and optimizing API response times.",
     },
     {
       role: "Backend Developer",
@@ -35,8 +41,8 @@ const Employsection = () => {
       is_verified: false,
       duration: "Aug 2019 to Dec 2020 (1 Year 5 Months)",
       description:
-        "Developed RESTful APIs and microservices using Express.js and MongoDB. Focused on performance tuning, security enhancements, and integration with AWS services."
-    }
+        "Developed RESTful APIs and microservices using Express.js and MongoDB. Focused on performance tuning, security enhancements, and integration with AWS services.",
+    },
   ];
 
   const openModalRH = () => {
@@ -49,11 +55,10 @@ const Employsection = () => {
     document.body.style.overflow = "auto"; // Re-enable background scrolling
   };
 
-
   const toggleExpand = (index) => {
     setExpanded((prev) => ({
       ...prev,
-      [index]: !prev[index] // Toggle expanded state for the specific item
+      [index]: !prev[index], // Toggle expanded state for the specific item
     }));
   };
 
@@ -64,14 +69,14 @@ const Employsection = () => {
         <div className="tabs-box">
           <div className="widget-title">
             <h4>Employment</h4>
-            <span 
-              onClick={openModalRH} 
+            <span
+              onClick={openModalRH}
               style={{
                 cursor: "pointer",
                 float: "right",
                 color: "#275df5",
                 fontWeight: 700,
-                fontSize: "16px"
+                fontSize: "16px",
               }}
             >
               Add employment
@@ -89,22 +94,32 @@ const Employsection = () => {
                       <span className="truncate emp-desg" title={item.role}>
                         <strong>{item.role}</strong>
                       </span>
-                      <i className="la la-pencil-alt" onClick={openModalRH} style={{ cursor: "pointer" }}></i>
+                      <i
+                        className="la la-pencil-alt"
+                        onClick={openModalRH}
+                        style={{ cursor: "pointer" }}
+                      ></i>
                     </div>
 
                     {/* Company Name */}
                     <div className="item">
-                      <span className="truncate typ-14Medium emp-org" title={item.company}>
+                      <span
+                        className="truncate typ-14Medium emp-org"
+                        title={item.company}
+                      >
                         <strong>{item.company}</strong>
                       </span>
                       {/* Show verified/unverified image */}
-                      <img 
-  src={item.is_verified ? "/images/resource/verified.png" : "/images/resource/unverified.png"} 
-  alt={item.is_verified ? "Verified" : "Not Verified"} 
-  style={{ width: "100px", height: "20px" }} 
-  className="ms-2"
-/>
-
+                      <img
+                        src={
+                          item.is_verified
+                            ? "/images/resource/verified.png"
+                            : "/images/resource/unverified.png"
+                        }
+                        alt={item.is_verified ? "Verified" : "Not Verified"}
+                        style={{ width: "100px", height: "20px" }}
+                        className="ms-2"
+                      />
                     </div>
 
                     {/* Job Type and Duration */}
@@ -127,7 +142,14 @@ const Employsection = () => {
                         {expanded[index] ? (
                           <>
                             {item.description}{" "}
-                            <a href="#" className="morelink" onClick={(e) => { e.preventDefault(); toggleExpand(index); }}>
+                            <a
+                              href="#"
+                              className="morelink"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                toggleExpand(index);
+                              }}
+                            >
                               Read Less
                             </a>
                           </>
@@ -136,7 +158,14 @@ const Employsection = () => {
                             {item.description.length > 100 ? (
                               <>
                                 {item.description.substring(0, 100)}...
-                                <a href="#" className="morelink" onClick={(e) => { e.preventDefault(); toggleExpand(index); }}>
+                                <a
+                                  href="#"
+                                  className="morelink"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    toggleExpand(index);
+                                  }}
+                                >
                                   Read More
                                 </a>
                               </>
@@ -156,7 +185,9 @@ const Employsection = () => {
       </div>
 
       {/* Render Modal if isModalOpen is true */}
-      {isModalOpen && <EmploymentModal show={isModalOpen} onClose={closeModalRH} />}
+      {isModalOpen && (
+        <EmploymentModal show={isModalOpen} onClose={closeModalRH} />
+      )}
     </>
   );
 };

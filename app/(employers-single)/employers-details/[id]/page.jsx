@@ -12,8 +12,6 @@ import Social from "@/components/employer-single-pages/social/Social";
 import PrivateMessageBox from "@/components/employer-single-pages/shared-components/PrivateMessageBox";
 import Image from "next/image";
 
-
-
 const EmployersSingleV1 = ({ params }) => {
   const id = params.id;
 

@@ -1,5 +1,4 @@
-
-'use client'
+"use client";
 
 import Link from "next/link";
 import jobFeatured from "../../data/job-featured";
@@ -26,7 +25,7 @@ const JobFilterTab = () => {
           tab.isActive = true;
         }
         return tab;
-      })
+      }),
     );
     // set id of tab
     setTabId(id);

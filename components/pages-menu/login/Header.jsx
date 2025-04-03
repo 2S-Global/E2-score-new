@@ -30,10 +30,22 @@ const Header = () => {
             <div className="logo-box">
               <div className="logo">
                 <Link href="/" className="noSticky">
-                  <Image width={154} height={50} src="/images/logo.svg" alt="logo" title="brand" />
+                  <Image
+                    width={154}
+                    height={50}
+                    src="/images/logo.svg"
+                    alt="logo"
+                    title="brand"
+                  />
                 </Link>
                 <Link href="/" className="isSticky">
-                  <Image width={154} height={50} src="/images/logo.svg" alt="logo" title="brand" />
+                  <Image
+                    width={154}
+                    height={50}
+                    src="/images/logo.svg"
+                    alt="logo"
+                    title="brand"
+                  />
                 </Link>
               </div>
             </div>
@@ -43,7 +55,10 @@ const Header = () => {
           <div className="outer-box">
             {/* Login/Register */}
             <div className="btn-box">
-              <Link href="/employers-dashboard/post-jobs" className="theme-btn btn-style-one">
+              <Link
+                href="/employers-dashboard/post-jobs"
+                className="theme-btn btn-style-one"
+              >
                 <span className="btn-title">Job Post</span>
               </Link>
             </div>

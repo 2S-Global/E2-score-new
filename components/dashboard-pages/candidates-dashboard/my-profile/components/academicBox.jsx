@@ -8,7 +8,7 @@ const colleges = [
   "College 3",
   "College of Engineering",
   "National Institute of Technology",
-  "Indian Institute of Technology"
+  "Indian Institute of Technology",
 ];
 const courses = [
   "Course 1",
@@ -23,8 +23,7 @@ const courses = [
   "BSc",
   "MSc",
   "BCom",
-  "MCom", 
-
+  "MCom",
 ];
 
 const AcademicBox = () => {
@@ -43,13 +42,21 @@ const AcademicBox = () => {
   const handleCollegeSearch = (e) => {
     const value = e.target.value;
     setCollegeSearch(value);
-    setFilteredColleges(colleges.filter(college => college.toLowerCase().includes(value.toLowerCase())));
+    setFilteredColleges(
+      colleges.filter((college) =>
+        college.toLowerCase().includes(value.toLowerCase()),
+      ),
+    );
   };
 
   const handleCourseSearch = (e) => {
     const value = e.target.value;
     setCourseSearch(value);
-    setFilteredCourses(courses.filter(course => course.toLowerCase().includes(value.toLowerCase())));
+    setFilteredCourses(
+      courses.filter((course) =>
+        course.toLowerCase().includes(value.toLowerCase()),
+      ),
+    );
   };
 
   // Selection Handlers
@@ -76,9 +83,17 @@ const AcademicBox = () => {
         autoComplete="off"
       />
       {options.length > 0 && value && (
-        <ul className="dropdown-menu show" style={{ position: "absolute", width: "100%" }}>
+        <ul
+          className="dropdown-menu show"
+          style={{ position: "absolute", width: "100%" }}
+        >
           {options.map((option, index) => (
-            <li key={index} className="dropdown-item" style={{ cursor: "pointer" }} onClick={() => onSelect(option)}>
+            <li
+              key={index}
+              className="dropdown-item"
+              style={{ cursor: "pointer" }}
+              onClick={() => onSelect(option)}
+            >
               {option}
             </li>
           ))}
@@ -105,9 +120,6 @@ const AcademicBox = () => {
       </div>
     </div>
   );
-  
-
-
 
   return (
     <form className="default-form">
@@ -118,7 +130,12 @@ const AcademicBox = () => {
         {/* Board */}
         <div className="form-group col-lg-4 col-md-12">
           <label htmlFor="classXBoard">Class X Board</label>
-          <select id="classXBoard" name="classXBoard" className="form-control" required>
+          <select
+            id="classXBoard"
+            name="classXBoard"
+            className="form-control"
+            required
+          >
             <option value="">Select Board</option>
             <option value="CBSE">CBSE</option>
             <option value="ICSE">ICSE</option>
@@ -129,17 +146,23 @@ const AcademicBox = () => {
         {/* Percentage */}
         <div className="form-group col-lg-4 col-md-12">
           <label htmlFor="classXPercentage">Percentage</label>
-          <input type="text" id="classXPercentage" name="classXPercentage" className="form-control" placeholder="Enter Percentage" />
+          <input
+            type="text"
+            id="classXPercentage"
+            name="classXPercentage"
+            className="form-control"
+            placeholder="Enter Percentage"
+          />
         </div>
 
         {/* Transcript Upload */}
         <UploadButton
-  label="Transcript"
-  id="classXTranscript"
-  file={logoImg}
-  onChange={(e) => setLogoImg(e.target.files[0])}
-  accept="image/*, .pdf"
-/>
+          label="Transcript"
+          id="classXTranscript"
+          file={logoImg}
+          onChange={(e) => setLogoImg(e.target.files[0])}
+          accept="image/*, .pdf"
+        />
       </div>
 
       {/* Class XII */}
@@ -149,7 +172,12 @@ const AcademicBox = () => {
         {/* Board */}
         <div className="form-group col-lg-4 col-md-12">
           <label htmlFor="classXIIBoard">Class XII Board</label>
-          <select id="classXIIBoard" name="classXIIBoard" className="form-control" required>
+          <select
+            id="classXIIBoard"
+            name="classXIIBoard"
+            className="form-control"
+            required
+          >
             <option value="">Select Board</option>
             <option value="CBSE">CBSE</option>
             <option value="ICSE">ISC</option>
@@ -160,17 +188,23 @@ const AcademicBox = () => {
         {/* Percentage */}
         <div className="form-group col-lg-4 col-md-12">
           <label htmlFor="classXIIPercentage">Percentage</label>
-          <input type="text" id="classXIIPercentage" name="classXIIPercentage" className="form-control" placeholder="Enter Percentage" />
+          <input
+            type="text"
+            id="classXIIPercentage"
+            name="classXIIPercentage"
+            className="form-control"
+            placeholder="Enter Percentage"
+          />
         </div>
 
         {/* Transcript Upload */}
         <UploadButton
-  label="Transcript"
-  id="classXTranscript"
-  file={logoImg}
-  onChange={(e) => setLogoImg(e.target.files[0])}
-  accept="image/*, .pdf"
-/>
+          label="Transcript"
+          id="classXTranscript"
+          file={logoImg}
+          onChange={(e) => setLogoImg(e.target.files[0])}
+          accept="image/*, .pdf"
+        />
       </div>
 
       {/* Diploma */}
@@ -178,80 +212,140 @@ const AcademicBox = () => {
         <h3 className="text-center pb-2">Diploma</h3>
 
         {/* College Name (Searchable) */}
-        <SearchableInput label="College Name" value={collegeSearch} onChange={handleCollegeSearch} options={filteredColleges} onSelect={handleCollegeSelect} />
-        <SearchableInput label="Course Name" value={courseSearch} onChange={handleCourseSearch} options={filteredCourses} onSelect={handleCourseSelect} />
-       
-
-
-        
+        <SearchableInput
+          label="College Name"
+          value={collegeSearch}
+          onChange={handleCollegeSearch}
+          options={filteredColleges}
+          onSelect={handleCollegeSelect}
+        />
+        <SearchableInput
+          label="Course Name"
+          value={courseSearch}
+          onChange={handleCourseSearch}
+          options={filteredCourses}
+          onSelect={handleCourseSelect}
+        />
 
         {/* Percentage */}
         <div className="form-group col-lg-4 col-md-6">
           <label htmlFor="diplomaPercentage">Percentage</label>
-          <input type="text" id="diplomaPercentage" name="diplomaPercentage" className="form-control" placeholder="Enter Percentage" required />
+          <input
+            type="text"
+            id="diplomaPercentage"
+            name="diplomaPercentage"
+            className="form-control"
+            placeholder="Enter Percentage"
+            required
+          />
         </div>
 
         {/* Transcript Upload */}
         <UploadButton
-  label="Transcript"
-  id="classXTranscript"
-  file={logoImg}
-  onChange={(e) => setLogoImg(e.target.files[0])}
-  accept="image/*, .pdf"
-/>
+          label="Transcript"
+          id="classXTranscript"
+          file={logoImg}
+          onChange={(e) => setLogoImg(e.target.files[0])}
+          accept="image/*, .pdf"
+        />
       </div>
 
       {/* Becelors */}
       <div className="row">
         <h3 className="text-center pb-2">Bachelor </h3>
 
-        <SearchableInput label="College Name" value={collegeSearch} onChange={handleCollegeSearch} options={filteredColleges} onSelect={handleCollegeSelect} />
-        <SearchableInput label="Course Name" value={courseSearch} onChange={handleCourseSearch} options={filteredCourses} onSelect={handleCourseSelect} />
-       
+        <SearchableInput
+          label="College Name"
+          value={collegeSearch}
+          onChange={handleCollegeSearch}
+          options={filteredColleges}
+          onSelect={handleCollegeSelect}
+        />
+        <SearchableInput
+          label="Course Name"
+          value={courseSearch}
+          onChange={handleCourseSearch}
+          options={filteredCourses}
+          onSelect={handleCourseSelect}
+        />
 
         {/* Percentage */}
         <div className="form-group col-lg-4 col-md-6">
           <label htmlFor="diplomaPercentage">Percentage</label>
-          <input type="text" id="diplomaPercentage" name="diplomaPercentage" className="form-control" placeholder="Enter Percentage" required />
+          <input
+            type="text"
+            id="diplomaPercentage"
+            name="diplomaPercentage"
+            className="form-control"
+            placeholder="Enter Percentage"
+            required
+          />
         </div>
 
         {/* Transcript Upload */}
         <div className="form-group col-lg-4 col-md-12">
           <label htmlFor="diplomaTranscript">Transcript</label>
           <div className="uploadButton">
-            <input className="uploadButton-input" type="file" accept="image/*, .pdf" id="diplomaTranscript" required onChange={(e) => coverHandler(e.target.files[0])} />
-            <label className="uploadButton-button ripple-effect" htmlFor="diplomaTranscript">
+            <input
+              className="uploadButton-input"
+              type="file"
+              accept="image/*, .pdf"
+              id="diplomaTranscript"
+              required
+              onChange={(e) => coverHandler(e.target.files[0])}
+            />
+            <label
+              className="uploadButton-button ripple-effect"
+              htmlFor="diplomaTranscript"
+            >
               {coverImg ? coverImg.name : "Browse Transcript.."}
             </label>
           </div>
         </div>
       </div>
-        
-        {/* Masters */}
-        <div className="row">
+
+      {/* Masters */}
+      <div className="row">
         <h3 className="text-center pb-2">Masters</h3>
 
         {/* College Name (Searchable) */}
-        <SearchableInput label="College Name" value={collegeSearch} onChange={handleCollegeSearch} options={filteredColleges} onSelect={handleCollegeSelect} />
-        <SearchableInput label="Course Name" value={courseSearch} onChange={handleCourseSearch} options={filteredCourses} onSelect={handleCourseSelect} />
-       
+        <SearchableInput
+          label="College Name"
+          value={collegeSearch}
+          onChange={handleCollegeSearch}
+          options={filteredColleges}
+          onSelect={handleCollegeSelect}
+        />
+        <SearchableInput
+          label="Course Name"
+          value={courseSearch}
+          onChange={handleCourseSearch}
+          options={filteredCourses}
+          onSelect={handleCourseSelect}
+        />
 
         {/* Percentage */}
         <div className="form-group col-lg-4 col-md-6">
           <label htmlFor="diplomaPercentage">Percentage</label>
-          <input type="text" id="diplomaPercentage" name="diplomaPercentage" className="form-control" placeholder="Enter Percentage" required />
+          <input
+            type="text"
+            id="diplomaPercentage"
+            name="diplomaPercentage"
+            className="form-control"
+            placeholder="Enter Percentage"
+            required
+          />
         </div>
 
         {/* Transcript Upload */}
         <UploadButton
-  label="Transcript"
-  id="classXTranscript"
-  file={logoImg}
-  onChange={(e) => setLogoImg(e.target.files[0])}
-  accept="image/*, .pdf"
-/>
+          label="Transcript"
+          id="classXTranscript"
+          file={logoImg}
+          onChange={(e) => setLogoImg(e.target.files[0])}
+          accept="image/*, .pdf"
+        />
       </div>
-        
     </form>
   );
 };

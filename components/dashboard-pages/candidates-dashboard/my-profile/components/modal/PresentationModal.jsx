@@ -13,7 +13,9 @@ const PresentationModal = ({ show, onClose }) => {
       setDescription(""); // Clear text if pressed again
       setIsGenerated(false);
     } else {
-      setDescription("Developed and deployed a scalable web application using React.js and Node.js, ensuring high performance and seamless user experience. Designed and implemented RESTful APIs, optimized database queries, and integrated third-party services for enhanced functionality. Focused on system architecture, security, and responsive UI/UX to deliver a robust and efficient solution.");
+      setDescription(
+        "Developed and deployed a scalable web application using React.js and Node.js, ensuring high performance and seamless user experience. Designed and implemented RESTful APIs, optimized database queries, and integrated third-party services for enhanced functionality. Focused on system architecture, security, and responsive UI/UX to deliver a robust and efficient solution.",
+      );
       setIsGenerated(true);
     }
   };
@@ -55,41 +57,72 @@ const PresentationModal = ({ show, onClose }) => {
           }
 `}
       </style>
-      <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+      <div
+        className="modal fade show d-block"
+        tabIndex="-1"
+        style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+      >
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
-
             {/* Modal Header */}
             <div className="modal-header">
               <h5 className="modal-title">Presentation</h5>
-              <button type="button" className="btn-close" onClick={onClose}></button>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={onClose}
+              ></button>
             </div>
 
             {/* Modal Body */}
             <div className="modal-body">
-              <p style={{ color: 'black' }}>
-                Add links to your online presentations (e.g. Slideshare presentation links etc.).</p>
+              <p style={{ color: "black" }}>
+                Add links to your online presentations (e.g. Slideshare
+                presentation links etc.).
+              </p>
 
               {/* Social profile */}
               <div className="mb-3">
-                <label className="form-label"><b>Presentation title</b></label>
-                <input type="text" className="form-control" placeholder="Enter Presentation title" />
+                <label className="form-label">
+                  <b>Presentation title</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter Presentation title"
+                />
               </div>
               {/* URL */}
               <div className="mb-3">
-                <label className="form-label"><b>URL</b></label>
-                <input type="text" className="form-control" placeholder="Enter Your Presentation URL" />
+                <label className="form-label">
+                  <b>URL</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter Your Presentation URL"
+                />
               </div>
               {/* Description */}
               <div className="mb-3">
-                <label className="form-label"><b>Description</b></label>
-                <textarea className="form-control custom-textarea" placeholder="Type here ..."
+                <label className="form-label">
+                  <b>Description</b>
+                </label>
+                <textarea
+                  className="form-control custom-textarea"
+                  placeholder="Type here ..."
                   value={description}
                   onChange={(e) => {
                     setDescription(e.target.value);
                     setIsGenerated(false); // Reset when user types
-                  }} rows="3"></textarea>
-                <button type="button" className="suggestion-btn" onClick={handleGenerateHeadline}>
+                  }}
+                  rows="3"
+                ></textarea>
+                <button
+                  type="button"
+                  className="suggestion-btn"
+                  onClick={handleGenerateHeadline}
+                >
                   <Sparkles />
                   {isGenerated ? "Clear" : "Help me write"}
                 </button>
@@ -98,23 +131,22 @@ const PresentationModal = ({ show, onClose }) => {
 
             {/* Modal Footer */}
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={onClose}>
-                Cancel
-              </button>
               <button
                 type="button"
-                className="btn btn-primary"
+                className="btn btn-secondary"
+                onClick={onClose}
               >
+                Cancel
+              </button>
+              <button type="button" className="btn btn-primary">
                 Save
               </button>
             </div>
-
           </div>
         </div>
       </div>
     </>
   );
-
 };
 
 export default PresentationModal;

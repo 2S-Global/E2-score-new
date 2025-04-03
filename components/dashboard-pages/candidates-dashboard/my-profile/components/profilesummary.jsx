@@ -4,12 +4,10 @@ import ResumeHeadline from "./modal/resumeheadline"; // Import the modal compone
 import "bootstrap/dist/css/bootstrap.min.css";
 import Profilesum from "./modal/profilesum";
 
-
-
-
 const ProfilesumerySection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const resumeHeadline = "Highlight your key career achievements to help employers know your potential";
+  const resumeHeadline =
+    "Highlight your key career achievements to help employers know your potential";
 
   const openModalRH = () => {
     setIsModalOpen(true);
@@ -20,7 +18,6 @@ const ProfilesumerySection = () => {
     setIsModalOpen(false);
     document.body.style.overflow = "auto"; // Re-enable background scrolling
   };
-
 
   return (
     <>
@@ -37,7 +34,7 @@ const ProfilesumerySection = () => {
                 float: "right",
                 color: "#275df5",
                 fontWeight: 700,
-                fontSize: "16px"
+                fontSize: "16px",
               }}
             >
               Add profile summary

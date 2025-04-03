@@ -2,8 +2,6 @@
 import dynamic from "next/dynamic";
 import OrderCompleted from "@/components/shop/order-completed";
 
-
-
 const index = () => {
   return (
     <>

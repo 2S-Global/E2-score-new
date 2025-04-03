@@ -1,5 +1,4 @@
-
-'use client'
+"use client";
 
 import Select from "react-select";
 
@@ -157,8 +156,18 @@ const PostBoxForm = () => {
             <select className="form-select" name="expiryMonth">
               <option value="">Month</option>
               {[
-                "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
               ].map((month, index) => (
                 <option key={index + 1} value={index + 1}>
                   {month}
@@ -180,7 +189,6 @@ const PostBoxForm = () => {
             </select>
           </div>
         </div>
-
 
         {/* <!-- Input --> */}
         <div className="form-group col-lg-6 col-md-12">
@@ -224,13 +232,8 @@ const PostBoxForm = () => {
             <option>Kolkata Branch</option>
             <option>Mumbai Branch</option>
             <option>Delhi Branch</option>
-
-
           </select>
         </div>
-
-
-
 
         {/* 
         <div className="form-group col-lg-3 col-md-12">

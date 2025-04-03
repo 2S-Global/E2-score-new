@@ -3,14 +3,9 @@ import dynamic from "next/dynamic";
 
 import RegisterForm from "@/components/pages-menu/register";
 
-
-
-
-
 const index = () => {
   return (
     <>
-      
       <RegisterForm />
     </>
   );

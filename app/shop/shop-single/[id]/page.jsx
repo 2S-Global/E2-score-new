@@ -2,8 +2,6 @@
 import ShopDetails from "@/components/shop/shop-single/ShopDetails";
 import dynamic from "next/dynamic";
 
-
-
 const ShopSingleDyanmic = ({ params }) => {
   return (
     <>

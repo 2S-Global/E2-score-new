@@ -7,12 +7,11 @@ const PersonalSection = () => {
   const [modalType, setModalType] = useState(null);
   const [focusSection, setFocusSection] = useState(null);
 
-
   // Personal details state (initial data)
   const [personalDetails, setPersonalDetails] = useState({
     gender: "Male",
     maritalStatus: "Single / Unmarried",
-    moreinfo :"",
+    moreinfo: "",
     dob: "13 Oct 2000",
     category: "",
     differentlyAbled: "No",
@@ -20,7 +19,13 @@ const PersonalSection = () => {
     workPermit: "",
     address: "Newtown, Kolkata, 700156",
     languages: [
-      { language: "English", proficiency: "Expert", read: true, write: true, speak: true },
+      {
+        language: "English",
+        proficiency: "Expert",
+        read: true,
+        write: true,
+        speak: true,
+      },
     ],
   });
 
@@ -50,10 +55,16 @@ const PersonalSection = () => {
         setPersonalDetails((prev) => ({ ...prev, category: data.category }));
         break;
       case "careerBreak":
-        setPersonalDetails((prev) => ({ ...prev, careerBreak: data.careerBreak }));
+        setPersonalDetails((prev) => ({
+          ...prev,
+          careerBreak: data.careerBreak,
+        }));
         break;
       case "workPermit":
-        setPersonalDetails((prev) => ({ ...prev, workPermit: data.workPermit }));
+        setPersonalDetails((prev) => ({
+          ...prev,
+          workPermit: data.workPermit,
+        }));
         break;
       case "languages":
         setPersonalDetails((prev) => ({ ...prev, languages: data.languages }));
@@ -104,7 +115,11 @@ const PersonalSection = () => {
                       fontSize: "16px",
                     }}
                   >
-                    {personalDetails.moreinfo&&personalDetails.gender && personalDetails.maritalStatus ? "Edit" : "Add more info"}
+                    {personalDetails.moreinfo &&
+                    personalDetails.gender &&
+                    personalDetails.maritalStatus
+                      ? "Edit"
+                      : "Add more info"}
                   </span>
                 </div>
 
@@ -137,7 +152,9 @@ const PersonalSection = () => {
                 {/* Differently abled */}
                 <div className="mt-3 mb-1">
                   <strong>Differently Abled</strong>
-                  <div className="typ-14Medium">{personalDetails.differentlyAbled}</div>
+                  <div className="typ-14Medium">
+                    {personalDetails.differentlyAbled}
+                  </div>
                 </div>
               </div>
 
@@ -204,7 +221,9 @@ const PersonalSection = () => {
                   fontSize: "16px",
                 }}
               >
-                {personalDetails.languages.length > 0 ? "Edit languages" : "Add languages"}
+                {personalDetails.languages.length > 0
+                  ? "Edit languages"
+                  : "Add languages"}
               </span>
             </div>
 
@@ -245,7 +264,7 @@ const PersonalSection = () => {
           modalType={modalType}
           onSubmit={handleModalSubmit}
           data={personalDetails}
-          focusSection={focusSection} 
+          focusSection={focusSection}
         />
       )}
     </>

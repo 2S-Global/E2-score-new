@@ -26,10 +26,7 @@ const Block4 = () => {
                 some kind of flexibility option such as telecommuting, a
                 part-time schedule or a flexible or flextime.
               </div>
-              <Link
-                href="/job-list-v4"
-                className="theme-btn btn-style-one"
-              >
+              <Link href="/job-list-v4" className="theme-btn btn-style-one">
                 Browse Job
               </Link>
             </div>

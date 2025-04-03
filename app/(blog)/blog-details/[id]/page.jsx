@@ -8,8 +8,6 @@ import DetailsContent from "@/components/blog-meu-pages/blog-details/details-con
 import blogs from "@/data/blogs";
 import Image from "next/image";
 
-
-
 const BlogDetailsDynamic = ({ params }) => {
   const id = params.id;
 

@@ -1,5 +1,3 @@
-
-
 const ContactInfoBox = () => {
   return (
     <form className="default-form">
@@ -39,8 +37,6 @@ const ContactInfoBox = () => {
           />
         </div>
 
-        
-
         {/* <!-- Input --> */}
         <div className="form-group col-lg-3 col-md-12">
           <label>Latitude</label>
@@ -58,7 +54,6 @@ const ContactInfoBox = () => {
           <button className="theme-btn btn-style-three">Search Location</button>
         </div>
 
-        
         {/* End MapBox */}
 
         {/* <!-- Input --> */}

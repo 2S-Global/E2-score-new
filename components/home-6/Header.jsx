@@ -1,5 +1,4 @@
-
-'use client'
+"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -65,7 +64,10 @@ const Header = () => {
             >
               Login / Register
             </a>
-            <Link href="/employers-dashboard/post-jobs" className="theme-btn btn-style-one">
+            <Link
+              href="/employers-dashboard/post-jobs"
+              className="theme-btn btn-style-one"
+            >
               Job Post
             </Link>
           </div>

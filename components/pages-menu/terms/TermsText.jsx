@@ -14,7 +14,8 @@ const TermsText = () => {
           Elementum lectus a porta commodo suspendisse arcu, aliquam lectus
           faucibus. Nisl malesuada tortor, ligula aliquet felis vitae enim. Mi
           augue aliquet mauris non elementum tincidunt eget facilisi.
-          Pellentesque massa ipsum tempus vel aliquam massa eu pulvinar eget.{" "}
+          Pellentesque massa ipsum tempus vel aliquam massa eu pulvinar
+          eget.{" "}
         </p>
       </div>
 
@@ -31,7 +32,8 @@ const TermsText = () => {
           Elementum lectus a porta commodo suspendisse arcu, aliquam lectus
           faucibus. Nisl malesuada tortor, ligula aliquet felis vitae enim. Mi
           augue aliquet mauris non elementum tincidunt eget facilisi.
-          Pellentesque massa ipsum tempus vel aliquam massa eu pulvinar eget.{" "}
+          Pellentesque massa ipsum tempus vel aliquam massa eu pulvinar
+          eget.{" "}
         </p>
       </div>
 
@@ -48,7 +50,8 @@ const TermsText = () => {
           Elementum lectus a porta commodo suspendisse arcu, aliquam lectus
           faucibus. Nisl malesuada tortor, ligula aliquet felis vitae enim. Mi
           augue aliquet mauris non elementum tincidunt eget facilisi.
-          Pellentesque massa ipsum tempus vel aliquam massa eu pulvinar eget.{" "}
+          Pellentesque massa ipsum tempus vel aliquam massa eu pulvinar
+          eget.{" "}
         </p>
       </div>
 
@@ -65,7 +68,8 @@ const TermsText = () => {
           Elementum lectus a porta commodo suspendisse arcu, aliquam lectus
           faucibus. Nisl malesuada tortor, ligula aliquet felis vitae enim. Mi
           augue aliquet mauris non elementum tincidunt eget facilisi.
-          Pellentesque massa ipsum tempus vel aliquam massa eu pulvinar eget.{" "}
+          Pellentesque massa ipsum tempus vel aliquam massa eu pulvinar
+          eget.{" "}
         </p>
       </div>
     </>

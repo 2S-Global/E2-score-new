@@ -1,6 +1,4 @@
-
-
-'use client'
+"use client";
 
 import Link from "next/link";
 import ListingShowing from "../components/ListingShowing";
@@ -85,7 +83,7 @@ const FilterTopBox = () => {
   const experienceFilter = (item) =>
     experiences?.length !== 0
       ? experiences?.includes(
-          item?.experience?.split(" ").join("-").toLocaleLowerCase()
+          item?.experience?.split(" ").join("-").toLocaleLowerCase(),
         )
       : item;
 
@@ -93,7 +91,7 @@ const FilterTopBox = () => {
   const qualificationFilter = (item) =>
     qualifications?.length !== 0
       ? qualifications?.includes(
-          item?.qualification?.split(" ").join("-").toLocaleLowerCase()
+          item?.qualification?.split(" ").join("-").toLocaleLowerCase(),
         )
       : item;
 

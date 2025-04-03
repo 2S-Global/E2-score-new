@@ -1,6 +1,4 @@
-
-
-'use client'
+"use client";
 
 import topCompany from "../../data/topCompany";
 import Slider from "react-slick";

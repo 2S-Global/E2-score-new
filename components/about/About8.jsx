@@ -67,10 +67,7 @@ const About8 = () => {
                   </div>
                   {/* blcok item */}
 
-                  <Link
-                    href="/job-list-v4"
-                    className="theme-btn -blue"
-                  >
+                  <Link href="/job-list-v4" className="theme-btn -blue">
                     Discover More
                   </Link>
                 </div>

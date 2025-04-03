@@ -1,6 +1,4 @@
-
-
-'use client'
+"use client";
 
 import SearchBox from "./SearchBox";
 import ContactList from "./ContactList";

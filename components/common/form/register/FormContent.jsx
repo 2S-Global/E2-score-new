@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 //new component
 import MessageComponent from "../../ResponseMsg";
 const FormContent = () => {
@@ -26,7 +26,10 @@ const FormContent = () => {
     setSuccess(null);
 
     try {
-      const response = await axios.post(`${apiurl}/api/auth/register`, formData);
+      const response = await axios.post(
+        `${apiurl}/api/auth/register`,
+        formData,
+      );
       console.log("Response:", response);
       //check if response is successful
       if (!response.data.success) {
@@ -34,10 +37,12 @@ const FormContent = () => {
       }
       setSuccess("Registration successful!");
       const token = response.data.token;
-      localStorage.setItem('token', token);
-      router.push('/candidates-dashboard/dashboard');
+      localStorage.setItem("token", token);
+      router.push("/candidates-dashboard/dashboard");
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed. Try again.");
+      setError(
+        err.response?.data?.message || "Registration failed. Try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -89,7 +94,11 @@ const FormContent = () => {
       {success && <p className="text-success">{success}</p>} */}
 
       <div className="form-group">
-        <button className="theme-btn btn-style-one" type="submit" disabled={loading}>
+        <button
+          className="theme-btn btn-style-one"
+          type="submit"
+          disabled={loading}
+        >
           {loading ? "Registering..." : "Register"}
         </button>
       </div>

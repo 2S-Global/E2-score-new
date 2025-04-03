@@ -2,8 +2,6 @@
 import dynamic from "next/dynamic";
 import ChangePassword from "@/components/dashboard-pages/candidates-dashboard/change-password";
 
-
-
 const index = () => {
   return (
     <>

@@ -1,5 +1,4 @@
-
-'use client'
+"use client";
 
 import {
   Chart as ChartJS,
@@ -21,7 +20,7 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 export const options = {

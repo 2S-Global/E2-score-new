@@ -2,8 +2,6 @@
 import dynamic from "next/dynamic";
 import Messages from "@/components/dashboard-pages/employers-dashboard/messages";
 
-
-
 const index = () => {
   return (
     <>

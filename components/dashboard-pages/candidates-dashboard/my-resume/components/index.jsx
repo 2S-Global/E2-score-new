@@ -1,6 +1,4 @@
-
-
-'use client'
+"use client";
 
 import AddPortfolio from "./AddPortfolio";
 import Awards from "./Awards";

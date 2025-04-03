@@ -711,9 +711,23 @@ Listing Block Seven
   height: 100%;
   width: 100%;
   border-radius: 10px;
-  background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0)), to(rgba(27, 32, 50, 1)));
-  background: -o-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(27, 32, 50, 1) 100%);
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(27, 32, 50, 1) 100%);
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(rgba(255, 255, 255, 0)),
+    to(rgba(27, 32, 50, 1))
+  );
+  background: -o-linear-gradient(
+    top,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(27, 32, 50, 1) 100%
+  );
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(27, 32, 50, 1) 100%
+  );
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#1b2032',GradientType=0 );
   z-index: 1;
   opacity: 0.8;

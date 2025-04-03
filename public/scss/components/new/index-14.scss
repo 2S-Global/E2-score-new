@@ -187,7 +187,11 @@
 
 .features {
   &__section {
-    background: linear-gradient(90.22deg, var(--primary-color) 0%, #4487e2 100%);
+    background: linear-gradient(
+      90.22deg,
+      var(--primary-color) 0%,
+      #4487e2 100%
+    );
     padding: 20px 0 !important;
   }
 

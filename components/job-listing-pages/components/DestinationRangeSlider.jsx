@@ -1,5 +1,4 @@
-
-'use client'
+"use client";
 
 import { useEffect, useState } from "react";
 import Slider from "rc-slider";
@@ -8,44 +7,44 @@ import { useDispatch, useSelector } from "react-redux";
 import { addDestination } from "../../../features/filter/filterSlice";
 
 const DestinationRangeSlider = () => {
-    const { jobList } = useSelector((state) => state.filter);
+  const { jobList } = useSelector((state) => state.filter);
 
-    const [destination, setDestination] = useState({
-        min: jobList.destination.min,
-        max: jobList.destination.max,
+  const [destination, setDestination] = useState({
+    min: jobList.destination.min,
+    max: jobList.destination.max,
+  });
+
+  const dispatch = useDispatch();
+
+  // destination handler
+  const handleOnChange = ({ min, max }) => {
+    dispatch(addDestination({ min, max }));
+  };
+
+  useEffect(() => {
+    setDestination({
+      min: jobList.destination.min,
+      max: jobList.destination.max,
     });
+  }, [setDestination, jobList]);
 
-    const dispatch = useDispatch();
-
-    // destination handler
-    const handleOnChange = ({ min, max }) => {
-        dispatch(addDestination({ min, max }));
-    };
-
-    useEffect(() => {
-        setDestination({
-            min: jobList.destination.min,
-            max: jobList.destination.max,
-        });
-    }, [setDestination, jobList]);
-
-    return (
-        <div className="range-slider-one">
-            <Slider
-                formatLabel={(value) => ``}
-                min={0}
-                max={100}
-                value={{ min: destination.min, max: destination.max }}
-                onChange={(value) => handleOnChange(value)}
-            />
-            <div className="input-outer">
-                <div className="amount-outer">
-                    <span className="area-amount">{destination.max}</span>
-                    km
-                </div>
-            </div>
+  return (
+    <div className="range-slider-one">
+      <Slider
+        formatLabel={(value) => ``}
+        min={0}
+        max={100}
+        value={{ min: destination.min, max: destination.max }}
+        onChange={(value) => handleOnChange(value)}
+      />
+      <div className="input-outer">
+        <div className="amount-outer">
+          <span className="area-amount">{destination.max}</span>
+          km
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default DestinationRangeSlider;

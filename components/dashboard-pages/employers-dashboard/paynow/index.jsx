@@ -10,59 +10,57 @@ import MenuToggler from "../../MenuToggler";
 import PaymentDetails from "./component/paynowtable";
 
 const index = () => {
-    return (
-        <div className="page-wrapper dashboard">
-            <span className="header-span"></span>
-            {/* <!-- Header Span for hight --> */}
+  return (
+    <div className="page-wrapper dashboard">
+      <span className="header-span"></span>
+      {/* <!-- Header Span for hight --> */}
 
-            <LoginPopup />
-            {/* End Login Popup Modal */}
+      <LoginPopup />
+      {/* End Login Popup Modal */}
 
-            <DashboardHeader />
-            {/* End Header */}
+      <DashboardHeader />
+      {/* End Header */}
 
-            <MobileMenu />
-            {/* End MobileMenu */}
+      <MobileMenu />
+      {/* End MobileMenu */}
 
-            <DashboardEmployerSidebar />
-            {/* <!-- End User Sidebar Menu --> */}
+      <DashboardEmployerSidebar />
+      {/* <!-- End User Sidebar Menu --> */}
 
-            {/* <!-- Dashboard --> */}
-            <section className="user-dashboard">
-                <div className="dashboard-outer">
-                   
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <div className="ls-widget">
-                                <div className="tabs-box">
-                                    <div className="widget-title">
-                                        <h4>Payment Details</h4>
-                                    </div>
-                                    {/* End widget-title */}
+      {/* <!-- Dashboard --> */}
+      <section className="user-dashboard">
+        <div className="dashboard-outer">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="ls-widget">
+                <div className="tabs-box">
+                  <div className="widget-title">
+                    <h4>Payment Details</h4>
+                  </div>
+                  {/* End widget-title */}
 
-                                    <div className="widget-content">
-                                        <div className="table-outer">
-                                            <PaymentDetails />
-
-                                        </div>
-                                    </div>
-                                    {/* End widget-content */}
-                                </div>
-                            </div>
-                            {/* <!-- Ls widget --> */}
-                        </div>
+                  <div className="widget-content">
+                    <div className="table-outer">
+                      <PaymentDetails />
                     </div>
-                    {/* End .row */}
+                  </div>
+                  {/* End widget-content */}
                 </div>
-                {/* End dashboard-outer */}
-            </section>
-            {/* <!-- End Dashboard --> */}
-
-            <CopyrightFooter />
-            {/* <!-- End Copyright --> */}
+              </div>
+              {/* <!-- Ls widget --> */}
+            </div>
+          </div>
+          {/* End .row */}
         </div>
-        // End page-wrapper
-    );
+        {/* End dashboard-outer */}
+      </section>
+      {/* <!-- End Dashboard --> */}
+
+      <CopyrightFooter />
+      {/* <!-- End Copyright --> */}
+    </div>
+    // End page-wrapper
+  );
 };
 
 export default index;

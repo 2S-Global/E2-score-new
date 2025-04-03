@@ -30,8 +30,23 @@ const DownloadPDF = () => {
   return (
     <div>
       {/* Hidden Component for PDF Capture */}
-      <div style={{ position: "absolute", left: "-9999px", width: "210mm", height: "297mm" }}>
-        <div ref={pdfRef} style={{ width: "210mm", minHeight: "297mm", background: "#fff", padding: "20px" }}>
+      <div
+        style={{
+          position: "absolute",
+          left: "-9999px",
+          width: "210mm",
+          height: "297mm",
+        }}
+      >
+        <div
+          ref={pdfRef}
+          style={{
+            width: "210mm",
+            minHeight: "297mm",
+            background: "#fff",
+            padding: "20px",
+          }}
+        >
           <PDFContent />
         </div>
       </div>

@@ -21,7 +21,7 @@ List Style one
   margin-bottom: 20px;
 }
 
-.list-style-one li:before{
+.list-style-one li:before {
   position: absolute;
   left: 0;
   top: 0;
@@ -53,13 +53,13 @@ List Style Two
   margin-bottom: 20px;
 }
 
-.list-style-two li:before{
+.list-style-two li:before {
   position: absolute;
   left: 0;
   top: 9px;
   width: 8px;
   height: 8px;
-  background: #C4C4C4;
+  background: #c4c4c4;
   border-radius: 50%;
   content: "";
 }

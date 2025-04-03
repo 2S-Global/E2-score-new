@@ -43,7 +43,6 @@ const index = () => {
                   <h4>Search Employee Details</h4>
                   {/*  <WidgetToFilterBox /> */}
                   {/* Add a button */}
-
                 </div>
                 {/* End widget top filter box */}
                 <SearchBox />

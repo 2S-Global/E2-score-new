@@ -18,12 +18,7 @@ export default function NotFound() {
       <div className="content">
         <div className="logo">
           <Link href="/">
-            <Image
-              width={154}
-              height={50}
-              src="/images/logo.svg"
-              alt="brand"
-            />
+            <Image width={154} height={50} src="/images/logo.svg" alt="brand" />
           </Link>
         </div>
         {/* End logo */}

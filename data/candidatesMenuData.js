@@ -56,7 +56,6 @@ module.exports = [
     active: "",
   },
 
- 
   {
     id: 9,
     name: "Messages",
@@ -78,7 +77,7 @@ module.exports = [
     routePath: "/",
     active: "",
   },
-/*   {
+  /*   {
     id: 12,
     name: "Delete Profile",
     icon: "la-trash",

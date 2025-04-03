@@ -2,8 +2,6 @@
 import dynamic from "next/dynamic";
 import CvManager from "@/components/dashboard-pages/candidates-dashboard/cv-manager";
 
-
-
 const index = () => {
   return (
     <>

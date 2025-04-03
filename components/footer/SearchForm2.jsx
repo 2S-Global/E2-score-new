@@ -1,6 +1,4 @@
-
-
-'use client'
+"use client";
 
 const SearchForm2 = () => {
   const handleSubmit = (event) => {

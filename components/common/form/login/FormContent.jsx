@@ -1,4 +1,4 @@
-"use client";  // ⬅ Required for Next.js Client Component
+"use client"; // ⬅ Required for Next.js Client Component
 
 import Link from "next/link";
 import LoginWithSocial from "./LoginWithSocial";
@@ -42,30 +42,28 @@ const FormContent = () => {
       const token = response.data.token;
       const role = response.data.role;
 
-
       //save token to local storage
       if (role == "1") {
-        localStorage.setItem('token', token);
-        router.push('/candidates-dashboard/dashboard');
-      }
-      else if (role == "2") {
-        localStorage.setItem('Admin_token', token);
-        router.push('/employers-dashboard/dashboard');
+        localStorage.setItem("token", token);
+        router.push("/candidates-dashboard/dashboard");
+      } else if (role == "2") {
+        localStorage.setItem("Admin_token", token);
+        router.push("/employers-dashboard/dashboard");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed. Try again.");
+      setError(
+        err.response?.data?.message || "Registration failed. Try again.",
+      );
     } finally {
       setLoading(false);
     }
   };
-
 
   return (
     <div className="form-inner">
       <h3>Login to E²-Score</h3>
       {/* display error */}
       <MessageComponent error={error} success={success} />
-
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -101,16 +99,21 @@ const FormContent = () => {
                 <span className="custom-checkbox"></span> Remember me
               </label>
             </div>
-            <a href="#" className="pwd">Forgot password?</a>
+            <a href="#" className="pwd">
+              Forgot password?
+            </a>
           </div>
         </div>
 
         <div className="form-group">
-          <button className="theme-btn btn-style-one" type="submit" disabled={loading}>
+          <button
+            className="theme-btn btn-style-one"
+            type="submit"
+            disabled={loading}
+          >
             {loading ? "Logging..." : "Log in"}
           </button>
         </div>
-
 
         {/* <div className="form-group">
           <button
@@ -129,18 +132,24 @@ const FormContent = () => {
             Log In (as Employer)
           </button>
         </div> */}
-
       </form>
 
       <div className="bottom-box">
         <div className="text">
           Don&apos;t have an account?{" "}
-          <Link href="#" className="call-modal signup" data-bs-toggle="modal" data-bs-target="#registerModal">
+          <Link
+            href="#"
+            className="call-modal signup"
+            data-bs-toggle="modal"
+            data-bs-target="#registerModal"
+          >
             Signup
           </Link>
         </div>
 
-        <div className="divider"><span>or</span></div>
+        <div className="divider">
+          <span>or</span>
+        </div>
 
         <LoginWithSocial />
       </div>

@@ -31,7 +31,8 @@ const index = () => {
       <blockquote className="blockquote-style-one mb-5 mt-5">
         <p>
           Aliquam hendrerit sollicitudin purus, quis rutrum mi accumsan nec.
-          Quisque bibendum orci ac nibh facilisis, at malesuada orci congue.{" "}
+          Quisque bibendum orci ac nibh facilisis, at malesuada orci
+          congue.{" "}
         </p>
         <cite>Luis Pickford</cite>
       </blockquote>

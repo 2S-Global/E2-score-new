@@ -1,12 +1,6 @@
 "use client";
 
-import {
-
-  Sidebar,
-  Menu,
-  MenuItem,
-  SubMenu,
-} from "react-pro-sidebar";
+import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 
 //import mobileMenuData from "../../../data/mobileMenuData";
 import mobileMenuData from "../../../data/mobileMenuDatatry";
@@ -18,11 +12,8 @@ import {
 } from "../../../utils/linkActiveChecker";
 import { usePathname, useRouter } from "next/navigation";
 
-
 const Index = () => {
-
-  const router = useRouter()
-
+  const router = useRouter();
 
   return (
     <div
@@ -34,7 +25,6 @@ const Index = () => {
       <SidebarHeader />
       {/* End pro-header */}
 
-      
       {/*   <Sidebar>
           <Menu>
             {mobileMenuData.map((item) => (
@@ -67,39 +57,49 @@ const Index = () => {
           </Menu>
         </Sidebar> */}
 
-        <Sidebar>
-  <Menu>
-    {mobileMenuData.map((item) => (
-      item.items && item.items.length > 0 ? ( // Check if there are submenu items
-        <SubMenu
-          className={isActiveParentChaild(item.items, usePathname()) ? "menu-active" : ""}
-          label={item.label}
-          key={item.id}
-        >
-          {item.items.map((menuItem, i) => (
-            <MenuItem
-              onClick={() => router.push(menuItem.routePath)}
-              className={isActiveLink(menuItem.routePath, usePathname()) ? "menu-active-link" : ""}
-              key={i}
-            >
-              {menuItem.label}
-            </MenuItem>
-          ))}
-        </SubMenu>
-      ) : (
-        <MenuItem
-          onClick={() => router.push(item.routePath)}
-          className={isActiveLink(item.routePath, usePathname()) ? "menu-active-link" : ""}
-          key={item.id}
-        >
-          {item.label}
-        </MenuItem>
-      )
-    ))}
-  </Menu>
-</Sidebar>
-
-
+      <Sidebar>
+        <Menu>
+          {mobileMenuData.map((item) =>
+            item.items && item.items.length > 0 ? ( // Check if there are submenu items
+              <SubMenu
+                className={
+                  isActiveParentChaild(item.items, usePathname())
+                    ? "menu-active"
+                    : ""
+                }
+                label={item.label}
+                key={item.id}
+              >
+                {item.items.map((menuItem, i) => (
+                  <MenuItem
+                    onClick={() => router.push(menuItem.routePath)}
+                    className={
+                      isActiveLink(menuItem.routePath, usePathname())
+                        ? "menu-active-link"
+                        : ""
+                    }
+                    key={i}
+                  >
+                    {menuItem.label}
+                  </MenuItem>
+                ))}
+              </SubMenu>
+            ) : (
+              <MenuItem
+                onClick={() => router.push(item.routePath)}
+                className={
+                  isActiveLink(item.routePath, usePathname())
+                    ? "menu-active-link"
+                    : ""
+                }
+                key={item.id}
+              >
+                {item.label}
+              </MenuItem>
+            ),
+          )}
+        </Menu>
+      </Sidebar>
 
       <SidebarFooter />
     </div>

@@ -2,11 +2,6 @@
 import React, { useState } from "react";
 import ResumeHeadline from "./modal/resumeheadline"; // Import the modal component
 
-
-
-
-
-
 const ResumeHeadlineSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const resumeHeadline = "Your Resume headline";
@@ -29,7 +24,11 @@ const ResumeHeadlineSection = () => {
           <div className="widget-title">
             <h4>Resume Headline</h4>
             {/* Open modal using an onClick function */}
-            <i className="la la-pencil-alt" onClick={openModalRH} style={{ cursor: "pointer" }}></i>
+            <i
+              className="la la-pencil-alt"
+              onClick={openModalRH}
+              style={{ cursor: "pointer" }}
+            ></i>
           </div>
           {/* Display Resume Headline */}
           <div className="widget-content">
@@ -39,7 +38,9 @@ const ResumeHeadlineSection = () => {
       </div>
 
       {/* Render Modal if isModalOpen is true */}
-      {isModalOpen && <ResumeHeadline show={isModalOpen} onClose={closeModalRH} />}
+      {isModalOpen && (
+        <ResumeHeadline show={isModalOpen} onClose={closeModalRH} />
+      )}
     </>
   );
 };

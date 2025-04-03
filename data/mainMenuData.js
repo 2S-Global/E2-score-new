@@ -153,7 +153,6 @@ export const findJobItems = [
       {
         name: "Job Details",
         routePath: "/job-details",
-
       },
       {
         name: "Job List V11",
@@ -177,9 +176,7 @@ export const findJobItems = [
     id: 4,
     title: "Jobs Single",
     items: [
-      {name: "Job Details",
-        routePath: "/job-details",
-      },
+      { name: "Job Details", routePath: "/job-details" },
       {
         name: "Job Single V1",
         routePath: "/job-single-v1/1",
@@ -290,9 +287,7 @@ export const candidateItems = [
     id: 2,
     title: "Candidates Single",
     items: [
-     { name: "Candidates Details",
-        routePath: "/candidates-details",
-      },
+      { name: "Candidates Details", routePath: "/candidates-details" },
       {
         name: "Candidates Single V1",
         routePath: "/candidates-single-v1/1",
@@ -362,20 +357,20 @@ export const pageItems = [
     routePath: "/404",
   },
 ];
- 
-export const about =[
+
+export const about = [
   {
     name: "About",
     routePath: "/about",
   },
-]
+];
 
-export const contact =[
+export const contact = [
   {
     name: "Contact",
     routePath: "/contact",
   },
-]
+];
 
 export const shopItems = [
   {

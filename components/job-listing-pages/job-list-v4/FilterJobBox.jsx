@@ -1,6 +1,4 @@
-
-
-'use client'
+"use client";
 
 import Pagination from "../components/Pagination";
 import Link from "next/link";
@@ -73,7 +71,7 @@ const FilterJobBox = () => {
   const jobTypeFilter = (item) =>
     jobType?.length !== 0 && item?.jobType !== undefined
       ? jobType?.includes(
-          item?.jobType[0]?.type.toLocaleLowerCase().split(" ").join("-")
+          item?.jobType[0]?.type.toLocaleLowerCase().split(" ").join("-"),
         )
       : item;
 
@@ -91,7 +89,7 @@ const FilterJobBox = () => {
   const experienceFilter = (item) =>
     experience?.length !== 0
       ? experience?.includes(
-          item?.experience?.split(" ").join("-").toLocaleLowerCase()
+          item?.experience?.split(" ").join("-").toLocaleLowerCase(),
         )
       : item;
 

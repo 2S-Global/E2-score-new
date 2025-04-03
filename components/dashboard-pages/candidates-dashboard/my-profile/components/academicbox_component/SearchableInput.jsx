@@ -13,7 +13,10 @@ const SearchableInput = ({ label, value, onChange, options, onSelect }) => {
         autoComplete="off"
       />
       {options.length > 0 && value && (
-        <ul className="dropdown-menu show" style={{ position: "absolute", width: "100%" }}>
+        <ul
+          className="dropdown-menu show"
+          style={{ position: "absolute", width: "100%" }}
+        >
           {options.map((option, index) => (
             <li
               key={index}

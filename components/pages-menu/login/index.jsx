@@ -1,6 +1,5 @@
 "use client";
 
-
 import FormContent2 from "../../common/form/login/FormContent2";
 import MobileMenu from "../../header/MobileMenu";
 import Header from "./Header";

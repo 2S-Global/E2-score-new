@@ -1,6 +1,4 @@
-
-
-'use client'
+"use client";
 
 const Subscribe = ({ btnStyle = "" }) => {
   const handleSubmit = (event) => {

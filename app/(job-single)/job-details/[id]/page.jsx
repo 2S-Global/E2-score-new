@@ -15,8 +15,6 @@ import JobDetailsDescriptions from "@/components/job-single-pages/shared-compone
 import ApplyJobModalContent from "@/components/job-single-pages/shared-components/ApplyJobModalContent";
 import Image from "next/image";
 
-
-
 const JobSingleDynamicV1 = ({ params }) => {
   const id = params.id;
   const company = jobs.find((item) => item.id == id) || jobs[0];

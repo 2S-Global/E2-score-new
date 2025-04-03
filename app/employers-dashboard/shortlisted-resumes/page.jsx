@@ -2,8 +2,6 @@
 import dynamic from "next/dynamic";
 import ShortlistedResumes from "@/components/dashboard-pages/employers-dashboard/shortlisted-resumes";
 
-
-
 const index = () => {
   return (
     <>

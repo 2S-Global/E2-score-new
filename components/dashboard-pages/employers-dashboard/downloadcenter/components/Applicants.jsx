@@ -1,9 +1,18 @@
-'use client'
+"use client";
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DataTable from "react-data-table-component";
-import { CheckCircle, XCircle, HelpCircle, Eye, Loader, MinusCircle,Clock2,Download  } from "lucide-react";
+import {
+  CheckCircle,
+  XCircle,
+  HelpCircle,
+  Eye,
+  Loader,
+  MinusCircle,
+  Clock2,
+  Download,
+} from "lucide-react";
 import Link from "next/link";
 
 const Applicants = () => {
@@ -12,7 +21,6 @@ const Applicants = () => {
   const [error, setError] = useState(null);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  
   useEffect(() => {
     const fetchCandidates = async () => {
       try {
@@ -29,11 +37,14 @@ const Applicants = () => {
           {},
           {
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         );
         setCandidates(response.data);
       } catch (error) {
-        console.error("Error fetching candidates:", error.response?.data || error);
+        console.error(
+          "Error fetching candidates:",
+          error.response?.data || error,
+        );
         setError(error.response?.data?.message || "Internal Server Error");
       } finally {
         setLoading(false);
@@ -48,7 +59,7 @@ const Applicants = () => {
       alert("No file available for download");
       return;
     }
-  }
+  };
 
   const renderProcessingIcon = (docNumber, docName, response) => {
     if (docNumber || docName) {
@@ -80,20 +91,16 @@ const Applicants = () => {
         </span>
       );
     }
-  
+
     return (
       <span title="Not Applied">
         <MinusCircle size={14} className="text-muted" />
       </span>
     );
   };
-  
-  
-
-
 
   // DataTable columns configuration
-  const columns = [ 
+  const columns = [
     {
       name: "Candidate Name",
       selector: (row) => row.candidate_name,
@@ -106,35 +113,63 @@ const Applicants = () => {
     },
     {
       name: "PAN Status",
-      selector: (row) => renderProcessingIcon(row.pan_number, row.pan_name, row.pan_response),
-      cell: (row) => renderProcessingIcon(row.pan_number, row.pan_name, row.pan_response),
+      selector: (row) =>
+        renderProcessingIcon(row.pan_number, row.pan_name, row.pan_response),
+      cell: (row) =>
+        renderProcessingIcon(row.pan_number, row.pan_name, row.pan_response),
     },
     {
       name: "Passport Status",
-      selector: (row) => renderProcessingIcon(row.passport_file_number, row.passport_name, row.passport_response),
-      cell: (row) => renderProcessingIcon(row.passport_file_number, row.passport_name, row.passport_response),
+      selector: (row) =>
+        renderProcessingIcon(
+          row.passport_file_number,
+          row.passport_name,
+          row.passport_response,
+        ),
+      cell: (row) =>
+        renderProcessingIcon(
+          row.passport_file_number,
+          row.passport_name,
+          row.passport_response,
+        ),
     },
     {
       name: "Aadhaar Status",
-      selector: (row) => renderProcessingIcon(row.aadhar_number, row.aadhar_name, row.aadhaar_response),
-      cell: (row) => renderProcessingIcon(row.aadhar_number, row.aadhar_name, row.aadhaar_response),
+      selector: (row) =>
+        renderProcessingIcon(
+          row.aadhar_number,
+          row.aadhar_name,
+          row.aadhaar_response,
+        ),
+      cell: (row) =>
+        renderProcessingIcon(
+          row.aadhar_number,
+          row.aadhar_name,
+          row.aadhaar_response,
+        ),
     },
     {
       name: "DL Status",
-      selector: (row) => renderProcessingIcon(row.dl_number, row.dl_name, row.dl_response),
-      cell: (row) => renderProcessingIcon(row.dl_number, row.dl_name, row.dl_response),
+      selector: (row) =>
+        renderProcessingIcon(row.dl_number, row.dl_name, row.dl_response),
+      cell: (row) =>
+        renderProcessingIcon(row.dl_number, row.dl_name, row.dl_response),
     },
     {
       name: "Epic Status",
-      selector: (row) => renderProcessingIcon(row.epic_number, row.epic_name, row.epic_response),
-      cell: (row) => renderProcessingIcon(row.epic_number, row.epic_name, row.epic_response),
+      selector: (row) =>
+        renderProcessingIcon(row.epic_number, row.epic_name, row.epic_response),
+      cell: (row) =>
+        renderProcessingIcon(row.epic_number, row.epic_name, row.epic_response),
     },
     {
       name: "Action",
       cell: (row) => (
         <div className="d-flex gap-2">
-
-<Link href={`/employers-dashboard/list-verified-employee/details?id=${row._id}`} passHref>
+          <Link
+            href={`/employers-dashboard/list-verified-employee/details?id=${row._id}`}
+            passHref
+          >
             <button className="btn btn-sm" title="View Details">
               <Eye size={16} className="me-1 text-primary" />
             </button>
@@ -144,9 +179,15 @@ const Applicants = () => {
             className="btn btn-link p-0"
             title="Download File"
             disabled={row.all_verified === 0} // Disable when all_verified = 0
-            style={{ opacity: row.all_verified === 0 ? 0.5 : 1, cursor: row.all_verified === 0 ? "not-allowed" : "pointer" }}
+            style={{
+              opacity: row.all_verified === 0 ? 0.5 : 1,
+              cursor: row.all_verified === 0 ? "not-allowed" : "pointer",
+            }}
           >
-            <Download size={20} className={row.all_verified === 0 ? "text-muted" : "text-success"} />
+            <Download
+              size={20}
+              className={row.all_verified === 0 ? "text-muted" : "text-success"}
+            />
           </button>
         </div>
       ),
@@ -154,22 +195,21 @@ const Applicants = () => {
       button: 1,
     },
   ];
-  
 
   // Custom styles for centering content in the DataTable
   const customStyles = {
     headCells: {
       style: {
-        display: 'flex',
-        justifyContent: 'center', // Center header content
-        alignItems: 'center',
+        display: "flex",
+        justifyContent: "center", // Center header content
+        alignItems: "center",
       },
     },
     cells: {
       style: {
-        display: 'flex',
-        justifyContent: 'center', // Center row content
-        alignItems: 'center',
+        display: "flex",
+        justifyContent: "center", // Center row content
+        alignItems: "center",
       },
     },
   };
@@ -183,11 +223,10 @@ const Applicants = () => {
       </div>
     );
 
-  if (error) return <p className="text-danger text-center mt-3">Error: {error}</p>;
+  if (error)
+    return <p className="text-danger text-center mt-3">Error: {error}</p>;
 
   return (
-
-    
     <div className="container mt-4">
       <DataTable
         title="Applicants"
@@ -198,7 +237,7 @@ const Applicants = () => {
         highlightOnHover
         striped
         responsive
-        customStyles={customStyles}  // Apply the customStyles here
+        customStyles={customStyles} // Apply the customStyles here
       />
     </div>
   );

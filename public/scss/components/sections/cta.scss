@@ -6,53 +6,53 @@ Call To Action
 
 ***/
 
-.call-to-action{
+.call-to-action {
   position: relative;
 }
 
-.call-to-action .outer-box{
+.call-to-action .outer-box {
   position: relative;
-  background-color: rgba(25,103,210,.07);
+  background-color: rgba(25, 103, 210, 0.07);
   padding: 50px 60px 10px;
   border-radius: 10px;
   overflow: hidden;
 }
 
-.call-to-action .sec-title{
+.call-to-action .sec-title {
   margin-bottom: 0;
 }
 
-.call-to-action .image-column{
+.call-to-action .image-column {
   position: absolute;
   right: 0;
   top: 0;
   height: 100%;
   width: 360px;
   background-repeat: no-repeat;
-  background-position: -10px 20px ;
+  background-position: -10px 20px;
   background-size: cover;
 }
 
-.call-to-action .image-column .image{
+.call-to-action .image-column .image {
   display: none;
   margin-bottom: 0;
 }
 
-.call-to-action .content-column{
+.call-to-action .content-column {
   position: relative;
   margin-right: 50px;
 }
 
-.call-to-action .sec-title{
+.call-to-action .sec-title {
   position: relative;
   margin-bottom: 50px;
 }
 
-.call-to-action .sec-title .theme-btn{
+.call-to-action .sec-title .theme-btn {
   margin-top: 30px;
 }
 
-.call-to-action.style-two{
+.call-to-action.style-two {
   padding-bottom: 100px;
 }
 
@@ -64,7 +64,7 @@ Call To Action Two
 
 ***/
 
-.call-to-action-two{
+.call-to-action-two {
   position: relative;
   background-repeat: no-repeat;
   background-position: center;
@@ -73,28 +73,28 @@ Call To Action Two
   text-align: center;
 }
 
-.call-to-action-two .sec-title{
+.call-to-action-two .sec-title {
   margin-bottom: 33px;
 }
 
-.call-to-action-two .btn-box{
+.call-to-action-two .btn-box {
   position: relative;
   display: inline-block;
 }
 
-.call-to-action-two .theme-btn{
+.call-to-action-two .theme-btn {
   margin: 0 10px 10px;
 }
 
-.call-to-action-two .btn-style-two{
+.call-to-action-two .btn-style-two {
   color: #ffffff;
 }
 
-.call-to-action-two.style-two{
+.call-to-action-two.style-two {
   position: relative;
 }
 
-.call-to-action-two.style-two:before{
+.call-to-action-two.style-two:before {
   position: absolute;
   left: 0;
   top: 0;
@@ -102,7 +102,7 @@ Call To Action Two
   width: 100%;
   background-color: var(--primary-color);
   content: "";
-  opacity: .85;
+  opacity: 0.85;
 }
 
 /*** 
@@ -113,13 +113,13 @@ Call To Action Three
 
 ***/
 
-.call-to-action-three{
+.call-to-action-three {
   position: relative;
   padding: 60px 0;
-  background-color: #DEEBFF;
+  background-color: #deebff;
 }
 
-.call-to-action-three .outer-box{
+.call-to-action-three .outer-box {
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -132,20 +132,20 @@ Call To Action Three
   align-items: center;
 }
 
-.call-to-action-three .sec-title{
+.call-to-action-three .sec-title {
   margin-bottom: 0;
   margin-right: 30px;
 }
 
-.call-to-action-three.style-two{
+.call-to-action-three.style-two {
   background: var(--primary-color);
 }
 
-.call-to-action-three.style-two .sec-title .text a{
+.call-to-action-three.style-two .sec-title .text a {
   color: #ffffff;
 }
 
-.call-to-action-three.style-two .theme-btn{
+.call-to-action-three.style-two .theme-btn {
   min-width: 180px;
 }
 
@@ -157,16 +157,16 @@ Call To Action Four
 
 ***/
 
-.call-to-action-four{
+.call-to-action-four {
   position: relative;
-  background-color: rgba(25,103,210,.07);
+  background-color: rgba(25, 103, 210, 0.07);
   padding: 30px 30px;
   padding-right: 140px;
   border-radius: 10px;
   overflow: hidden;
 }
 
-.call-to-action-four h5{
+.call-to-action-four h5 {
   font-weight: 500;
   font-size: 18px;
   line-height: 24px;
@@ -174,14 +174,14 @@ Call To Action Four
   margin-bottom: 17px;
 }
 
-.call-to-action-four p{
+.call-to-action-four p {
   font-size: 14px;
   line-height: 24px;
   color: #696969;
   margin-bottom: 25px;
 }
 
-.call-to-action-four .image{
+.call-to-action-four .image {
   position: absolute;
   right: 0;
   top: 0;
@@ -192,23 +192,23 @@ Call To Action Four
   background-size: cover;
 }
 
-.call-to-action-four.style-two{
-  padding: 50px 50px;    
+.call-to-action-four.style-two {
+  padding: 50px 50px;
 }
 
-.call-to-action-four.style-two h5{
+.call-to-action-four.style-two h5 {
   font-weight: 500;
   font-size: 30px;
   line-height: 41px;
   color: #202124;
 }
 
-.call-to-action-four.style-two p{
+.call-to-action-four.style-two p {
   font-size: 15px;
   line-height: 24px;
   margin-bottom: 25px;
 }
 
-.call-to-action-four.style-two .image{
+.call-to-action-four.style-two .image {
   width: 350px;
 }

@@ -13,7 +13,9 @@ const ResumeHeadline = ({ show, onClose }) => {
       setHeadline(""); // Clear text if pressed again
       setIsGenerated(false);
     } else {
-      setHeadline("Experienced Software Developer skilled in React, Node.js, and system design.");
+      setHeadline(
+        "Experienced Software Developer skilled in React, Node.js, and system design.",
+      );
       setIsGenerated(true);
     }
   };
@@ -55,20 +57,29 @@ const ResumeHeadline = ({ show, onClose }) => {
         `}
       </style>
 
-      <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+      <div
+        className="modal fade show d-block"
+        tabIndex="-1"
+        style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+      >
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
-            
             {/* Modal Header */}
             <div className="modal-header">
               <h5 className="modal-title">Resume Headline</h5>
-              <button type="button" className="btn-close" onClick={onClose}></button>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={onClose}
+              ></button>
             </div>
 
             {/* Modal Body */}
             <div className="modal-body">
-              <p style={{ color: 'black' }}>
-                It is the first thing recruiters notice in your profile. Write a concise headline introducing yourself to employers. (Minimum 5 words)
+              <p style={{ color: "black" }}>
+                It is the first thing recruiters notice in your profile. Write a
+                concise headline introducing yourself to employers. (Minimum 5
+                words)
               </p>
 
               {/* Textarea Input with AI Button */}
@@ -82,11 +93,14 @@ const ResumeHeadline = ({ show, onClose }) => {
                     setIsGenerated(false); // Reset when user types
                   }}
                   maxLength={250}
-                  style={{ height: "100px", paddingBottom: "40px" }} 
+                  style={{ height: "100px", paddingBottom: "40px" }}
                 />
 
                 {/* "Help me write" AI Suggestion Button */}
-                <button className="suggestion-btn" onClick={handleGenerateHeadline}>
+                <button
+                  className="suggestion-btn"
+                  onClick={handleGenerateHeadline}
+                >
                   <Sparkles />
                   {isGenerated ? "Clear" : "Help me write"}
                 </button>
@@ -99,7 +113,11 @@ const ResumeHeadline = ({ show, onClose }) => {
 
             {/* Modal Footer */}
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={onClose}>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={onClose}
+              >
                 Cancel
               </button>
               <button
@@ -110,7 +128,6 @@ const ResumeHeadline = ({ show, onClose }) => {
                 Save
               </button>
             </div>
-            
           </div>
         </div>
       </div>

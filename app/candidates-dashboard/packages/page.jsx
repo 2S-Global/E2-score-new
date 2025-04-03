@@ -2,7 +2,6 @@
 import dynamic from "next/dynamic";
 import Packages from "@/components/dashboard-pages/candidates-dashboard/packages";
 
-
 const index = () => {
   return (
     <>

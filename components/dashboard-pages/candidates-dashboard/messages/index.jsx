@@ -1,7 +1,4 @@
-
-
-'use client'
-
+"use client";
 
 import MobileMenu from "../../../header/MobileMenu";
 import LoginPopup from "../../../common/form/login/LoginPopup";

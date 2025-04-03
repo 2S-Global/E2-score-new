@@ -4,10 +4,23 @@ import { Sparkles } from "lucide-react";
 
 const WorksampleModal = ({ show, onClose }) => {
   if (!show) return null;
-  const years = Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i); // Last 50 years
+  const years = Array.from(
+    { length: 50 },
+    (_, i) => new Date().getFullYear() - i,
+  ); // Last 50 years
   const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   const [fromYear, setFromYear] = useState("");
@@ -23,7 +36,9 @@ const WorksampleModal = ({ show, onClose }) => {
       setDescription(""); // Clear text if pressed again
       setIsGenerated(false);
     } else {
-      setDescription("Developed and deployed a scalable web application using React.js and Node.js, ensuring high performance and seamless user experience. Designed and implemented RESTful APIs, optimized database queries, and integrated third-party services for enhanced functionality. Focused on system architecture, security, and responsive UI/UX to deliver a robust and efficient solution.");
+      setDescription(
+        "Developed and deployed a scalable web application using React.js and Node.js, ensuring high performance and seamless user experience. Designed and implemented RESTful APIs, optimized database queries, and integrated third-party services for enhanced functionality. Focused on system architecture, security, and responsive UI/UX to deliver a robust and efficient solution.",
+      );
       setIsGenerated(true);
     }
   };
@@ -65,106 +80,152 @@ const WorksampleModal = ({ show, onClose }) => {
           }
 `}
       </style>
-      <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+      <div
+        className="modal fade show d-block"
+        tabIndex="-1"
+        style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+      >
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
-
             {/* Modal Header */}
             <div className="modal-header">
               <h5 className="modal-title">Work samples</h5>
-              <button type="button" className="btn-close" onClick={onClose}></button>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={onClose}
+              ></button>
             </div>
 
             {/* Modal Body */}
             <div className="modal-body">
-              <p style={{ color: 'black' }}>
+              <p style={{ color: "black" }}>
                 Link relevant work samples (e.g. Github, Behance)
               </p>
 
               {/* Social profile */}
               <div className="mb-3">
-                <label className="form-label"><b>Work title</b></label>
-                <input type="text" className="form-control" placeholder="Enter Work title" />
+                <label className="form-label">
+                  <b>Work title</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter Work title"
+                />
               </div>
               {/* URL */}
               <div className="mb-3">
-                <label className="form-label"><b>URL</b></label>
-                <input type="text" className="form-control" placeholder="Enter URL here" />
+                <label className="form-label">
+                  <b>URL</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter URL here"
+                />
               </div>
 
               {/* Duration From */}
               <div className="mb-3 row">
-                <label className="form-label"><b>Duration From</b></label>
+                <label className="form-label">
+                  <b>Duration From</b>
+                </label>
                 <div className="col-md-6">
-                  <select className="form-select" value={fromYear} onChange={(e) => setFromYear(e.target.value)}>
+                  <select
+                    className="form-select"
+                    value={fromYear}
+                    onChange={(e) => setFromYear(e.target.value)}
+                  >
                     <option value="">Select year</option>
                     {years.map((year) => (
-                      <option key={year} value={year}>{year}</option>
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
                     ))}
                   </select>
-
                 </div>
                 <div className="col-md-6">
-                  <select className="form-select" value={fromMonth} onChange={(e) => setFromMonth(e.target.value)}>
+                  <select
+                    className="form-select"
+                    value={fromMonth}
+                    onChange={(e) => setFromMonth(e.target.value)}
+                  >
                     <option value="">Select month</option>
                     {months.map((month, index) => (
-                      <option key={index} value={month}>{month}</option>
+                      <option key={index} value={month}>
+                        {month}
+                      </option>
                     ))}
                   </select>
-
                 </div>
               </div>
 
               {/* Duration To */}
               <div className="mb-3 row">
-                <label className="form-label"><b>Duration To</b></label>
+                <label className="form-label">
+                  <b>Duration To</b>
+                </label>
                 <div className="col-md-6">
-                  <select className="form-select" value={fromYear} onChange={(e) => setFromYear(e.target.value)}>
+                  <select
+                    className="form-select"
+                    value={fromYear}
+                    onChange={(e) => setFromYear(e.target.value)}
+                  >
                     <option value="">Select year</option>
                     {years.map((year) => (
-                      <option key={year} value={year}>{year}</option>
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
                     ))}
                   </select>
-
                 </div>
                 <div className="col-md-6">
-                  <select className="form-select" value={fromMonth} onChange={(e) => setFromMonth(e.target.value)}>
+                  <select
+                    className="form-select"
+                    value={fromMonth}
+                    onChange={(e) => setFromMonth(e.target.value)}
+                  >
                     <option value="">Select month</option>
                     {months.map((month, index) => (
-                      <option key={index} value={month}>{month}</option>
+                      <option key={index} value={month}>
+                        {month}
+                      </option>
                     ))}
                   </select>
-
                 </div>
               </div>
-
-
-
-
-
 
               {/* Checkbox */}
               <div className="mb-3">
                 <div className="checkbox-container">
-                  <input
-                    type="checkbox"
-                    id="currentWork"
-                  />
-                  <label htmlFor="currentWork">I am currently working on this</label>
+                  <input type="checkbox" id="currentWork" />
+                  <label htmlFor="currentWork">
+                    I am currently working on this
+                  </label>
                 </div>
               </div>
 
               {/* Description */}
               <div className="mb-3">
-                <label className="form-label"><b>Description</b></label>
-                <textarea className="form-control custom-textarea" placeholder="Type here ..." rows="3"
+                <label className="form-label">
+                  <b>Description</b>
+                </label>
+                <textarea
+                  className="form-control custom-textarea"
+                  placeholder="Type here ..."
+                  rows="3"
                   value={description}
                   onChange={(e) => {
                     setDescription(e.target.value);
                     setIsGenerated(false); // Reset when user types
                   }}
                 ></textarea>
-                <button type="button" className="suggestion-btn" onClick={handleGenerateHeadline}>
+                <button
+                  type="button"
+                  className="suggestion-btn"
+                  onClick={handleGenerateHeadline}
+                >
                   <Sparkles />
                   {isGenerated ? "Clear" : "Help me write"}
                 </button>
@@ -173,23 +234,22 @@ const WorksampleModal = ({ show, onClose }) => {
 
             {/* Modal Footer */}
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={onClose}>
-                Cancel
-              </button>
               <button
                 type="button"
-                className="btn btn-primary"
+                className="btn btn-secondary"
+                onClick={onClose}
               >
+                Cancel
+              </button>
+              <button type="button" className="btn btn-primary">
                 Save
               </button>
             </div>
-
           </div>
         </div>
       </div>
     </>
   );
-
 };
 
 export default WorksampleModal;

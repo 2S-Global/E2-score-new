@@ -3,12 +3,13 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 
 const Profilepic = ({ show, onClose, imageSrc }) => {
-  const [selectedImage, setSelectedImage] = useState(imageSrc || "/default-profile.png");
+  const [selectedImage, setSelectedImage] = useState(
+    imageSrc || "/default-profile.png",
+  );
   const [file, setFile] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
-
 
   const router = useRouter();
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
@@ -16,9 +17,7 @@ const Profilepic = ({ show, onClose, imageSrc }) => {
   const token = localStorage.getItem("token");
   if (!token) {
     console.log("No token");
-
   }
-
 
   // Handle file selection
   const handleFileChange = (event) => {
@@ -69,25 +68,41 @@ const Profilepic = ({ show, onClose, imageSrc }) => {
   console.log(error);
 
   return (
-    <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+    <div
+      className="modal fade show d-block"
+      tabIndex="-1"
+      style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+    >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           {/* Modal Header */}
           <div className="modal-header">
             <h5 className="modal-title">Upload a Recent Photo</h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={onClose}
+            ></button>
           </div>
 
           {/* Modal Body */}
           <div className="modal-body">
             <p className="text-muted">
-              A profile photo enhances memorability and helps demonstrate professionalism.
+              A profile photo enhances memorability and helps demonstrate
+              professionalism.
             </p>
 
             {/* Profile Image Preview */}
             <div className="d-flex justify-content-center">
-              <div className="rounded-circle overflow-hidden border" style={{ width: "120px", height: "120px" }}>
-                <img src={selectedImage} alt="Profile" className="w-100 h-100 object-cover" />
+              <div
+                className="rounded-circle overflow-hidden border"
+                style={{ width: "120px", height: "120px" }}
+              >
+                <img
+                  src={selectedImage}
+                  alt="Profile"
+                  className="w-100 h-100 object-cover"
+                />
               </div>
             </div>
 
@@ -103,10 +118,13 @@ const Profilepic = ({ show, onClose, imageSrc }) => {
                 style={{ display: "none" }}
                 onChange={handleFileChange}
               />
-              <button className="btn btn-danger" onClick={() => {
-                setSelectedImage("/default-profile.png");
-                setFile(null);
-              }}>
+              <button
+                className="btn btn-danger"
+                onClick={() => {
+                  setSelectedImage("/default-profile.png");
+                  setFile(null);
+                }}
+              >
                 Delete Photo
               </button>
             </div>
@@ -114,17 +132,26 @@ const Profilepic = ({ show, onClose, imageSrc }) => {
             {/* Submit Button (Only Show If Image is Selected) */}
             {file && (
               <div className="d-flex justify-content-center mt-3">
-                <button className="btn btn-success" onClick={uploadImage} disabled={loading}>
+                <button
+                  className="btn btn-success"
+                  onClick={uploadImage}
+                  disabled={loading}
+                >
                   {loading ? "Uploading..." : "Submit"}
                 </button>
               </div>
             )}
 
             {/* Success & Error Messages */}
-            {success && <p className="text-success text-center mt-2">{success}</p>}
+            {success && (
+              <p className="text-success text-center mt-2">{success}</p>
+            )}
             {error && <p className="text-danger text-center mt-2">{error}</p>}
 
-            <p className="text-muted mt-2 text-center" style={{ fontSize: "12px" }}>
+            <p
+              className="text-muted mt-2 text-center"
+              style={{ fontSize: "12px" }}
+            >
               Supported file formats: PNG, JPG, JPEG, GIF - up to 2MB.
             </p>
           </div>
@@ -132,7 +159,6 @@ const Profilepic = ({ show, onClose, imageSrc }) => {
       </div>
     </div>
   );
-
 };
 
 export default Profilepic;

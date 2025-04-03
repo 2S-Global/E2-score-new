@@ -9,10 +9,10 @@ Banner Section
 .banner-section {
   position: relative;
   display: block;
-  padding:0 55px 0;
+  padding: 0 55px 0;
 }
 
-.banner-section:before{
+.banner-section:before {
   position: absolute;
   left: 0;
   top: 0;
@@ -25,21 +25,21 @@ Banner Section
   content: "";
 }
 
-.banner-section .content-column{
+.banner-section .content-column {
   position: relative;
 }
 
-.banner-section .content-column .inner-column{
+.banner-section .content-column .inner-column {
   position: relative;
   padding: 270px 0 150px;
-} 
+}
 
-.banner-section .content-column .title-box{
+.banner-section .content-column .title-box {
   position: relative;
   margin-bottom: 40px;
 }
 
-.banner-section .content-column h3{
+.banner-section .content-column h3 {
   font-size: 50px;
   line-height: 60px;
   color: #202124;
@@ -47,37 +47,37 @@ Banner Section
   margin-bottom: 25px;
 }
 
-.banner-section .content-column h3 .colored{
+.banner-section .content-column h3 .colored {
   color: var(--primary-color);
 }
 
-.banner-section .content-column .text{
+.banner-section .content-column .text {
   font-size: 15px;
   color: #696969;
   line-height: 25px;
 }
 
-.banner-section .popular-searches{
+.banner-section .popular-searches {
   position: relative;
   font-size: 15px;
   color: #696969;
   font-weight: 400;
 }
 
-.banner-section .popular-searches .title{
+.banner-section .popular-searches .title {
   margin-right: 20px;
   font-weight: 500;
 }
 
-.banner-section .popular-searches a{
+.banner-section .popular-searches a {
   color: inherit;
   font-size: 14px;
 }
 
 .job-search-form {
   position: relative;
-  background: #FFFFFF;
-  border: 1px solid #ECEDF2;
+  background: #ffffff;
+  border: 1px solid #ecedf2;
   -webkit-box-shadow: 0px 7px 18px rgba(64, 79, 104, 0.05);
   box-shadow: 0px 7px 18px rgba(64, 79, 104, 0.05);
   border-radius: 10px;
@@ -112,10 +112,10 @@ Banner Section
   z-index: 9;
 }
 
-.job-search-form .form-group.category{
+.job-search-form .form-group.category {
   border-left: 1px solid #e6e6e6;
 }
-.job-search-form .form-group:first-child{
+.job-search-form .form-group:first-child {
   border-right: 1px solid #e6e6e6;
 }
 
@@ -142,40 +142,40 @@ Banner Section
   transition: all 300ms ease;
 }
 
-.job-search-form .chosen-container-multi .chosen-choices, 
-.job-search-form .chosen-container.chosen-with-drop .chosen-drop{
+.job-search-form .chosen-container-multi .chosen-choices,
+.job-search-form .chosen-container.chosen-with-drop .chosen-drop {
   background: #ffffff;
 }
 
-.job-search-form .chosen-container-single .chosen-single{
+.job-search-form .chosen-container-single .chosen-single {
   padding-left: 40px;
   border: 1px solid #ffffff !important;
   border-bottom: 0 !important;
   border-radius: 8px;
 }
 
-.job-search-form .chosen-container-single .chosen-drop{
-/*    border: 1px solid #ffffff !important;
+.job-search-form .chosen-container-single .chosen-drop {
+  /*    border: 1px solid #ffffff !important;
 border-top: 0 !important;*/
 }
 
-.job-search-form .chosen-container-active .chosen-single{
-/*    border: 1px solid #dddddd !important;
+.job-search-form .chosen-container-active .chosen-single {
+  /*    border: 1px solid #dddddd !important;
 border-bottom: 0 !important;*/
 }
 
-.job-search-form .chosen-container-active .chosen-drop{
-  border: 1px solid #ECEDF2 !important;
+.job-search-form .chosen-container-active .chosen-drop {
+  border: 1px solid #ecedf2 !important;
   box-shadow: 0px 6px 15px rgba(64, 79, 104, 0.05);
   border-radius: 8px !important;
   padding-top: 10px !important;
 }
 
-.job-search-form .form-group.btn-box{
+.job-search-form .form-group.btn-box {
   text-align: right;
 }
 
-.job-search-form .form-group .theme-btn{
+.job-search-form .form-group .theme-btn {
   width: 100%;
   min-width: auto;
   height: 60px;
@@ -187,35 +187,35 @@ border-bottom: 0 !important;*/
 .job-search-form.style-two form,
 .job-search-form.style-two .form-group .icon,
 .job-search-form.style-two .form-group,
-.job-search-form.style-two .ui-selectmenu-button.ui-button, 
-.job-search-form.style-two .ui-selectmenu-button.ui-button, 
+.job-search-form.style-two .ui-selectmenu-button.ui-button,
+.job-search-form.style-two .ui-selectmenu-button.ui-button,
 .job-search-form.style-two .chosen-container-single .chosen-single span,
-.job-search-form.style-two .chosen-container-single .chosen-single, 
-.job-search-form.style-two .form-group input, 
-.job-search-form.style-two .form-group select, 
-.job-search-form.style-two .form-group textarea{
+.job-search-form.style-two .chosen-container-single .chosen-single,
+.job-search-form.style-two .form-group input,
+.job-search-form.style-two .form-group select,
+.job-search-form.style-two .form-group textarea {
   background: var(--primary-color);
   color: #ffffff;
   border-color: var(--primary-color) !important;
 }
 
-.job-search-form.style-two .chosen-container-single .chosen-single{
+.job-search-form.style-two .chosen-container-single .chosen-single {
   padding-left: 40px;
 }
 
-.job-search-form.style-two .chosen-container-single .chosen-single div:after{
+.job-search-form.style-two .chosen-container-single .chosen-single div:after {
   color: #fff;
 }
 
-.job-search-form.style-two .form-group{
-  border-right:1px solid rgba(255,255,255,.2);
+.job-search-form.style-two .form-group {
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.banner-section .image-column{
+.banner-section .image-column {
   position: relative;
 }
 
-.banner-section .image-column .image-box{
+.banner-section .image-column .image-box {
   position: relative;
   display: block;
   padding-top: 150px;
@@ -223,19 +223,18 @@ border-bottom: 0 !important;*/
   padding-left: 90px;
 }
 
-.banner-section .image-column .main-image{
+.banner-section .image-column .main-image {
   position: relative;
   display: block;
   text-align: center;
   margin-bottom: 0;
 }
 
-.banner-section .image-column .main-image img{
+.banner-section .image-column .main-image img {
   display: inline-block;
   max-width: 100%;
   height: auto;
 }
-
 
 /*================================
 Info Blocks
@@ -243,7 +242,7 @@ Info Blocks
 
 /* Info Block One */
 
-.info_block{
+.info_block {
   position: relative;
   padding: 20px 40px 20px 90px;
   min-height: 90px;
@@ -261,13 +260,13 @@ Info Blocks
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  background: #FFFFFF;
+  background: #ffffff;
   -webkit-box-shadow: 0px 40px 30px rgba(25, 25, 46, 0.04);
   box-shadow: 0px 40px 30px rgba(25, 25, 46, 0.04);
   border-radius: 8px;
 }
 
-.info_block .icon{
+.info_block .icon {
   position: absolute;
   left: 20px;
   top: 20px;
@@ -286,10 +285,10 @@ Info Blocks
   -ms-flex-align: center;
   align-items: center;
   color: var(--primary-2nd-color);
-  background: rgba(249,171,0,.15);
+  background: rgba(249, 171, 0, 0.15);
 }
 
-.info_block p{
+.info_block p {
   font-size: 16px;
   line-height: 22px;
   color: #202124;
@@ -298,7 +297,7 @@ Info Blocks
 
 /* Info Block Two */
 
-.info_block_two{
+.info_block_two {
   position: relative;
   min-height: 146px;
   max-width: 276px;
@@ -313,19 +312,19 @@ Info Blocks
   -ms-flex-direction: column;
   flex-direction: column;
   padding: 30px 35px;
-  background: #FFFFFF;
+  background: #ffffff;
   -webkit-box-shadow: 0px 40px 30px rgba(25, 25, 46, 0.04);
   box-shadow: 0px 40px 30px rgba(25, 25, 46, 0.04);
   border-radius: 8px;
   text-align: center;
 }
 
-.info_block_two .image{
+.info_block_two .image {
   position: relative;
   margin-top: 15px;
 }
 
-.info_block_two p{
+.info_block_two p {
   font-size: 16px;
   line-height: 25px;
   color: #202124;
@@ -334,7 +333,7 @@ Info Blocks
 
 /* Info Block Three */
 
-.info_block_three{
+.info_block_three {
   position: relative;
   padding: 20px 80px 20px 90px;
   -webkit-box-shadow: 0px 46px 35px rgba(25, 25, 46, 0.04);
@@ -355,7 +354,7 @@ Info Blocks
   flex-direction: column;
 }
 
-.info_block_three .icon{
+.info_block_three .icon {
   position: absolute;
   left: 20px;
   top: 20px;
@@ -372,31 +371,31 @@ Info Blocks
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  color: #D93025;
-  background: rgba(217,48,37,.2);
+  color: #d93025;
+  background: rgba(217, 48, 37, 0.2);
 }
 
-.info_block_three p{
+.info_block_three p {
   font-size: 16px;
   line-height: 25px;
   color: #202124;
   font-weight: 500;
 }
 
-.info_block_three .sub-text{
+.info_block_three .sub-text {
   font-size: 15px;
   color: #696969;
   display: block;
 }
 
-.info_block_three .right_icon{
+.info_block_three .right_icon {
   position: absolute;
   right: 20px;
   top: 50%;
   margin-top: -15px;
   font-size: 14px;
   color: #ffffff;
-  background: rgba(217,48,37,.2);
+  background: rgba(217, 48, 37, 0.2);
   height: 30px;
   width: 30px;
   line-height: 30px;
@@ -406,14 +405,14 @@ Info Blocks
 
 /* Info Block Four */
 
-.info_block_four{
+.info_block_four {
   position: relative;
   padding-left: 40px;
   padding-top: 40px;
   min-width: 320px;
 }
 
-.info_block_four .inner{
+.info_block_four .inner {
   position: relative;
   padding: 20px 30px 20px 66px;
   -webkit-box-shadow: 0px 46px 35px rgba(25, 25, 46, 0.04);
@@ -432,7 +431,7 @@ Info Blocks
   border-radius: 10px;
 }
 
-.info_block_four .icon{
+.info_block_four .icon {
   position: absolute;
   left: 0;
   top: 0;
@@ -450,8 +449,8 @@ Info Blocks
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  color: #34A853;
-  background: #FFFFFF;
+  color: #34a853;
+  background: #ffffff;
   overflow: hidden;
   -webkit-box-shadow: 0px 46.7708px 35.0781px rgba(25, 25, 46, 0.04);
   box-shadow: 0px 46.7708px 35.0781px rgba(25, 25, 46, 0.04);
@@ -459,38 +458,38 @@ Info Blocks
   z-index: 1;
 }
 
-.info_block_four p{
+.info_block_four p {
   font-size: 16px;
   line-height: 25px;
   color: #202124;
   font-weight: 500;
 }
 
-.info_block_four .sub-text{
+.info_block_four .sub-text {
   font-size: 15px;
   color: #696969;
   display: block;
 }
 
-.banner-section .image-column .info_block{
+.banner-section .image-column .info_block {
   position: absolute;
   left: -30px;
   top: 160px;
 }
 
-.banner-section .image-column .info_block_two{
+.banner-section .image-column .info_block_two {
   position: absolute;
   right: -100px;
   top: 210px;
 }
 
-.banner-section .image-column .info_block_three{
+.banner-section .image-column .info_block_three {
   position: absolute;
   right: -50px;
   top: 490px;
 }
 
-.banner-section .image-column .info_block_four{
+.banner-section .image-column .info_block_four {
   position: absolute;
   left: 30px;
   bottom: 85px;
@@ -504,13 +503,13 @@ Banner Section
 
 ***/
 
-.banner-section-two{
+.banner-section-two {
   position: relative;
   display: block;
-  padding:0 55px 0;
+  padding: 0 55px 0;
 }
 
-.banner-section-two:before{
+.banner-section-two:before {
   position: absolute;
   left: 0;
   top: 0;
@@ -523,21 +522,21 @@ Banner Section
   content: "";
 }
 
-.banner-section-two .content-column{
+.banner-section-two .content-column {
   position: relative;
 }
 
-.banner-section-two .content-column .inner-column{
+.banner-section-two .content-column .inner-column {
   position: relative;
   padding: 270px 0 75px;
-} 
+}
 
-.banner-section-two .content-column .title-box{
+.banner-section-two .content-column .title-box {
   position: relative;
   margin-bottom: 40px;
 }
 
-.banner-section-two .content-column h3{
+.banner-section-two .content-column h3 {
   font-size: 50px;
   line-height: 60px;
   color: #ffffff;
@@ -545,51 +544,51 @@ Banner Section
   margin-bottom: 25px;
 }
 
-.banner-section-two .content-column h3 .colored{
+.banner-section-two .content-column h3 .colored {
   color: var(--primary-color);
 }
 
-.banner-section-two .content-column .text{
+.banner-section-two .content-column .text {
   font-size: 15px;
   color: #ffffff;
   line-height: 25px;
 }
 
-.banner-section-two .popular-searches{
+.banner-section-two .popular-searches {
   position: relative;
   font-size: 15px;
   color: #ffffff;
   font-weight: 400;
 }
 
-.banner-section-two .popular-searches .title{
+.banner-section-two .popular-searches .title {
   margin-right: 20px;
   font-weight: 500;
 }
 
-.banner-section-two .popular-searches a{
+.banner-section-two .popular-searches a {
   color: inherit;
   font-size: 14px;
   color: #ffffff;
 }
 
-.banner-section-two .image-column{
+.banner-section-two .image-column {
   position: relative;
 }
 
-.banner-section-two .image-column .image-box{
+.banner-section-two .image-column .image-box {
   position: relative;
   padding: 150px 0 50px;
   text-align: center;
   margin-right: -300px;
 }
 
-.banner-section-two .image-column .image-box .image{
+.banner-section-two .image-column .image-box .image {
   position: relative;
   margin-bottom: 0;
 }
 
-.banner-section-two .bottom-box{
+.banner-section-two .bottom-box {
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -603,32 +602,32 @@ Banner Section
   margin-top: 125px;
 }
 
-.banner-section-two .count-employers{
+.banner-section-two .count-employers {
   position: relative;
   color: #ffffff;
 }
 
-.banner-section-two .count-employers .title{
+.banner-section-two .count-employers .title {
   position: relative;
   margin-right: 20px;
 }
 
-.banner-section-two .count-employers img{
+.banner-section-two .count-employers img {
   max-height: 50px;
 }
 
-.banner-section-two .bottom-box .upload-cv{
+.banner-section-two .bottom-box .upload-cv {
   position: relative;
   font-size: 15px;
   line-height: 25px;
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 400;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-.banner-section-two .bottom-box .upload-cv .icon{
+.banner-section-two .bottom-box .upload-cv .icon {
   position: relative;
   margin-right: 5px;
   font-size: 25px;
@@ -643,29 +642,29 @@ Banner Section Three
 
 ***/
 
-.banner-section-three{
+.banner-section-three {
   position: relative;
   display: block;
-  padding:0 55px 0;
+  padding: 0 55px 0;
   background-color: #ffffff;
 }
 
-.banner-section-three .content-column{
+.banner-section-three .content-column {
   position: relative;
   z-index: 3;
 }
 
-.banner-section-three .content-column .inner-column{
+.banner-section-three .content-column .inner-column {
   position: relative;
   padding: 270px 0 150px;
-} 
+}
 
-.banner-section-three .content-column .title-box{
+.banner-section-three .content-column .title-box {
   position: relative;
   margin-bottom: 40px;
 }
 
-.banner-section-three .content-column h3{
+.banner-section-three .content-column h3 {
   font-size: 50px;
   line-height: 60px;
   color: #202124;
@@ -673,55 +672,55 @@ Banner Section Three
   margin-bottom: 20px;
 }
 
-.banner-section-three .content-column h3 .colored{
+.banner-section-three .content-column h3 .colored {
   color: var(--primary-color);
 }
 
-.banner-section-three .content-column .text{
+.banner-section-three .content-column .text {
   font-size: 15px;
   color: #696969;
   line-height: 25px;
 }
 
-.banner-section-three .popular-searches{
+.banner-section-three .popular-searches {
   position: relative;
   font-size: 15px;
   color: #696969;
   font-weight: 400;
 }
 
-.banner-section-three .popular-searches .title{
+.banner-section-three .popular-searches .title {
   margin-right: 20px;
   color: #202124;
   font-weight: 500;
 }
 
-.banner-section-three .popular-searches a{
+.banner-section-three .popular-searches a {
   color: inherit;
   font-size: 14px;
 }
 
-.banner-section-three .image-column{
+.banner-section-three .image-column {
   position: relative;
 }
 
-.banner-section-three .image-column .image-box{
+.banner-section-three .image-column .image-box {
   position: relative;
   padding: 120px 0 0;
   margin-left: -90px;
   margin-right: -280px;
 }
 
-.banner-section-three .image-column .image-box .image{
+.banner-section-three .image-column .image-box .image {
   margin-bottom: 0;
 }
 
 /* Job Search Form Two*/
 
-.job-search-form-two{
+.job-search-form-two {
   position: relative;
-  background: #FFFFFF;
-  border: 1px solid #ECEDF2;
+  background: #ffffff;
+  border: 1px solid #ecedf2;
   -webkit-box-shadow: 0px 7px 18px rgba(64, 79, 104, 0.05);
   box-shadow: 0px 7px 18px rgba(64, 79, 104, 0.05);
   border-radius: 10px;
@@ -735,7 +734,7 @@ Banner Section Three
   padding-left: 30px;
 }
 
-.job-search-form-two .row{
+.job-search-form-two .row {
   margin: 0 -30px;
 }
 
@@ -746,7 +745,7 @@ Banner Section Three
   margin-bottom: 0;
 }
 
-.job-search-form-two .title{
+.job-search-form-two .title {
   display: block;
   font-size: 16px;
   line-height: 30px;
@@ -768,14 +767,14 @@ Banner Section Three
   z-index: 9;
 }
 
-.job-search-form-two .form-group:first-child{
+.job-search-form-two .form-group:first-child {
   border-right: 1px solid #e6e6e6;
 }
 
 .job-search-form-two .ui-selectmenu-button.ui-button,
 .job-search-form-two .form-group input,
 .job-search-form-two .form-group select,
-.job-search-form-two .form-group textarea{
+.job-search-form-two .form-group textarea {
   position: relative;
   display: block;
   width: 100%;
@@ -794,11 +793,11 @@ Banner Section Three
   transition: all 300ms ease;
 }
 
-.job-search-form-two .form-group.btn-box{
+.job-search-form-two .form-group.btn-box {
   text-align: right;
 }
 
-.job-search-form-two .form-group .theme-btn{
+.job-search-form-two .form-group .theme-btn {
   width: 100%;
   min-width: auto;
   height: 60px;
@@ -812,7 +811,7 @@ Banner Section Four
 
 ***/
 
-.banner-section-four{
+.banner-section-four {
   position: relative;
   display: block;
   background-repeat: no-repeat;
@@ -837,71 +836,71 @@ Banner Section Four
   padding: 120px 0;
 }
 
-.banner-section-four .title-box{
+.banner-section-four .title-box {
   position: relative;
   margin-bottom: 25px;
 }
 
-.banner-section-four h3{
+.banner-section-four h3 {
   position: relative;
   font-weight: 500;
   font-size: 50px;
   line-height: 68px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
-.banner-section-four .popular-searches{
+.banner-section-four .popular-searches {
   position: relative;
   font-size: 15px;
   color: #ffffff;
   font-weight: 400;
 }
 
-.banner-section-four .popular-searches .title{
+.banner-section-four .popular-searches .title {
   margin-right: 20px;
   font-weight: 500;
 }
 
-.banner-section-four .popular-searches a{
+.banner-section-four .popular-searches a {
   color: inherit;
   font-size: 14px;
   color: #ffffff;
 }
 
-.banner-section-four .job-search-form{
+.banner-section-four .job-search-form {
   border-radius: 50px;
   max-width: 1070px;
   margin: 0 auto 20px;
 }
 
-.banner-section-four .job-search-form form{
+.banner-section-four .job-search-form form {
   padding: 10px 10px;
   padding-left: 30px;
   border-radius: 50px;
 }
 
-.banner-section-four .job-search-form .theme-btn{
+.banner-section-four .job-search-form .theme-btn {
   border-radius: 50px;
   color: #ffffff;
 }
 
-.banner-section-four .image-column{
+.banner-section-four .image-column {
   position: relative;
 }
 
-.banner-section-four .image-column .image-box{
+.banner-section-four .image-column .image-box {
   position: relative;
   padding: 150px 0 50px;
   text-align: center;
   margin-right: -300px;
 }
 
-.banner-section-four .image-column .image-box .image{
+.banner-section-four .image-column .image-box .image {
   position: relative;
   margin-bottom: 0;
 }
 
-.banner-section-four .bottom-box{
+.banner-section-four .bottom-box {
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -915,32 +914,32 @@ Banner Section Four
   margin-top: 125px;
 }
 
-.banner-section-four .count-employers{
+.banner-section-four .count-employers {
   position: relative;
   color: #ffffff;
 }
 
-.banner-section-four .count-employers .title{
+.banner-section-four .count-employers .title {
   position: relative;
   margin-right: 20px;
 }
 
-.banner-section-four .count-employers img{
+.banner-section-four .count-employers img {
   max-height: 50px;
 }
 
-.banner-section-four .bottom-box .upload-cv{
+.banner-section-four .bottom-box .upload-cv {
   position: relative;
   font-size: 15px;
   line-height: 25px;
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 400;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-.banner-section-four .bottom-box .upload-cv .icon{
+.banner-section-four .bottom-box .upload-cv .icon {
   position: relative;
   margin-right: 5px;
   font-size: 25px;
@@ -955,13 +954,13 @@ Banner Section Five
 
 ***/
 
-.banner-section-five{
+.banner-section-five {
   position: relative;
   display: block;
-  padding:0 55px 0;
+  padding: 0 55px 0;
 }
 
-.banner-section-five:before{
+.banner-section-five:before {
   position: absolute;
   left: 0;
   top: 0;
@@ -974,21 +973,21 @@ Banner Section Five
   content: "";
 }
 
-.banner-section-five .content-column{
+.banner-section-five .content-column {
   position: relative;
 }
 
-.banner-section-five .content-column .inner-column{
+.banner-section-five .content-column .inner-column {
   position: relative;
   padding: 270px 0 150px;
-} 
+}
 
-.banner-section-five .content-column .title-box{
+.banner-section-five .content-column .title-box {
   position: relative;
   margin-bottom: 40px;
 }
 
-.banner-section-five .content-column h3{
+.banner-section-five .content-column h3 {
   font-size: 50px;
   line-height: 60px;
   color: #202124;
@@ -996,45 +995,45 @@ Banner Section Five
   margin-bottom: 25px;
 }
 
-.banner-section-five .content-column h3 .colored{
-  color: #34A853;
+.banner-section-five .content-column h3 .colored {
+  color: #34a853;
 }
 
-.banner-section-five .content-column .text{
+.banner-section-five .content-column .text {
   font-size: 15px;
   color: #696969;
   line-height: 25px;
 }
 
-.banner-section-five .popular-searches{
+.banner-section-five .popular-searches {
   position: relative;
   font-size: 15px;
   color: #696969;
   font-weight: 400;
 }
 
-.banner-section-five .popular-searches .title{
+.banner-section-five .popular-searches .title {
   margin-right: 20px;
   font-weight: 500;
 }
 
-.banner-section-five .popular-searches a{
+.banner-section-five .popular-searches a {
   color: inherit;
   font-size: 14px;
 }
 
-.banner-section-five .image-column{
+.banner-section-five .image-column {
   position: relative;
 }
 
-.banner-section-five .image-column .row{
+.banner-section-five .image-column .row {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
   margin: 0 -20px;
 }
 
-.banner-section-five .image-column .image-box{
+.banner-section-five .image-column .image-box {
   position: relative;
   display: block;
   padding-top: 150px;
@@ -1042,32 +1041,32 @@ Banner Section Five
   padding-left: 100px;
 }
 
-.banner-section-five .image-column .column{
+.banner-section-five .image-column .column {
   position: relative;
   padding: 0 20px;
 }
 
-.banner-section-five .image-column .column .image{
+.banner-section-five .image-column .column .image {
   position: relative;
   display: block;
   text-align: center;
   margin-bottom: 40px;
 }
 
-.banner-section-five .image-column .image-box img{
+.banner-section-five .image-column .image-box img {
   max-width: 100%;
   width: 100%;
   height: auto;
   border-radius: 10px;
 }
 
-.banner-section-five .info_block{
+.banner-section-five .info_block {
   position: absolute;
   left: 0;
   top: 200px;
 }
 
-.banner-section-five .info_block_two{
+.banner-section-five .info_block_two {
   position: absolute;
   left: 230px;
   bottom: 60px;
@@ -1081,20 +1080,20 @@ Banner Section Six
 
 ***/
 
-.banner-section-six{
+.banner-section-six {
   position: relative;
   display: block;
-  padding:0 55px 0;
+  padding: 0 55px 0;
 }
 
 .banner-section-six:after,
-.banner-section-six:before{
+.banner-section-six:before {
   position: absolute;
   left: 0;
   width: 50%;
   top: 0;
   height: 100%;
-  background: #ECEDF2;
+  background: #ecedf2;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -1102,33 +1101,33 @@ Banner Section Six
   z-index: -1;
 }
 
-.banner-section-six:before{ 
+.banner-section-six:before {
   border-radius: 0px 60px 60px 0px;
   left: 50%;
   width: 500px;
 }
 
-.banner-section-six .content-column{
+.banner-section-six .content-column {
   position: relative;
   z-index: 9;
 }
 
-.banner-section-six .content-column .inner-column{
+.banner-section-six .content-column .inner-column {
   position: relative;
   padding: 185px 0 150px;
-} 
+}
 
-.banner-section-six .content-column .title-box{
+.banner-section-six .content-column .title-box {
   position: relative;
   margin-bottom: 50px;
 }
 
-.banner-section-six .job-search-form form{
+.banner-section-six .job-search-form form {
   padding: 10px 10px;
   padding-left: 20px;
 }
 
-.banner-section-six .content-column h3{
+.banner-section-six .content-column h3 {
   font-size: 50px;
   line-height: 60px;
   color: #202124;
@@ -1136,38 +1135,38 @@ Banner Section Six
   margin-bottom: 25px;
 }
 
-.banner-section-six .content-column h3 .colored{
+.banner-section-six .content-column h3 .colored {
   color: var(--primary-color);
 }
 
-.banner-section-six .content-column .text{
+.banner-section-six .content-column .text {
   font-size: 15px;
   color: #696969;
   line-height: 25px;
 }
 
-.banner-section-six .popular-searches{
+.banner-section-six .popular-searches {
   position: relative;
   font-size: 15px;
   color: #696969;
   font-weight: 400;
 }
 
-.banner-section-six .popular-searches .title{
+.banner-section-six .popular-searches .title {
   margin-right: 20px;
   font-weight: 700;
 }
 
-.banner-section-six .popular-searches a{
+.banner-section-six .popular-searches a {
   color: inherit;
   font-size: 14px;
 }
 
-.banner-section-six .image-column{
+.banner-section-six .image-column {
   position: relative;
 }
 
-.banner-section-six .image-column .image-box{
+.banner-section-six .image-column .image-box {
   position: relative;
   display: block;
   padding-top: 67px;
@@ -1175,32 +1174,32 @@ Banner Section Six
   padding-bottom: 67px;
 }
 
-.banner-section-six .image-column .main-image{
+.banner-section-six .image-column .main-image {
   position: relative;
   display: block;
   text-align: center;
   margin-bottom: 0;
 }
 
-.banner-section-six .image-column .main-image img{
+.banner-section-six .image-column .main-image img {
   display: inline-block;
   max-width: 100%;
   height: auto;
 }
 
-.banner-section-six .image-column .info_block{
+.banner-section-six .image-column .info_block {
   position: absolute;
   left: -30px;
   top: 113px;
 }
 
-.banner-section-six .image-column .info_block_two{
+.banner-section-six .image-column .info_block_two {
   position: absolute;
   right: 120px;
   top: 150px;
 }
 
-.banner-section-six .image-column .info_block_three{
+.banner-section-six .image-column .info_block_three {
   position: absolute;
   right: 185px;
   bottom: 220px;
@@ -1212,7 +1211,7 @@ Banner Section Six
   bottom: 40px;
 }
 
-.banner-section-six .info_block_four .inner{
+.banner-section-six .info_block_four .inner {
   padding: 15px 30px 15px 66px;
 }
 
@@ -1224,41 +1223,41 @@ Banner Section Seven
 
 ***/
 
-.banner-section-seven{
+.banner-section-seven {
   position: relative;
   display: block;
-  padding:0 55px 0;
+  padding: 0 55px 0;
 }
 
-.banner-section-seven .content-column{
+.banner-section-seven .content-column {
   position: relative;
 }
 
-.banner-section-seven .content-column .inner-column{
+.banner-section-seven .content-column .inner-column {
   position: relative;
   padding: 175px 0 150px;
-} 
+}
 
-.banner-section-seven .content-column .title-box{
+.banner-section-seven .content-column .title-box {
   position: relative;
   margin-bottom: 50px;
 }
 
-.banner-section-seven .job-search-form{
+.banner-section-seven .job-search-form {
   border-radius: 100px;
   overflow: hidden;
 }
 
-.banner-section-seven .job-search-form .form-group .theme-btn{
+.banner-section-seven .job-search-form .form-group .theme-btn {
   border-radius: 50px;
 }
 
-.banner-section-seven .job-search-form form{
+.banner-section-seven .job-search-form form {
   padding: 10px 10px;
   padding-left: 30px;
 }
 
-.banner-section-seven .content-column h3{
+.banner-section-seven .content-column h3 {
   font-size: 50px;
   line-height: 60px;
   color: #202124;
@@ -1266,50 +1265,50 @@ Banner Section Seven
   margin-bottom: 25px;
 }
 
-.banner-section-seven .content-column h3 .colored{
+.banner-section-seven .content-column h3 .colored {
   color: var(--primary-color);
 }
 
-.banner-section-seven .content-column .text{
+.banner-section-seven .content-column .text {
   font-size: 15px;
   color: #696969;
   line-height: 25px;
 }
 
-.banner-section-seven .popular-searches{
+.banner-section-seven .popular-searches {
   position: relative;
   font-size: 15px;
   color: #696969;
   font-weight: 400;
 }
 
-.banner-section-seven .popular-searches .title{
+.banner-section-seven .popular-searches .title {
   margin-right: 20px;
   font-weight: 700;
 }
 
-.banner-section-seven .popular-searches a{
+.banner-section-seven .popular-searches a {
   color: inherit;
   font-size: 14px;
 }
 
-.banner-section-seven .image-outer{
+.banner-section-seven .image-outer {
   position: absolute;
   right: 0;
   top: 0;
   width: 50%;
 }
 
-.banner-section-seven .image-outer .image{
+.banner-section-seven .image-outer .image {
   position: relative;
   margin-left: -130px;
 }
 
-.banner-section-seven .image-outer .image img{
+.banner-section-seven .image-outer .image img {
   width: 100%;
 }
 
-.banner-section-seven .clients-section-two{
+.banner-section-seven .clients-section-two {
   padding-top: 0;
   margin-top: 100px;
   margin-right: -220px;
@@ -1323,52 +1322,52 @@ Banner Section Eight
 
 ***/
 
-.banner-section-eight{
+.banner-section-eight {
   position: relative;
   display: block;
-  padding:0 55px 0;
+  padding: 0 55px 0;
   margin-bottom: 90px;
 }
 
-.banner-section-eight:before{
+.banner-section-eight:before {
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   bottom: 0;
   content: "";
-  background: -o-linear-gradient(191.23deg, #F5F7FC 0.12%, #F5F7FC 99.74%);
-  background: linear-gradient(258.77deg, #F5F7FC 0.12%, #F5F7FC 99.74%);
+  background: -o-linear-gradient(191.23deg, #f5f7fc 0.12%, #f5f7fc 99.74%);
+  background: linear-gradient(258.77deg, #f5f7fc 0.12%, #f5f7fc 99.74%);
 }
 
-.banner-section-eight .content-column{
+.banner-section-eight .content-column {
   position: relative;
 }
 
-.banner-section-eight .content-column .inner-column{
+.banner-section-eight .content-column .inner-column {
   position: relative;
   padding: 340px 0 90px;
-} 
+}
 
-.banner-section-eight .content-column .title-box{
+.banner-section-eight .content-column .title-box {
   position: relative;
   margin-bottom: 20px;
 }
 
-.banner-section-eight .job-search-form{
+.banner-section-eight .job-search-form {
   min-width: 1070px;
 }
 
-.banner-section-eight .job-search-form .form-group .theme-btn{
+.banner-section-eight .job-search-form .form-group .theme-btn {
   border-radius: 50px;
 }
 
-.banner-section-eight .job-search-form form{
+.banner-section-eight .job-search-form form {
   padding: 20px 20px;
   padding-left: 30px;
 }
 
-.banner-section-eight .content-column h3{
+.banner-section-eight .content-column h3 {
   font-size: 50px;
   line-height: 60px;
   color: #202124;
@@ -1376,21 +1375,21 @@ Banner Section Eight
   margin-bottom: 10px;
 }
 
-.banner-section-eight .content-column h3 .colored{
+.banner-section-eight .content-column h3 .colored {
   color: var(--primary-color);
 }
 
-.banner-section-eight .content-column .text{
+.banner-section-eight .content-column .text {
   font-size: 15px;
   line-height: 20px;
   color: #202124;
 }
 
-.banner-section-eight .content-column .theme-btn{
+.banner-section-eight .content-column .theme-btn {
   border-radius: 8px !important;
 }
 
-.banner-section-eight .bottom-box{
+.banner-section-eight .bottom-box {
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1404,7 +1403,7 @@ Banner Section Eight
   margin-top: 160px;
 }
 
-.banner-section-eight .count-employers{
+.banner-section-eight .count-employers {
   position: relative;
   color: #202124;
   display: -webkit-box;
@@ -1415,16 +1414,16 @@ Banner Section Eight
   align-items: center;
 }
 
-.banner-section-eight .count-employers .title{
+.banner-section-eight .count-employers .title {
   position: relative;
   margin-right: 20px;
 }
 
-.banner-section-eight .count-employers img{
+.banner-section-eight .count-employers img {
   max-height: 50px;
 }
 
-.banner-section-eight .bottom-box .upload-cv{
+.banner-section-eight .bottom-box .upload-cv {
   position: relative;
   font-size: 15px;
   line-height: 25px;
@@ -1437,26 +1436,26 @@ Banner Section Eight
   margin-right: 40px;
 }
 
-.banner-section-eight .bottom-box .upload-cv .icon{
+.banner-section-eight .bottom-box .upload-cv .icon {
   position: relative;
   margin-right: 5px;
   font-size: 25px;
   line-height: 25px;
 }
 
-.banner-section-eight .image-outer{
+.banner-section-eight .image-outer {
   position: absolute;
   right: 0;
   top: 0;
   width: 50%;
 }
 
-.banner-section-eight .image-outer .image{
+.banner-section-eight .image-outer .image {
   position: relative;
   margin-left: 0;
 }
 
-.banner-section-eight .image-outer .image img{
+.banner-section-eight .image-outer .image img {
   width: 100%;
 }
 
@@ -1468,7 +1467,7 @@ Banner Section Nine
 
 ***/
 
-.banner-section-nine{
+.banner-section-nine {
   position: relative;
   display: block;
   background-repeat: no-repeat;
@@ -1479,58 +1478,58 @@ Banner Section Nine
   padding: 360px 0 75px;
 }
 
-.banner-section-nine .title-box{
+.banner-section-nine .title-box {
   position: relative;
   margin-bottom: 90px;
 }
 
-.banner-section-nine h3{
+.banner-section-nine h3 {
   position: relative;
   font-weight: 500;
   font-size: 50px;
   line-height: 68px;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-bottom: 5px;
 }
 
-.banner-section-nine .text{
+.banner-section-nine .text {
   font-weight: normal;
   font-size: 15px;
   line-height: 20px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
-.banner-section-nine .job-search-form{
+.banner-section-nine .job-search-form {
   max-width: 1070px;
   margin: 0 auto 20px;
 }
 
-.banner-section-nine .job-search-form form{
+.banner-section-nine .job-search-form form {
   padding: 10px 10px;
   padding-left: 30px;
 }
 
-.banner-section-nine .job-search-form .form-group label{
+.banner-section-nine .job-search-form .form-group label {
   position: absolute;
   left: 15px;
   top: -45px;
   font-size: 15px;
   line-height: 20px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
-.banner-section-nine .job-search-form .theme-btn{
+.banner-section-nine .job-search-form .theme-btn {
   color: #ffffff !important;
 }
 
-.banner-section-nine .fun-fact-section{
+.banner-section-nine .fun-fact-section {
   max-width: 75%;
   margin: 0 auto;
   padding-top: 140px;
   padding-bottom: 0;
 }
 
-.banner-section-nine .fun-fact-section .count-box{
+.banner-section-nine .fun-fact-section .count-box {
   color: #ffffff;
   font-weight: 500;
   font-size: 30px;
@@ -1539,12 +1538,12 @@ Banner Section Nine
   margin-bottom: 0;
 }
 
-.banner-section-nine .fun-fact-section .counter-title{
+.banner-section-nine .fun-fact-section .counter-title {
   font-weight: 500;
   font-size: 18px;
   line-height: 24px;
   text-align: center;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 /*** 
@@ -1555,7 +1554,7 @@ Banner Section Ten
 
 ***/
 
-.banner-section-ten{
+.banner-section-ten {
   position: relative;
   display: block;
   background-repeat: no-repeat;
@@ -1566,17 +1565,17 @@ Banner Section Ten
   padding: 370px 0 37px;
 }
 
-.banner-section-ten .auto-container{
+.banner-section-ten .auto-container {
   position: relative;
   z-index: 1;
 }
 
 .banner-section-ten .banner-carousel .owl-item,
 .banner-section-ten .banner-carousel .owl-stage-outer,
-.banner-section-ten .banner-carousel .owl-stage{
+.banner-section-ten .banner-carousel .owl-stage {
   height: 100%;
 }
-.banner-section-ten .banner-carousel{
+.banner-section-ten .banner-carousel {
   position: absolute;
   left: 0;
   top: 0;
@@ -1584,7 +1583,7 @@ Banner Section Ten
   width: 100%;
 }
 
-.banner-section-ten .banner-carousel .bg-image{
+.banner-section-ten .banner-carousel .bg-image {
   position: relative;
   left: 0;
   top: 0;
@@ -1595,8 +1594,8 @@ Banner Section Ten
   background-size: cover;
 }
 
-.banner-section-ten .banner-carousel.default-nav .owl-next, 
-.banner-section-ten .banner-carousel.default-nav .owl-prev{
+.banner-section-ten .banner-carousel.default-nav .owl-next,
+.banner-section-ten .banner-carousel.default-nav .owl-prev {
   left: 50px;
   background: transparent;
   border: 1px solid #ffffff;
@@ -1604,53 +1603,52 @@ Banner Section Ten
   font-size: 14px;
 }
 
-.banner-section-ten .banner-carousel.default-nav .owl-next{
+.banner-section-ten .banner-carousel.default-nav .owl-next {
   left: auto;
   right: 50px;
 }
 
-
-.banner-section-ten .title-box{
+.banner-section-ten .title-box {
   position: relative;
   margin-bottom: 40px;
 }
 
-.banner-section-ten h3{
+.banner-section-ten h3 {
   position: relative;
   font-weight: 500;
   font-size: 50px;
   line-height: 68px;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-bottom: 5px;
 }
 
-.banner-section-ten .text{
+.banner-section-ten .text {
   font-weight: normal;
   font-size: 15px;
   line-height: 20px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
-.banner-section-ten .job-search-form{
+.banner-section-ten .job-search-form {
   max-width: 1070px;
   margin: 0 auto 210px;
 }
 
-.banner-section-ten .job-search-form form{
+.banner-section-ten .job-search-form form {
   padding: 20px 20px;
   padding-left: 30px;
 }
 
-.banner-section-ten .job-search-form .form-group label{
+.banner-section-ten .job-search-form .form-group label {
   position: absolute;
   left: 15px;
   top: -45px;
   font-size: 15px;
   line-height: 20px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
-.banner-section-ten .job-search-form .theme-btn{
+.banner-section-ten .job-search-form .theme-btn {
   color: #ffffff !important;
-  background-color: #D93025;
+  background-color: #d93025;
 }

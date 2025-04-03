@@ -13,13 +13,21 @@ const KYCModal = ({ show, onClose }) => {
   if (!show) return null; // Prevent rendering when modal is closed
 
   return (
-    <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+    <div
+      className="modal fade show d-block"
+      tabIndex="-1"
+      style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+    >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           {/* Modal Header */}
           <div className="modal-header">
             <h5 className="modal-title">KYC</h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={onClose}
+            ></button>
           </div>
 
           {/* Modal Body */}
@@ -28,11 +36,14 @@ const KYCModal = ({ show, onClose }) => {
 
             {/* select box */}
             <div className="mb-3">
-                <select className="form-select" aria-label="Select a document type">
-                  <option>Select Document Type</option>
-                  <option value="1">GST Certificate</option>
-                  <option value="2">CIN Certificate</option>
-                </select>
+              <select
+                className="form-select"
+                aria-label="Select a document type"
+              >
+                <option>Select Document Type</option>
+                <option value="1">GST Certificate</option>
+                <option value="2">CIN Certificate</option>
+              </select>
             </div>
 
             {/* File Upload */}
@@ -48,7 +59,10 @@ const KYCModal = ({ show, onClose }) => {
                     required
                     onChange={(e) => logoHandler(e.target.files[0])}
                   />
-                  <label className="uploadButton-button ripple-effect" htmlFor="upload">
+                  <label
+                    className="uploadButton-button ripple-effect"
+                    htmlFor="upload"
+                  >
                     {logoImg ? logoImg.name : "Browse Document"}
                   </label>
                   <span className="uploadButton-file-name"></span>
@@ -62,7 +76,11 @@ const KYCModal = ({ show, onClose }) => {
 
           {/* Modal Footer */}
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={onClose}
+            >
               Cancel
             </button>
             <button type="button" className="btn btn-primary">

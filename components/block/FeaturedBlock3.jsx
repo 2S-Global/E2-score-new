@@ -41,10 +41,7 @@ const FeaturedBlock3 = () => {
                 <div className="content">
                   <h5>{item.city}</h5>
                   <span className="total-jobs">{item.jobNumber} Jobs</span>
-                  <Link
-                    href="/job-list-v13"
-                    className="overlay-link"
-                  ></Link>
+                  <Link href="/job-list-v13" className="overlay-link"></Link>
                 </div>
               </div>
             </div>

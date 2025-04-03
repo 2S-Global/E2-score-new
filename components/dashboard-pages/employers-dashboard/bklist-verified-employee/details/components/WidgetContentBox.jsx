@@ -20,7 +20,12 @@ const WidgetContentBox = () => {
           {userData.map((field, index) => (
             <div key={index} className="form-group col-md-4 mb-3">
               <label className="fw-bold">{field.label}</label>
-              <input type="text" className="form-control" value={field.value} readOnly />
+              <input
+                type="text"
+                className="form-control"
+                value={field.value}
+                readOnly
+              />
             </div>
           ))}
         </div>
@@ -29,7 +34,9 @@ const WidgetContentBox = () => {
       <div className="row">
         <h4 className="text-primary mb-3">Verification Details</h4>
         <div className="col-md-4 mb-4">
-          <div className="p-3 shadow-sm rounded bg-light"> {/* Simple box with padding and background */}
+          <div className="p-3 shadow-sm rounded bg-light">
+            {" "}
+            {/* Simple box with padding and background */}
             <h5 className="fw-bold text-dark mb-2">PAN</h5>
             <div className="mt-2">
               <div className="d-flex align-items-center mb-1">
@@ -51,13 +58,17 @@ const WidgetContentBox = () => {
               <div className="d-flex align-items-center mb-1">
                 <span className="fw-bold me-2">Address:</span>
                 <MapPin size={16} className="me-1" />
-                <span className="text-break">Lueilwitz, Wisoky and Leuschke</span>
+                <span className="text-break">
+                  Lueilwitz, Wisoky and Leuschke
+                </span>
               </div>
             </div>
           </div>
         </div>
         <div className="col-md-4 mb-4">
-          <div className="p-3 shadow-sm rounded bg-light"> {/* Simple box with padding and background */}
+          <div className="p-3 shadow-sm rounded bg-light">
+            {" "}
+            {/* Simple box with padding and background */}
             <h5 className="fw-bold text-dark mb-2">AADHAAR</h5>
             <div className="mt-2">
               <div className="d-flex align-items-center mb-1">
@@ -79,13 +90,17 @@ const WidgetContentBox = () => {
               <div className="d-flex align-items-center mb-1">
                 <span className="fw-bold me-2">Address:</span>
                 <MapPin size={16} className="me-1" />
-                <span className="text-break">Lueilwitz, Wisoky and Leuschke</span>
+                <span className="text-break">
+                  Lueilwitz, Wisoky and Leuschke
+                </span>
               </div>
             </div>
           </div>
         </div>
         <div className="col-md-4 mb-4">
-          <div className="p-3 shadow-sm rounded bg-light"> {/* Simple box with padding and background */}
+          <div className="p-3 shadow-sm rounded bg-light">
+            {" "}
+            {/* Simple box with padding and background */}
             <h5 className="fw-bold text-dark mb-2">EPIC</h5>
             <div className="mt-2">
               <div className="d-flex align-items-center mb-1">
@@ -109,13 +124,17 @@ const WidgetContentBox = () => {
               <div className="d-flex align-items-center mb-1">
                 <span className="fw-bold me-2">Address:</span>
                 <MapPin size={16} className="me-1" />
-                <span className="text-break">Lueilwitz, Wisoky and Leuschke</span>
+                <span className="text-break">
+                  Lueilwitz, Wisoky and Leuschke
+                </span>
               </div>
             </div>
           </div>
         </div>
         <div className="col-md-4 mb-4">
-          <div className="p-3 shadow-sm rounded bg-light"> {/* Simple box with padding and background */}
+          <div className="p-3 shadow-sm rounded bg-light">
+            {" "}
+            {/* Simple box with padding and background */}
             <h5 className="fw-bold text-dark mb-2">DL</h5>
             <div className="mt-2">
               <div className="d-flex align-items-center mb-1">
@@ -139,12 +158,13 @@ const WidgetContentBox = () => {
                 <span className="fw-bold me-2">Expiry Date:</span>
                 <span className="text-break">06-03-2033</span>
               </div>
-
             </div>
           </div>
         </div>
         <div className="col-md-4 mb-4">
-          <div className="p-3 shadow-sm rounded bg-light"> {/* Simple box with padding and background */}
+          <div className="p-3 shadow-sm rounded bg-light">
+            {" "}
+            {/* Simple box with padding and background */}
             <h5 className="fw-bold text-dark mb-2">Passport</h5>
             <div className="mt-2">
               <div className="d-flex align-items-center mb-1">
@@ -168,21 +188,14 @@ const WidgetContentBox = () => {
               <div className="d-flex align-items-center mb-1">
                 <span className="fw-bold me-2">Address:</span>
                 <MapPin size={16} className="me-1" />
-                <span className="text-break">Lueilwitz, Wisoky and Leuschke</span>
+                <span className="text-break">
+                  Lueilwitz, Wisoky and Leuschke
+                </span>
               </div>
             </div>
           </div>
         </div>
-
-
-
-
       </div>
-
-
-
-
-
     </div>
   );
 };

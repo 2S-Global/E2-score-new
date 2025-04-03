@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 //new component
 import MessageComponent from "../../ResponseMsg";
-
-
-
 
 const FormContentcom = () => {
   const [formData, setFormData] = useState({
@@ -31,7 +28,10 @@ const FormContentcom = () => {
     setSuccess(null);
 
     try {
-      const response = await axios.post(`${apiurl}/api/auth/company-register`, formData);
+      const response = await axios.post(
+        `${apiurl}/api/auth/company-register`,
+        formData,
+      );
       console.log("Response:", response);
       //check if response is successful
       if (!response.data.success) {
@@ -39,10 +39,12 @@ const FormContentcom = () => {
       }
       setSuccess("Registration successful!");
       const token = response.data.token;
-      localStorage.setItem('Admin_token', token);
-      router.push('/employers-dashboard/dashboard');
+      localStorage.setItem("Admin_token", token);
+      router.push("/employers-dashboard/dashboard");
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed. Try again.");
+      setError(
+        err.response?.data?.message || "Registration failed. Try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -55,17 +57,27 @@ const FormContentcom = () => {
 
       <div className="form-group">
         <label>Company Name</label>
-        <input type="text" name="name" placeholder="Name as per PAN" required
+        <input
+          type="text"
+          name="name"
+          placeholder="Name as per PAN"
+          required
           value={formData.name}
-          onChange={handleChange} />
+          onChange={handleChange}
+        />
       </div>
       {/* name */}
       <div className="form-group">
         <label>Official Email Address</label>
-        <input type="email" name="email" placeholder="
-        Enter your Official Email address" required
+        <input
+          type="email"
+          name="email"
+          placeholder="
+        Enter your Official Email address"
+          required
           value={formData.email}
-          onChange={handleChange} />
+          onChange={handleChange}
+        />
       </div>
       {/* Email */}
 
@@ -114,7 +126,11 @@ const FormContentcom = () => {
       {/* password */}
 
       <div className="form-group">
-        <button className="theme-btn btn-style-one" type="submit" disabled={loading}>
+        <button
+          className="theme-btn btn-style-one"
+          type="submit"
+          disabled={loading}
+        >
           {loading ? "Registering..." : "Register"}
         </button>
       </div>

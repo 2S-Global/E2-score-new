@@ -22,14 +22,14 @@ Products Section
   padding: 25px 30px 25px;
   border-radius: 8px;
   background: #ffffff;
-  border: 1px solid #ECEDF2;
+  border: 1px solid #ecedf2;
   text-align: center;
   -webkit-transition: all 300ms ease;
   -o-transition: all 300ms ease;
   transition: all 300ms ease;
 }
 
-.product-block .inner-box:hover{
+.product-block .inner-box:hover {
   -webkit-box-shadow: 0px 6px 15px rgba(64, 79, 104, 0.05);
   box-shadow: 0px 6px 15px rgba(64, 79, 104, 0.05);
 }
@@ -49,11 +49,11 @@ Products Section
   max-width: 100%;
 }
 
-.product-block .info{
+.product-block .info {
   position: relative;
 }
 
-.product-block h3{
+.product-block h3 {
   font-weight: 500;
   font-size: 16px;
   line-height: 22px;
@@ -61,7 +61,7 @@ Products Section
   margin-bottom: 7px;
 }
 
-.product-block .price{
+.product-block .price {
   position: relative;
   font-size: 15px;
   line-height: 20px;
@@ -69,7 +69,7 @@ Products Section
   color: #696969;
 }
 
-.product-block .theme-btn{
+.product-block .theme-btn {
   position: absolute;
   left: 0;
   bottom: -10px;
@@ -81,11 +81,11 @@ Products Section
   transition: all 400ms ease;
 }
 
-.product-block .theme-btn i{
+.product-block .theme-btn i {
   margin-right: 10px;
 }
 
-.product-block .inner-box:hover .theme-btn{
+.product-block .inner-box:hover .theme-btn {
   opacity: 1;
   visibility: visible;
   bottom: 0;

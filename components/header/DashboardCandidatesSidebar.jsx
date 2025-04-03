@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import Link from "next/link";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
@@ -13,7 +13,6 @@ import { usePathname } from "next/navigation";
 const DashboardCandidatesSidebar = () => {
   const { menu } = useSelector((state) => state.toggle);
   const percentage = 30;
-
 
   const dispatch = useDispatch();
   // menu togggle handler

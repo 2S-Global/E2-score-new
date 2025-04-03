@@ -8,9 +8,17 @@ export const DocumentsTable = ({ user, handleclick }) => {
       return <OctagonAlert className="text-danger" size={20} />;
     }
     return user[key]?.response_code == 100 ? (
-      <BadgeCheck className="text-success cursor-pointer" size={20} onClick={() => handleclick(key)} />
+      <BadgeCheck
+        className="text-success cursor-pointer"
+        size={20}
+        onClick={() => handleclick(key)}
+      />
     ) : (
-      <BadgeAlert className="text-warning cursor-pointer" size={20} onClick={() => handleclick(key)} />
+      <BadgeAlert
+        className="text-warning cursor-pointer"
+        size={20}
+        onClick={() => handleclick(key)}
+      />
     );
   };
 
@@ -31,7 +39,13 @@ export const DocumentsTable = ({ user, handleclick }) => {
         <tbody>
           <tr>
             <td className="py-3">{user?.candidate_name || "N/A"}</td>
-            {["pan_response", "passport_response", "aadhaar_response", "dl_response", "epic_response"].map((key, index) => (
+            {[
+              "pan_response",
+              "passport_response",
+              "aadhaar_response",
+              "dl_response",
+              "epic_response",
+            ].map((key, index) => (
               <td key={index} className="py-3">
                 {getStatusIcon(key)}
               </td>

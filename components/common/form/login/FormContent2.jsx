@@ -6,11 +6,9 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import React, { useState } from "react";
 
-
 //new component
 import MessageComponent from "../../ResponseMsg";
 const FormContent2 = () => {
-
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
@@ -43,18 +41,18 @@ const FormContent2 = () => {
       const token = response.data.token;
       const role = response.data.role;
 
-
       //save token to local storage
       if (role == "1") {
-        localStorage.setItem('token', token);
-        router.push('/candidates-dashboard/dashboard');
-      }
-      else if (role == "2") {
-        localStorage.setItem('Admin_token', token);
-        router.push('/employers-dashboard/dashboard');
+        localStorage.setItem("token", token);
+        router.push("/candidates-dashboard/dashboard");
+      } else if (role == "2") {
+        localStorage.setItem("Admin_token", token);
+        router.push("/employers-dashboard/dashboard");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed. Try again.");
+      setError(
+        err.response?.data?.message || "Registration failed. Try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -108,9 +106,12 @@ const FormContent2 = () => {
         </div>
         {/* forgot password */}
 
-
         <div className="form-group">
-          <button className="theme-btn btn-style-one" type="submit" disabled={loading}>
+          <button
+            className="theme-btn btn-style-one"
+            type="submit"
+            disabled={loading}
+          >
             {loading ? "Logging..." : "Log in"}
           </button>
         </div>

@@ -15,8 +15,6 @@ import Image from "next/image";
 import { use } from "react";
 import { useParams } from "next/navigation";
 
-
-
 const CandidateSingleDynamicV2 = () => {
   const params = useParams();
   const id = params?.id;

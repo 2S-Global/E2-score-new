@@ -9,8 +9,8 @@ import {
   homeItems,
   pageItems,
   shopItems,
-  about ,
-  contact
+  about,
+  contact,
 } from "../../data/mainMenuData";
 import {
   isActiveParent,
@@ -30,8 +30,7 @@ const HeaderNavContent = () => {
               isActiveParent(homeItems, usePathname()) ? "current" : ""
             } dropdown`}
           >
-             <Link href='/'>Home</Link>
-           
+            <Link href="/">Home</Link>
           </li>
           {/* End homepage menu items */}
 
@@ -41,9 +40,7 @@ const HeaderNavContent = () => {
             } dropdown has-mega-menu`}
             id="has-mega-menu"
           >
-            <Link href='/job-list'>Find Jobs</Link>
-            
-            
+            <Link href="/job-list">Find Jobs</Link>
           </li>
           {/* End findjobs menu items */}
 
@@ -55,8 +52,7 @@ const HeaderNavContent = () => {
                 : ""
             } dropdown`}
           >
-            <Link href='/employers-list'>Employers</Link>
-            
+            <Link href="/employers-list">Employers</Link>
           </li>
           {/* End Employers menu items */}
 
@@ -66,12 +62,13 @@ const HeaderNavContent = () => {
               usePathname()?.split("/")[1] === "candidates-dashboard"
                 ? "current"
                 : ""
-                ? "current"
-                : ""
+                  ? "current"
+                  : ""
             } dropdown`}
           >
-             <Link href='/candidates-list'><span>Candidates</span></Link>
-            
+            <Link href="/candidates-list">
+              <span>Candidates</span>
+            </Link>
           </li>
           {/* End Candidates menu items */}
 
@@ -80,8 +77,9 @@ const HeaderNavContent = () => {
               isActiveParentChaild(blogItems, usePathname()) ? "current" : ""
             } dropdown`}
           >
-            <Link href='/blog-list'><span>Blog</span></Link>
-            
+            <Link href="/blog-list">
+              <span>Blog</span>
+            </Link>
           </li>
           {/* End Blog menu items */}
 
@@ -91,12 +89,13 @@ const HeaderNavContent = () => {
               usePathname()?.split("/")[1] === "about"
                 ? "current"
                 : ""
-                ? "current"
-                : ""
+                  ? "current"
+                  : ""
             } dropdown`}
           >
-             <Link href='/about'><span>About</span></Link>
-            
+            <Link href="/about">
+              <span>About</span>
+            </Link>
           </li>
           {/* End About menu items */}
 
@@ -106,15 +105,16 @@ const HeaderNavContent = () => {
               usePathname()?.split("/")[1] === "contact"
                 ? "current"
                 : ""
-                ? "current"
-                : ""
+                  ? "current"
+                  : ""
             } dropdown`}
           >
-             <Link href='/contact'><span>Contact</span></Link>
-            
+            <Link href="/contact">
+              <span>Contact</span>
+            </Link>
           </li>
 
-         {/*  <li
+          {/*  <li
             className={`${
               isActiveParentChaild(pageItems, usePathname()) ||
               isActiveParentChaild(shopItems[0].items, usePathname())

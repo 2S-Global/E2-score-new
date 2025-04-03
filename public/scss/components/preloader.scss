@@ -2,17 +2,17 @@
 Preloader
 ===========================*/
 
-.preloader{ 
-  position:fixed; 
-  left:0px; 
-  top:0px; 
-  width:100%; 
-  height:100%; 
-  z-index:999999; 
-  background-color:#ffffff; 
-} 
+.preloader {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 999999;
+  background-color: #ffffff;
+}
 
-.preloader:after{ 
+.preloader:after {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -20,13 +20,13 @@ Preloader
   width: 50px;
   margin-left: -25px;
   margin-top: -25px;
-  background-position:center center; 
-  background-repeat:no-repeat; 
-  background-image:url(../../images/favicon.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url(../../images/favicon.png);
   content: "";
 }
 
-.preloader:before{
+.preloader:before {
   position: absolute;
   top: 50%;
   left: 0;
@@ -39,5 +39,5 @@ Preloader
   font-size: 14px;
   font-weight: 400;
   letter-spacing: 2px;
-  content: "LOADING"
+  content: "LOADING";
 }

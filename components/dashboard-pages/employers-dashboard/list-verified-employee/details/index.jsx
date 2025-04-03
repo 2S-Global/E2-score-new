@@ -32,7 +32,7 @@ const index = () => {
           <div className="row">
             <div className="col-lg-12">
               <div className="applicants-widget ls-widget">
-              <DownloadPDF />
+                <DownloadPDF />
                 <WidgetContentBox />
               </div>
               {/* <!-- applicants Widget --> */}

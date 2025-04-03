@@ -15,13 +15,19 @@ const CareerSection = () => {
     document.body.style.overflow = "auto"; // Re-enable background scrolling
   };
 
-
   return (
     <>
       <div className="ls-widget">
         <div className="tabs-box">
           {/* Title with Edit Icon */}
-          <div className="widget-title" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div
+            className="widget-title"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <h4>Career Profile</h4>
             <i
               className="la la-pencil-alt"
@@ -34,7 +40,14 @@ const CareerSection = () => {
 
           {/* Career Profile Details */}
           <div className="widget-content">
-            <div className="career-details" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+            <div
+              className="career-details"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "20px",
+              }}
+            >
               <div>
                 <strong>Current Industry</strong>
                 <div className="typ-14Medium">IT Services & Consulting</div>

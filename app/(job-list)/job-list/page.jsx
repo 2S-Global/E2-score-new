@@ -2,8 +2,6 @@
 import dynamic from "next/dynamic";
 import JobList from "@/components/job-listing-pages/job-list-v1";
 
-
-
 const index = () => {
   return (
     <>

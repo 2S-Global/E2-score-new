@@ -2,8 +2,6 @@
 import dynamic from "next/dynamic";
 import ResumeAlerts from "@/components/dashboard-pages/employers-dashboard/resume-alerts";
 
-
-
 const index = () => {
   return (
     <>

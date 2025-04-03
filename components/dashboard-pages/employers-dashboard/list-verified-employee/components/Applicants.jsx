@@ -1,8 +1,15 @@
-'use client'
+"use client";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import Link from "next/link";
-import { CheckCircle, XCircle, HelpCircle, Eye ,MinusCircle,Download} from "lucide-react";
+import {
+  CheckCircle,
+  XCircle,
+  HelpCircle,
+  Eye,
+  MinusCircle,
+  Download,
+} from "lucide-react";
 import axios from "axios";
 
 const Applicants = () => {
@@ -24,13 +31,19 @@ const Applicants = () => {
           return;
         }
 
-        const response = await axios.get(`${API_URL}/api/verify/listUserVerifiedList`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          `${API_URL}/api/verify/listUserVerifiedList`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
 
         setCandidates(response.data);
       } catch (error) {
-        console.error("Error fetching candidates:", error.response?.data || error);
+        console.error(
+          "Error fetching candidates:",
+          error.response?.data || error,
+        );
         setError(error.response?.data?.message || "Internal Server Error");
       } finally {
         setLoading(false);
@@ -41,34 +54,8 @@ const Applicants = () => {
   }, [API_URL]);
 
   // ✅ Function to render verification status icons
-const renderVerificationStatus = (response) => {
-  if (!response)
-    return (
-      <span className="d-flex align-items-center">
-        <MinusCircle size={14} className="text-muted">
-          <title>Not Applied</title>
-        </MinusCircle>
-      </span>
-    );
-
-  switch (response.response_code) {
-    case "100":
-      return (
-        <span className="d-flex align-items-center">
-          <CheckCircle size={14} className="text-success">
-            <title>Valid Authentication</title>
-          </CheckCircle>
-        </span>
-      );
-    case "101":
-      return (
-        <span className="d-flex align-items-center">
-          <XCircle size={14} className="text-danger">
-            <title>Invalid Authentication</title>
-          </XCircle>
-        </span>
-      );
-    default:
+  const renderVerificationStatus = (response) => {
+    if (!response)
       return (
         <span className="d-flex align-items-center">
           <MinusCircle size={14} className="text-muted">
@@ -76,9 +63,34 @@ const renderVerificationStatus = (response) => {
           </MinusCircle>
         </span>
       );
-  }
-};
 
+    switch (response.response_code) {
+      case "100":
+        return (
+          <span className="d-flex align-items-center">
+            <CheckCircle size={14} className="text-success">
+              <title>Valid Authentication</title>
+            </CheckCircle>
+          </span>
+        );
+      case "101":
+        return (
+          <span className="d-flex align-items-center">
+            <XCircle size={14} className="text-danger">
+              <title>Invalid Authentication</title>
+            </XCircle>
+          </span>
+        );
+      default:
+        return (
+          <span className="d-flex align-items-center">
+            <MinusCircle size={14} className="text-muted">
+              <title>Not Applied</title>
+            </MinusCircle>
+          </span>
+        );
+    }
+  };
 
   // ✅ Define DataTable columns
   const columns = [
@@ -117,38 +129,34 @@ const renderVerificationStatus = (response) => {
       cell: (row) => renderVerificationStatus(row.epic_response),
     },
 
-
     {
       name: "Action",
       cell: (row) => (
         <div className="d-flex gap-2">
           {/* View Button */}
-          <Link href={`/employers-dashboard/list-verified-employee/details?id=${row._id}`} passHref>
+          <Link
+            href={`/employers-dashboard/list-verified-employee/details?id=${row._id}`}
+            passHref
+          >
             <button className="btn btn-sm" title="View Details">
               <Eye size={16} className="me-1 text-primary" />
             </button>
           </Link>
-    
+
           {/* Download Button */}
-          <button
-        className="bg border-0 p-0"
-        title="Download File"
-   
-     
-      >
-        <Download size={18} className="text-success" />
-      </button>
+          <button className="bg border-0 p-0" title="Download File">
+            <Download size={18} className="text-success" />
+          </button>
         </div>
       ),
       ignoreRowClick: true,
       button: 1,
     },
-    
   ];
 
   // ✅ Filter candidates based on search
   const filteredCandidates = candidates.filter((candidate) =>
-    candidate.candidate_name.toLowerCase().includes(searchText.toLowerCase())
+    candidate.candidate_name.toLowerCase().includes(searchText.toLowerCase()),
   );
 
   // ✅ Loader UI when fetching data
@@ -162,7 +170,8 @@ const renderVerificationStatus = (response) => {
     );
 
   // ✅ Error UI if API call fails
-  if (error) return <p className="text-danger text-center mt-3">Error: {error}</p>;
+  if (error)
+    return <p className="text-danger text-center mt-3">Error: {error}</p>;
 
   return (
     <div className="container mt-4">
