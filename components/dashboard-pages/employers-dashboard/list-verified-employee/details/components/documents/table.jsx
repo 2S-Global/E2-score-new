@@ -1,9 +1,21 @@
 import React from "react";
-import { BadgeAlert, BadgeCheck, FileText } from "lucide-react";
+import { BadgeAlert, BadgeCheck, FileText, OctagonAlert } from "lucide-react";
 
-export const DocumentsTable = ({ user , handleclick  }) => {
+export const DocumentsTable = ({ user, handleclick }) => {
+  // Helper function to get the appropriate icon
+  const getStatusIcon = (key) => {
+    if (!user?.[key]) {
+      return <OctagonAlert className="text-danger" size={20} />;
+    }
+    return user[key]?.response_code == 100 ? (
+      <BadgeCheck className="text-success cursor-pointer" size={20} onClick={() => handleclick(key)} />
+    ) : (
+      <BadgeAlert className="text-warning cursor-pointer" size={20} onClick={() => handleclick(key)} />
+    );
+  };
+
   return (
-    <div className="table-responsive"> {/* Makes table scrollable on small screens */}
+    <div className="table-responsive">
       <table className="table table-bordered text-center align-middle">
         <thead className="table-light">
           <tr>
@@ -19,23 +31,9 @@ export const DocumentsTable = ({ user , handleclick  }) => {
         <tbody>
           <tr>
             <td className="py-3">{user?.candidate_name || "N/A"}</td>
-            {[
-              "pan_response",
-              "passport_response",
-              "aadhaar_response",
-              "dl_response",
-              "epic_response",
-            ].map((key, index) => (
-                /* implement handleclick  */
+            {["pan_response", "passport_response", "aadhaar_response", "dl_response", "epic_response"].map((key, index) => (
               <td key={index} className="py-3">
-                {user?.[key]?.response_code == 100 ? (
-                  <BadgeCheck className="text-success" size={20} 
-                  onClick={() => handleclick(key)}
-                  />
-                ) : (
-                  <BadgeAlert className="text-warning" size={20} 
-                  onClick={() => handleclick(key)}/>
-                )}
+                {getStatusIcon(key)}
               </td>
             ))}
             <td className="py-3">

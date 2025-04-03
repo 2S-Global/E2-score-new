@@ -6,19 +6,24 @@ const AdharDetails = ({ user }) => {
                   <div className="p-3 shadow-sm rounded bg-light"> {/* Simple box with padding and background */}
                   <div className="d-flex align-items-center mb-3">
                     <h5 className="fw-bold text-dark mb-0 me-2">Aadhaar</h5>
-                      {user?.aadhaar_response?.response_code === "100" ? (
                     <img
-                        src="/images/resource/verified.png"
-                        alt="Verified"
-                        style={{ width: "100px", height: "20px" }}
-                    />
-                    ) : (
-                        <img
-                            src="/images/resource/unverified.png"
-                            alt="Not Verified"
-                            style={{ width: "100px", height: "20px" }}
-                        />
-                    )}  
+                         src={
+                                !user?.aadhaar_response
+                                ? "/images/resource/na.png"
+                                : user?.aadhaar_response?.response_code == 100
+                                ? "/images/resource/verified.png"
+                                : "/images/resource/unverified.png"
+                            }         
+                          alt={
+                                !user?.aadhaar_response
+                                ? "N/A"
+                                : user?.aadhaar_response?.response_code == 100
+                                ? "Verified"
+                                : "Not Verified"
+                            }           
+                          style={{ width: "100px", height: "20px" }}
+                      />
+ 
                 </div>
                     <div className="mt-2">
                       <div className="d-flex align-items-center mb-1">

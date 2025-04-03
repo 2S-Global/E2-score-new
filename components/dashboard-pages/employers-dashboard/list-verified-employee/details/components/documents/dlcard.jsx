@@ -10,25 +10,28 @@ const DlDetails = ({ user }) => {
         <div className="p-3 shadow-sm rounded bg-light"> {/* Simple box with padding and background */}
         <div className="d-flex align-items-center mb-3">
                     <h5 className="fw-bold text-dark mb-0 me-2">Driving License</h5>
-                    {user?.dl_response?.response_code == 100 ? (
-                <img
-                  src="/images/resource/verified.png"
-                  alt="Verified"
-                  style={{ width: "100px", height: "20px" }}
-
-                />
-              ) : (<img
-                src="/images/resource/unverified.png"
-                alt="Not Verified"
-                style={{ width: "100px", height: "20px" }}
-
-              />
-              )}
+                    <img
+                         src={
+                                !user?.dl_response
+                                ? "/images/resource/na.png"
+                                : user?.dl_response?.response_code == 100
+                                ? "/images/resource/verified.png"
+                                : "/images/resource/unverified.png"
+                            }         
+                          alt={
+                                !user?.dl_response
+                                ? "N/A"
+                                : user?.dl_response?.response_code == 100
+                                ? "Verified"
+                                : "Not Verified"
+                            }           
+                          style={{ width: "100px", height: "20px" }}
+                      />
                 </div>
                 <div className="mt-2">
                 <div className="row">
         {/* Profile Image */}
-        <div className="col-md-3 text-center mb-3" style={{ overflow: "hidden" }}>
+        <div className="col-md-6 text-center mb-3" >
   {user?.dl_response?.result?.user_image ? (
     <img
       src={`data:image/jpeg;base64,${user?.dl_response?.result?.user_image}`}
@@ -41,21 +44,25 @@ const DlDetails = ({ user }) => {
       src="/images/resource/no_user.png"
       alt="Profile"
       className="img-thumbnail rounded"
-      style={{ width: "50px", height: "50px", maxWidth: "100%" }}
+      style={{ maxWidth: "150px", maxHeight: "150px" }}
     />
   )}
 </div>
 
         
         {/* Basic Details */}
-        <div className="col-md-9 p-3">
-          <div className="row">
+        <div className="col-md-6 p-3">
+          <div className="row ">
             <div className="col-md-12 mb-2"><strong>Full Name:</strong> {user?.dl_response?.result?.user_full_name || "N/A"}</div>
             <div className="col-md-12 mb-2"><strong>DL Number:</strong> {user?.dl_response?.result?.dl_number || "N/A"}</div>
             <div className="col-md-12 mb-2"><strong>Date of Birth:</strong> {user?.dl_response?.result?.user_dob || "N/A"}</div>
               </div>
         </div>
-        <div className="row">
+        
+
+
+      </div>
+      <div className="row mt-3 ">
         <div className="col-md-6 mb-2"><strong>Father/Husband Name:</strong> {user?.dl_response?.result?.father_or_husband || "N/A"}</div>
             <div className="col-md-6 mb-2"><strong>License State:</strong> {user?.dl_response?.result?.state || "N/A"}</div>
             <div className="col-md-6 mb-2"><strong>License Status:</strong> {user?.dl_response?.result?.status || "N/A"}</div>
@@ -65,9 +72,6 @@ const DlDetails = ({ user }) => {
          
 
         </div>
-
-
-      </div>
       {/* Address Details */}
       <div className="row mt-3">
         {["Permanent", "Present"].map((type) => {
