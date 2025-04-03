@@ -19,6 +19,7 @@ const UsersList = ({ users }) => {
                 <th>Voter Status</th>
                 <th>License Status</th>
                 <th>Passport Status</th>
+                <th>Verified Date</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -46,6 +47,9 @@ const UsersList = ({ users }) => {
                       {renderStatusIcon(item.response)}
                     </td>
                   ))}
+                  <td>
+                    {new Date(candidate.updatedAt).toLocaleDateString("en-GB")}
+                  </td>
 
                   <td>
                     <Link
