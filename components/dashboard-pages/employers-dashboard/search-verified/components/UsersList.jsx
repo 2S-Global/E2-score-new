@@ -25,8 +25,8 @@ const UsersList = ({ users }) => {
                 <th style={{ textAlign: "center" }}>Phone</th>
                 <th style={{ textAlign: "center" }}>PAN Status</th>
                 <th style={{ textAlign: "center" }}>Passport Status</th>
-                <th style={{ textAlign: "center" }}>Aadhar Status</th>
-                <th style={{ textAlign: "center" }}>Driving LicenseStatus</th>
+                <th style={{ textAlign: "center" }}>Aadhaar Status</th>
+                <th style={{ textAlign: "center" }}>Driving License Status</th>
                 <th style={{ textAlign: "center" }}>Epic Status</th>
                 <th style={{ textAlign: "center" }}>Verified Date</th>
                 <th style={{ textAlign: "center" }}>Action</th>
