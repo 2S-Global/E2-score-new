@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DataTable from "react-data-table-component";
@@ -49,25 +51,43 @@ const Applicants = () => {
   }
 
   const renderProcessingIcon = (docNumber, docName, response) => {
-    // If document number OR name exists, check the response
     if (docNumber || docName) {
       if (response) {
         switch (response.response_code) {
           case "100":
-            return <CheckCircle size={14} className="text-success" title="Valid Authentication" />;
+            return (
+              <span title="Valid Authentication">
+                <CheckCircle size={14} className="text-success" />
+              </span>
+            );
           case "101":
-            return <XCircle size={14} className="text-danger" title="Invalid Authentication" />;
+            return (
+              <span title="Invalid Authentication">
+                <XCircle size={14} className="text-danger" />
+              </span>
+            );
           default:
-            return <MinusCircle size={14} className="text-warning" title="Not Applied" />;
+            return (
+              <span title="Not Applied">
+                <MinusCircle size={14} className="text-warning" />
+              </span>
+            );
         }
       }
-      // If document exists but no response, show processing
-      return <Clock2 size={14} className="text-info" title="Processing" />;
+      return (
+        <span title="Processing">
+          <Clock2 size={14} className="text-info" />
+        </span>
+      );
     }
   
-    // If neither number nor name is provided, mark as "Not Provided"
-    return <MinusCircle size={14} className="text-muted" title="Not Provided" />;
+    return (
+      <span title="Not Applied">
+        <MinusCircle size={14} className="text-muted" />
+      </span>
+    );
   };
+  
   
 
 
@@ -113,6 +133,12 @@ const Applicants = () => {
       name: "Action",
       cell: (row) => (
         <div className="d-flex gap-2">
+
+<Link href={`/employers-dashboard/list-verified-employee/details?id=${row._id}`} passHref>
+            <button className="btn btn-sm" title="View Details">
+              <Eye size={16} className="me-1 text-primary" />
+            </button>
+          </Link>
           <button
             onClick={() => handleDownload(row.file_url)}
             className="btn btn-link p-0"

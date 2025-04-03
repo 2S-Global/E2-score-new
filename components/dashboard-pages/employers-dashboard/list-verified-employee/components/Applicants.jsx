@@ -1,7 +1,8 @@
+'use client'
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import Link from "next/link";
-import { CheckCircle, XCircle, HelpCircle, Eye ,MinusCircle} from "lucide-react";
+import { CheckCircle, XCircle, HelpCircle, Eye ,MinusCircle,Download} from "lucide-react";
 import axios from "axios";
 
 const Applicants = () => {
@@ -44,7 +45,7 @@ const renderVerificationStatus = (response) => {
   if (!response)
     return (
       <span className="d-flex align-items-center">
-        <MinusCircle size={14} className="text-warning">
+        <MinusCircle size={14} className="text-muted">
           <title>Not Applied</title>
         </MinusCircle>
       </span>
@@ -70,7 +71,7 @@ const renderVerificationStatus = (response) => {
     default:
       return (
         <span className="d-flex align-items-center">
-          <MinusCircle size={14} className="text-success">
+          <MinusCircle size={14} className="text-muted">
             <title>Not Applied</title>
           </MinusCircle>
         </span>
@@ -120,14 +121,29 @@ const renderVerificationStatus = (response) => {
     {
       name: "Action",
       cell: (row) => (
-        <Link href={`/employers-dashboard/list-verified-employee/details?id=${row._id}`}>
-          <button className="btn btn-outline-primary btn-sm">
-            <Eye size={14} className="me-1" /> 
-          </button>
-        </Link>
+        <div className="d-flex gap-2">
+          {/* View Button */}
+          <Link href={`/employers-dashboard/list-verified-employee/details?id=${row._id}`} passHref>
+            <button className="btn btn-sm" title="View Details">
+              <Eye size={16} className="me-1 text-primary" />
+            </button>
+          </Link>
+    
+          {/* Download Button */}
+          <button
+        className="bg border-0 p-0"
+        title="Download File"
+   
+     
+      >
+        <Download size={18} className="text-success" />
+      </button>
+        </div>
       ),
       ignoreRowClick: true,
+      button: 1,
     },
+    
   ];
 
   // ✅ Filter candidates based on search
