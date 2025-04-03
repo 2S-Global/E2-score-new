@@ -83,7 +83,7 @@ const WidgetContentBox = () => {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
 
       if (response.status === 201) {
@@ -240,24 +240,6 @@ const WidgetContentBox = () => {
             onFileChange={handleFileChange}
             onfieldChange={handleChange}
           />
-          <DocumentUpload
-            label="Aadhaar"
-            name="aadhaar"
-            fileId="upload-aadhaar"
-            valuename={formData.aadhaarname}
-            numbername={formData.aadhaarnumber}
-            onFileChange={handleFileChange}
-            onfieldChange={handleChange}
-          />
-          <DocumentUpload
-            label="Driving License"
-            name="license"
-            fileId="upload-license"
-            valuename={formData.licensename}
-            numbername={formData.licensenumber}
-            onFileChange={handleFileChange}
-            onfieldChange={handleChange}
-          />
 
           <div className="row">
             {/* Heading */}
@@ -319,6 +301,25 @@ const WidgetContentBox = () => {
               </div>
             </div>
           </div>
+
+          <DocumentUpload
+            label="Aadhaar"
+            name="aadhaar"
+            fileId="upload-aadhaar"
+            valuename={formData.aadhaarname}
+            numbername={formData.aadhaarnumber}
+            onFileChange={handleFileChange}
+            onfieldChange={handleChange}
+          />
+          <DocumentUpload
+            label="Driving License"
+            name="license"
+            fileId="upload-license"
+            valuename={formData.licensename}
+            numbername={formData.licensenumber}
+            onFileChange={handleFileChange}
+            onfieldChange={handleChange}
+          />
 
           <DocumentUpload
             label="Epic (Voter)"

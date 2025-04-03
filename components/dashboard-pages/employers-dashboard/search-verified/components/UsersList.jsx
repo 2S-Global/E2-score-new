@@ -37,13 +37,17 @@ const UsersList = ({ users }) => {
                   {/* Mapping over status responses */}
                   {[
                     { label: "PAN", response: candidate.pan_response },
-                    { label: "Aadhar", response: candidate.aadhar_response },
-                    { label: "Voter", response: candidate.epic_response },
-                    { label: "License", response: candidate.dl_response },
                     {
                       label: "Passport",
                       response: candidate.passport_response,
                     },
+                    { label: "Aadhar", response: candidate.aadhar_response },
+                    {
+                      label: "Driving License",
+                      response: candidate.dl_response,
+                    },
+                    ,
+                    { label: "Voter", response: candidate.epic_response },
                   ].map((item, idx) => (
                     <td
                       style={{ textAlign: "center" }}
@@ -61,7 +65,7 @@ const UsersList = ({ users }) => {
                       href={`/employers-dashboard/list-verified-employee/details?id=${candidate._id}`}
                     >
                       <button className="btn btn-outline-primary btn-sm w-100">
-                        <Eye size={14} className="me-1" /> View Application
+                        <Eye size={14} className="me-1" /> View Details
                       </button>
                     </Link>
                   </td>
