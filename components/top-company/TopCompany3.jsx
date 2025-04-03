@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import topCompany from "../../data/topCompany";
 import Image from "next/image";

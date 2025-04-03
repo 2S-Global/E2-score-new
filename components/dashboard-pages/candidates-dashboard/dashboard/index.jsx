@@ -1,3 +1,4 @@
+import React from "react";
 import MobileMenu from "../../../header/MobileMenu";
 import LoginPopup from "../../../common/form/login/LoginPopup";
 import DashboardCandidatesSidebar from "../../../header/DashboardCandidatesSidebar";

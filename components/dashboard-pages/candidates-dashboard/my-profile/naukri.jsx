@@ -1,20 +1,11 @@
-
+import React from "react";
 import MobileMenu from "../../../header/MobileMenu";
 import LoginPopup from "../../../common/form/login/LoginPopup";
 import DashboardCandidatesSidebar from "../../../header/DashboardCandidatesSidebar";
 import BreadCrumb from "../../BreadCrumb";
-import MyProfile from "./components/my-profile";
-import SocialNetworkBox from "./components/SocialNetworkBox";
-import ContactInfoBox from "./components/ContactInfoBox";
 import CopyrightFooter from "../../CopyrightFooter";
 import DashboardCandidatesHeader from "../../../header/DashboardCandidatesHeader";
 import MenuToggler from "../../MenuToggler";
-
-
-
-
-
-
 
 /* component added */
 import ResumeBox from "./components/resumebox";
@@ -28,13 +19,10 @@ import ProfilesumerySection from "./components/profilesummary";
 import AcomSection from "./components/accomsection";
 import Carrersection from "./components/carrersection";
 import PersonalSection from "./components/Personal_details";
-import EscoreSection from "./components/EscoreSection";
-import HeadSection from "./components/HeadSection";
-import ScoreSection from "./components/scoreSection";
 
+import HeadSection from "./components/HeadSection";
 
 const index = () => {
-
   return (
     <div className="page-wrapper dashboard">
       <span className="header-span"></span>
@@ -71,8 +59,7 @@ const index = () => {
 
               {/* E2 score section */}
               {/* <EscoreSection/>
- */}
-
+               */}
 
               {/* Resume Headline Section */}
               <ResumeHeadlineSection />

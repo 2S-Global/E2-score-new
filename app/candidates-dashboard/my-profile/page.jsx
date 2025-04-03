@@ -1,18 +1,16 @@
-"use client";
-import dynamic from "next/dynamic";
+"use client"; // ✅ Must be the first line
+
+import React from "react";
 //import MyProfile from "@/components/dashboard-pages/candidates-dashboard/my-profile";
 import CanProfile from "@/components/dashboard-pages/candidates-dashboard/my-profile/naukri";
 
-
-
-
-const index = () => {
+const Index = () => {
   return (
     <>
-     {/*  <MyProfile /> */}
+      {/*  <MyProfile /> */}
       <CanProfile /> {/* Replace with your actual component */}
     </>
   );
 };
 
-export default dynamic(() => Promise.resolve(index), { ssr: false });
+export default Index;

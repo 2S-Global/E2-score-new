@@ -1,12 +1,10 @@
+import React from "react";
 import MobileMenu from "../../../header/MobileMenu";
 import DashboardHeader from "../../../header/DashboardHeader";
 import LoginPopup from "../../../common/form/login/LoginPopup";
 import DashboardEmployerSidebar from "../../../header/DashboardEmployerSidebar";
-import BreadCrumb from "../../BreadCrumb";
 import CopyrightFooter from "../../CopyrightFooter";
-import WidgetToFilterBox from "./components/WidgetToFilterBox";
 import WidgetContentBox from "./components/WidgetContentBox";
-import MenuToggler from "../../MenuToggler";
 
 const index = () => {
   return (
