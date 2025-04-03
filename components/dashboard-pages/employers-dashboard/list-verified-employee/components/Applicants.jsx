@@ -35,14 +35,14 @@ const Applicants = () => {
           `${API_URL}/api/verify/listUserVerifiedList`,
           {
             headers: { Authorization: `Bearer ${token}` },
-          },
+          }
         );
 
         setCandidates(response.data);
       } catch (error) {
         console.error(
           "Error fetching candidates:",
-          error.response?.data || error,
+          error.response?.data || error
         );
         setError(error.response?.data?.message || "Internal Server Error");
       } finally {
@@ -128,6 +128,10 @@ const Applicants = () => {
       selector: (row) => renderVerificationStatus(row.epic_response),
       cell: (row) => renderVerificationStatus(row.epic_response),
     },
+    {
+      name: "Verified At",
+      selector: (row) => new Date(row.updatedAt).toLocaleDateString("en-GB"),
+    },
 
     {
       name: "Action",
@@ -156,7 +160,7 @@ const Applicants = () => {
 
   // ✅ Filter candidates based on search
   const filteredCandidates = candidates.filter((candidate) =>
-    candidate.candidate_name.toLowerCase().includes(searchText.toLowerCase()),
+    candidate.candidate_name.toLowerCase().includes(searchText.toLowerCase())
   );
 
   // ✅ Loader UI when fetching data

@@ -37,13 +37,13 @@ const Applicants = () => {
           {},
           {
             headers: { Authorization: `Bearer ${token}` },
-          },
+          }
         );
         setCandidates(response.data);
       } catch (error) {
         console.error(
           "Error fetching candidates:",
-          error.response?.data || error,
+          error.response?.data || error
         );
         setError(error.response?.data?.message || "Internal Server Error");
       } finally {
@@ -124,13 +124,13 @@ const Applicants = () => {
         renderProcessingIcon(
           row.passport_file_number,
           row.passport_name,
-          row.passport_response,
+          row.passport_response
         ),
       cell: (row) =>
         renderProcessingIcon(
           row.passport_file_number,
           row.passport_name,
-          row.passport_response,
+          row.passport_response
         ),
     },
     {
@@ -139,13 +139,13 @@ const Applicants = () => {
         renderProcessingIcon(
           row.aadhar_number,
           row.aadhar_name,
-          row.aadhaar_response,
+          row.aadhaar_response
         ),
       cell: (row) =>
         renderProcessingIcon(
           row.aadhar_number,
           row.aadhar_name,
-          row.aadhaar_response,
+          row.aadhaar_response
         ),
     },
     {
@@ -161,6 +161,13 @@ const Applicants = () => {
         renderProcessingIcon(row.epic_number, row.epic_name, row.epic_response),
       cell: (row) =>
         renderProcessingIcon(row.epic_number, row.epic_name, row.epic_response),
+    },
+    {
+      name: "Verified At",
+      selector: (row) =>
+        row.all_verified === 1
+          ? new Date(row.updatedAt).toLocaleDateString("en-GB")
+          : "-",
     },
     {
       name: "Action",

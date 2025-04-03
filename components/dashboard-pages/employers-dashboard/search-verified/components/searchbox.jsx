@@ -31,7 +31,7 @@ const SearchBox = () => {
       const response = await axios.post(
         `${apiurl}/api/verify/searchUserVerifiedList`,
         { keyword: searchQuery },
-        { headers: { Authorization: `Bearer ${token}` } },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (response.data.users && response.data.users.length > 0) {
@@ -48,6 +48,15 @@ const SearchBox = () => {
       setLoading(false);
     }
   };
+
+  if (loading)
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
 
   return (
     <div className="widget-content">
