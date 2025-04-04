@@ -1,6 +1,6 @@
+"use client"; // Required in Next.js App Router
 import React from "react";
 import { BadgeAlert, BadgeCheck, FileText, OctagonAlert } from "lucide-react";
-
 export const DocumentsTable = ({ user, handleclick }) => {
   // Helper function to get the appropriate icon
   const getStatusIcon = (key) => {
@@ -51,6 +51,7 @@ export const DocumentsTable = ({ user, handleclick }) => {
               </td>
             ))}
             <td className="py-3">
+              {/* this should download the pdf */}
               <FileText className="text-primary cursor-pointer" size={20} />
             </td>
           </tr>

@@ -3,10 +3,10 @@ import React from "react";
 const DlDetails = ({ user }) => {
   const dl = user?.dl_response?.result || {};
   const permanentAddress = dl.user_address?.find(
-    (addr) => addr.type === "Permanent",
+    (addr) => addr.type === "Permanent"
   );
   const presentAddress = dl.user_address?.find(
-    (addr) => addr.type === "Present",
+    (addr) => addr.type === "Present"
   );
   return (
     <div className="col-md-6 mb-4" id="dl_response">
@@ -122,7 +122,7 @@ const DlDetails = ({ user }) => {
             })}
           </div>
           {/* Validity Details */}
-          <div className="row mt-3">
+          <div className="row mt-3" style={{ display: "none" }}>
             <div className="col-md-6 mb-2">
               <strong>Non-Transport Validity:</strong>{" "}
               {dl.non_transport_validity
@@ -137,7 +137,7 @@ const DlDetails = ({ user }) => {
             </div>
           </div>
           {/* Endorsement Details */}
-          <div className="row mt-3">
+          <div className="row mt-3" style={{ display: "none" }}>
             <div className="col-md-6 mb-2">
               <strong>Endorsement Number:</strong>{" "}
               {dl.endorse_number !== "NA" ? dl.endorse_number : "N/A"}
@@ -149,7 +149,7 @@ const DlDetails = ({ user }) => {
           </div>
 
           {/* Vehicle Categories */}
-          <div className="mt-3">
+          <div className="mt-3" style={{ display: "none" }}>
             <h6 className="fw-bold mb-2">Vehicle Categories</h6>
             {dl.vehicle_category_details?.length > 0 ? (
               <ul className="list-group">
