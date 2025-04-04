@@ -31,10 +31,6 @@ const WidgetContentBox = () => {
     voterdoc: null,
     licensenumdoc: null,
     passportdoc: null,
-    // uanname:null,
-    uannumber:null,
-
-
   });
 
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
@@ -335,21 +331,6 @@ const WidgetContentBox = () => {
             onfieldChange={handleChange}
           />
 
-          <div className="row">
- 
-            <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-              <label>UAN</label>
-              <input
-                type="text"
-                name="uannumber"
-                placeholder="Enter UAN"
-                className="form-control"
-                value={formData.uannumber || ""}
-                onChange={handleChange}
-              />
-            </div>
-            
-            </div>
           {/* Submit Button */}
           <div className="form-group">
             <button
