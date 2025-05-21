@@ -43,15 +43,15 @@ const FormContent2 = () => {
 
       //save token to local storage
       if (role == "1") {
-        localStorage.setItem("token", token);
+        localStorage.setItem("candidate_token", token);
         router.push("/candidates-dashboard/dashboard");
       } else if (role == "2") {
-        localStorage.setItem("Admin_token", token);
+        localStorage.setItem("company_token", token);
         router.push("/employers-dashboard/dashboard");
       }
     } catch (err) {
       setError(
-        err.response?.data?.message || "Registration failed. Try again.",
+        err.response?.data?.message || "Registration failed. Try again."
       );
     } finally {
       setLoading(false);

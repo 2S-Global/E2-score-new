@@ -2,8 +2,34 @@
 import React from "react";
 import CircularProgress from "./HeadSection/profilepic";
 import ProfileCard from "./HeadSection/profilecard";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const HeadSection = () => {
+  const [profile_pic, setProfile_pic] = useState(
+    "/images/resource/no_user.png"
+  );
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+
+  useEffect(() => {
+    const fetchProfilePic = async () => {
+      try {
+        const token = localStorage.getItem("candidate_token");
+        const response = await axios.get(`${apiurl}/api/userdata/userdata`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setProfile_pic(response.data.profilePicture);
+      } catch (error) {
+        console.error("Error fetching profile pic:", error);
+      }
+    };
+
+    fetchProfilePic();
+  }, [apiurl]);
+
   return (
     <>
       <div className="ls-widget">
@@ -12,10 +38,7 @@ const HeadSection = () => {
             <div className="row">
               {/* Left Section - Circular Progress */}
               <div className="col-md-2 d-flex justify-content-center align-items-center p-4">
-                <CircularProgress
-                  progress={85}
-                  imageSrc="/images/resource/candidate-1.png"
-                />
+                <CircularProgress progress={85} imageSrc={profile_pic} />
               </div>
 
               {/* Center Section - Profile Card */}

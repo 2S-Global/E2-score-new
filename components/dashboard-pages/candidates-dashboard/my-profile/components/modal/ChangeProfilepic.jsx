@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 const Profilepic = ({ show, onClose, imageSrc }) => {
   const [selectedImage, setSelectedImage] = useState(
-    imageSrc || "/default-profile.png",
+    imageSrc || "/default-profile.png"
   );
   const [file, setFile] = useState(null);
   const [error, setError] = useState(null);
@@ -14,7 +14,7 @@ const Profilepic = ({ show, onClose, imageSrc }) => {
   const router = useRouter();
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("candidate_token");
   if (!token) {
     console.log("No token");
   }
@@ -45,15 +45,19 @@ const Profilepic = ({ show, onClose, imageSrc }) => {
     }
 
     const formData = new FormData();
-    formData.append("profile_image", file);
+    formData.append("profile_picture", file);
 
     try {
-      const response = await axios.post(`${apiurl}/upload`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.post(
+        `${apiurl}/api/useraction/update-profile-picture`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       console.log("Upload successful:", response.data);
       setSuccess("Image uploaded successfully!");
