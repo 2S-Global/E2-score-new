@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CustomizedProgressBars from "@/components/common/loader";
 import DatePicker from "react-datepicker";
+import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 const Cardedit = ({ show, onClose }) => {
   const [countries, setCountries] = useState([]);
   const [isResidingInIndia, setIsResidingInIndia] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const [formData, setFormData] = useState({
     full_name: "",
@@ -14,7 +17,6 @@ const Cardedit = ({ show, onClose }) => {
     country: "",
     currentLocation: "",
     hometown: "",
-    mobile: "",
   });
 
   useEffect(() => {
@@ -25,6 +27,10 @@ const Cardedit = ({ show, onClose }) => {
 
   const [loading, setLoading] = useState(true);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const token = localStorage.getItem("candidate_token");
+  if (!token) {
+    console.log("No token");
+  }
 
   if (!show) return null;
 
@@ -112,9 +118,42 @@ const Cardedit = ({ show, onClose }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
+
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    if (!token) {
+      setError("Authorization token is missing. Please log in.");
+      return;
+    }
+    try {
+      const response = await axios.post(
+        `${apiurl}/api/useraction/update-user-details`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Upload successful:", response.data);
+      if (!response.data.success) {
+        throw new Error(response.data.message || "An error occurred");
+      }
+      setSuccess("Details updated successfully!");
+      setTimeout(() => onClose(), 1500); // Close modal after success
+    } catch (error) {
+      console.error("Upload failed:", error);
+      setError("Failed to upload image. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -303,7 +342,7 @@ const Cardedit = ({ show, onClose }) => {
                     />
                   </div>
                   {/* Mobile no */}
-                  <div className="mb-3">
+                  {/* <div className="mb-3">
                     <label htmlFor="mobile" className="form-label">
                       Mobile No.
                     </label>
@@ -316,7 +355,7 @@ const Cardedit = ({ show, onClose }) => {
                       onChange={handleChange}
                       name="mobile"
                     />
-                  </div>
+                  </div> */}
                 </>
               )}
             </div>
