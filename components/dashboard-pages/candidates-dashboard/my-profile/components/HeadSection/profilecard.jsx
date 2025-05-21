@@ -40,25 +40,26 @@ const ProfileCard = ({
         <div className="">
           <h4 className="fw-bold mb-1 d-flex align-items-center">
             {name} &nbsp;
-            <span
-              style={{
-                fontSize: "15px",
-                fontWeight: "normal",
-                lineHeight: "1.5",
-                verticalAlign: "middle",
-                paddingTop: "2px",
-              }}
-            >
-              ({gender}) &nbsp;
-            </span>
+            {gender && (
+              <span
+                style={{
+                  fontSize: "15px",
+                  fontWeight: "normal",
+                  lineHeight: "1.5",
+                  verticalAlign: "middle",
+                  paddingTop: "2px",
+                }}
+              >
+                ({gender})&nbsp;
+              </span>
+            )}
             <i
               className="la la-pencil-alt fs-5"
               onClick={openModalRH}
               style={{ cursor: "pointer" }}
             ></i>
           </h4>
-
-          <h6 className="text-muted">{degree}</h6>
+          {degree && <h6 className="text-muted">{degree}</h6>}
           {/*  <p className="text-muted">{university}</p> */}
         </div>
 
@@ -70,9 +71,11 @@ const ProfileCard = ({
               <FaMapMarkerAlt className="text-secondary me-2" /> {location}
             </p>
             {/*  <p className="mb-0"><FaUser className="text-secondary me-2" /> {gender}</p> */}
-            <p className="mb-0">
-              <FaBirthdayCake className="text-secondary me-2" /> {dob}
-            </p>
+            {dob && (
+              <p className="mb-0">
+                <FaBirthdayCake className="text-secondary me-2" /> {dob}
+              </p>
+            )}
             <p className="mb-0">
               <FaPhone className="text-secondary me-2" /> {phone}{" "}
               <FaCheckCircle className="text-success" />

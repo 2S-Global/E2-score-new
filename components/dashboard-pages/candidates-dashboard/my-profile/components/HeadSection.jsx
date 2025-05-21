@@ -9,6 +9,7 @@ const HeadSection = () => {
   const [profile_pic, setProfile_pic] = useState(
     "/images/resource/no_user.png"
   );
+  const [user, setUser] = useState({});
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
@@ -22,6 +23,7 @@ const HeadSection = () => {
         });
 
         setProfile_pic(response.data.profilePicture);
+        setUser(response.data);
       } catch (error) {
         console.error("Error fetching profile pic:", error);
       }
@@ -44,14 +46,14 @@ const HeadSection = () => {
               {/* Center Section - Profile Card */}
               <div className="col-md-4  d-flex justify-content-center align-items-center p-4">
                 <ProfileCard
-                  name="Abhishek Dey"
-                  degree="B.Tech/B.E."
+                  name={user.name}
+                  degree=""
                   /* university="University of Engineering and Management, Jaipur" */
                   location="Kolkata"
                   phone="9051624898"
-                  email="ab.dey2000@gmail.com"
-                  gender="Male"
-                  dob="13th October 2000"
+                  email={user.email}
+                  gender=""
+                  dob=""
                 />
               </div>
 
