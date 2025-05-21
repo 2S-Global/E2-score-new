@@ -1,62 +1,121 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import CustomizedProgressBars from "@/components/common/loader";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 const Cardedit = ({ show, onClose }) => {
-  const [fullname, setFullname] = useState("Abhishek Dey");
-  const [selectedGender, setSelectedGender] = useState("Male");
+  const [countries, setCountries] = useState([]);
+  const [isResidingInIndia, setIsResidingInIndia] = useState(false);
+
+  const [formData, setFormData] = useState({
+    full_name: "",
+    gender: "",
+    dob: null,
+    country: "",
+    currentLocation: "",
+    hometown: "",
+    mobile: "",
+  });
+
+  useEffect(() => {
+    if (isResidingInIndia) {
+      setFormData((prev) => ({ ...prev, country: 102 }));
+    }
+  }, [isResidingInIndia]);
+
+  const [loading, setLoading] = useState(true);
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
   if (!show) return null;
 
+  useEffect(() => {
+    const fetchCountries = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${apiurl}/api/sql/locations/All_contry`);
+        const data = await response.json();
+        setCountries(data.data);
+      } catch (error) {
+        console.error("Error fetching countries:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCountries();
+  }, [apiurl]);
+
+  const today = new Date();
+  const eighteenYearsAgo = new Date(
+    today.getFullYear() - 18,
+    today.getMonth(),
+    today.getDate()
+  );
+  const handleCheckboxChange = (e) => {
+    setIsResidingInIndia(e.target.checked);
+  };
+
+  const handleCountryChange = (e) => {
+    setFormData((prev) => ({ ...prev, country: parseInt(e.target.value) }));
+  };
   const handleSelect = (type, value, e) => {
     e.preventDefault();
-    if (type === "gender") setSelectedGender(value);
+    if (type === "gender")
+      setFormData((prevData) => ({
+        ...prevData,
+        gender: value,
+      }));
+
     if (type === "marital") setSelectedMaritalStatus(value);
     if (type === "info") {
       setSelectedInfo((prev) =>
         prev.includes(value)
           ? prev.filter((item) => item !== value)
-          : [...prev, value],
+          : [...prev, value]
       );
     }
   };
+  const handleDateChange = (date) => {
+    if (date) {
+      setFormData({ ...formData, dob: date }); // Store raw Date object
+    }
+  };
 
-  const old_locations = [
-    "United Kingdom",
-    "Canada",
-    "Australia",
-    "Germany",
-    "France",
-    "Italy",
-    "Japan",
-    "Mexico",
-    "Poland",
-    "Russia",
-    "Spain",
-    "Sweden",
-    "Switzerland",
-    "Turkey",
-    "Brazil",
-    "China",
-    "India",
-    "Indonesia",
-    "Korea",
-    "Philippines",
-    "Singapore",
-    "Thailand",
-    "United Arab Emirates",
-    "Vietnam",
-    "Argentina",
-    "Bolivia",
-    "Chile",
-    "Colombia",
-    "Ecuador",
-    "Guyana",
-    "Paraguay",
-    "Peru",
-    "Suriname",
-    "Uruguay",
-    "Venezuela",
-  ];
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "full_name") {
+      const onlyLetters = /^[A-Za-z\s]*$/; // Allow letters and spaces only
+
+      if (!onlyLetters.test(value)) {
+        return; // Don't update state if invalid character
+      }
+    }
+
+    if (name === "phone") {
+      const onlyNumbers = /^[0-9]*$/; // Only numbers allowed
+
+      // If value contains any non-numeric characters, prevent update
+      if (!onlyNumbers.test(value)) {
+        return; // Don't update state if invalid character
+      }
+
+      // Check for exact 10 characters
+      if (value.length > 10) {
+        return; // Prevent more than 10 characters
+      }
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+  };
 
   return (
     <>
@@ -106,7 +165,7 @@ const Cardedit = ({ show, onClose }) => {
           <div className="modal-content">
             {/* Modal Header */}
             <div className="modal-header">
-              <h5 className="modal-title">All about you</h5>
+              <h5 className="modal-title">All About You</h5>
               <button
                 type="button"
                 className="btn-close"
@@ -116,146 +175,150 @@ const Cardedit = ({ show, onClose }) => {
 
             {/* Modal Body */}
             <div className="modal-body">
-              {/* Fullname */}
-              <div className="mb-3">
-                <label htmlFor="fullname" className="form-label">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={fullname}
-                  onChange={(e) => setFullname(e.target.value)}
-                  id="fullname"
-                  placeholder="Enter your full name"
-                />
-              </div>
+              {loading ? (
+                <CustomizedProgressBars />
+              ) : (
+                <>
+                  {/* Fullname */}
+                  <div className="mb-3">
+                    <label htmlFor="full_name" className="form-label">
+                      <b>Full Name</b>
+                    </label>
+                    <input
+                      name="full_name"
+                      type="text"
+                      className="form-control"
+                      value={formData.full_name}
+                      onChange={handleChange}
+                      required
+                      id="full_name"
+                      placeholder="Enter your full name"
+                    />
+                  </div>
+                  {/* Gender Selection */}
+                  <div className="mb-3">
+                    <label className="form-label">
+                      <b>Gender</b>
+                    </label>
+                    <div className="d-flex gap-2 flex-wrap">
+                      {["Male", "Female", "Transgender"].map((gender) => (
+                        <button
+                          key={gender}
+                          onClick={(e) => handleSelect("gender", gender, e)}
+                          className={`btn option-btn rounded-pill ${
+                            formData.gender === gender ? "active" : ""
+                          }`}
+                        >
+                          {gender}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
 
-              {/* Gender Selection */}
-              <div className="mb-3">
-                <label className="form-label">
-                  <b>Gender</b>
-                </label>
-                <div className="d-flex gap-2 flex-wrap">
-                  {["Male", "Female", "Transgender"].map((gender) => (
-                    <button
-                      key={gender}
-                      onClick={(e) => handleSelect("gender", gender, e)}
-                      className={`btn option-btn rounded-pill ${
-                        selectedGender === gender ? "active" : ""
-                      }`}
-                    >
-                      {gender}
-                    </button>
-                  ))}
-                </div>
-              </div>
+                  {/* Date of Birth Section */}
+                  <div className="mb-3">
+                    <label className="form-label d-block">
+                      <b>Date of Birth</b>
+                      <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <DatePicker
+                      selected={formData.dob ? new Date(formData.dob) : null}
+                      onChange={handleDateChange}
+                      dateFormat="dd/MM/yyyy"
+                      className="form-control"
+                      maxDate={eighteenYearsAgo}
+                      showYearDropdown
+                      scrollableYearDropdown
+                      yearDropdownItemNumber={100}
+                      required
+                      placeholderText="dd/mm/yyyy"
+                      width="100%"
+                      withPortal
+                    />
+                  </div>
 
-              {/* Date of Birth Section */}
-              <div className="mb-3">
-                <label className="form-label">
-                  <b>Date of Birth</b>
-                </label>
-                <div className="d-flex gap-2">
-                  <select className="form-select">
-                    {[...Array(31)].map((_, i) => (
-                      <option key={i + 1} value={i + 1}>
-                        {i + 1}
-                      </option>
-                    ))}
-                  </select>
-                  <select className="form-select">
-                    {[
-                      "Jan",
-                      "Feb",
-                      "Mar",
-                      "Apr",
-                      "May",
-                      "Jun",
-                      "Jul",
-                      "Aug",
-                      "Sep",
-                      "Oct",
-                      "Nov",
-                      "Dec",
-                    ].map((month, i) => (
-                      <option key={i} value={month}>
-                        {month}
-                      </option>
-                    ))}
-                  </select>
-                  <select className="form-select">
-                    {[...Array(70)].map((_, i) => (
-                      <option key={i} value={2000 - i}>
-                        {2000 - i}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              {/* ckeckbox */}
-              <div className="mb-3">
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value="remember-me"
-                    id="rememberMe"
-                  />
-                  <label className="form-check-label" htmlFor="rememberMe">
-                    Currently residing in India
-                  </label>
-                </div>
-              </div>
-              {/*Country Drop Down */}
-              <div className="mb-3">
-                <label htmlFor="country" className="form-label">
-                  Country
-                </label>
-                <select className="form-select" id="country">
-                  {old_locations.map((country) => (
-                    <option key={country} value={country}>
-                      {country}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              {/* current location */}
-              <div className="mb-3">
-                <label htmlFor="currentLocation" className="form-label">
-                  Current Location
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="currentLocation"
-                  placeholder="Enter your current location"
-                />
-              </div>
-              {/* Home-Town */}
-              <div className="mb-3">
-                <label htmlFor="homeTown" className="form-label">
-                  Hometown
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="homeTown"
-                  placeholder="Enter your home-town"
-                />
-              </div>
-              {/* Mobile no */}
-              <div className="mb-3">
-                <label htmlFor="mobileNo" className="form-label">
-                  Mobile No.
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="mobileNo"
-                  placeholder="Enter your mobile number"
-                />
-              </div>
+                  {/* ckeckbox */}
+                  <div className="mb-3">
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="rememberMe"
+                        checked={isResidingInIndia}
+                        onChange={handleCheckboxChange}
+                      />
+                      <label className="form-check-label" htmlFor="rememberMe">
+                        Currently residing in India
+                      </label>
+                    </div>
+                  </div>
+
+                  {!isResidingInIndia && (
+                    <div className="mb-3">
+                      <label htmlFor="country" className="form-label">
+                        Country
+                      </label>
+                      <select
+                        className="form-select"
+                        id="country"
+                        value={formData.country}
+                        onChange={handleCountryChange}
+                      >
+                        {countries.map((country) => (
+                          <option key={country.id} value={country.id}>
+                            {country.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                  {/* current location */}
+                  <div className="mb-3">
+                    <label htmlFor="currentLocation" className="form-label">
+                      Current Location
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="currentLocation"
+                      placeholder="Enter your current location"
+                      value={formData.currentLocation}
+                      onChange={handleChange}
+                      name="currentLocation"
+                    />
+                  </div>
+                  {/* Home-Town */}
+                  <div className="mb-3">
+                    <label htmlFor="hometown" className="form-label">
+                      Hometown
+                    </label>
+                    <input
+                      name="hometown"
+                      type="text"
+                      className="form-control"
+                      id="hometown"
+                      placeholder="Enter your home-town"
+                      value={formData.hometown}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  {/* Mobile no */}
+                  <div className="mb-3">
+                    <label htmlFor="mobile" className="form-label">
+                      Mobile No.
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="mobile"
+                      placeholder="Enter your mobile number"
+                      value={formData.mobile}
+                      onChange={handleChange}
+                      name="mobile"
+                    />
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Modal Footer */}
@@ -267,7 +330,11 @@ const Cardedit = ({ show, onClose }) => {
               >
                 Cancel
               </button>
-              <button type="button" className="btn btn-primary">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleSubmit}
+              >
                 Save
               </button>
             </div>
