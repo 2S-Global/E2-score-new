@@ -5,6 +5,7 @@ import CustomizedProgressBars from "@/components/common/loader";
 
 const KeySkillsModal = ({ show, onClose, selectedSkills }) => {
   const [skills, setSkills] = useState(selectedSkills || []);
+  const [suggestedSkills, setSuggestedSkills] = useState([]);
   const [allskills, setAllskills] = useState([]);
   const [newSkill, setNewSkill] = useState("");
   const [error, setError] = useState("");
@@ -12,12 +13,13 @@ const KeySkillsModal = ({ show, onClose, selectedSkills }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load random skills initially
+    // Load random skills on mount
     setLoading(true);
     axios
       .get(`${apiurl}/api/sql/dropdown/Random_Skill`)
       .then((response) => {
         setAllskills(response.data.data || []);
+        setSuggestedSkills((response.data.data || []).slice(0, 5));
       })
       .catch((error) => {
         console.error("Error fetching random skills:", error);
@@ -27,9 +29,11 @@ const KeySkillsModal = ({ show, onClose, selectedSkills }) => {
       });
   }, []);
 
+  // Dynamically fetch matching skills when user types
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       const trimmed = newSkill.trim();
+
       if (trimmed.length > 0) {
         axios
           .get(
@@ -42,6 +46,7 @@ const KeySkillsModal = ({ show, onClose, selectedSkills }) => {
             console.error("Error fetching matching skills:", error);
           });
       } else {
+        // Reload random skills if input is empty
         axios
           .get(`${apiurl}/api/sql/dropdown/Random_Skill`)
           .then((response) => {
@@ -55,22 +60,6 @@ const KeySkillsModal = ({ show, onClose, selectedSkills }) => {
 
     return () => clearTimeout(delayDebounceFn);
   }, [newSkill]);
-
-  const suggestedSkills = [
-    "Project Management",
-    "Team Leadership",
-    "Technical Skills",
-    "Leadership",
-    "Public Speaking",
-    "Networking",
-    "Marketing",
-    "Sales",
-    "Product Management",
-    "UX/UI Design",
-    "Data Analysis",
-    "Web Development",
-    "Software Engineering",
-  ];
 
   const handleRemoveSkill = (skillToRemove) => {
     setSkills(skills.filter((skill) => skill !== skillToRemove));
@@ -86,29 +75,19 @@ const KeySkillsModal = ({ show, onClose, selectedSkills }) => {
     if (skills.length === 0) {
       setError("Please specify at least one Key Skill.");
     } else {
+      console.log("Saved Skills:", skills);
       onClose(skills);
     }
   };
 
   const handleInputChange = (e) => {
-    setNewSkill(e.target.value);
-    setError("");
-  };
+    const value = e.target.value;
+    setNewSkill(value);
 
-  const handleAddNewSkill = () => {
-    const trimmed = newSkill.trim();
-    if (trimmed && !skills.includes(trimmed)) {
-      setSkills([...skills, trimmed]);
+    if (allskills.includes(value) && !skills.includes(value)) {
+      setSkills([...skills, value]);
       setNewSkill("");
-    } else if (skills.includes(trimmed)) {
-      setError("This skill is already added.");
-    }
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleAddNewSkill();
+      setError("");
     }
   };
 
@@ -145,7 +124,7 @@ const KeySkillsModal = ({ show, onClose, selectedSkills }) => {
               ) : (
                 <>
                   <p style={{ color: "black" }}>
-                    Add skills that define your expertise (Minimum 1)
+                    Add skills that define your expertise (Minimum 1).
                   </p>
 
                   {/* Selected Skills */}
@@ -163,30 +142,22 @@ const KeySkillsModal = ({ show, onClose, selectedSkills }) => {
                     ))}
                   </div>
 
-                  {/* Input and Add Button */}
-                  <div className="input-group mb-2">
+                  {/* Input Box with Datalist */}
+                  <div className="input-group mb-3">
                     <input
                       type="text"
                       className="form-control custom-textarea"
                       placeholder="Enter or select a skill"
                       value={newSkill}
                       onChange={handleInputChange}
-                      onKeyDown={handleKeyDown}
                       list="skills-list"
                     />
-                    <button
-                      className="btn btn-outline-primary"
-                      onClick={handleAddNewSkill}
-                    >
-                      Add
-                    </button>
+                    <datalist id="skills-list">
+                      {allskills.map((skill, index) => (
+                        <option key={index} value={skill} />
+                      ))}
+                    </datalist>
                   </div>
-
-                  <datalist id="skills-list">
-                    {allskills.map((skill, index) => (
-                      <option key={index} value={skill} />
-                    ))}
-                  </datalist>
 
                   {error && <p className="text-danger">{error}</p>}
 
