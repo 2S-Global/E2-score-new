@@ -27,18 +27,16 @@ const ResumeHeadlineSection = () => {
             },
           }
         );
+        //set only if response code is 200
 
-        if (response.status === 200) {
-          setResumeHeadline(response.data.resumeHeadline);
-        }
+        setResumeHeadline(response.data.resumeHeadline);
       } catch (error) {
-        console.error("Error fetching resume headline:", error);
+        console.error("Error fetching profile pic:", error);
       }
     };
 
     fetchResumeHeadline();
   }, [apiurl]);
-
   return (
     <>
       {/* Resume Headline Section */}

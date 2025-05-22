@@ -47,7 +47,7 @@ const ResumeHeadline = ({
         }
       );
     } catch (error) {
-      console.error("Error uploading image:", error);
+      console.error("Error updating data:", error);
     }
     onClose();
   };

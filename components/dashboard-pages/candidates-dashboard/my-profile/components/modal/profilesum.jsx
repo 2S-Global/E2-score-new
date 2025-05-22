@@ -1,26 +1,52 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Sparkles } from "lucide-react";
+import axios from "axios";
 
-const Profilesum = ({ show, onClose }) => {
-  const [headline, setHeadline] = useState("");
-
-  const [description, setDescription] = useState("");
+const Profilesum = ({ show, onClose, profilesummary, setProfilesummary }) => {
   const [isGenerated, setIsGenerated] = useState(false); // Track button presses
-
+  const token = localStorage.getItem("candidate_token");
+  if (!token) {
+    console.log("No token");
+  }
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const handleGenerateHeadline = () => {
     if (isGenerated) {
-      setDescription(""); // Clear text if pressed again
+      setProfilesummary(""); // Clear text if pressed again
       setIsGenerated(false);
     } else {
-      setDescription(
-        "Developed and deployed a scalable web application using React.js and Node.js, ensuring high performance and seamless user experience. Designed and implemented RESTful APIs, optimized database queries, and integrated third-party services for enhanced functionality. Focused on system architecture, security, and responsive UI/UX to deliver a robust and efficient solution.",
+      setProfilesummary(
+        "Developed and deployed a scalable web application using React.js and Node.js, ensuring high performance and seamless user experience. Designed and implemented RESTful APIs, optimized database queries, and integrated third-party services for enhanced functionality. Focused on system architecture, security, and responsive UI/UX to deliver a robust and efficient solution."
       );
       setIsGenerated(true);
     }
   };
 
   if (!show) return null;
+
+  const handelSubmit = async () => {
+    console.log("submit");
+    console.log(profilesummary);
+    if (!token) {
+      setError("Authorization token is missing. Please log in.");
+      return;
+    }
+    try {
+      const response = await axios.post(
+        `${apiurl}/api/useraction/profilesummary`,
+        { profileSummary: profilesummary },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error uploading data:", error);
+    }
+    onClose();
+  };
 
   return (
     <>
@@ -88,9 +114,9 @@ const Profilesum = ({ show, onClose }) => {
                 <textarea
                   className="form-control custom-textarea"
                   placeholder="Type here..."
-                  value={description}
+                  value={profilesummary}
                   onChange={(e) => {
-                    setDescription(e.target.value);
+                    setProfilesummary(e.target.value);
                     setIsGenerated(false); // Reset when user types
                   }}
                   maxLength={1000}
@@ -109,7 +135,7 @@ const Profilesum = ({ show, onClose }) => {
                   </div>
                   <div className="col-sm-6">
                     <small className="text-muted d-block text-end">
-                      {1000 - headline.length} character(s) left
+                      {1000 - profilesummary.length} character(s) left
                     </small>
                   </div>
                 </div>
@@ -128,7 +154,8 @@ const Profilesum = ({ show, onClose }) => {
               <button
                 type="button"
                 className="btn btn-primary"
-                disabled={headline.trim().split(" ").length < 5}
+                onClick={handelSubmit}
+                disabled={profilesummary.trim().split(" ").length < 5}
               >
                 Save
               </button>
