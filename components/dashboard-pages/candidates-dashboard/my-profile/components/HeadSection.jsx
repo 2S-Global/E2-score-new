@@ -1,4 +1,5 @@
 "use client";
+import dayjs from "dayjs";
 import React from "react";
 import CircularProgress from "./HeadSection/profilepic";
 import ProfileCard from "./HeadSection/profilecard";
@@ -21,8 +22,10 @@ const HeadSection = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+        if (response.data?.profilePicture) {
+          setProfile_pic(response.data.profilePicture);
+        }
 
-        setProfile_pic(response.data.profilePicture);
         setUser(response.data);
       } catch (error) {
         console.error("Error fetching profile pic:", error);
@@ -49,11 +52,11 @@ const HeadSection = () => {
                   name={user.name}
                   degree=""
                   /* university="University of Engineering and Management, Jaipur" */
-                  location="Kolkata"
+                  location={user.currentLocation}
                   phone={user.phone_number}
                   email={user.email}
-                  gender=""
-                  dob=""
+                  gender={user.gender_name}
+                  dob={dayjs(user.dob).format("DD-MM-YYYY")}
                 />
               </div>
 

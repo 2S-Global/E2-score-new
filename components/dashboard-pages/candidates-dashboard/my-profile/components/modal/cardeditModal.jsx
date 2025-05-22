@@ -62,8 +62,32 @@ const Cardedit = ({ show, onClose }) => {
       }
     };
 
-    fetchGenders();
+    const fetchUerDetails = async () => {
+      const token = localStorage.getItem("candidate_token");
+      const response = await axios.get(`${apiurl}/api/userdata/user_details`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        setFormData({
+          full_name: response.data.name,
+          gender: response.data.gender,
+          dob: response.data.dob,
+          country: response.data.country_id,
+          currentLocation: response.data.currentLocation,
+          hometown: response.data.hometown,
+        });
 
+        if (response.data.country_id == 102) {
+          setIsResidingInIndia(true);
+        }
+      }
+      console.log(response.data);
+    };
+
+    fetchUerDetails();
+    fetchGenders();
     fetchCountries();
   }, [apiurl]);
 
@@ -261,7 +285,7 @@ const Cardedit = ({ show, onClose }) => {
                           key={gender.id}
                           onClick={(e) => handleSelect("gender", gender.id, e)}
                           className={`btn option-btn rounded-pill ${
-                            formData.gender === gender.id ? "active" : ""
+                            formData.gender == gender.id ? "active" : ""
                           }`}
                         >
                           {gender.name}

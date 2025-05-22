@@ -40,7 +40,7 @@ const FormContent = () => {
       }
       setSuccess("Registration successful!");
       const token = response.data.token;
-      localStorage.setItem("token", token);
+      localStorage.setItem("candidate_token", token);
       router.push("/candidates-dashboard/dashboard");
     } catch (err) {
       setError(

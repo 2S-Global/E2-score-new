@@ -38,19 +38,11 @@ const ProfileCard = ({
       <div className="p-4">
         {/* Name & Degree Section */}
         <div className="">
-          <h4 className="fw-bold mb-1 d-flex align-items-center">
-            {name} &nbsp;
+          <h4 className="fw-bold mb-1 d-flex align-items-center gap-1">
+            <span>{name}</span>
             {gender && (
-              <span
-                style={{
-                  fontSize: "15px",
-                  fontWeight: "normal",
-                  lineHeight: "1.5",
-                  verticalAlign: "middle",
-                  paddingTop: "2px",
-                }}
-              >
-                ({gender})&nbsp;
+              <span style={{ fontSize: "12px", fontWeight: "normal" }}>
+                ({gender})
               </span>
             )}
             <i
@@ -59,6 +51,7 @@ const ProfileCard = ({
               style={{ cursor: "pointer" }}
             ></i>
           </h4>
+
           {degree && <h6 className="text-muted">{degree}</h6>}
           {/*  <p className="text-muted">{university}</p> */}
         </div>
