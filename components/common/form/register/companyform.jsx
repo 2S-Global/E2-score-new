@@ -9,6 +9,7 @@ const FormContentcom = () => {
     name: "",
     email: "",
     password: "",
+    phone_number: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -30,7 +31,7 @@ const FormContentcom = () => {
     try {
       const response = await axios.post(
         `${apiurl}/api/auth/company-register`,
-        formData,
+        formData
       );
       console.log("Response:", response);
       //check if response is successful
@@ -43,7 +44,7 @@ const FormContentcom = () => {
       router.push("/employers-dashboard/dashboard");
     } catch (err) {
       setError(
-        err.response?.data?.message || "Registration failed. Try again.",
+        err.response?.data?.message || "Registration failed. Try again."
       );
     } finally {
       setLoading(false);
@@ -94,10 +95,17 @@ const FormContentcom = () => {
 </div> */}
       {/* Number of Employees */}
 
-      {/*  <div className="form-group">
-          <label>Phone Number</label>
-          <input type="text" name="phone" placeholder="Phone Number" required />
-        </div> */}
+      <div className="form-group">
+        <label>Phone Number</label>
+        <input
+          type="text"
+          name="phone_number"
+          placeholder="Phone Number"
+          value={formData.phone_number}
+          onChange={handleChange}
+          required
+        />
+      </div>
       {/* Phone */}
 
       {/*     <div className="form-group">

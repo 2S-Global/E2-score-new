@@ -8,6 +8,7 @@ const FormContent = () => {
     name: "",
     email: "",
     password: "",
+    phone_number: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -28,7 +29,7 @@ const FormContent = () => {
     try {
       const response = await axios.post(
         `${apiurl}/api/auth/register`,
-        formData,
+        formData
       );
       console.log("Response:", response);
       //check if response is successful
@@ -41,7 +42,7 @@ const FormContent = () => {
       router.push("/candidates-dashboard/dashboard");
     } catch (err) {
       setError(
-        err.response?.data?.message || "Registration failed. Try again.",
+        err.response?.data?.message || "Registration failed. Try again."
       );
     } finally {
       setLoading(false);
@@ -76,6 +77,18 @@ const FormContent = () => {
           onChange={handleChange}
         />
       </div>
+      <div className="form-group">
+        <label>Phone Number</label>
+        <input
+          type="text"
+          name="phone_number"
+          placeholder="Phone Number"
+          value={formData.phone_number}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      {/* Phone */}
 
       <div className="form-group">
         <label>Password</label>
