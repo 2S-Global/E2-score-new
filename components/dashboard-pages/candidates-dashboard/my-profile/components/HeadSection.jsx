@@ -50,7 +50,7 @@ const HeadSection = () => {
                   degree=""
                   /* university="University of Engineering and Management, Jaipur" */
                   location="Kolkata"
-                  phone="9051624898"
+                  phone={user.phone_number}
                   email={user.email}
                   gender=""
                   dob=""

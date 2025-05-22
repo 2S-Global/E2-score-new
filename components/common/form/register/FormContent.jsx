@@ -26,6 +26,8 @@ const FormContent = () => {
     setError(null);
     setSuccess(null);
 
+    console.log(formData);
+
     try {
       const response = await axios.post(
         `${apiurl}/api/auth/register`,

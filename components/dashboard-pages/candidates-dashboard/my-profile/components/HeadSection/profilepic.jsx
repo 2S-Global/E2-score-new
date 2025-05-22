@@ -58,7 +58,7 @@ const CircularProgress = ({ progress, imageSrc }) => {
           onClick={openModalRH}
         >
           <img
-            src={imageSrc || "/images/resource/candidate-1.png"}
+            src={imageSrc || "/images/resource/no_user.png"}
             alt="Profile"
             className="w-100 h-100 object-cover"
           />
