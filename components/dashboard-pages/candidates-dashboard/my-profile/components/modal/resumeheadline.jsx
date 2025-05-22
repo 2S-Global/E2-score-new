@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Sparkles } from "lucide-react"; // AI suggestion icon
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import axios from "axios";
 const ResumeHeadline = ({
   show,
   onClose,
@@ -9,7 +9,11 @@ const ResumeHeadline = ({
   resumeHeadline,
 }) => {
   const [isGenerated, setIsGenerated] = useState(false); // Track button presses
-
+  const token = localStorage.getItem("candidate_token");
+  if (!token) {
+    console.log("No token");
+  }
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
   if (!show) return null;
 
   const handleGenerateHeadline = () => {
@@ -22,6 +26,30 @@ const ResumeHeadline = ({
       );
       setIsGenerated(true);
     }
+  };
+
+  const handelSubmit = async () => {
+    console.log("submit");
+    console.log(resumeHeadline);
+    if (!token) {
+      setError("Authorization token is missing. Please log in.");
+      return;
+    }
+    try {
+      const response = await axios.post(
+        `${apiurl}/api/useraction/resumeheadline`,
+        { resumeHeadline: resumeHeadline },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+    onClose();
   };
 
   return (
@@ -127,6 +155,7 @@ const ResumeHeadline = ({
               <button
                 type="button"
                 className="btn btn-primary"
+                onClick={handelSubmit}
                 disabled={resumeHeadline.trim().split(" ").length < 5}
               >
                 Save
