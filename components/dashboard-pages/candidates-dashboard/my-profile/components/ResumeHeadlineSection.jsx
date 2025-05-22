@@ -1,20 +1,43 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ResumeHeadline from "./modal/resumeheadline"; // Import the modal component
-
+import axios from "axios";
 const ResumeHeadlineSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const resumeHeadline = "Your Resume headline";
-
+  const [resumeHeadline, setResumeHeadline] = useState("");
   const openModalRH = () => {
     setIsModalOpen(true);
     document.body.style.overflow = "hidden"; // Disable background scrolling
   };
-
   const closeModalRH = () => {
     setIsModalOpen(false);
     document.body.style.overflow = "auto"; // Re-enable background scrolling
   };
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+
+  useEffect(() => {
+    const fetchResumeHeadline = async () => {
+      try {
+        const token = localStorage.getItem("candidate_token");
+        const response = await axios.get(
+          `${apiurl}/api/userdata/resume_headline`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          setResumeHeadline(response.data.resumeHeadline);
+        }
+      } catch (error) {
+        console.error("Error fetching resume headline:", error);
+      }
+    };
+
+    fetchResumeHeadline();
+  }, [apiurl]);
 
   return (
     <>
@@ -39,7 +62,12 @@ const ResumeHeadlineSection = () => {
 
       {/* Render Modal if isModalOpen is true */}
       {isModalOpen && (
-        <ResumeHeadline show={isModalOpen} onClose={closeModalRH} />
+        <ResumeHeadline
+          show={isModalOpen}
+          onClose={closeModalRH}
+          resumeHeadline={resumeHeadline}
+          setResumeHeadline={setResumeHeadline}
+        />
       )}
     </>
   );

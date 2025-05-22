@@ -2,19 +2,23 @@ import React, { useState } from "react";
 import { Sparkles } from "lucide-react"; // AI suggestion icon
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const ResumeHeadline = ({ show, onClose }) => {
-  const [headline, setHeadline] = useState("");
+const ResumeHeadline = ({
+  show,
+  onClose,
+  setResumeHeadline,
+  resumeHeadline,
+}) => {
   const [isGenerated, setIsGenerated] = useState(false); // Track button presses
 
   if (!show) return null;
 
   const handleGenerateHeadline = () => {
     if (isGenerated) {
-      setHeadline(""); // Clear text if pressed again
+      setResumeHeadline(""); // Clear text if pressed again
       setIsGenerated(false);
     } else {
-      setHeadline(
-        "Experienced Software Developer skilled in React, Node.js, and system design.",
+      setResumeHeadline(
+        "Experienced Software Developer skilled in React, Node.js, and system design."
       );
       setIsGenerated(true);
     }
@@ -87,9 +91,9 @@ const ResumeHeadline = ({ show, onClose }) => {
                 <textarea
                   className="form-control custom-textarea"
                   placeholder="Minimum 5 words. Sample headlines: Sales Manager well versed in Excel and Dynamics CRM. Senior-level Interior Designer with expertise in 3D modeling."
-                  value={headline}
+                  value={resumeHeadline}
                   onChange={(e) => {
-                    setHeadline(e.target.value);
+                    setResumeHeadline(e.target.value);
                     setIsGenerated(false); // Reset when user types
                   }}
                   maxLength={250}
@@ -106,7 +110,7 @@ const ResumeHeadline = ({ show, onClose }) => {
                 </button>
 
                 <small className="text-muted d-block text-end">
-                  {250 - headline.length} character(s) left
+                  {250 - resumeHeadline.length} character(s) left
                 </small>
               </div>
             </div>
@@ -123,7 +127,7 @@ const ResumeHeadline = ({ show, onClose }) => {
               <button
                 type="button"
                 className="btn btn-primary"
-                disabled={headline.trim().split(" ").length < 5}
+                disabled={resumeHeadline.trim().split(" ").length < 5}
               >
                 Save
               </button>
