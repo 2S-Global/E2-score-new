@@ -1,18 +1,32 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import KeySkillsModal from "./modal/keyskillsModal"; // Import the modal component
-
+import axios from "axios";
 const Keyskillsection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const keyskill = [
-    "Web Development",
-    "Software Development",
-    "Java",
-    "Javascript",
-    "CSS",
-  ];
-
+  const [keyskill, setKeySkill] = useState([]);
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  useEffect(() => {
+    const fetchKeySkill = async () => {
+      try {
+        const token = localStorage.getItem("candidate_token");
+        const response = await axios.get(
+          `${apiurl}/api/userdata/candidateskills`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status == 200) {
+          setKeySkill(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching skills:", error);
+      }
+    };
+    fetchKeySkill();
+  }, [apiurl]);
   const openModalRH = () => {
     setIsModalOpen(true);
     document.body.style.overflow = "hidden"; // Disable background scrolling
@@ -59,7 +73,11 @@ const Keyskillsection = () => {
 
       {/* Render Modal if isModalOpen is true */}
       {isModalOpen && (
-        <KeySkillsModal show={isModalOpen} onClose={closeModalRH} />
+        <KeySkillsModal
+          show={isModalOpen}
+          onClose={closeModalRH}
+          selectedSkills={keyskill}
+        />
       )}
     </>
   );
