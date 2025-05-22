@@ -63,27 +63,36 @@ const Cardedit = ({ show, onClose }) => {
     };
 
     const fetchUerDetails = async () => {
-      const token = localStorage.getItem("candidate_token");
-      const response = await axios.get(`${apiurl}/api/userdata/user_details`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.status === 200) {
-        setFormData({
-          full_name: response.data.name,
-          gender: response.data.gender,
-          dob: response.data.dob,
-          country: response.data.country_id,
-          currentLocation: response.data.currentLocation,
-          hometown: response.data.hometown,
-        });
+      setLoading(true);
+      try {
+        const token = localStorage.getItem("candidate_token");
+        const response = await axios.get(
+          `${apiurl}/api/userdata/user_details`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          setFormData({
+            full_name: response.data.name,
+            gender: response.data.gender,
+            dob: response.data.dob,
+            country: response.data.country_id,
+            currentLocation: response.data.currentLocation,
+            hometown: response.data.hometown,
+          });
 
-        if (response.data.country_id == 102) {
-          setIsResidingInIndia(true);
+          if (response.data.country_id == 102) {
+            setIsResidingInIndia(true);
+          }
         }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      } finally {
+        setLoading(false);
       }
-      console.log(response.data);
     };
 
     fetchUerDetails();
