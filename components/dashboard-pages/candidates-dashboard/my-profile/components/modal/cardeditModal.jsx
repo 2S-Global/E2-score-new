@@ -6,6 +6,7 @@ import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 const Cardedit = ({ show, onClose }) => {
   const [countries, setCountries] = useState([]);
+  const [Genders, setGenders] = useState([]);
   const [isResidingInIndia, setIsResidingInIndia] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -38,7 +39,7 @@ const Cardedit = ({ show, onClose }) => {
     const fetchCountries = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${apiurl}/api/sql/locations/All_contry`);
+        const response = await fetch(`${apiurl}/api/sql/dropdown/All_contry`);
         const data = await response.json();
         setCountries(data.data);
       } catch (error) {
@@ -47,6 +48,21 @@ const Cardedit = ({ show, onClose }) => {
         setLoading(false);
       }
     };
+
+    const fetchGenders = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${apiurl}/api/sql/dropdown/All_gender`);
+        const data = await response.json();
+        setGenders(data.data);
+      } catch (error) {
+        console.error("Error fetching genders:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGenders();
 
     fetchCountries();
   }, [apiurl]);
@@ -240,15 +256,15 @@ const Cardedit = ({ show, onClose }) => {
                       <b>Gender</b>
                     </label>
                     <div className="d-flex gap-2 flex-wrap">
-                      {["Male", "Female", "Transgender"].map((gender) => (
+                      {Genders.map((gender) => (
                         <button
-                          key={gender}
-                          onClick={(e) => handleSelect("gender", gender, e)}
+                          key={gender.id}
+                          onClick={(e) => handleSelect("gender", gender.id, e)}
                           className={`btn option-btn rounded-pill ${
-                            formData.gender === gender ? "active" : ""
+                            formData.gender === gender.id ? "active" : ""
                           }`}
                         >
-                          {gender}
+                          {gender.name}
                         </button>
                       ))}
                     </div>

@@ -4,6 +4,7 @@ import LoginPopup from "../../../common/form/login/LoginPopup";
 import DashboardEmployerSidebar from "../../../header/DashboardEmployerSidebar";
 import BreadCrumb from "../../BreadCrumb";
 import TopCardBlock from "./components/TopCardBlock";
+import TopCardBlock2 from "./components/TopCardBlock2";
 import ProfileChart from "./components/ProfileChart";
 import Notification from "./components/Notification";
 import Applicants from "./components/Applicants";
@@ -40,6 +41,9 @@ const Index = () => {
           <div className="row">
             <TopCardBlock />
           </div>
+          {/*   <div className="row">
+            <TopCardBlock2 />
+          </div> */}
           {/* End .row top card block */}
 
           <div className="row">
