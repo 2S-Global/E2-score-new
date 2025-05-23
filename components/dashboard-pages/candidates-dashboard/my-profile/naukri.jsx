@@ -67,7 +67,7 @@ const index = () => {
               <Keyskillsection />
               {/* Employment Section */}
               <Employsection />
-              {/* Academy Section */}
+              {/* Academy Section  */}
               <Academysection />
               {/* IT Key Section */}
               <ItkeySection />

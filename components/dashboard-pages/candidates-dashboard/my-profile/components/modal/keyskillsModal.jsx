@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import CustomizedProgressBars from "@/components/common/loader";
 
-const KeySkillsModal = ({ show, onClose, selectedSkills }) => {
+const KeySkillsModal = ({ show, onClose, selectedSkills, setKeySkill }) => {
   const [skills, setSkills] = useState(selectedSkills || []);
   const [suggestedSkills, setSuggestedSkills] = useState([]);
   const [allskills, setAllskills] = useState([]);
@@ -76,6 +76,32 @@ const KeySkillsModal = ({ show, onClose, selectedSkills }) => {
       setError("Please specify at least one Key Skill.");
     } else {
       console.log("Saved Skills:", skills);
+      const token = localStorage.getItem("candidate_token");
+      if (!token) {
+        console.log("No token");
+        setError("Authorization token is missing. Please log in.");
+        return;
+      }
+
+      axios
+        .post(
+          `${apiurl}/api/useraction/keyskills`,
+          { skills: skills },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log("Skills updated successfully:", response.data);
+          setKeySkill(skills || []);
+        })
+        .catch((error) => {
+          console.error("Error updating skills:", error);
+        });
+
       onClose(skills);
     }
   };

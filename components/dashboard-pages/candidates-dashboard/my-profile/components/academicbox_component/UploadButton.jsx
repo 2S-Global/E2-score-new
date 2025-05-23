@@ -9,7 +9,6 @@ const UploadButton = ({
   width = "340px",
 }) => (
   <div className="form-group col-lg-4 col-md-12">
-    <label htmlFor={id}>{label}</label>
     <div className="uploadButton">
       <input
         className="uploadButton-input"
@@ -24,7 +23,7 @@ const UploadButton = ({
         style={{ width }}
         htmlFor={id}
       >
-        {file ? file.name : `Browse ${label}..`}
+        {file ? file.name : `Browse..`}
       </label>
     </div>
   </div>

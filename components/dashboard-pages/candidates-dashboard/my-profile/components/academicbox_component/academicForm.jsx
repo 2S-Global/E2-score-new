@@ -20,6 +20,206 @@ const EducationForm = () => {
   const [filteredColleges, setFilteredColleges] = useState(colleges);
   const [filteredCourses, setFilteredCourses] = useState(courses);
 
+  const [states, useStates] = useState([
+    {
+      id: 4,
+      name: "ANDHRA PRADESH",
+    },
+    {
+      id: 5,
+      name: "ARUNACHAL PRADESH",
+    },
+    {
+      id: 6,
+      name: "ASSAM",
+    },
+    {
+      id: 7,
+      name: "BIHAR",
+    },
+    {
+      id: 8,
+      name: "CHHATTISGARH",
+    },
+    {
+      id: 9,
+      name: "GOA",
+    },
+    {
+      id: 10,
+      name: "GUJARAT",
+    },
+    {
+      id: 11,
+      name: "HARYANA",
+    },
+    {
+      id: 12,
+      name: "HIMACHAL PRADESH",
+    },
+    {
+      id: 13,
+      name: "JAMMU &amp; KASHMIR",
+    },
+    {
+      id: 14,
+      name: "JHARKHAND",
+    },
+    {
+      id: 15,
+      name: "KARNATAKA",
+    },
+    {
+      id: 16,
+      name: "KERALA",
+    },
+    {
+      id: 17,
+      name: "MADHYA PRADESH",
+    },
+    {
+      id: 18,
+      name: "MAHARASHTRA",
+    },
+    {
+      id: 19,
+      name: "MANIPUR",
+    },
+    {
+      id: 20,
+      name: "MEGHALAYA",
+    },
+    {
+      id: 21,
+      name: "MIZORAM",
+    },
+    {
+      id: 22,
+      name: "NAGALAND",
+    },
+    {
+      id: 23,
+      name: "ODISHA",
+    },
+    {
+      id: 24,
+      name: "PUNJAB",
+    },
+    {
+      id: 25,
+      name: "RAJASTHAN",
+    },
+    {
+      id: 26,
+      name: "SIKKIM",
+    },
+    {
+      id: 27,
+      name: "TAMILNADU",
+    },
+    {
+      id: 28,
+      name: "TELANGANA",
+    },
+    {
+      id: 29,
+      name: "TRIPURA",
+    },
+    {
+      id: 30,
+      name: "UTTAR PRADESH",
+    },
+    {
+      id: 31,
+      name: "UTTARAKHAND",
+    },
+    {
+      id: 32,
+      name: "WEST BENGAL",
+    },
+    {
+      id: 33,
+      name: "NCT OF DELHI",
+    },
+    {
+      id: 34,
+      name: "CHANDIGARH",
+    },
+    {
+      id: 35,
+      name: "PUDUCHERRY",
+    },
+    {
+      id: 36,
+      name: "UT OF LADAKH",
+    },
+    {
+      id: 37,
+      name: "KARNATAKA",
+    },
+    {
+      id: 38,
+      name: "NEW DELHI",
+    },
+  ]);
+
+  const [levels, Setlevels] = useState([
+    {
+      id: 1,
+      level: "10th Standard",
+      duration: 0,
+      type: "",
+    },
+    {
+      id: 2,
+      level: "12th Standard",
+      duration: 0,
+      type: "",
+    },
+    {
+      id: 3,
+      level: "Diploma",
+      duration: 0,
+      type: "",
+    },
+    {
+      id: 4,
+      level: "Undergraduate (3 years)",
+      duration: 3,
+      type: "UG",
+    },
+    {
+      id: 5,
+      level: "Undergraduate (4 years)",
+      duration: 4,
+      type: "UG",
+    },
+    {
+      id: 6,
+      level: "Postgraduate (1 Year)",
+      duration: 1,
+      type: "PG",
+    },
+    {
+      id: 7,
+      level: "Postgraduate (2 Years)",
+      duration: 2,
+      type: "PG",
+    },
+    {
+      id: 8,
+      level: "Postgraduate (3 Years)",
+      duration: 3,
+      type: "PG",
+    },
+    {
+      id: 9,
+      level: "doctorate/PhD",
+      duration: 0,
+      type: "",
+    },
+  ]);
+
   const handleRemove = (id) => {
     setAcademicData(academicData.filter((item) => item.id !== id));
   };
@@ -33,7 +233,7 @@ const EducationForm = () => {
     const value = e.target.value;
     setSearch(value);
     setFiltered(
-      list.filter((item) => item.toLowerCase().includes(value.toLowerCase())),
+      list.filter((item) => item.toLowerCase().includes(value.toLowerCase()))
     );
   };
 
@@ -47,8 +247,8 @@ const EducationForm = () => {
       prevData.map((item) =>
         item.id === id
           ? { ...item, data: { ...item.data, [field]: value } }
-          : item,
-      ),
+          : item
+      )
     );
   };
 
@@ -111,19 +311,9 @@ const EducationForm = () => {
           onChange={(e) => handleLevelChange(e.target.value)}
         >
           <option value="">Select Level</option>
-          {[
-            "tenth",
-            "twelfth",
-            "diploma",
-            "undergraduate",
-            "undergraduate4",
-            "postgraduate",
-            "postgraduate2",
-            "postgraduate3",
-            "doctoratePhD",
-          ].map((level) => (
-            <option key={level} value={level}>
-              {formatLevelName(level)}
+          {levels.map((level) => (
+            <option key={level.id} value={level.id}>
+              {level.level}
             </option>
           ))}
         </select>
@@ -141,15 +331,9 @@ const EducationForm = () => {
                 onChange={(e) => handleChange(item.id, "state", e.target.value)}
               >
                 <option>Select State</option>
-                {[
-                  "West Bengal",
-                  "Delhi",
-                  "Uttar Pradesh",
-                  "Maharashtra",
-                  "Karnataka",
-                ].map((state) => (
-                  <option key={state} value={state}>
-                    {state}
+                {states.map((state) => (
+                  <option key={state.id} value={state.id}>
+                    {state.name}
                   </option>
                 ))}
               </select>
@@ -190,7 +374,7 @@ const EducationForm = () => {
                         <option key={year} value={year}>
                           {year}
                         </option>
-                      ),
+                      )
                     )}
                   </select>
                 </div>
@@ -209,7 +393,7 @@ const EducationForm = () => {
                         <option key={medium} value={medium}>
                           {medium}
                         </option>
-                      ),
+                      )
                     )}
                   </select>
                 </div>
@@ -292,7 +476,7 @@ const EducationForm = () => {
                       e,
                       setCollegeSearch,
                       setFilteredColleges,
-                      colleges,
+                      colleges
                     )
                   }
                   options={filteredColleges}
@@ -309,7 +493,7 @@ const EducationForm = () => {
                       e,
                       setCourseSearch,
                       setFilteredCourses,
-                      courses,
+                      courses
                     )
                   }
                   options={filteredCourses}
@@ -454,17 +638,6 @@ const EducationForm = () => {
                   </div>
                 </div>
 
-                {/* CGPA */}
-                {/* <div className="form-group col-lg-4">
-              <label>CGPA</label>
-              <input type="text" className="form-control" placeholder="Enter CGPA" onChange={(e) => calPercentage(item.id, e.target.value)} />
-            </div> */}
-
-                {/* Percentage */}
-                {/* <div className="form-group col-lg-4">
-              <label>Percentage</label>
-              <input type="text" className="form-control" placeholder="Enter Percentage" onChange={(e) => handleChange(item.id, "percentage", e.target.value)} />
-            </div> */}
                 {/* Grading system drop down */}
                 <div className="form-group">
                   <label>Grading System</label>

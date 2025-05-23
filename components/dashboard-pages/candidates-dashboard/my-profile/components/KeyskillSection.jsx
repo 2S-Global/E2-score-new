@@ -77,6 +77,7 @@ const Keyskillsection = () => {
           show={isModalOpen}
           onClose={closeModalRH}
           selectedSkills={keyskill}
+          setKeySkill={setKeySkill}
         />
       )}
     </>

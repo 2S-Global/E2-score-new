@@ -6,14 +6,6 @@ const Academysection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expanded, setExpanded] = useState({}); // Track expanded descriptions
 
-  const keyskill = [
-    "Web Development",
-    "Software Development",
-    "Java",
-    "Javascript",
-    "CSS",
-  ];
-
   const userdata = [
     {
       level: "B.Tech/B.E",

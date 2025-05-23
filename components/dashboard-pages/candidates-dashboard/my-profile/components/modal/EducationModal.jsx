@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import EducationForm from "../academicbox_component/academicForm";
+import EducationForm from "../academicbox_component/academicForm2";
 
 const EducationModal = ({ show, onClose }) => {
   const handleSave = () => {

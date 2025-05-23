@@ -4,7 +4,9 @@ import ResumeHeadline from "./modal/resumeheadline"; // Import the modal compone
 import axios from "axios";
 const ResumeHeadlineSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [resumeHeadline, setResumeHeadline] = useState("");
+  const [resumeHeadline, setResumeHeadline] = useState(
+    "Add Your Resume Headline"
+  );
   const openModalRH = () => {
     setIsModalOpen(true);
     document.body.style.overflow = "hidden"; // Disable background scrolling

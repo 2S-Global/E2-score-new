@@ -6,7 +6,9 @@ import Profilesum from "./modal/profilesum";
 
 const ProfilesumerySection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [profilesummary, setProfilesummary] = useState("");
+  const [profilesummary, setProfilesummary] = useState(
+    "Highlight your key career achievements to help employers know your potentials."
+  );
   const openModalRH = () => {
     setIsModalOpen(true);
     document.body.style.overflow = "hidden"; // Disable background scrolling
