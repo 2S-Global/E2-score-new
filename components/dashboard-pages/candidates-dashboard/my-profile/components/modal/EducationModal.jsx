@@ -3,15 +3,28 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import EducationForm from "../academicbox_component/academicForm2";
+import { university } from "../academicbox_component/academicData";
 
 const EducationModal = ({ show, onClose }) => {
   const [formData, setFormData] = useState({
     level: "",
-    state_id: "",
-    board_id: "",
+    state: "",
+    board: "",
     year_of_passing: "",
-    medium_of_education: "",
+    medium: "",
     marks: "",
+    eng_marks: "",
+    math_marks: "",
+    university: "",
+    institute_name: "",
+    course_name: "",
+    course_type: "",
+    start_year: "",
+    end_year: "",
+    grading_system: "",
+    is_primary: "0",
+    transcript: null,
+    certificate: null,
   });
 
   const handleSave = () => {};
@@ -40,6 +53,13 @@ const EducationModal = ({ show, onClose }) => {
               Details like course, university, and more, help recruiters
               identify your educational background
             </p>
+
+            <button
+              className="btn btn-primary"
+              onClick={() => console.log(formData)}
+            >
+              TEST
+            </button>
 
             <EducationForm formData={formData} setFormData={setFormData} />
           </div>

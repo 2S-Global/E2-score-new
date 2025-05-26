@@ -13,9 +13,12 @@ const HeadSection = () => {
   const [user, setUser] = useState({});
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
+  const [reload, setReload] = useState(false);
+
   useEffect(() => {
     const fetchProfilePic = async () => {
       try {
+        setReload(false);
         const token = localStorage.getItem("candidate_token");
         const response = await axios.get(`${apiurl}/api/userdata/userdata`, {
           headers: {
@@ -33,7 +36,7 @@ const HeadSection = () => {
     };
 
     fetchProfilePic();
-  }, [apiurl]);
+  }, [reload]);
 
   return (
     <>
@@ -43,7 +46,11 @@ const HeadSection = () => {
             <div className="row">
               {/* Left Section - Circular Progress */}
               <div className="col-md-2 d-flex justify-content-center align-items-center p-4">
-                <CircularProgress progress={85} imageSrc={profile_pic} />
+                <CircularProgress
+                  progress={85}
+                  imageSrc={profile_pic}
+                  setReload={setReload}
+                />
               </div>
 
               {/* Center Section - Profile Card */}

@@ -15,7 +15,7 @@ import UploadButton from "./UploadButton";
 import SchoolForm from "./schoolform";
 import DegreeForm from "./degreeform";
 
-const EducationForm = () => {
+const EducationForm = ({ formData, setFormData }) => {
   const [selectedLevel, setSelectedLevel] = useState("");
   const [academicData, setAcademicData] = useState([]);
   const [transcriptFile, setTranscriptFile] = useState(null);
@@ -28,6 +28,7 @@ const EducationForm = () => {
   const [levels, Setlevels] = useState([]);
   const [loading, setLoading] = useState(false);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
+
   const token = localStorage.getItem("candidate_token");
   if (!token) {
     console.log("No token");
@@ -72,6 +73,7 @@ const EducationForm = () => {
   const handleLevelChange = (level) => {
     setSelectedLevel(level);
     setAcademicData(level ? [{ id: Date.now(), level, data: {} }] : []);
+    setFormData({ ...formData, level: level });
   };
 
   const handleSearchChange = (e, setSearch, setFiltered, list) => {
@@ -95,6 +97,7 @@ const EducationForm = () => {
           : item
       )
     );
+    setFormData({ ...formData, [field]: value });
   };
 
   const calPercentage = (id, cgpa) => {
@@ -117,7 +120,7 @@ const EducationForm = () => {
             <label>Select Level (This is form 2)</label>
             <select
               className="form-control"
-              value={selectedLevel}
+              value={formData.level}
               onChange={(e) => handleLevelChange(e.target.value)}
             >
               <option value="">Select Level</option>
@@ -154,6 +157,8 @@ const EducationForm = () => {
                   // Board Selection for 10th/12th
                   <SchoolForm
                     item={item}
+                    formData={formData}
+                    setFormData={setFormData}
                     handleChange={handleChange}
                     transcriptFile={transcriptFile}
                     setTranscriptFile={setTranscriptFile}
@@ -185,6 +190,8 @@ const EducationForm = () => {
                     handleSelect={handleSelect}
                     colleges={colleges}
                     courses={courses}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                 )}
               </div>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import UploadButton from "./UploadButton";
 import SearchableInput from "./SearchableInput";
-
 const DegreeForm = ({
   item,
   handleChange,
@@ -25,6 +24,8 @@ const DegreeForm = ({
   handleSelect,
   colleges,
   courses,
+  formData,
+  setFormData,
 }) => {
   return (
     <>
@@ -33,6 +34,7 @@ const DegreeForm = ({
         <select
           className="form-control"
           onChange={(e) => handleChange(item.id, "university", e.target.value)}
+          value={formData.university}
         >
           <option>Select University</option>
           {(item.level === "diploma" ? diploma_st_uni : university).map(
@@ -52,9 +54,10 @@ const DegreeForm = ({
           handleSearchChange(e, setCollegeSearch, setFilteredColleges, colleges)
         }
         options={filteredColleges}
-        onSelect={(value) =>
-          handleSelect(value, setCollegeSearch, setFilteredColleges)
-        }
+        onSelect={(value) => {
+          handleSelect(value, setCollegeSearch, setFilteredColleges);
+          setFormData({ ...formData, institute_name: value });
+        }}
       />
 
       <SearchableInput
@@ -64,14 +67,15 @@ const DegreeForm = ({
           handleSearchChange(e, setCourseSearch, setFilteredCourses, courses)
         }
         options={filteredCourses}
-        onSelect={(value) =>
-          handleSelect(value, setCourseSearch, setFilteredCourses)
-        }
+        onSelect={(value) => {
+          handleSelect(value, setCourseSearch, setFilteredCourses);
+          setFormData({ ...formData, course_name: value });
+        }}
       />
       {/* Specialization */}
-      <div className="form-group">
+      {/* <div className="form-group">
         <label>Specialization</label>
-        {/* drop down */}
+        
         <select
           className="form-control"
           onChange={(e) =>
@@ -85,7 +89,7 @@ const DegreeForm = ({
             </option>
           ))}
         </select>
-      </div>
+      </div> */}
       {/* course type radio button */}
       <div className="form-group">
         <label>Course Type</label>
@@ -99,7 +103,7 @@ const DegreeForm = ({
             onChange={(e) =>
               handleChange(item.id, "course_type", e.target.value)
             }
-            checked={item.data.course_type === "Full Time"}
+            checked={item.data.course_type == "Full Time"}
           />
           <label
             className="form-check-label"
@@ -163,7 +167,7 @@ const DegreeForm = ({
             onChange={(e) =>
               handleChange(item.id, "start_year", e.target.value)
             }
-            value={item.data.start_year || ""}
+            value={formData.start_year || ""}
           >
             <option value="">Select Year</option>
             {[...Array(26)].map((_, i) => {
@@ -187,7 +191,7 @@ const DegreeForm = ({
           <select
             className="form-control"
             onChange={(e) => handleChange(item.id, "end_year", e.target.value)}
-            value={item.data.end_year || ""}
+            value={formData.end_year || ""}
           >
             <option value="">Select Year</option>
             {[...Array(26)].map((_, i) => {
@@ -211,6 +215,7 @@ const DegreeForm = ({
           onChange={(e) =>
             handleChange(item.id, "grading_system", e.target.value)
           }
+          value={formData.grading_system}
         >
           <option>Select Grading System</option>
           {grading_systems.map((grading_system) => (
@@ -232,31 +237,41 @@ const DegreeForm = ({
       </div>
       {/* checkbox */}
       <div className="form-group">
-        <input type="checkbox" value="1" />
+        <input
+          type="checkbox"
+          value="1"
+          onChange={(e) =>
+            handleChange(item.id, "is_primary", e.target.checked)
+          }
+        />
         <label> Make this as my primary graduation/diploma</label>
       </div>
 
       {/* Upload Buttons */}
-      <div className="form-group col-lg-4">
+      <div className="form-group col-lg-6">
         <label>Upload Transcript</label>
         <UploadButton
           label="Transcript"
           id={`transcript-${item.id}`}
-          file={transcriptFile}
-          onChange={(e) => setTranscriptFile(e.target.files[0])}
+          file={formData.transcript}
+          onChange={(e) =>
+            setFormData({ ...formData, transcript: e.target.files[0] })
+          }
           accept="image/*, .pdf"
-          width="120px"
+          width="150px"
         />
       </div>
 
-      <div className="form-group col-lg-4">
+      <div className="form-group col-lg-6">
         <label>Upload Certificate</label>
         <UploadButton
-          width="120px"
+          width="150px"
           label="Certificate"
           id={`certificate-${item.id}`}
-          file={certificateFile}
-          onChange={(e) => setCertificateFile(e.target.files[0])}
+          file={formData.certificate}
+          onChange={(e) =>
+            setFormData({ ...formData, certificate: e.target.files[0] })
+          }
           accept="image/*, .pdf"
         />
       </div>

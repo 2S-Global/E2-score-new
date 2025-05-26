@@ -4,6 +4,8 @@ const SchoolForm = ({
   item,
   handleChange,
   transcriptFile,
+  formData,
+  setFormData,
   setTranscriptFile,
   certificateFile,
   setCertificateFile,
@@ -14,6 +16,7 @@ const SchoolForm = ({
         <label>Board</label>
         <select
           className="form-control"
+          value={formData.board}
           onChange={(e) => handleChange(item.id, "board", e.target.value)}
         >
           <option>Select Board</option>
@@ -33,6 +36,7 @@ const SchoolForm = ({
           onChange={(e) =>
             handleChange(item.id, "year_of_passing", e.target.value)
           }
+          value={formData.year_of_passing}
         >
           <option>Select Year</option>
           {Array.from(
@@ -51,6 +55,7 @@ const SchoolForm = ({
         <select
           className="form-control"
           onChange={(e) => handleChange(item.id, "medium", e.target.value)}
+          value={formData.medium}
         >
           <option>Select Medium</option>
           {["Hindi", "English", "Marathi", "Telugu", "Other"].map((medium) => (
@@ -68,6 +73,7 @@ const SchoolForm = ({
           className="form-control"
           placeholder="Enter Marks"
           onChange={(e) => handleChange(item.id, "marks", e.target.value)}
+          value={formData.marks}
         />
       </div>
       {item.level == 2 && (
@@ -79,8 +85,9 @@ const SchoolForm = ({
               className="form-control"
               placeholder="Enter Marks in English"
               onChange={(e) =>
-                handleChange(item.id, "end_marks", e.target.value)
+                handleChange(item.id, "eng_marks", e.target.value)
               }
+              value={formData.eng_marks}
             />
           </div>
           <div className="form-group">
@@ -89,6 +96,7 @@ const SchoolForm = ({
               type="text"
               className="form-control"
               placeholder="Enter Marks in Math"
+              value={formData.math_marks}
               onChange={(e) =>
                 handleChange(item.id, "math_marks", e.target.value)
               }
@@ -103,8 +111,10 @@ const SchoolForm = ({
         <UploadButton
           label="Transcript"
           id={`transcript-${item.id}`}
-          file={transcriptFile}
-          onChange={(e) => setTranscriptFile(e.target.files[0])}
+          file={formData.transcript}
+          onChange={(e) =>
+            setFormData({ ...formData, transcript: e.target.files[0] })
+          }
           accept="image/*, .pdf"
           width="150px"
         />
@@ -116,8 +126,10 @@ const SchoolForm = ({
           width="150px"
           label="Certificate"
           id={`certificate-${item.id}`}
-          file={certificateFile}
-          onChange={(e) => setCertificateFile(e.target.files[0])}
+          file={formData.certificate}
+          onChange={(e) =>
+            setFormData({ ...formData, certificate: e.target.files[0] })
+          }
           accept="image/*, .pdf"
         />
       </div>

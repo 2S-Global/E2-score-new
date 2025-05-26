@@ -171,13 +171,14 @@ const Cardedit = ({ show, onClose }) => {
     e.preventDefault();
     console.log(formData);
 
-    // setLoading(true);
     setError(null);
     setSuccess(null);
     if (!formData.full_name.trim() || !formData.gender || !formData.dob) {
       setError("Please fill in all required fields.");
       return;
     }
+
+    setLoading(true);
 
     if (!token) {
       setError("Authorization token is missing. Please log in.");

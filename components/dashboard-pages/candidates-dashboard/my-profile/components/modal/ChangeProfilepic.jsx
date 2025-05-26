@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-const Profilepic = ({ show, onClose, imageSrc }) => {
+const Profilepic = ({ show, onClose, imageSrc, setReload }) => {
   const [selectedImage, setSelectedImage] = useState(
     imageSrc || "/default-profile.png"
   );
@@ -61,6 +61,7 @@ const Profilepic = ({ show, onClose, imageSrc }) => {
 
       console.log("Upload successful:", response.data);
       setSuccess("Image uploaded successfully!");
+      setReload(true);
       setTimeout(() => onClose(), 1500); // Close modal after success
     } catch (error) {
       console.error("Upload failed:", error);

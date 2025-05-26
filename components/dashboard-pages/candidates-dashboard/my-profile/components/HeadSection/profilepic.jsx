@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Profilepic from "../modal/ChangeProfilepic";
 
-const CircularProgress = ({ progress, imageSrc }) => {
+const CircularProgress = ({ progress, imageSrc, setReload }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModalRH = () => setIsModalOpen(true);
   const closeModalRH = () => setIsModalOpen(false);
 
-  const radius = 100; // Increased radius
+  const radius = 70; // Increased radius
   const strokeWidth = 10;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (progress / 100) * circumference;
@@ -95,6 +95,7 @@ const CircularProgress = ({ progress, imageSrc }) => {
           show={isModalOpen}
           onClose={closeModalRH}
           imageSrc={imageSrc}
+          setReload={setReload}
         />
       )}
     </>
