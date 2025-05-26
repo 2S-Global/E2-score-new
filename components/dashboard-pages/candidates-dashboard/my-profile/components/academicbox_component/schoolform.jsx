@@ -9,6 +9,7 @@ const SchoolForm = ({
   setTranscriptFile,
   certificateFile,
   setCertificateFile,
+  listboard,
 }) => {
   return (
     <>
@@ -20,9 +21,9 @@ const SchoolForm = ({
           onChange={(e) => handleChange(item.id, "board", e.target.value)}
         >
           <option>Select Board</option>
-          {["CBSE", "ICSE", "State Board"].map((board) => (
-            <option key={board} value={board}>
-              {board}
+          {listboard.map((board) => (
+            <option key={board.id} value={board.id}>
+              {board.board_name}
             </option>
           ))}
         </select>

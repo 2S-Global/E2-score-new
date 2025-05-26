@@ -27,6 +27,8 @@ const EducationForm = ({ formData, setFormData }) => {
   const [states, useStates] = useState([]);
   const [levels, Setlevels] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [listboard, setListboard] = useState(["CBSE", "ICSE"]);
+  const [listmedium, setListmedium] = useState(["English"]);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
   const token = localStorage.getItem("candidate_token");
@@ -61,10 +63,41 @@ const EducationForm = ({ formData, setFormData }) => {
         setLoading(false);
       }
     };
-
     fetchLevels();
     fetchStates();
   }, [token]);
+
+  useEffect(() => {
+    const fetchboard = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `${apiurl}/api/sql/dropdown/state_wise_board?state_id=${formData.state}`
+        );
+        setListboard(response.data.data);
+      } catch (error) {
+        console.error("Error fetching boards:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchmedium = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `${apiurl}/api/sql/dropdown/medium_of_education`
+        );
+        setListmedium(response.data.data);
+      } catch (error) {
+        console.error("Error fetching mediums:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchboard();
+    fetchmedium();
+  }, [formData.state]);
 
   const handleRemove = (id) => {
     setAcademicData(academicData.filter((item) => item.id !== id));
@@ -144,6 +177,7 @@ const EducationForm = ({ formData, setFormData }) => {
                     onChange={(e) =>
                       handleChange(item.id, "state", e.target.value)
                     }
+                    value={formData.state || ""}
                   >
                     <option>Select State</option>
                     {states.map((state) => (
@@ -164,6 +198,7 @@ const EducationForm = ({ formData, setFormData }) => {
                     setTranscriptFile={setTranscriptFile}
                     certificateFile={certificateFile}
                     setCertificateFile={setCertificateFile}
+                    listboard={listboard}
                   />
                 ) : (
                   // University Selection for Diploma/UG/PG/PhD
