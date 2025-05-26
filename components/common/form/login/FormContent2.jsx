@@ -42,12 +42,18 @@ const FormContent2 = () => {
       const role = response.data.role;
 
       //save token to local storage
-      if (role == "1") {
+      if (role == "0") {
+        localStorage.setItem("Super_token", token);
+        router.push("/admin/dashboard");
+      } else if (role == "1") {
         localStorage.setItem("candidate_token", token);
         router.push("/candidates-dashboard/dashboard");
       } else if (role == "2") {
-        localStorage.setItem("company_token", token);
+        localStorage.setItem("Admin_token", token);
         router.push("/employers-dashboard/dashboard");
+      } else if (role == "3") {
+        localStorage.setItem("Institute_token", token);
+        router.push("/institute-dashboard/dashboard");
       }
     } catch (err) {
       setError(
