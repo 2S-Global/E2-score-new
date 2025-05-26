@@ -2,38 +2,41 @@ import React, { useState, useEffect, use } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CustomizedProgressBars from "@/components/common/loader";
 import axios from "axios";
-import {
-  specializations,
-  colleges,
-  courses,
-  diploma_st_uni,
-  university,
-  grading_systems,
-} from "./academicData";
+import { specializations, grading_systems } from "./academicData";
 import SearchableInput from "./SearchableInput";
 import UploadButton from "./UploadButton";
 import SchoolForm from "./schoolform";
 import DegreeForm from "./degreeform";
 
 const EducationForm = ({ formData, setFormData }) => {
-  const [selectedLevel, setSelectedLevel] = useState("");
   const [academicData, setAcademicData] = useState([]);
   const [transcriptFile, setTranscriptFile] = useState(null);
   const [certificateFile, setCertificateFile] = useState(null);
   const [collegeSearch, setCollegeSearch] = useState("");
   const [courseSearch, setCourseSearch] = useState("");
-  const [filteredColleges, setFilteredColleges] = useState(colleges);
+  const [courses, setCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState(courses);
   const [states, useStates] = useState([]);
   const [levels, Setlevels] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [listboard, setListboard] = useState(["CBSE", "ICSE"]);
-  const [listmedium, setListmedium] = useState(["English"]);
+  const [listboard, setListboard] = useState([]);
+  const [listmedium, setListmedium] = useState([]);
+
+  const [diploma_st_uni, setDiploma_st_uni] = useState([]);
+  const [university, setUniversity] = useState([]);
+  const [colleges, setColleges] = useState([]);
+  const [filteredColleges, setFilteredColleges] = useState(colleges);
+
+  const [coursetype, setCoursetype] = useState([]);
+
+  const [course_mode, setCourseMode] = useState([]);
+  const [grading_systems, setGradingSystems] = useState([]);
+
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
   const token = localStorage.getItem("candidate_token");
   if (!token) {
-    console.log("No token");
+    // console.log("No token");
   }
 
   useEffect(() => {
@@ -43,13 +46,20 @@ const EducationForm = ({ formData, setFormData }) => {
         const response = await axios.get(
           `${apiurl}/api/sql/dropdown/education_level`
         );
+
         Setlevels(response.data.data);
       } catch (error) {
-        console.error("Error fetching levels:", error);
+        //  console.error("Error fetching levels:", error);
       } finally {
         setLoading(false);
       }
     };
+
+    fetchLevels();
+  }, [token]);
+
+  useEffect(() => {
+    if (!formData.level) return;
     const fetchStates = async () => {
       setLoading(true);
       try {
@@ -58,55 +68,169 @@ const EducationForm = ({ formData, setFormData }) => {
         );
         useStates(response.data.data);
       } catch (error) {
-        console.error("Error fetching states:", error);
+        //  console.error("Error fetching states:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchLevels();
+    /* api/sql/dropdown/course_type */
+    const fetchCourseMode = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `${apiurl}/api/sql/dropdown/course_type`
+        );
+        setCourseMode(response.data.data);
+      } catch (error) {
+        // console.error("Error fetching course modes:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourseMode();
+
+    const fetchGradingSystems = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `${apiurl}/api/sql/dropdown/grading_system`
+        );
+        setGradingSystems(response.data.data);
+      } catch (error) {
+        // console.error("Error fetching grading systems:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchGradingSystems();
+
     fetchStates();
-  }, [token]);
+  }, [formData.level]);
 
   useEffect(() => {
+    if (!formData.state) return;
     const fetchboard = async () => {
-      setLoading(true);
+      /* setLoading(true); */
       try {
         const response = await axios.get(
           `${apiurl}/api/sql/dropdown/state_wise_board?state_id=${formData.state}`
         );
         setListboard(response.data.data);
       } catch (error) {
-        console.error("Error fetching boards:", error);
+        //  console.error("Error fetching boards:", error);
       } finally {
         setLoading(false);
       }
     };
 
     const fetchmedium = async () => {
-      setLoading(true);
+      /*  setLoading(true); */
       try {
         const response = await axios.get(
           `${apiurl}/api/sql/dropdown/medium_of_education`
         );
         setListmedium(response.data.data);
       } catch (error) {
-        console.error("Error fetching mediums:", error);
+        //     console.error("Error fetching mediums:", error);
       } finally {
         setLoading(false);
       }
     };
+
+    const fetchuniversity = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `${apiurl}/api/sql/dropdown/university_state?state_id=${formData.state}`
+        );
+        setUniversity(response.data.data);
+      } catch (error) {
+        // console.error("Error fetching universities:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchuniversity();
     fetchboard();
     fetchmedium();
   }, [formData.state]);
+
+  useEffect(() => {
+    if (!formData.university) return;
+    const fetchcolleges = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `${apiurl}/api/sql/dropdown/college_name?university_id=${formData.university}`
+        );
+        setColleges(response.data.data);
+        setFilteredColleges(response.data.data);
+      } catch (error) {
+        // console.error("Error fetching colleges:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchcolleges();
+  }, [formData.university]);
+
+  useEffect(() => {
+    if (!formData.institute_name) return;
+    const fetchCourses = async () => {
+      setLoading(true);
+      try {
+        /* /api/sql/dropdown/university_course?state_id=32&university_id=1032&college_name=KALYANI%20GOVERNMENT%20ENGINEERING%20COLLEGE&course_type=UG */
+        const response = await axios.get(
+          `${apiurl}/api/sql/dropdown/university_course?state_id=${formData.state}&university_id=${formData.university}&college_name=${formData.institute_name}&course_type=${coursetype}`
+        );
+        setCourses(response.data.data);
+        setFilteredCourses(response.data.data);
+      } catch (error) {
+        // console.error("Error fetching courses:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, [formData.institute_name]);
 
   const handleRemove = (id) => {
     setAcademicData(academicData.filter((item) => item.id !== id));
   };
 
   const handleLevelChange = (level) => {
-    setSelectedLevel(level);
     setAcademicData(level ? [{ id: Date.now(), level, data: {} }] : []);
-    setFormData({ ...formData, level: level });
+
+    //map out levels based on selected level
+    const levelData = levels.find((lvl) => lvl.id == level);
+    if (!levelData) {
+      //console.error("Level data not found");
+      // return;
+    }
+    setCoursetype(levelData.type);
+
+    setFormData({
+      level,
+      state: "",
+      board: "",
+      year_of_passing: "",
+      medium: "",
+      marks: "",
+      eng_marks: "",
+      math_marks: "",
+      university: "",
+      institute_name: "",
+      course_name: "",
+      course_type: "",
+      start_year: "",
+      end_year: "",
+      grading_system: "",
+      is_primary: "0",
+      transcript: null,
+      certificate: null,
+    });
   };
 
   const handleSearchChange = (e, setSearch, setFiltered, list) => {
@@ -132,12 +256,6 @@ const EducationForm = ({ formData, setFormData }) => {
     );
     setFormData({ ...formData, [field]: value });
   };
-
-  const calPercentage = (id, cgpa) => {
-    const percentage = cgpa ? (parseFloat(cgpa) * 9.5).toFixed(2) : "";
-    handleChange(id, "percentage", percentage);
-  };
-
   const formatLevelName = (id) => {
     const levelObj = levels.find((lvl) => lvl.id == id);
     return levelObj ? levelObj.level : "Unknown Level";
@@ -199,6 +317,7 @@ const EducationForm = ({ formData, setFormData }) => {
                     certificateFile={certificateFile}
                     setCertificateFile={setCertificateFile}
                     listboard={listboard}
+                    listmedium={listmedium}
                   />
                 ) : (
                   // University Selection for Diploma/UG/PG/PhD
@@ -227,6 +346,7 @@ const EducationForm = ({ formData, setFormData }) => {
                     courses={courses}
                     formData={formData}
                     setFormData={setFormData}
+                    course_mode={course_mode}
                   />
                 )}
               </div>

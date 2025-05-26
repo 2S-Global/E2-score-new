@@ -26,6 +26,7 @@ const DegreeForm = ({
   courses,
   formData,
   setFormData,
+  course_mode,
 }) => {
   return (
     <>
@@ -37,13 +38,11 @@ const DegreeForm = ({
           value={formData.university}
         >
           <option>Select University</option>
-          {(item.level === "diploma" ? diploma_st_uni : university).map(
-            (uni) => (
-              <option key={uni} value={uni}>
-                {uni}
-              </option>
-            )
-          )}
+          {university.map((uni) => (
+            <option key={uni.id} value={uni.id}>
+              {uni.name}
+            </option>
+          ))}
         </select>
       </div>
       {/* Searchable Inputs */}
@@ -93,67 +92,30 @@ const DegreeForm = ({
       {/* course type radio button */}
       <div className="form-group">
         <label>Course Type</label>
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="radio"
-            name={`courseType-${item.id}`}
-            id={`courseType-${item.id}-fulltime`}
-            value="Full Time"
-            onChange={(e) =>
-              handleChange(item.id, "course_type", e.target.value)
-            }
-            checked={item.data.course_type == "Full Time"}
-          />
-          <label
-            className="form-check-label"
-            htmlFor={`courseType-${item.id}-fulltime`}
-          >
-            Full Time
-          </label>
-        </div>
-
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="radio"
-            name={`courseType-${item.id}`}
-            id={`courseType-${item.id}-parttime`}
-            value="Part Time"
-            onChange={(e) =>
-              handleChange(item.id, "course_type", e.target.value)
-            }
-            checked={item.data.course_type === "Part Time"}
-          />
-          <label
-            className="form-check-label"
-            htmlFor={`courseType-${item.id}-parttime`}
-          >
-            Part Time
-          </label>
-        </div>
-
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="radio"
-            name={`courseType-${item.id}`}
-            id={`courseType-${item.id}-distance`}
-            value="Correspondence/Distance learning"
-            onChange={(e) =>
-              handleChange(item.id, "course_type", e.target.value)
-            }
-            checked={
-              item.data.course_type === "Correspondence/Distance learning"
-            }
-          />
-          <label
-            className="form-check-label"
-            htmlFor={`courseType-${item.id}-distance`}
-          >
-            Correspondence/Distance Learning
-          </label>
-        </div>
+        {course_mode.map((type) => (
+          <div className="form-check" key={type.id}>
+            <input
+              className="form-check-input"
+              type="radio"
+              name="course_type"
+              id={`course_type-${type.id}`}
+              value={type.id}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  course_type: parseInt(e.target.value),
+                }))
+              }
+              checked={parseInt(formData.course_type) == parseInt(type.id)}
+            />
+            <label
+              className="form-check-label"
+              htmlFor={`course_type-${type.id}`}
+            >
+              {type.name}
+            </label>
+          </div>
+        ))}
       </div>
 
       {/* Course Duration */}
@@ -219,8 +181,8 @@ const DegreeForm = ({
         >
           <option>Select Grading System</option>
           {grading_systems.map((grading_system) => (
-            <option key={grading_system} value={grading_system}>
-              {grading_system}
+            <option key={grading_system.id} value={grading_system.id}>
+              {grading_system.name}
             </option>
           ))}
         </select>

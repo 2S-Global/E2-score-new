@@ -10,6 +10,7 @@ const SchoolForm = ({
   certificateFile,
   setCertificateFile,
   listboard,
+  listmedium,
 }) => {
   return (
     <>
@@ -29,42 +30,44 @@ const SchoolForm = ({
         </select>
       </div>
 
-      <div className="form-group">
-        <label>Year of Passing</label>
+      <div className="row">
+        <div className="form-group col-md-6">
+          <label>Year of Passing</label>
 
-        <select
-          className="form-control"
-          onChange={(e) =>
-            handleChange(item.id, "year_of_passing", e.target.value)
-          }
-          value={formData.year_of_passing}
-        >
-          <option>Select Year</option>
-          {Array.from(
-            { length: 61 },
-            (_, i) => new Date().getFullYear() - 50 + i
-          ).map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
-      </div>
-      {/* school medium */}
-      <div className="form-group">
-        <label>Medium of Education</label>
-        <select
-          className="form-control"
-          onChange={(e) => handleChange(item.id, "medium", e.target.value)}
-          value={formData.medium}
-        >
-          <option>Select Medium</option>
-          {["Hindi", "English", "Marathi", "Telugu", "Other"].map((medium) => (
-            <option key={medium} value={medium}>
-              {medium}
-            </option>
-          ))}
-        </select>
+          <select
+            className="form-control"
+            onChange={(e) =>
+              handleChange(item.id, "year_of_passing", e.target.value)
+            }
+            value={formData.year_of_passing}
+          >
+            <option>Select Year</option>
+            {Array.from(
+              { length: 61 },
+              (_, i) => new Date().getFullYear() - 50 + i
+            ).map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
+        {/* school medium */}
+        <div className="form-group col-md-6">
+          <label>Medium of Education</label>
+          <select
+            className="form-control"
+            onChange={(e) => handleChange(item.id, "medium", e.target.value)}
+            value={formData.medium}
+          >
+            <option>Select Medium</option>
+            {listmedium.map((medium) => (
+              <option key={medium.id} value={medium.id}>
+                {medium.name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       {/* marks */}
       <div className="form-group ">
@@ -79,29 +82,31 @@ const SchoolForm = ({
       </div>
       {item.level == 2 && (
         <>
-          <div className="form-group">
-            <label>Marks in English</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Enter Marks in English"
-              onChange={(e) =>
-                handleChange(item.id, "eng_marks", e.target.value)
-              }
-              value={formData.eng_marks}
-            />
-          </div>
-          <div className="form-group">
-            <label>Marks in Math</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Enter Marks in Math"
-              value={formData.math_marks}
-              onChange={(e) =>
-                handleChange(item.id, "math_marks", e.target.value)
-              }
-            />
+          <div className="row">
+            <div className="form-group col-md-6">
+              <label>Marks in English</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter Marks in English"
+                onChange={(e) =>
+                  handleChange(item.id, "eng_marks", e.target.value)
+                }
+                value={formData.eng_marks}
+              />
+            </div>
+            <div className="form-group col-md-6">
+              <label>Marks in Math</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter Marks in Math"
+                value={formData.math_marks}
+                onChange={(e) =>
+                  handleChange(item.id, "math_marks", e.target.value)
+                }
+              />
+            </div>
           </div>
         </>
       )}

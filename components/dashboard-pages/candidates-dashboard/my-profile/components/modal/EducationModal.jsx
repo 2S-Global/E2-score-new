@@ -18,7 +18,7 @@ const EducationModal = ({ show, onClose }) => {
     university: "",
     institute_name: "",
     course_name: "",
-    course_type: "",
+    course_type: "2",
     start_year: "",
     end_year: "",
     grading_system: "",
