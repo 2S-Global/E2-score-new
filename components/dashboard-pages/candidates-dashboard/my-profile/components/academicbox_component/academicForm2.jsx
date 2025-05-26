@@ -33,15 +33,6 @@ const EducationForm = () => {
     console.log("No token");
   }
 
-  const [formData, setFormData] = useState({
-    level: "",
-    state_id: "",
-    board_id: "",
-    year_of_passing: "",
-    medium_of_education: "",
-    marks: "",
-  });
-
   useEffect(() => {
     const fetchLevels = async () => {
       setLoading(true);

@@ -5,14 +5,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import EducationForm from "../academicbox_component/academicForm2";
 
 const EducationModal = ({ show, onClose }) => {
-  const handleSave = () => {
-    if (skills.length === 0) {
-      setError("Please specify at least one Key Skill.");
-    } else {
-      console.log("Saved Skills:", skills);
-      onClose();
-    }
-  };
+  const [formData, setFormData] = useState({
+    level: "",
+    state_id: "",
+    board_id: "",
+    year_of_passing: "",
+    medium_of_education: "",
+    marks: "",
+  });
+
+  const handleSave = () => {};
 
   if (!show) return null;
 
@@ -39,7 +41,7 @@ const EducationModal = ({ show, onClose }) => {
               identify your educational background
             </p>
 
-            <EducationForm />
+            <EducationForm formData={formData} setFormData={setFormData} />
           </div>
 
           {/* Footer Buttons */}

@@ -171,9 +171,13 @@ const Cardedit = ({ show, onClose }) => {
     e.preventDefault();
     console.log(formData);
 
-    setLoading(true);
+    // setLoading(true);
     setError(null);
     setSuccess(null);
+    if (!formData.full_name.trim() || !formData.gender || !formData.dob) {
+      setError("Please fill in all required fields.");
+      return;
+    }
 
     if (!token) {
       setError("Authorization token is missing. Please log in.");
@@ -260,138 +264,147 @@ const Cardedit = ({ show, onClose }) => {
                 onClick={onClose}
               ></button>
             </div>
+            <form onSubmit={handleSubmit}>
+              {/* Modal Body */}
+              <div className="modal-body">
+                {loading ? (
+                  <CustomizedProgressBars />
+                ) : (
+                  <>
+                    {error && <div className="alert alert-danger">{error}</div>}
 
-            {/* Modal Body */}
-            <div className="modal-body">
-              {loading ? (
-                <CustomizedProgressBars />
-              ) : (
-                <>
-                  {/* Fullname */}
-                  <div className="mb-3">
-                    <label htmlFor="full_name" className="form-label">
-                      <b>Full Name</b>
-                    </label>
-                    <input
-                      name="full_name"
-                      type="text"
-                      className="form-control"
-                      value={formData.full_name}
-                      onChange={handleChange}
-                      required
-                      id="full_name"
-                      placeholder="Enter your full name"
-                    />
-                  </div>
-                  {/* Gender Selection */}
-                  <div className="mb-3">
-                    <label className="form-label">
-                      <b>Gender</b>
-                    </label>
-                    <div className="d-flex gap-2 flex-wrap">
-                      {Genders.map((gender) => (
-                        <button
-                          key={gender.id}
-                          onClick={(e) => handleSelect("gender", gender.id, e)}
-                          className={`btn option-btn rounded-pill ${
-                            formData.gender == gender.id ? "active" : ""
-                          }`}
-                        >
-                          {gender.name}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Date of Birth Section */}
-                  <div className="mb-3">
-                    <label className="form-label d-block">
-                      <b>Date of Birth</b>
-                      <span style={{ color: "red" }}>*</span>
-                    </label>
-                    <DatePicker
-                      selected={formData.dob ? new Date(formData.dob) : null}
-                      onChange={handleDateChange}
-                      dateFormat="dd/MM/yyyy"
-                      className="form-control"
-                      maxDate={eighteenYearsAgo}
-                      showYearDropdown
-                      scrollableYearDropdown
-                      yearDropdownItemNumber={100}
-                      required
-                      placeholderText="dd/mm/yyyy"
-                      width="100%"
-                      withPortal
-                    />
-                  </div>
-
-                  {/* ckeckbox */}
-                  <div className="mb-3">
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="rememberMe"
-                        checked={isResidingInIndia}
-                        onChange={handleCheckboxChange}
-                      />
-                      <label className="form-check-label" htmlFor="rememberMe">
-                        Currently residing in India
-                      </label>
-                    </div>
-                  </div>
-
-                  {!isResidingInIndia && (
+                    {/* Fullname */}
                     <div className="mb-3">
-                      <label htmlFor="country" className="form-label">
-                        Country
+                      <label htmlFor="full_name" className="form-label">
+                        <b>Full Name</b>
+                        <span style={{ color: "red" }}>*</span>
                       </label>
-                      <select
-                        className="form-select"
-                        id="country"
-                        value={formData.country}
-                        onChange={handleCountryChange}
-                      >
-                        {countries.map((country) => (
-                          <option key={country.id} value={country.id}>
-                            {country.name}
-                          </option>
-                        ))}
-                      </select>
+                      <input
+                        name="full_name"
+                        type="text"
+                        className="form-control"
+                        value={formData.full_name}
+                        onChange={handleChange}
+                        required
+                        id="full_name"
+                        placeholder="Enter your full name"
+                      />
                     </div>
-                  )}
-                  {/* current location */}
-                  <div className="mb-3">
-                    <label htmlFor="currentLocation" className="form-label">
-                      Current Location
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="currentLocation"
-                      placeholder="Enter your current location"
-                      value={formData.currentLocation}
-                      onChange={handleChange}
-                      name="currentLocation"
-                    />
-                  </div>
-                  {/* Home-Town */}
-                  <div className="mb-3">
-                    <label htmlFor="hometown" className="form-label">
-                      Hometown
-                    </label>
-                    <input
-                      name="hometown"
-                      type="text"
-                      className="form-control"
-                      id="hometown"
-                      placeholder="Enter your home-town"
-                      value={formData.hometown}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  {/* Mobile no */}
-                  {/* <div className="mb-3">
+                    {/* Gender Selection */}
+                    <div className="mb-3">
+                      <label className="form-label">
+                        <b>Gender</b>
+                        <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <div className="d-flex gap-2 flex-wrap">
+                        {Genders.map((gender) => (
+                          <button
+                            key={gender.id}
+                            onClick={(e) =>
+                              handleSelect("gender", gender.id, e)
+                            }
+                            className={`btn option-btn rounded-pill ${
+                              formData.gender == gender.id ? "active" : ""
+                            }`}
+                          >
+                            {gender.name}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Date of Birth Section */}
+                    <div className="mb-3">
+                      <label className="form-label d-block">
+                        <b>Date of Birth</b>
+                        <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <DatePicker
+                        selected={formData.dob ? new Date(formData.dob) : null}
+                        onChange={handleDateChange}
+                        dateFormat="dd/MM/yyyy"
+                        className="form-control"
+                        maxDate={eighteenYearsAgo}
+                        showYearDropdown
+                        scrollableYearDropdown
+                        yearDropdownItemNumber={100}
+                        required
+                        placeholderText="dd/mm/yyyy"
+                        width="100%"
+                        withPortal
+                      />
+                    </div>
+
+                    {/* ckeckbox */}
+                    <div className="mb-3">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="rememberMe"
+                          checked={isResidingInIndia}
+                          onChange={handleCheckboxChange}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="rememberMe"
+                        >
+                          Currently residing in India
+                        </label>
+                      </div>
+                    </div>
+
+                    {!isResidingInIndia && (
+                      <div className="mb-3">
+                        <label htmlFor="country" className="form-label">
+                          Country
+                        </label>
+                        <select
+                          className="form-select"
+                          id="country"
+                          value={formData.country}
+                          onChange={handleCountryChange}
+                        >
+                          {countries.map((country) => (
+                            <option key={country.id} value={country.id}>
+                              {country.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                    {/* current location */}
+                    <div className="mb-3">
+                      <label htmlFor="currentLocation" className="form-label">
+                        Current Location
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="currentLocation"
+                        placeholder="Enter your current location"
+                        value={formData.currentLocation}
+                        onChange={handleChange}
+                        name="currentLocation"
+                      />
+                    </div>
+                    {/* Home-Town */}
+                    <div className="mb-3">
+                      <label htmlFor="hometown" className="form-label">
+                        Hometown
+                      </label>
+                      <input
+                        name="hometown"
+                        type="text"
+                        className="form-control"
+                        id="hometown"
+                        placeholder="Enter your home-town"
+                        value={formData.hometown}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    {/* Mobile no */}
+                    {/* <div className="mb-3">
                     <label htmlFor="mobile" className="form-label">
                       Mobile No.
                     </label>
@@ -405,27 +418,28 @@ const Cardedit = ({ show, onClose }) => {
                       name="mobile"
                     />
                   </div> */}
-                </>
-              )}
-            </div>
+                  </>
+                )}
+              </div>
 
-            {/* Modal Footer */}
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={onClose}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={handleSubmit}
-              >
-                Save
-              </button>
-            </div>
+              {/* Modal Footer */}
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={onClose}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  onClick={handleSubmit}
+                >
+                  Save
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
