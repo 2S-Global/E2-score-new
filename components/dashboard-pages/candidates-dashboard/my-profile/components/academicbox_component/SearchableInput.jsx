@@ -3,7 +3,10 @@ import React from "react";
 const SearchableInput = ({ label, value, onChange, options, onSelect }) => {
   return (
     <div className="form-group  position-relative">
-      <label>{label}</label>
+      <label>
+        {label}
+        <span style={{ color: "red" }}>*</span>
+      </label>
       <input
         type="text"
         className="form-control"

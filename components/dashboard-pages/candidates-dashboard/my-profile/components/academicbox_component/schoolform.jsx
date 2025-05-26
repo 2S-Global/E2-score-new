@@ -15,7 +15,10 @@ const SchoolForm = ({
   return (
     <>
       <div className="form-group ">
-        <label>Board</label>
+        <label>
+          Board
+          <span style={{ color: "red" }}>*</span>
+        </label>
         <select
           className="form-control"
           value={formData.board}
@@ -32,7 +35,10 @@ const SchoolForm = ({
 
       <div className="row">
         <div className="form-group col-md-6">
-          <label>Year of Passing</label>
+          <label>
+            Year of Passing
+            <span style={{ color: "red" }}>*</span>
+          </label>
 
           <select
             className="form-control"
@@ -54,7 +60,10 @@ const SchoolForm = ({
         </div>
         {/* school medium */}
         <div className="form-group col-md-6">
-          <label>Medium of Education</label>
+          <label>
+            Medium of Education
+            <span style={{ color: "red" }}>*</span>
+          </label>
           <select
             className="form-control"
             onChange={(e) => handleChange(item.id, "medium", e.target.value)}
@@ -71,7 +80,10 @@ const SchoolForm = ({
       </div>
       {/* marks */}
       <div className="form-group ">
-        <label>Marks</label>
+        <label>
+          Marks
+          <span style={{ color: "red" }}>*</span>
+        </label>
         <input
           type="text"
           className="form-control"
@@ -84,7 +96,10 @@ const SchoolForm = ({
         <>
           <div className="row">
             <div className="form-group col-md-6">
-              <label>Marks in English</label>
+              <label>
+                Marks in English
+                <span style={{ color: "red" }}>*</span>
+              </label>
               <input
                 type="text"
                 className="form-control"
@@ -96,7 +111,10 @@ const SchoolForm = ({
               />
             </div>
             <div className="form-group col-md-6">
-              <label>Marks in Math</label>
+              <label>
+                Marks in Math
+                <span style={{ color: "red" }}>*</span>
+              </label>
               <input
                 type="text"
                 className="form-control"
@@ -113,7 +131,10 @@ const SchoolForm = ({
 
       {/* Upload Buttons */}
       <div className="form-group col-lg-6">
-        <label>Upload Transcript</label>
+        <label>
+          Upload Transcript
+          <span style={{ color: "red" }}>*</span>
+        </label>
         <UploadButton
           label="Transcript"
           id={`transcript-${item.id}`}
@@ -127,7 +148,10 @@ const SchoolForm = ({
       </div>
 
       <div className="form-group col-lg-6">
-        <label>Upload Certificate</label>
+        <label>
+          Upload Certificate
+          <span style={{ color: "red" }}>*</span>
+        </label>
         <UploadButton
           width="150px"
           label="Certificate"

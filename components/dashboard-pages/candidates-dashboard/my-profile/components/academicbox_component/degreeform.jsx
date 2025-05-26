@@ -31,7 +31,10 @@ const DegreeForm = ({
   return (
     <>
       <div className="form-group ">
-        <label>University Name</label>
+        <label>
+          University Name
+          <span style={{ color: "red" }}>*</span>
+        </label>
         <select
           className="form-control"
           onChange={(e) => handleChange(item.id, "university", e.target.value)}
@@ -91,7 +94,10 @@ const DegreeForm = ({
       </div> */}
       {/* course type radio button */}
       <div className="form-group">
-        <label>Course Type</label>
+        <label>
+          Course Type
+          <span style={{ color: "red" }}>*</span>
+        </label>
         {course_mode.map((type) => (
           <div className="form-check" key={type.id}>
             <input
@@ -120,7 +126,10 @@ const DegreeForm = ({
 
       {/* Course Duration */}
       <div className="form-group row align-items-center">
-        <label className="col-12">Course Duration</label>
+        <label className="col-12">
+          Course Duration
+          <span style={{ color: "red" }}>*</span>
+        </label>
 
         {/* Start Year */}
         <div className="col-sm-5">
@@ -170,7 +179,10 @@ const DegreeForm = ({
 
       {/* Grading system drop down */}
       <div className="form-group">
-        <label>Grading System</label>
+        <label>
+          Grading System
+          <span style={{ color: "red" }}>*</span>
+        </label>
         {/* drop down */}
         <select
           className="form-control"
@@ -189,7 +201,10 @@ const DegreeForm = ({
       </div>
       {/* Marks */}
       <div className="form-group">
-        <label>Marks</label>
+        <label>
+          Marks
+          <span style={{ color: "red" }}>*</span>
+        </label>
         <input
           type="text"
           className="form-control"
@@ -211,7 +226,10 @@ const DegreeForm = ({
 
       {/* Upload Buttons */}
       <div className="form-group col-lg-6">
-        <label>Upload Transcript</label>
+        <label>
+          Upload Transcript
+          <span style={{ color: "red" }}>*</span>
+        </label>
         <UploadButton
           label="Transcript"
           id={`transcript-${item.id}`}
@@ -225,7 +243,10 @@ const DegreeForm = ({
       </div>
 
       <div className="form-group col-lg-6">
-        <label>Upload Certificate</label>
+        <label>
+          Upload Certificate
+          <span style={{ color: "red" }}>*</span>
+        </label>
         <UploadButton
           width="150px"
           label="Certificate"

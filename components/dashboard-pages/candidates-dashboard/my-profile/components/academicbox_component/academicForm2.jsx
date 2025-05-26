@@ -268,7 +268,10 @@ const EducationForm = ({ formData, setFormData }) => {
       ) : (
         <form className="default-form">
           <div className="form-group">
-            <label>Select Level (This is form 2)</label>
+            <label>
+              Select Level (This is form 2)
+              <span style={{ color: "red" }}>*</span>
+            </label>
             <select
               className="form-control"
               value={formData.level}
@@ -290,6 +293,7 @@ const EducationForm = ({ formData, setFormData }) => {
                 {/* State Selection */}
                 <div className="form-group">
                   <label>State</label>
+                  <span style={{ color: "red" }}>*</span>
                   <select
                     className="form-control"
                     onChange={(e) =>
