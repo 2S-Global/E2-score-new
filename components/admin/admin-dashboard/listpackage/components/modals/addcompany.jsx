@@ -68,6 +68,12 @@ const AddCompanyModal = ({ show, onClose }) => {
       return;
     }
 
+      if (!formData.allowed_verifications || formData.allowed_verifications.split(",").length === 0) {
+    setError("Please select at least one allowed verification.");
+    setLoading(false);
+    return;
+  }
+
     try {
       const response = await axios.post(
         `${apiurl}/api/pacakageRoute/addPackage`,
@@ -123,7 +129,7 @@ const AddCompanyModal = ({ show, onClose }) => {
                   <div className="mb-3 col-md-6">
                     <div>
                       <label htmlFor="name" className="form-label">
-                        Package Name
+                        Package Name <span style={{ color: "red" }}>*</span>
                       </label>
                       <input
                         type="text"
@@ -170,7 +176,7 @@ const AddCompanyModal = ({ show, onClose }) => {
 
                   <div className="mb-3 col-md-6">
                     <label htmlFor="description" className="form-label">
-                      Description
+                      Description <span style={{ color: "red" }}>*</span>
                     </label>
                     <textarea
                       name="description"
@@ -185,7 +191,7 @@ const AddCompanyModal = ({ show, onClose }) => {
 
                   <div className="mb-3 text-center col-md-12">
                     <strong className="d-block mb-2">
-                      Allowed Verification
+                      Allowed Verification <span style={{ color: "red" }}>*</span>
                     </strong>
                     <div className="d-flex justify-content-center flex-wrap gap-3">
                       {["PAN", "Aadhaar", "EPIC", "DL", "Passport", "UAN"].map(
