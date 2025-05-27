@@ -35,6 +35,8 @@ const EducationForm = ({ formData, setFormData }) => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
   const [stateselected, setStateselected] = useState(false);
+  const [universityselected, setUniversityselected] = useState(false);
+  const [collegeselected, setCollegeselected] = useState(false);
 
   const token = localStorage.getItem("candidate_token");
   if (!token) {
@@ -265,6 +267,20 @@ const EducationForm = ({ formData, setFormData }) => {
         setStateselected(false);
       }
     }
+    if (field === "university") {
+      if (value) {
+        setUniversityselected(true);
+      } else {
+        setUniversityselected(false);
+      }
+    }
+    if (field === "institute_name") {
+      if (value) {
+        setCollegeselected(true);
+      } else {
+        setCollegeselected(false);
+      }
+    }
   };
   const formatLevelName = (id) => {
     const levelObj = levels.find((lvl) => lvl.id == id);
@@ -362,6 +378,9 @@ const EducationForm = ({ formData, setFormData }) => {
                     formData={formData}
                     setFormData={setFormData}
                     course_mode={course_mode}
+                    stateselected={stateselected}
+                    universityselected={universityselected}
+                    collegeselected={collegeselected}
                   />
                 )}
               </div>

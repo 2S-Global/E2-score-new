@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import EducationForm from "../academicbox_component/academicForm2";
-import { university } from "../academicbox_component/academicData";
 
 const EducationModal = ({ show, onClose }) => {
   const [formData, setFormData] = useState({
