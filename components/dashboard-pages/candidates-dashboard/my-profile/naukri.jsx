@@ -63,24 +63,27 @@ const index = () => {
 
               {/* Resume Headline Section */}
               <ResumeHeadlineSection />
+              {/* profile summery  */}
+              <ProfilesumerySection />
               {/* Keyskill Section */}
               <Keyskillsection />
-              {/* Employment Section */}
-              <Employsection />
+              {/* Personal details */}
+              <PersonalSection />
               {/* Academy Section  */}
               <Academysection />
-              {/* IT Key Section */}
-              <ItkeySection />
-              {/* project  */}
-              <ProjectSection />
-              {/* profile summery profilesumerySection */}
-              <ProfilesumerySection />
               {/* Acom Section */}
               <AcomSection />
               {/* carrer section  */}
               <Carrersection />
-              {/* Personal details */}
-              <PersonalSection />
+
+              {/* Employment Section */}
+              <Employsection />
+
+              {/* IT Key Section */}
+              <ItkeySection />
+              {/* project  */}
+              <ProjectSection />
+
               {/* Resume */}
               <div className="ls-widget">
                 <div className="tabs-box">
