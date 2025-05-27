@@ -1,6 +1,13 @@
 import React from "react";
 
-const SearchableInput = ({ label, value, onChange, options, onSelect }) => {
+const SearchableInput = ({
+  name,
+  label,
+  value,
+  onChange,
+  options,
+  onSelect,
+}) => {
   return (
     <div className="form-group  position-relative">
       <label>
@@ -14,6 +21,7 @@ const SearchableInput = ({ label, value, onChange, options, onSelect }) => {
         value={value}
         onChange={onChange}
         autoComplete="off"
+        name={name}
       />
       {options.length > 0 && value && (
         <ul

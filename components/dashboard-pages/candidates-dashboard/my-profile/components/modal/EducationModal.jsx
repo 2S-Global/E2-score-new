@@ -2,9 +2,15 @@
 
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import EducationForm from "../academicbox_component/academicForm2";
+import EducationForm from "../academicbox_component/academicForm3";
+import axios from "axios";
 
 const EducationModal = ({ show, onClose }) => {
+  const token = localStorage.getItem("candidate_token");
+  if (!token) {
+    console.log("No token");
+  }
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [formData, setFormData] = useState({
     level: "",
     state: "",
@@ -21,12 +27,44 @@ const EducationModal = ({ show, onClose }) => {
     start_year: "",
     end_year: "",
     grading_system: "",
-    is_primary: "0",
+    is_primary: false,
     transcript: null,
     certificate: null,
   });
 
-  const handleSave = () => {};
+  const handleSave = async () => {
+    if (!token) {
+      setError("Authorization token is missing. Please log in.");
+      return;
+    }
+
+    try {
+      const payload = new FormData();
+
+      // Append all fields manually or dynamically
+      for (const key in formData) {
+        if (formData[key] !== null && formData[key] !== undefined) {
+          payload.append(key, formData[key]);
+        }
+      }
+
+      const response = await axios.post(
+        `${apiurl}/api/useraction/usereducation`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Education data saved successfully:", response.data);
+      onClose();
+    } catch (error) {
+      console.error("Error saving education data:", error);
+    }
+  };
 
   if (!show) return null;
 
