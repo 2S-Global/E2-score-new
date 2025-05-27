@@ -229,7 +229,7 @@ const EditfieldModal = ({ show, onClose, field }) => {
               <div className="row">
                 <div className="mb-3 col-md-6">
                   <label htmlFor="name" className="form-label">
-                    Company Name
+                    Company Name <span style={{ color: "red" }}>*</span>
                   </label>
                   <input
                     type="text"
@@ -247,7 +247,7 @@ const EditfieldModal = ({ show, onClose, field }) => {
 
                 <div className="mb-3 col-md-6">
                   <label htmlFor="email" className="form-label">
-                    Official Email Address
+                    Official Email Address <span style={{ color: "red" }}>*</span>
                   </label>
                   <input
                     type="email"
@@ -292,7 +292,7 @@ const EditfieldModal = ({ show, onClose, field }) => {
 
                 <div className="mb-3 col-md-6">
                   <label htmlFor="address" className="form-label">
-                    Address
+                    Address <span style={{ color: "red" }}>*</span>
                   </label>
                   <textarea
                     name="address"

@@ -87,6 +87,15 @@ const EditfieldModal = ({ show, onClose, field }) => {
       return;
     }
 
+    if (
+      !formData.allowed_verifications ||
+      formData.allowed_verifications.split(",").length === 0
+    ) {
+      setError("Please select at least one allowed verification.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.post(
         `${apiurl}/api/pacakageRoute/updatePackage`,
@@ -148,7 +157,9 @@ const EditfieldModal = ({ show, onClose, field }) => {
 
               <div className="row">
                 <div className="mb-3 col-md-6">
-                  <label className="form-label">Package Name</label>
+                  <label className="form-label">
+                    Package Name <span style={{ color: "red" }}>*</span>
+                  </label>
                   <input
                     type="text"
                     name="name"
@@ -191,7 +202,9 @@ const EditfieldModal = ({ show, onClose, field }) => {
                 </div> */}
 
                 <div className="mb-3 col-md-6">
-                  <label className="form-label">Description</label>
+                  <label className="form-label">
+                    Description <span style={{ color: "red" }}>*</span>
+                  </label>
                   <textarea
                     name="description"
                     className="form-control"
@@ -204,7 +217,8 @@ const EditfieldModal = ({ show, onClose, field }) => {
 
                 <div className="mb-3 text-center">
                   <strong className="d-block mb-2">
-                    Allowed Verifications
+                    Allowed Verifications{" "}
+                    <span style={{ color: "red" }}>*</span>
                   </strong>
                   <div className="d-flex justify-content-center flex-wrap gap-3">
                     {verificationOptions.map((item, index) => (
