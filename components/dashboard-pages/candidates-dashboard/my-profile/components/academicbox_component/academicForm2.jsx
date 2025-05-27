@@ -34,6 +34,8 @@ const EducationForm = ({ formData, setFormData }) => {
 
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
+  const [stateselected, setStateselected] = useState(false);
+
   const token = localStorage.getItem("candidate_token");
   if (!token) {
     // console.log("No token");
@@ -255,6 +257,14 @@ const EducationForm = ({ formData, setFormData }) => {
       )
     );
     setFormData({ ...formData, [field]: value });
+
+    if (field === "state") {
+      if (value) {
+        setStateselected(true);
+      } else {
+        setStateselected(false);
+      }
+    }
   };
   const formatLevelName = (id) => {
     const levelObj = levels.find((lvl) => lvl.id == id);
@@ -301,7 +311,7 @@ const EducationForm = ({ formData, setFormData }) => {
                     }
                     value={formData.state || ""}
                   >
-                    <option>Select State</option>
+                    <option value="">Select State</option>
                     {states.map((state) => (
                       <option key={state.id} value={state.id}>
                         {state.name}
@@ -322,6 +332,7 @@ const EducationForm = ({ formData, setFormData }) => {
                     setCertificateFile={setCertificateFile}
                     listboard={listboard}
                     listmedium={listmedium}
+                    stateselected={stateselected}
                   />
                 ) : (
                   // University Selection for Diploma/UG/PG/PhD
