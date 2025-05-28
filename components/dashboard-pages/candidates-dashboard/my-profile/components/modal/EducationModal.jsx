@@ -10,6 +10,7 @@ const EducationModal = ({ show, onClose }) => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
   const [formData, setFormData] = useState({
+    _id: "",
     level: "",
     state: "",
     board: "",
@@ -162,13 +163,13 @@ const EducationModal = ({ show, onClose }) => {
               Details like course, university, and more, help recruiters
               identify your educational background
             </p>
-            {/* 
+
             <button
               className="btn btn-primary"
               onClick={() => console.log(formData)}
             >
               TEST
-            </button> */}
+            </button>
 
             <EducationForm formData={formData} setFormData={setFormData} />
           </div>
