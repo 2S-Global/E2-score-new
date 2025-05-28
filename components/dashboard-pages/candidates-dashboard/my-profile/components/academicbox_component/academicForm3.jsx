@@ -29,18 +29,24 @@ const EducationForm = ({ formData, setFormData }) => {
   const [stateselected, setStateselected] = useState(false);
   const [universityselected, setUniversityselected] = useState(false);
   const [collegeselected, setCollegeselected] = useState(false);
-  const [collegeSearch, setCollegeSearch] = useState("");
+  const [collegeSearch, setCollegeSearch] = useState(formData.institute_name);
   const [filteredColleges, setFilteredColleges] = useState(colleges);
   const [filteredCourses, setFilteredCourses] = useState(courses);
   const [courseSearch, setCourseSearch] = useState("");
-  const [coursetype, setCoursetype] = useState([]);
-  //fetch levels
+  const [coursetype, setCoursetype] = useState(formData.level_type);
+  //use Effect
   useEffect(() => {
     const fetchLevels = async () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `${apiurl}/api/sql/dropdown/education_level`
+          `${apiurl}/api/sql/dropdown/education_level`,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         Setlevels(response.data.data);
@@ -193,16 +199,31 @@ const EducationForm = ({ formData, setFormData }) => {
     fetchCourses();
   }, [formData.institute_name]);
 
+  useEffect(() => {
+    setStateselected(!!formData.state);
+    setUniversityselected(!!formData.university);
+    setCollegeselected(!!formData.institute_name);
+  }, [formData.state, formData.university, formData.institute_name]);
+
+  useEffect(() => {
+    return () => {
+      if (formData.transcriptPreview)
+        URL.revokeObjectURL(formData.transcriptPreview);
+      if (formData.certificatePreview)
+        URL.revokeObjectURL(formData.certificatePreview);
+    };
+  }, [formData.transcriptPreview, formData.certificatePreview]);
+
   //chanage level
   const handleLevelChange = (e) => {
     const selectedLevel = e.target.value;
     //map out levels based on selected level
     const levelData = levels.find((lvl) => lvl.id == selectedLevel);
-    if (!levelData) {
+    if (levelData) {
+      setCoursetype(levelData.type);
       //console.error("Level data not found");
       // return;
     }
-    setCoursetype(levelData.type);
 
     setFormData({
       level: selectedLevel,
@@ -272,6 +293,32 @@ const EducationForm = ({ formData, setFormData }) => {
     setFiltered([]);
   };
 
+  const handleTranscriptChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const preview = URL.createObjectURL(file); // ✅ works for both images and PDFs
+
+    setFormData((prev) => ({
+      ...prev,
+      transcript: file,
+      transcriptPreview: preview,
+    }));
+  };
+
+  const handleCertificateChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const preview = URL.createObjectURL(file); // ✅ works for both images and PDFs
+
+    setFormData((prev) => ({
+      ...prev,
+      certificate: file,
+      certificatePreview: preview,
+    }));
+  };
+
   return (
     <>
       {loading ? (
@@ -331,6 +378,8 @@ const EducationForm = ({ formData, setFormData }) => {
                         listboard={listboard}
                         listmedium={listmedium}
                         stateselected={stateselected}
+                        handleTranscriptChange={handleTranscriptChange}
+                        handleCertificateChange={handleCertificateChange}
                       />
                     ) : (
                       <DegreeForm
@@ -355,6 +404,8 @@ const EducationForm = ({ formData, setFormData }) => {
                         courses={courses}
                         course_mode={course_mode}
                         grading_systems={grading_systems}
+                        handleTranscriptChange={handleTranscriptChange}
+                        handleCertificateChange={handleCertificateChange}
                       />
                     )}
                   </div>

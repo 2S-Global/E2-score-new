@@ -24,6 +24,8 @@ const DegreeForm = ({
   courses,
   course_mode,
   grading_systems,
+  handleTranscriptChange,
+  handleCertificateChange,
 }) => {
   return (
     <>
@@ -246,11 +248,10 @@ const DegreeForm = ({
             id="transcript"
             name="transcript"
             file={formData.transcript}
-            onChange={(e) =>
-              setFormData({ ...formData, transcript: e.target.files[0] })
-            }
+            onChange={handleTranscriptChange}
             accept="image/*, .pdf"
             width="200px"
+            image={formData.transcriptPreview}
           />
         </div>
         <div className="form-group col-lg-6">
@@ -264,10 +265,9 @@ const DegreeForm = ({
             name="certificate"
             width="200px"
             file={formData.certificate}
-            onChange={(e) =>
-              setFormData({ ...formData, certificate: e.target.files[0] })
-            }
+            onChange={handleCertificateChange}
             accept="image/*, .pdf"
+            image={formData.certificatePreview}
           />
         </div>
       </div>
