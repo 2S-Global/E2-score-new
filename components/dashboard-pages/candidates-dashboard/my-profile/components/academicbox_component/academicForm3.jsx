@@ -182,7 +182,6 @@ const EducationForm = ({ formData, setFormData }) => {
     const fetchCourses = async () => {
       setLoading(true);
       try {
-        /* /api/sql/dropdown/university_course?state_id=32&university_id=1032&college_name=KALYANI%20GOVERNMENT%20ENGINEERING%20COLLEGE&course_type=UG */
         const response = await axios.get(
           `${apiurl}/api/sql/dropdown/university_course?state_id=${formData.state}&university_id=${formData.university}&college_name=${formData.institute_name}&course_type=${coursetype}`
         );
@@ -217,12 +216,9 @@ const EducationForm = ({ formData, setFormData }) => {
   //chanage level
   const handleLevelChange = (e) => {
     const selectedLevel = e.target.value;
-    //map out levels based on selected level
     const levelData = levels.find((lvl) => lvl.id == selectedLevel);
     if (levelData) {
       setCoursetype(levelData.type);
-      //console.error("Level data not found");
-      // return;
     }
 
     setFormData({
@@ -310,7 +306,7 @@ const EducationForm = ({ formData, setFormData }) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const preview = URL.createObjectURL(file); // ✅ works for both images and PDFs
+    const preview = URL.createObjectURL(file);
 
     setFormData((prev) => ({
       ...prev,
