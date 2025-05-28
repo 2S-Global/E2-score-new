@@ -156,7 +156,10 @@ const KeySkillsModal = ({ show, onClose, selectedSkills, setKeySkill }) => {
                   {/* Selected Skills */}
                   <div className="mb-3">
                     {skills.map((skill, index) => (
-                      <span key={index} className="badge bg-secondary me-2 p-2">
+                      <span
+                        key={index}
+                        className="badge bg-secondary me-2 p-2 mt-2 "
+                      >
                         {skill}{" "}
                         <button
                           className="btn btn-sm btn-light ms-2"
