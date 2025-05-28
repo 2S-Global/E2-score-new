@@ -91,12 +91,12 @@ const EducationModal = ({ show, onClose }) => {
               identify your educational background
             </p>
 
-            <button
+            {/* <button
               className="btn btn-primary"
               onClick={() => console.log(formData)}
             >
               TEST
-            </button>
+            </button> */}
 
             <EducationForm formData={formData} setFormData={setFormData} />
           </div>
