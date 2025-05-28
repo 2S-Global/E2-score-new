@@ -281,7 +281,7 @@ const EducationForm = ({ formData, setFormData }) => {
           <form className="default-form">
             <div className="form-group">
               <label>
-                Select Level (This is form 3)
+                Select Level
                 <span style={{ color: "red" }}>*</span>
               </label>
               <select
