@@ -26,6 +26,14 @@ const DegreeForm = ({
   grading_systems,
   handleTranscriptChange,
   handleCertificateChange,
+  handleFocus,
+  handleBlur,
+  isFocused,
+  setIsFocused,
+  universitySearch,
+  setUniversitySearch,
+  filteredUniversity,
+  setFilteredUniversity,
 }) => {
   return (
     <>
@@ -41,25 +49,29 @@ const DegreeForm = ({
           opacity: !stateselected ? 0.5 : 1,
         }}
       >
-        <div className="form-group">
-          <label>
-            University Name
-            <span style={{ color: "red" }}>*</span>
-          </label>
-          <select
-            className="form-control"
-            name="university"
-            onChange={handleChange}
-            value={formData.university}
-          >
-            <option value="">Select University</option>
-            {university?.map((item) => (
-              <option value={item.id} key={item.id}>
-                {item.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <SearchableInput
+          label="University Name"
+          name="university"
+          value={universitySearch}
+          onChange={(e) => {
+            handleSearchChange(
+              e,
+              setUniversitySearch,
+              setFilteredUniversity,
+              university
+            );
+          }}
+          options={filteredUniversity}
+          onSelect={(value) => {
+            handleSelect(value, setUniversitySearch, setFilteredUniversity);
+            setFormData({ ...formData, university: value });
+          }}
+          handleFocus={handleFocus}
+          handleBlur={handleBlur}
+          isFocused={isFocused}
+          setIsFocused={setIsFocused}
+        />
+
         <div
           style={{
             pointerEvents: !universityselected ? "none" : "auto",
@@ -85,6 +97,10 @@ const DegreeForm = ({
               handleSelect(value, setCollegeSearch, setFilteredColleges);
               setFormData({ ...formData, institute_name: value });
             }}
+            handleFocus={handleFocus}
+            handleBlur={handleBlur}
+            isFocused={isFocused}
+            setIsFocused={setIsFocused}
           />
           <div
             style={{
@@ -110,6 +126,10 @@ const DegreeForm = ({
                 handleSelect(value, setCourseSearch, setFilteredCourses);
                 setFormData({ ...formData, course_name: value });
               }}
+              handleFocus={handleFocus}
+              handleBlur={handleBlur}
+              isFocused={isFocused}
+              setIsFocused={setIsFocused}
             />
             <div className="form-group">
               <label>
@@ -133,13 +153,11 @@ const DegreeForm = ({
             </div>
           </div>
         </div>
-
         <div className="form-group row align-items-center mt-2">
           <label className="col-12">
             Course Duration
             <span style={{ color: "red" }}>*</span>
           </label>
-
           <div className="col-md-5">
             <select
               className="form-control"
@@ -180,7 +198,6 @@ const DegreeForm = ({
             </select>
           </div>
         </div>
-
         <div className="row">
           <div className="col-md-6">
             <div className="form-group">

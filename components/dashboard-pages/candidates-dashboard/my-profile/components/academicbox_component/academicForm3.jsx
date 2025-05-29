@@ -32,8 +32,11 @@ const EducationForm = ({ formData, setFormData }) => {
   const [collegeSearch, setCollegeSearch] = useState(formData.institute_name);
   const [filteredColleges, setFilteredColleges] = useState(colleges);
   const [filteredCourses, setFilteredCourses] = useState(courses);
-  const [courseSearch, setCourseSearch] = useState("");
+  const [courseSearch, setCourseSearch] = useState(formData.course_name);
   const [coursetype, setCoursetype] = useState(formData.level_type);
+  const [universitySearch, setUniversitySearch] = useState(formData.university);
+  const [filteredUniversity, setFilteredUniversity] = useState(university);
+  const [isFocused, setIsFocused] = useState(false);
   //use Effect
   useEffect(() => {
     const fetchLevels = async () => {
@@ -146,6 +149,7 @@ const EducationForm = ({ formData, setFormData }) => {
           `${apiurl}/api/sql/dropdown/university_state?state_id=${formData.state}`
         );
         setUniversity(response.data.data);
+        setFilteredUniversity(response.data.data);
       } catch (error) {
         // console.error("Error fetching universities:", error);
       } finally {
@@ -160,11 +164,14 @@ const EducationForm = ({ formData, setFormData }) => {
 
   useEffect(() => {
     if (!formData.university) return;
+    if (!formData.state) return;
     const fetchcolleges = async () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `${apiurl}/api/sql/dropdown/college_name?university_id=${formData.university}`
+          `${apiurl}/api/sql/dropdown/college_name?university_id=${formData.university}
+          
+          `
         );
         setColleges(response.data.data);
         setFilteredColleges(response.data.data);
@@ -175,7 +182,7 @@ const EducationForm = ({ formData, setFormData }) => {
       }
     };
     fetchcolleges();
-  }, [formData.university]);
+  }, [formData.university, formData.state]);
 
   useEffect(() => {
     if (!formData.institute_name) return;
@@ -315,6 +322,12 @@ const EducationForm = ({ formData, setFormData }) => {
     }));
   };
 
+  const handleFocus = () => setIsFocused(true);
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    setTimeout(() => setIsFocused(false), 100); // Slight delay for click to register
+  };
   return (
     <>
       {loading ? (
@@ -376,6 +389,10 @@ const EducationForm = ({ formData, setFormData }) => {
                         stateselected={stateselected}
                         handleTranscriptChange={handleTranscriptChange}
                         handleCertificateChange={handleCertificateChange}
+                        handleFocus={handleFocus}
+                        handleBlur={handleBlur}
+                        isFocused={isFocused}
+                        setIsFocused={setIsFocused}
                       />
                     ) : (
                       <DegreeForm
@@ -402,6 +419,14 @@ const EducationForm = ({ formData, setFormData }) => {
                         grading_systems={grading_systems}
                         handleTranscriptChange={handleTranscriptChange}
                         handleCertificateChange={handleCertificateChange}
+                        handleFocus={handleFocus}
+                        handleBlur={handleBlur}
+                        isFocused={isFocused}
+                        setIsFocused={setIsFocused}
+                        universitySearch={universitySearch}
+                        setUniversitySearch={setUniversitySearch}
+                        filteredUniversity={filteredUniversity}
+                        setFilteredUniversity={setFilteredUniversity}
                       />
                     )}
                   </div>

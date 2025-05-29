@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import UploadButton from "../UploadButton";
-
+import SearchableInput from "../SearchableInput";
 const SchoolForm = ({
   formData,
   setFormData,
@@ -10,6 +10,10 @@ const SchoolForm = ({
   stateselected,
   handleTranscriptChange,
   handleCertificateChange,
+  handleFocus,
+  handleBlur,
+  isFocused,
+  setIsFocused,
 }) => {
   return (
     <>
@@ -26,7 +30,7 @@ const SchoolForm = ({
         }}
       >
         <div className="form-group ">
-          <label>Board</label>
+          <label>Board (Will be removed once api is ready )</label>
           <span style={{ color: "red" }}>*</span>
           <select onChange={handleChange} name="board" value={formData.board}>
             <option value="">Select Board</option>

@@ -7,14 +7,11 @@ const SearchableInput = ({
   onChange,
   options,
   onSelect,
+  handleFocus,
+  handleBlur,
+  isFocused,
+  setIsFocused,
 }) => {
-  const [isFocused, setIsFocused] = useState(false);
-
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => {
-    setTimeout(() => setIsFocused(false), 100); // Slight delay for click to register
-  };
-
   return (
     <div className="form-group position-relative">
       <label>

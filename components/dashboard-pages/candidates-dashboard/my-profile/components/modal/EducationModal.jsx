@@ -147,7 +147,7 @@ const EducationModal = ({ show, onClose }) => {
       tabIndex="-1"
       style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
     >
-      <div className="modal-dialog modal-dialog-centered">
+      <div className="modal-dialog modal-dialog-centered modal-lg">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">Education</h5>

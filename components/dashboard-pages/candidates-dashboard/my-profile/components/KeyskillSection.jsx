@@ -63,7 +63,7 @@ const Keyskillsection = () => {
                     borderRadius: "10px",
                   }}
                 >
-                  {skill}
+                  {skill.charAt(0).toUpperCase() + skill.slice(1)}
                 </span>
               ))}
             </div>
