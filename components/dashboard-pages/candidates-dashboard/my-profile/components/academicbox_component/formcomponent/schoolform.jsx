@@ -14,6 +14,12 @@ const SchoolForm = ({
   handleBlur,
   isFocused,
   setIsFocused,
+  boardSearch,
+  setBoardSearch,
+  handleSearchChange,
+  filteredBoard,
+  setFilteredBoard,
+  handleSelect,
 }) => {
   return (
     <>
@@ -29,19 +35,26 @@ const SchoolForm = ({
           opacity: !stateselected ? 0.5 : 1,
         }}
       >
-        <div className="form-group ">
-          <label>Board (Will be removed once api is ready )</label>
-          <span style={{ color: "red" }}>*</span>
-          <select onChange={handleChange} name="board" value={formData.board}>
-            <option value="">Select Board</option>
-            {listboard?.map((item) => (
-              <option value={item.id} key={item.id}>
-                {item.board_name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <SearchableInput label="Board" name="board" />
+        <SearchableInput
+          label="Board"
+          name="board"
+          value={boardSearch}
+          onChange={(e) =>
+            handleSearchChange(e, setBoardSearch, setFilteredBoard, listboard)
+          }
+          options={filteredBoard}
+          onSelect={(value) => {
+            handleSelect(value, setBoardSearch, setFilteredBoard);
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              board: value,
+            }));
+          }}
+          handleFocus={handleFocus}
+          handleBlur={handleBlur}
+          isFocused={isFocused}
+          setIsFocused={setIsFocused}
+        />
 
         <div className="row">
           <div className="form-group col-md-6">

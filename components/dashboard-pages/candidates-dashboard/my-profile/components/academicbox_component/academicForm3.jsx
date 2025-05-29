@@ -37,6 +37,8 @@ const EducationForm = ({ formData, setFormData }) => {
   const [universitySearch, setUniversitySearch] = useState(formData.university);
   const [filteredUniversity, setFilteredUniversity] = useState(university);
   const [isFocused, setIsFocused] = useState(false);
+  const [boardSearch, setBoardSearch] = useState(formData.board);
+  const [filteredBoard, setFilteredBoard] = useState(listboard);
   //use Effect
   useEffect(() => {
     const fetchLevels = async () => {
@@ -121,6 +123,7 @@ const EducationForm = ({ formData, setFormData }) => {
           `${apiurl}/api/sql/dropdown/state_wise_board?state_id=${formData.state}`
         );
         setListboard(response.data.data);
+        setFilteredBoard(response.data.data);
       } catch (error) {
         //  console.error("Error fetching boards:", error);
       } finally {
@@ -391,6 +394,12 @@ const EducationForm = ({ formData, setFormData }) => {
                         handleBlur={handleBlur}
                         isFocused={isFocused}
                         setIsFocused={setIsFocused}
+                        handleSearchChange={handleSearchChange}
+                        filteredBoard={filteredBoard}
+                        setFilteredBoard={setFilteredBoard}
+                        boardSearch={boardSearch}
+                        setBoardSearch={setBoardSearch}
+                        handleSelect={handleSelect}
                       />
                     ) : (
                       <DegreeForm
@@ -425,6 +434,8 @@ const EducationForm = ({ formData, setFormData }) => {
                         setUniversitySearch={setUniversitySearch}
                         filteredUniversity={filteredUniversity}
                         setFilteredUniversity={setFilteredUniversity}
+                        boardSearch={boardSearch}
+                        setBoardSearch={setBoardSearch}
                       />
                     )}
                   </div>
