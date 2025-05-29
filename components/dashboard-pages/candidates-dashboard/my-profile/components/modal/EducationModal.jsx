@@ -8,7 +8,6 @@ import axios from "axios";
 const EducationModal = ({ show, onClose, reload, setReload }) => {
   const token = localStorage.getItem("candidate_token");
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
-
   const [formData, setFormData] = useState({
     _id: "",
     level: "",
@@ -33,7 +32,6 @@ const EducationModal = ({ show, onClose, reload, setReload }) => {
     certificatePreview: "",
     level_type: "",
   });
-
   const [isFormValid, setIsFormValid] = useState(false);
   const [saving, setSaving] = useState(false);
 
