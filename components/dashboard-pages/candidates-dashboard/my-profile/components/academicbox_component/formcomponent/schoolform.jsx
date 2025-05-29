@@ -41,6 +41,7 @@ const SchoolForm = ({
             ))}
           </select>
         </div>
+        <SearchableInput label="Board" name="board" />
 
         <div className="row">
           <div className="form-group col-md-6">

@@ -169,9 +169,7 @@ const EducationForm = ({ formData, setFormData }) => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `${apiurl}/api/sql/dropdown/college_name?university_id=${formData.university}
-          
-          `
+          `${apiurl}/api/sql/dropdown/college_name?university_id=${formData.university}&state_id=${formData.state}`
         );
         setColleges(response.data.data);
         setFilteredColleges(response.data.data);

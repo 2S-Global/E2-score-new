@@ -1,30 +1,79 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import EducationModal from "./modal/EducationModal"; // Import the modal component
-
+import ClgDisplay from "./academicbox_component/clgdisplay";
+import SchoolDisplay from "./academicbox_component/schooldisplay";
+import axios from "axios";
 const Academysection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expanded, setExpanded] = useState({}); // Track expanded descriptions
+  const [listlevel, setListlevel] = useState([]);
+  const [reload, setReload] = useState(false);
+  const [missingLevels, setMissingLevels] = useState([]);
 
-  const userdata = [
-    {
-      level: "B.Tech/B.E",
-      course: "Computer Science and Engineering",
-      institution: "National Institute of Technology, Rourkela",
-      year: "2018-2022",
-      type: "Full Time",
-    },
-    {
-      level: "Class XII",
-      Board: "CISCE(ICSE/ISC)",
-      year: "2018",
-    },
-    {
-      level: "Class X",
-      Board: "CISCE(ICSE/ISC)",
-      year: "2016",
-    },
-  ];
+  const [userdata, setUserdata] = useState([]);
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+
+  useEffect(() => {
+    const fetchuserdata = async () => {
+      try {
+        const token = localStorage.getItem("candidate_token");
+        const response = await axios.get(
+          `${apiurl}/api/userdata/get_user_education`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status == 200) {
+          setUserdata(response.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching skills:", error);
+      }
+    };
+    fetchuserdata();
+  }, [reload]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("candidate_token");
+    const fetchLevels = async () => {
+      try {
+        const response = await axios.get(
+          `${apiurl}/api/sql/dropdown/education_level`,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setListlevel(response.data.data);
+      } catch (error) {
+        //  console.error("Error fetching levels:", error);
+      } finally {
+      }
+    };
+
+    fetchLevels();
+  }, []);
+
+  useEffect(() => {
+    const compareLevels = async () => {
+      //map missing levels from userdata
+      const missingLevels = listlevel.filter((level) => {
+        return !userdata.some((item) => item.level_id == level.id);
+      });
+
+      console.log("Missing Levels:", missingLevels);
+      setMissingLevels(missingLevels);
+    };
+
+    compareLevels();
+  }, [userdata, listlevel]);
+
   const openModalRH = () => {
     setIsModalOpen(true);
     document.body.style.overflow = "hidden"; // Disable background scrolling
@@ -67,62 +116,33 @@ const Academysection = () => {
             <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
               <div className="resume-content">
                 {userdata.map((item, index) => (
-                  <div key={index} className="resume-item emp-list pb-3">
-                    {/* Job Title and Edit Icon */}
-                    <div className="item title typ-14Bold">
-                      <span className="truncate emp-desg" title={item.level}>
-                        <strong>
-                          {item.level} {item.course}
-                        </strong>
-                      </span>
-                      <i
-                        className="la la-pencil-alt"
-                        onClick={openModalRH}
-                        style={{ cursor: "pointer" }}
-                      ></i>
-                    </div>
-
-                    {/* Job Type and Duration */}
-                    <div className="item experienceType typ-14Regular">
-                      <span className="truncate expType">
-                        {item.institution} {item.Board}
-                      </span>
-                      <br />
-                      <span className="truncate">
-                        {item.year} {item.type && ` | ${item.type}`}
-                      </span>
-                    </div>
+                  <div key={index}>
+                    {item.level_id == 1 || item.level_id == 2 ? (
+                      <SchoolDisplay data={item} />
+                    ) : (
+                      <ClgDisplay data={item} />
+                    )}
                   </div>
                 ))}
 
                 {/* Add Buttons */}
-                <span
-                  onClick={openModalRH}
-                  style={{
-                    cursor: "pointer",
-                    display: "block",
-                    color: "#275df5",
-                    fontWeight: 700,
-                    fontSize: "16px",
-                    paddingBottom: "10px", // Added bottom padding
-                  }}
-                >
-                  Add doctorate/PhD
-                </span>
 
-                <span
-                  onClick={openModalRH}
-                  style={{
-                    cursor: "pointer",
-                    display: "block",
-                    color: "#275df5",
-                    fontWeight: 700,
-                    fontSize: "16px",
-                    paddingBottom: "10px", // Added bottom padding
-                  }}
-                >
-                  Add masters/post-graduation
-                </span>
+                {missingLevels.map((level) => (
+                  <span
+                    key={level.id}
+                    onClick={openModalRH}
+                    style={{
+                      cursor: "pointer",
+                      display: "block",
+                      color: "#275df5",
+                      fontWeight: 700,
+                      fontSize: "16px",
+                      paddingBottom: "10px", // Added bottom padding
+                    }}
+                  >
+                    Add {level.level}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
@@ -131,7 +151,12 @@ const Academysection = () => {
 
       {/* Render Modal if isModalOpen is true */}
       {isModalOpen && (
-        <EducationModal show={isModalOpen} onClose={closeModalRH} />
+        <EducationModal
+          show={isModalOpen}
+          onClose={closeModalRH}
+          reload={reload}
+          setReload={setReload}
+        />
       )}
     </>
   );

@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import EducationForm from "../academicbox_component/academicForm3";
 import axios from "axios";
 
-const EducationModal = ({ show, onClose }) => {
+const EducationModal = ({ show, onClose, reload, setReload }) => {
   const token = localStorage.getItem("candidate_token");
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -35,6 +35,7 @@ const EducationModal = ({ show, onClose }) => {
   });
 
   const [isFormValid, setIsFormValid] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const validateForm = () => {
     // 'level' is always required
@@ -114,6 +115,7 @@ const EducationModal = ({ show, onClose }) => {
     }
 
     try {
+      setSaving(true);
       const payload = new FormData();
       for (const key in formData) {
         if (formData[key] !== null && formData[key] !== undefined) {
@@ -133,9 +135,12 @@ const EducationModal = ({ show, onClose }) => {
       );
 
       console.log("Education data saved successfully:", response.data);
+      setReload(!reload);
       onClose();
     } catch (error) {
       console.error("Error saving education data:", error);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -215,7 +220,7 @@ const EducationModal = ({ show, onClose }) => {
               <button
                 className="btn btn-primary"
                 onClick={handleSave}
-                disabled={!isFormValid}
+                disabled={!isFormValid || saving}
               >
                 Save
               </button>
