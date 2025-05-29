@@ -5,7 +5,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import EducationForm from "../academicbox_component/academicForm3";
 import axios from "axios";
 
-const EducationModal = ({ show, onClose, reload, setReload }) => {
+const EducationModal = ({
+  show,
+  onClose,
+  reload,
+  setReload,
+  selectedLevel,
+}) => {
   const token = localStorage.getItem("candidate_token");
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [formData, setFormData] = useState({
@@ -32,8 +38,16 @@ const EducationModal = ({ show, onClose, reload, setReload }) => {
     certificatePreview: "",
     level_type: "",
   });
+
   const [isFormValid, setIsFormValid] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (selectedLevel) {
+      console.log("selectedLevel from useEffect", selectedLevel);
+      setFormData({ ...formData, level: selectedLevel });
+    }
+  }, [selectedLevel]);
 
   const validateForm = () => {
     // 'level' is always required
@@ -174,7 +188,11 @@ const EducationModal = ({ show, onClose, reload, setReload }) => {
               TEST
             </button>
 
-            <EducationForm formData={formData} setFormData={setFormData} />
+            <EducationForm
+              formData={formData}
+              setFormData={setFormData}
+              selectedLevel_main={selectedLevel}
+            />
           </div>
 
           <div className="modal-footer">

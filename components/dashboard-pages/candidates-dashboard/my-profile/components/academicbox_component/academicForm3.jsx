@@ -6,7 +6,7 @@ import axios from "axios";
 import SchoolForm from "./formcomponent/schoolform";
 import DegreeForm from "./formcomponent/degreeform";
 
-const EducationForm = ({ formData, setFormData }) => {
+const EducationForm = ({ formData, setFormData, selectedLevel_main }) => {
   const [loading, setLoading] = useState(false);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const token = localStorage.getItem("candidate_token");
@@ -347,6 +347,7 @@ const EducationForm = ({ formData, setFormData }) => {
                 value={formData.level}
                 onChange={handleLevelChange}
                 required
+                disabled={selectedLevel_main}
               >
                 <option value="">Select Level</option>
                 {levels.map((level) => (

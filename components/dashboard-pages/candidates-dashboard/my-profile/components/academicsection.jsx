@@ -13,7 +13,7 @@ const Academysection = () => {
 
   const [userdata, setUserdata] = useState([]);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
-
+  const [selectedLevel, setSelectedLevel] = useState("");
   useEffect(() => {
     const fetchuserdata = async () => {
       try {
@@ -67,15 +67,22 @@ const Academysection = () => {
         return !userdata.some((item) => item.level_id == level.id);
       });
 
-      console.log("Missing Levels:", missingLevels);
+      // console.log("Missing Levels:", missingLevels);
       setMissingLevels(missingLevels);
     };
 
     compareLevels();
   }, [userdata, listlevel]);
 
-  const openModalRH = () => {
+  const openModalRH = (level) => {
     setIsModalOpen(true);
+    if (level) {
+      console.log("Selected Level:", level);
+      setSelectedLevel(level);
+    } else {
+      setSelectedLevel("");
+    }
+
     document.body.style.overflow = "hidden"; // Disable background scrolling
   };
 
@@ -98,7 +105,7 @@ const Academysection = () => {
           <div className="widget-title">
             <h4>Education</h4>
             <span
-              onClick={openModalRH}
+              onClick={() => openModalRH()}
               style={{
                 cursor: "pointer",
                 float: "right",
@@ -130,7 +137,7 @@ const Academysection = () => {
                 {missingLevels.map((level) => (
                   <span
                     key={level.id}
-                    onClick={openModalRH}
+                    onClick={() => openModalRH(level.id)}
                     style={{
                       cursor: "pointer",
                       display: "block",
@@ -156,6 +163,7 @@ const Academysection = () => {
           onClose={closeModalRH}
           reload={reload}
           setReload={setReload}
+          selectedLevel={selectedLevel}
         />
       )}
     </>
