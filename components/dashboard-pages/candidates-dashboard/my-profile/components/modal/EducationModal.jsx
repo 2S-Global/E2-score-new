@@ -11,6 +11,7 @@ const EducationModal = ({
   reload,
   setReload,
   selectedLevel,
+  edit_id,
 }) => {
   const token = localStorage.getItem("candidate_token");
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
@@ -41,6 +42,7 @@ const EducationModal = ({
 
   const [isFormValid, setIsFormValid] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (selectedLevel) {
@@ -48,6 +50,63 @@ const EducationModal = ({
       setFormData({ ...formData, level: selectedLevel });
     }
   }, [selectedLevel]);
+
+  useEffect(() => {
+    if (edit_id) {
+      console.log("edit_id from useEffect", edit_id);
+      setFormData({ ...formData, _id: edit_id });
+      /* http://localhost:8080/api/userdata/get_edit_user_data?dataId=6839499e3bbfe3574bccef83 */
+      const fetchuserdata = async () => {
+        setLoading(true);
+        try {
+          const response = await axios.get(
+            `${apiurl}/api/userdata/get_edit_user_data?dataId=${edit_id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (response.status == 200) {
+            const responseData = response.data.data;
+
+            setFormData({
+              ...formData,
+              _id: responseData._id,
+              level: responseData.level,
+              state: responseData.state,
+              board: responseData.board,
+              year_of_passing: responseData.year_of_passing,
+              medium: responseData.medium_of_education,
+              marks: responseData.marks,
+              eng_marks: responseData.eng_marks,
+              math_marks: responseData.math_marks,
+              university: responseData.universityName,
+              institute_name: responseData.instituteName,
+              course_name: responseData.courseName,
+              course_type: responseData.courseType,
+              start_year: responseData.duration.from,
+              end_year: responseData.duration.to,
+              grading_system: responseData.gradingSystem,
+              is_primary: responseData.isPrimary,
+              transcript: null,
+              transcriptPreview: responseData.transcript_data,
+              certificate: null,
+              certificatePreview: responseData.certificate_data,
+              level_type: "",
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchuserdata();
+    }
+  }, [edit_id]);
 
   const validateForm = () => {
     // 'level' is always required
@@ -192,6 +251,9 @@ const EducationModal = ({
               formData={formData}
               setFormData={setFormData}
               selectedLevel_main={selectedLevel}
+              edit_id_main={edit_id}
+              loading={loading}
+              setLoading={setLoading}
             />
           </div>
 
@@ -238,7 +300,11 @@ const EducationModal = ({
                 onClick={handleSave}
                 disabled={!isFormValid || saving}
               >
-                Save
+                {edit_id ? (
+                  <>{saving ? "Updating..." : "Update"}</>
+                ) : (
+                  <>{saving ? "Saving..." : "Save"}</>
+                )}
               </button>
             </div>
           </div>

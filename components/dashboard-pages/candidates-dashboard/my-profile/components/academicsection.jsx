@@ -14,6 +14,8 @@ const Academysection = () => {
   const [userdata, setUserdata] = useState([]);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [selectedLevel, setSelectedLevel] = useState("");
+  const [edit_id, setEdit_id] = useState("");
+
   useEffect(() => {
     const fetchuserdata = async () => {
       try {
@@ -74,13 +76,19 @@ const Academysection = () => {
     compareLevels();
   }, [userdata, listlevel]);
 
-  const openModalRH = (level) => {
+  const openModalRH = (level, edit_id) => {
     setIsModalOpen(true);
     if (level) {
       console.log("Selected Level:", level);
       setSelectedLevel(level);
     } else {
       setSelectedLevel("");
+    }
+
+    if (edit_id) {
+      setEdit_id(edit_id);
+    } else {
+      setEdit_id("");
     }
 
     document.body.style.overflow = "hidden"; // Disable background scrolling
@@ -125,9 +133,9 @@ const Academysection = () => {
                 {userdata.map((item, index) => (
                   <div key={index}>
                     {item.level_id == 1 || item.level_id == 2 ? (
-                      <SchoolDisplay data={item} />
+                      <SchoolDisplay data={item} openModalRH={openModalRH} />
                     ) : (
-                      <ClgDisplay data={item} />
+                      <ClgDisplay data={item} openModalRH={openModalRH} />
                     )}
                   </div>
                 ))}
@@ -164,6 +172,7 @@ const Academysection = () => {
           reload={reload}
           setReload={setReload}
           selectedLevel={selectedLevel}
+          edit_id={edit_id}
         />
       )}
     </>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-const SchoolDisplay = ({ data }) => {
+const SchoolDisplay = ({ data, openModalRH }) => {
+  // console.log("inside display :", data);
   return (
     <>
       <div className="resume-item emp-list pb-3">
@@ -10,7 +11,7 @@ const SchoolDisplay = ({ data }) => {
           </span>
           <i
             className="la la-pencil-alt"
-            /* onClick={openModalRH} */
+            onClick={() => openModalRH(data.level_id, data._id)}
             style={{ cursor: "pointer" }}
           ></i>
         </div>

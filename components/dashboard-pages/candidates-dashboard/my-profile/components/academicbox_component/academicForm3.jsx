@@ -6,8 +6,14 @@ import axios from "axios";
 import SchoolForm from "./formcomponent/schoolform";
 import DegreeForm from "./formcomponent/degreeform";
 
-const EducationForm = ({ formData, setFormData, selectedLevel_main }) => {
-  const [loading, setLoading] = useState(false);
+const EducationForm = ({
+  formData,
+  setFormData,
+  selectedLevel_main,
+  edit_id_main,
+  loading,
+  setLoading,
+}) => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const token = localStorage.getItem("candidate_token");
   if (!token) {
@@ -29,32 +35,55 @@ const EducationForm = ({ formData, setFormData, selectedLevel_main }) => {
   const [stateselected, setStateselected] = useState(false);
   const [universityselected, setUniversityselected] = useState(false);
   const [collegeselected, setCollegeselected] = useState(false);
-  const [collegeSearch, setCollegeSearch] = useState(formData.institute_name);
   const [filteredColleges, setFilteredColleges] = useState(colleges);
   const [filteredCourses, setFilteredCourses] = useState(courses);
+  const [filteredUniversity, setFilteredUniversity] = useState(university);
+  const [isFocused, setIsFocused] = useState(false);
+  const [filteredBoard, setFilteredBoard] = useState(listboard);
+  const [boardSearch, setBoardSearch] = useState(formData.board);
   const [courseSearch, setCourseSearch] = useState(formData.course_name);
   const [coursetype, setCoursetype] = useState(formData.level_type);
   const [universitySearch, setUniversitySearch] = useState(formData.university);
-  const [filteredUniversity, setFilteredUniversity] = useState(university);
-  const [isFocused, setIsFocused] = useState(false);
-  const [boardSearch, setBoardSearch] = useState(formData.board);
-  const [filteredBoard, setFilteredBoard] = useState(listboard);
+  const [collegeSearch, setCollegeSearch] = useState(formData.institute_name);
+
   //use Effect
+  useEffect(() => {
+    setBoardSearch(formData.board);
+    setCourseSearch(formData.course_name);
+    setCoursetype(formData.level_type);
+    setUniversitySearch(formData.university);
+    setCollegeSearch(formData.institute_name);
+  }, [formData]);
+
   useEffect(() => {
     const fetchLevels = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(
-          `${apiurl}/api/sql/dropdown/education_level`,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        /* /api/userdata/get_user_level
+        for adding
+        ${apiurl}/api/sql/dropdown/education_level
+        for editing
 
-        Setlevels(response.data.data);
+
+        */
+        if (edit_id_main) {
+          const response = await axios.get(
+            `${apiurl}/api/sql/dropdown/education_level`
+          );
+          Setlevels(response.data.data);
+        } else {
+          const response = await axios.get(
+            `${apiurl}/api/userdata/get_user_level`,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          Setlevels(response.data.data);
+        }
       } catch (error) {
         //  console.error("Error fetching levels:", error);
       } finally {
