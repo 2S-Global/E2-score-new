@@ -1,7 +1,7 @@
-import MobileMenu from "../../../header/MobileMenu";
-import DashboardHeader from "../../../header/DashboardHeader";
-import LoginPopup from "../../../common/form/login/LoginPopup";
-import DashboardEmployerSidebar from "../../../header/DashboardEmployerSidebar";
+import MobileMenu from "../../../header/AdminMobileMenu";
+import DashboardHeader from "../../../header/DashboardAdminheader";
+import DashboardEmployerSidebar from "../../../header/DashboardAdminsidebar";
+
 import BreadCrumb from "../../BreadCrumb";
 import CopyrightFooter from "../../CopyrightFooter";
 import Form from "./components/Form";
@@ -13,11 +13,9 @@ const index = () => {
       <span className="header-span"></span>
       {/* <!-- Header Span for hight --> */}
 
-      <LoginPopup />
+      <DashboardHeader />
       {/* End Login Popup Modal */}
 
-      <DashboardHeader />
-      {/* End Header */}
 
       <MobileMenu />
       {/* End MobileMenu */}
@@ -28,10 +26,10 @@ const index = () => {
       {/* <!-- Dashboard --> */}
       <section className="user-dashboard">
         <div className="dashboard-outer">
-          <BreadCrumb title="Change Password!" />
+          {/* <BreadCrumb title="Change Password!" /> */}
           {/* breadCrumb */}
 
-          <MenuToggler />
+          {/* <MenuToggler /> */}
           {/* Collapsible sidebar button */}
 
           <div className="ls-widget">

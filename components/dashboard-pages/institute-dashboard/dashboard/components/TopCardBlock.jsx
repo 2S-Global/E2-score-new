@@ -13,7 +13,7 @@ const TopCardBlock = () => {
       id: 1,
       icon: "la-building", // Better for "Total Company"
       countNumber: TotalCompany,
-      metaName: "Total Company",
+      metaName: "Total Candidate",
       uiClass: "ui-green",
     },
     {

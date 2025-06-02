@@ -7,7 +7,7 @@ import { isActiveLink } from "../../utils/linkActiveChecker";
 import { useDispatch, useSelector } from "react-redux";
 import { menuToggle } from "../../features/toggle/toggleSlice.js";
 import { usePathname } from "next/navigation";
-
+import styles  from "./DashboardAdminSidebar.module.css"
 const DashboardEmployerSidebar = () => {
   const { menu } = useSelector((state) => state.toggle || {}); // Safe destructuring
 
@@ -30,16 +30,7 @@ const DashboardEmployerSidebar = () => {
 
       <div>
         <p
-          style={{
-            textAlign: "center",
-            fontWeight: "800",
-            fontSize: "20px",
-            marginTop: "20px",
-            backgroundColor: "#FF0000", // Set background color
-            color: "white", // Set text color
-            padding: "10px", // Optional: add some padding
-            borderRadius: "5px", // Optional: rounded corners
-          }}
+          className={styles.adminTitle}
         >
           Admin Panel
         </p>

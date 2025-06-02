@@ -3,7 +3,7 @@ module.exports = [
     id: 1,
     name: "Dashboard",
     icon: "la-home",
-    routePath: "#",
+    routePath: "/institute-dashboard/dashboard",
     active: "active",
   },
   {
