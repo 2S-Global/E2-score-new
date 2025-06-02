@@ -240,20 +240,22 @@ const DegreeForm = ({
           </div>
         </div>
 
-        <div className="form-group">
-          <input
-            type="checkbox"
-            name="is_primary"
-            checked={formData.is_primary}
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                is_primary: e.target.checked, // true if checked, false if unchecked
-              }))
-            }
-          />
-          <label> Make this as my primary graduation/diploma</label>
-        </div>
+        {formData.level == 3 || formData.level == 5 ? (
+          <div className="form-group">
+            <input
+              type="checkbox"
+              name="is_primary"
+              checked={formData.is_primary}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  is_primary: e.target.checked, // true if checked, false if unchecked
+                }))
+              }
+            />
+            <label> Make this as my primary graduation/diploma</label>
+          </div>
+        ) : null}
 
         <div className="form-group col-lg-6">
           <label>

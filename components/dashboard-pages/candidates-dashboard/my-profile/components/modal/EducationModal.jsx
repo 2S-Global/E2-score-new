@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import EducationForm from "../academicbox_component/academicForm3";
 import axios from "axios";
+import { Trash2 } from "lucide-react";
 
 const EducationModal = ({
   show,
@@ -232,6 +233,35 @@ const EducationModal = ({
     }
   };
 
+  const handleDelete = async () => {
+    if (!edit_id) {
+      console.error("No education record selected for deletion.");
+      return;
+    }
+    if (!token) {
+      console.error("Authorization token is missing. Please log in.");
+      return;
+    }
+    try {
+      setLoading(true);
+      /*   const response = await axios.delete(
+        `${apiurl}/api/useraction/usereducation/${edit_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ); */
+      console.log("Education record deleted successfully:");
+      setReload(!reload);
+      onClose();
+    } catch (error) {
+      console.error("Error deleting education record:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (!show) return null;
 
   return (
@@ -252,12 +282,27 @@ const EducationModal = ({
           </div>
 
           <div className="modal-body">
-            <p style={{ color: "black" }}>
-              Details like course, university, and more, help recruiters
-              identify your educational background
-            </p>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                color: "black",
+              }}
+              className="mb-3"
+            >
+              <span>
+                Details like course, university, and more, help recruiters
+                identify your educational background
+              </span>
+              {edit_id && (
+                <span style={{ color: "red", cursor: "pointer" }}>
+                  <Trash2 size={20} onClick={handleDelete} />
+                </span>
+              )}
+            </div>
 
-            {/*  <button
+            {/* <button
               className="btn btn-primary"
               onClick={() => console.log(formData)}
             >

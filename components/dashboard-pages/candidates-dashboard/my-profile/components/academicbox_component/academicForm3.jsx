@@ -50,7 +50,6 @@ const EducationForm = ({
   useEffect(() => {
     setBoardSearch(formData.board);
     setCourseSearch(formData.course_name);
-    setCoursetype(formData.level_type);
     setUniversitySearch(formData.university);
     setCollegeSearch(formData.institute_name);
   }, [formData]);
