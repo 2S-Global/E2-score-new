@@ -3,7 +3,7 @@ module.exports = [
     id: 1,
     name: "Change Password",
     icon: "la-home",
-    routePath: "#",
+    routePath: "changepassword",
     active: "active",
   },
   {

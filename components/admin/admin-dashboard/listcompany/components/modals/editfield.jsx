@@ -185,8 +185,8 @@ const EditfieldModal = ({ show, onClose, field }) => {
       );
 
       setSuccess(response.data.message);
-      window.location.reload();
-      router.push("/admin/listcompany");
+      // window.location.reload();
+      // router.push("/admin/listcompany");
     } catch (err) {
       setError(
         err.response?.data?.message || "Something went wrong. Try again."

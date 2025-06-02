@@ -312,7 +312,7 @@ const AddInstituteModal = ({ show, onClose }) => {
                     />
                   </div>
 
-                  <div className="mb-4 col-md-6 position-relative">
+                  {/* <div className="mb-4 col-md-6 position-relative">
                     <label htmlFor="password" className="form-label">
                       Password <span style={{ color: "red" }}>*</span>
                     </label>
@@ -344,7 +344,7 @@ const AddInstituteModal = ({ show, onClose }) => {
                         )}
                       </span>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="mb-3 col-md-6">
                     <label htmlFor="gst_no" className="form-label">

@@ -7,7 +7,7 @@ import { isActiveLink } from "../../utils/linkActiveChecker";
 import { useDispatch, useSelector } from "react-redux";
 import { menuToggle } from "../../features/toggle/toggleSlice";
 import { usePathname } from "next/navigation";
-
+import styles  from "./DashboardAdminSidebar.module.css"
 const DashboardEmployerSidebar = () => {
   const { menu } = useSelector((state) => state.toggle);
   const dispatch = useDispatch();
@@ -16,6 +16,9 @@ const DashboardEmployerSidebar = () => {
   const menuToggleHandler = () => {
     dispatch(menuToggle());
   };
+
+  const pathname = usePathname();
+
 
   return (
     <div className={`user-sidebar ${menu ? "sidebar_open" : ""}`}>
@@ -27,16 +30,7 @@ const DashboardEmployerSidebar = () => {
       </div>
       {/* End sidebar close icon */}
       <p
-        style={{
-          textAlign: "center",
-          fontWeight: "800",
-          fontSize: "20px",
-          marginTop: "20px",
-          backgroundColor: "#FF0000", // Set background color
-          color: "white", // Set text color
-          padding: "10px", // Optional: add some padding
-          borderRadius: "5px", // Optional: rounded corners
-        }}
+   className={styles.adminTitle}
       >
         Institute Panel
       </p>

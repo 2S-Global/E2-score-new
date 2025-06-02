@@ -18,6 +18,9 @@ const FormContent2 = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
+const [token, setToken] = useState(null);
+
+
 
   // Handle input changes
   const handleChange = (e) => {
