@@ -7,11 +7,22 @@ const SearchableInput = ({
   onChange,
   options,
   onSelect,
-  handleFocus,
-  handleBlur,
-  isFocused,
-  setIsFocused,
 }) => {
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = (e) => {
+    // Update parent form data
+    const { name, value } = e.target;
+    onChange(e);
+
+    // Slight delay so click (onMouseDown) can register
+    setTimeout(() => setIsFocused(false), 100);
+  };
+
   return (
     <div className="form-group position-relative">
       <label>
@@ -39,7 +50,10 @@ const SearchableInput = ({
               key={index}
               className="dropdown-item"
               style={{ cursor: "pointer" }}
-              onMouseDown={() => onSelect(option)} // Use onMouseDown instead of onClick
+              onMouseDown={() => {
+                onSelect(option);
+                setIsFocused(false);
+              }}
             >
               {option}
             </li>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const ClgDisplay = ({ data }) => {
+const ClgDisplay = ({ data, openModalRH }) => {
   return (
     <>
       <div className="resume-item emp-list pb-3">
@@ -12,7 +12,7 @@ const ClgDisplay = ({ data }) => {
           </span>
           <i
             className="la la-pencil-alt"
-            /* onClick={openModalRH} */
+            onClick={() => openModalRH(data.level_id, data._id)}
             style={{ cursor: "pointer" }}
           ></i>
         </div>

@@ -73,27 +73,27 @@ const EducationModal = ({
 
             setFormData({
               ...formData,
-              _id: responseData._id,
-              level: responseData.level,
-              state: responseData.state,
-              board: responseData.board,
-              year_of_passing: responseData.year_of_passing,
-              medium: responseData.medium_of_education,
-              marks: responseData.marks,
-              eng_marks: responseData.eng_marks,
-              math_marks: responseData.math_marks,
-              university: responseData.universityName,
-              institute_name: responseData.instituteName,
-              course_name: responseData.courseName,
-              course_type: responseData.courseType,
-              start_year: responseData.duration.from,
-              end_year: responseData.duration.to,
-              grading_system: responseData.gradingSystem,
-              is_primary: responseData.isPrimary,
+              _id: responseData._id || "",
+              level: responseData.level || "",
+              state: responseData.state || "",
+              board: responseData.board || "",
+              year_of_passing: responseData.year_of_passing || "",
+              medium: responseData.medium_of_education || "",
+              marks: responseData.marks || "",
+              eng_marks: responseData.eng_marks || "",
+              math_marks: responseData.math_marks || "",
+              university: responseData.universityName || "",
+              institute_name: responseData.instituteName || "",
+              course_name: responseData.courseName || "",
+              course_type: responseData.courseType || "",
+              start_year: responseData.duration.from || "",
+              end_year: responseData.duration.to || "",
+              grading_system: responseData.gradingSystem || "",
+              is_primary: responseData.isPrimary || false,
               transcript: null,
-              transcriptPreview: responseData.transcript_data,
+              transcriptPreview: responseData.transcript_data || "",
               certificate: null,
-              certificatePreview: responseData.certificate_data,
+              certificatePreview: responseData.certificate_data || "",
               level_type: "",
             });
           }
@@ -122,13 +122,15 @@ const EducationModal = ({
         "year_of_passing",
         "medium",
         "marks",
-        "transcript",
-        "certificate",
       ];
 
       if (formData.level == 2) {
         requiredFields.push("eng_marks");
         requiredFields.push("math_marks");
+      }
+      if (!edit_id) {
+        requiredFields.push("transcript");
+        requiredFields.push("certificate");
       }
 
       const isAnyFieldEmpty = requiredFields.some((field) => {
@@ -152,9 +154,11 @@ const EducationModal = ({
         "end_year",
         "grading_system",
         "marks",
-        "transcript",
-        "certificate",
       ];
+      if (!edit_id) {
+        requiredFields.push("transcript");
+        requiredFields.push("certificate");
+      }
       const isAnyFieldEmpty = requiredFields.some((field) => {
         const value = formData[field];
         if (field === "transcript" || field === "certificate") {
@@ -193,19 +197,32 @@ const EducationModal = ({
           payload.append(key, formData[key]);
         }
       }
+      if (edit_id) {
+        const response = await axios.put(
+          `${apiurl}/api/useraction/usereducation`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("Education data saved successfully:", response.data);
+      } else {
+        const response = await axios.post(
+          `${apiurl}/api/useraction/usereducation`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("Education data saved successfully:", response.data);
+      }
 
-      const response = await axios.post(
-        `${apiurl}/api/useraction/usereducation`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      console.log("Education data saved successfully:", response.data);
       setReload(!reload);
       onClose();
     } catch (error) {
