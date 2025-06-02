@@ -95,7 +95,7 @@ const EducationModal = ({
               transcriptPreview: responseData.transcript_data || "",
               certificate: null,
               certificatePreview: responseData.certificate_data || "",
-              level_type: "",
+              level_type: responseData.levelType || "",
             });
           }
         } catch (error) {
