@@ -244,21 +244,31 @@ const EducationModal = ({
     }
     try {
       setLoading(true);
-      /*   const response = await axios.delete(
-        `${apiurl}/api/useraction/usereducation/${edit_id}`,
+
+      /* /api/useraction/delete_user_data?_id=683958213ade488ea47299eb */
+      const response = await axios.delete(
+        `${apiurl}/api/useraction/delete_user_data?_id=${edit_id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
-      ); */
-      console.log("Education record deleted successfully:");
+      );
+      if (response.status !== 200) {
+        throw new Error("Failed to delete education record");
+      }
       setReload(!reload);
       onClose();
     } catch (error) {
       console.error("Error deleting education record:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleConfirmDelete = () => {
+    if (window.confirm("Are you sure you want to delete this record?")) {
+      handleDelete();
     }
   };
 
@@ -297,7 +307,7 @@ const EducationModal = ({
               </span>
               {edit_id && (
                 <span style={{ color: "red", cursor: "pointer" }}>
-                  <Trash2 size={20} onClick={handleDelete} />
+                  <Trash2 size={20} onClick={handleConfirmDelete} />
                 </span>
               )}
             </div>

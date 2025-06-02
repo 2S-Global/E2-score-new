@@ -7,6 +7,8 @@ const SearchableInput = ({
   onChange,
   options,
   onSelect,
+  setFormData,
+  formData,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -17,6 +19,10 @@ const SearchableInput = ({
   const handleBlur = (e) => {
     // Update parent form data
     const { name, value } = e.target;
+    if (setFormData) {
+      setFormData({ ...formData, [name]: value });
+    }
+
     onChange(e);
 
     // Slight delay so click (onMouseDown) can register

@@ -4,6 +4,8 @@ import EducationModal from "./modal/EducationModal"; // Import the modal compone
 import ClgDisplay from "./academicbox_component/clgdisplay";
 import SchoolDisplay from "./academicbox_component/schooldisplay";
 import axios from "axios";
+import CustomizedProgressBars from "@/components/common/loader";
+
 const Academysection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expanded, setExpanded] = useState({}); // Track expanded descriptions
@@ -16,9 +18,12 @@ const Academysection = () => {
   const [selectedLevel, setSelectedLevel] = useState("");
   const [edit_id, setEdit_id] = useState("");
 
+  const [sectionloading, setSectionloading] = useState(false);
+
   useEffect(() => {
     const fetchuserdata = async () => {
       try {
+        setSectionloading(true);
         const token = localStorage.getItem("candidate_token");
         const response = await axios.get(
           `${apiurl}/api/userdata/get_user_education`,
@@ -33,6 +38,8 @@ const Academysection = () => {
         }
       } catch (error) {
         console.error("Error fetching skills:", error);
+      } finally {
+        setSectionloading(false);
       }
     };
     fetchuserdata();
@@ -107,62 +114,92 @@ const Academysection = () => {
 
   return (
     <>
-      {/* Resume Headline Section */}
-      <div className="ls-widget">
-        <div className="tabs-box">
-          <div className="widget-title">
-            <h4>Education</h4>
-            <span
-              onClick={() => openModalRH()}
-              style={{
-                cursor: "pointer",
-                float: "right",
-                color: "#275df5",
-                fontWeight: 700,
-                fontSize: "16px",
-              }}
-            >
-              Add education
-            </span>
+      {sectionloading ? (
+        <>
+          <div className="ls-widget">
+            <div className="tabs-box">
+              <div className="widget-title">
+                <h4>Education</h4>
+                <span
+                  onClick={() => openModalRH()}
+                  style={{
+                    cursor: "pointer",
+                    float: "right",
+                    color: "#275df5",
+                    fontWeight: 700,
+                    fontSize: "16px",
+                  }}
+                >
+                  Add education
+                </span>
+              </div>
+              <CustomizedProgressBars />
+            </div>
           </div>
+        </>
+      ) : (
+        <>
+          <div className="ls-widget">
+            <div className="tabs-box">
+              <div className="widget-title">
+                <h4>Education</h4>
+                <span
+                  onClick={() => openModalRH()}
+                  style={{
+                    cursor: "pointer",
+                    float: "right",
+                    color: "#275df5",
+                    fontWeight: 700,
+                    fontSize: "16px",
+                  }}
+                >
+                  Add education
+                </span>
+              </div>
 
-          {/* Display Resume Headline */}
-          <div className="widget-content">
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-              <div className="resume-content">
-                {userdata.map((item, index) => (
-                  <div key={index}>
-                    {item.level_id == 1 || item.level_id == 2 ? (
-                      <SchoolDisplay data={item} openModalRH={openModalRH} />
-                    ) : (
-                      <ClgDisplay data={item} openModalRH={openModalRH} />
-                    )}
+              {/* Display Resume Headline */}
+              <div className="widget-content">
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+                  <div className="resume-content">
+                    {userdata.map((item, index) => (
+                      <div key={index}>
+                        {item.level_id == 1 || item.level_id == 2 ? (
+                          <SchoolDisplay
+                            data={item}
+                            openModalRH={openModalRH}
+                          />
+                        ) : (
+                          <ClgDisplay data={item} openModalRH={openModalRH} />
+                        )}
+                      </div>
+                    ))}
+
+                    {/* Add Buttons */}
+
+                    {missingLevels.map((level) => (
+                      <span
+                        key={level.id}
+                        onClick={() => openModalRH(level.id)}
+                        style={{
+                          cursor: "pointer",
+                          display: "block",
+                          color: "#275df5",
+                          fontWeight: 700,
+                          fontSize: "16px",
+                          paddingBottom: "10px", // Added bottom padding
+                        }}
+                      >
+                        Add {level.level}
+                      </span>
+                    ))}
                   </div>
-                ))}
-
-                {/* Add Buttons */}
-
-                {missingLevels.map((level) => (
-                  <span
-                    key={level.id}
-                    onClick={() => openModalRH(level.id)}
-                    style={{
-                      cursor: "pointer",
-                      display: "block",
-                      color: "#275df5",
-                      fontWeight: 700,
-                      fontSize: "16px",
-                      paddingBottom: "10px", // Added bottom padding
-                    }}
-                  >
-                    Add {level.level}
-                  </span>
-                ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
+      {/* Resume Headline Section */}
 
       {/* Render Modal if isModalOpen is true */}
       {isModalOpen && (

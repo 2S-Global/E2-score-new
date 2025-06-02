@@ -70,6 +70,8 @@ const DegreeForm = ({
           handleBlur={handleBlur}
           isFocused={isFocused}
           setIsFocused={setIsFocused}
+          setFormData={setFormData}
+          formData={formData}
         />
 
         <div
@@ -101,6 +103,8 @@ const DegreeForm = ({
             handleBlur={handleBlur}
             isFocused={isFocused}
             setIsFocused={setIsFocused}
+            setFormData={setFormData}
+            formData={formData}
           />
           <div
             style={{
@@ -130,6 +134,8 @@ const DegreeForm = ({
               handleBlur={handleBlur}
               isFocused={isFocused}
               setIsFocused={setIsFocused}
+              setFormData={setFormData}
+              formData={formData}
             />
             <div className="form-group">
               <label>
@@ -168,10 +174,16 @@ const DegreeForm = ({
               <option value="">Select Start Year</option>
               {Array.from({ length: 50 }, (_, i) => {
                 const year = new Date().getFullYear() - i;
+                const isDisabled =
+                  formData.end_year &&
+                  parseInt(year) > parseInt(formData.end_year);
+
                 return (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
+                  !isDisabled && (
+                    <option key={year} value={year} disabled={isDisabled}>
+                      {year}
+                    </option>
+                  )
                 );
               })}
             </select>
@@ -189,10 +201,16 @@ const DegreeForm = ({
               <option value="">Select End Year</option>
               {Array.from({ length: 46 }, (_, i) => {
                 const year = new Date().getFullYear() + 5 - i;
+                const isDisabled =
+                  formData.start_year &&
+                  parseInt(year) < parseInt(formData.start_year);
+
                 return (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
+                  !isDisabled && (
+                    <option key={year} value={year} disabled={isDisabled}>
+                      {year}
+                    </option>
+                  )
                 );
               })}
             </select>

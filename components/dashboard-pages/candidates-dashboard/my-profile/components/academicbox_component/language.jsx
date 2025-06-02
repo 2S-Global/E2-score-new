@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 
 const LanguageProficiency = () => {
-  const [languages, setLanguages] = useState([
-    { language: "", proficiency: "", read: false, write: false, speak: false },
-  ]);
+  const [languages, setLanguages] = useState([{}]);
 
   const addLanguage = () => {
     setLanguages([

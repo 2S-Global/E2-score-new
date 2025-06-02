@@ -70,7 +70,7 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
       setSelectedInfo((prev) =>
         prev.includes(value)
           ? prev.filter((item) => item !== value)
-          : [...prev, value],
+          : [...prev, value]
       );
     }
   };
@@ -144,7 +144,7 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
         tabIndex="-1"
         style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
       >
-        <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-dialog modal-dialog-centered modal-lg">
           <div className="modal-content p-3">
             {/* Modal Header */}
             <div className="modal-header">
