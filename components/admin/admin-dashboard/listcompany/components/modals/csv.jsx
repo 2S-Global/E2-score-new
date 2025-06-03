@@ -133,7 +133,7 @@ const AddCsvModal = ({ show, onClose, field }) => {
                 <button
                   type="submit"
                   className="btn btn-primary w-100"
-                  disabled={loading}
+                  disabled={loading || !csvFile}
                 >
                   {loading ? "Registering..." : "Register"}
                 </button>
