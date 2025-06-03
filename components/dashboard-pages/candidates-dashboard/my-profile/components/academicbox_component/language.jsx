@@ -4,6 +4,9 @@ const LanguageProficiency = ({ formData, setFormData, apiurl }) => {
   const [languages, setLanguages] = useState(formData.languages || []);
 
   const [languageOptions, setLanguageOptions] = useState([]);
+  const [languageproficiencyOptions, setLanguageproficiencyOptions] = useState(
+    []
+  );
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     setFormData((prevData) => ({ ...prevData, languages }));
@@ -22,7 +25,24 @@ const LanguageProficiency = ({ formData, setFormData, apiurl }) => {
         setLoading(false);
       }
     };
+    /* /api/sql/dropdown/language_proficiency */
+    const fetchLanguageproficiencyOptions = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          `${apiurl}/api/sql/dropdown/language_proficiency`
+        );
+        const data = await response.json();
+        setLanguageproficiencyOptions(data.data);
+      } catch (error) {
+        console.error("Error fetching language proficiency options:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchLanguageOptions();
+    fetchLanguageproficiencyOptions();
   }, [apiurl]);
 
   const addLanguage = () => {
@@ -128,9 +148,11 @@ const LanguageProficiency = ({ formData, setFormData, apiurl }) => {
                 style={{ width: "100%", padding: "8px", marginTop: "5px" }}
               >
                 <option value="">Select proficiency</option>
-                <option value="Beginner">Beginner</option>
-                <option value="Proficient">Proficient</option>
-                <option value="Expert">Expert</option>
+                {languageproficiencyOptions.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
