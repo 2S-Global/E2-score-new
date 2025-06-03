@@ -54,7 +54,7 @@ const AddCsvModal = ({ show, onClose, field }) => {
       router.push("/admin/listinstitute");
     } catch (err) {
       setError(
-        err.response?.data?.message || "Registration failed. Try again."
+        err.response?.data?.message || "Import failed. Try again."
       );
     } finally {
       setLoading(false);
@@ -100,7 +100,7 @@ const AddCsvModal = ({ show, onClose, field }) => {
       download
       className="btn btn-sm btn-outline-primary"
     >
-      Download Dummy Csv
+      Download Dummy CSV
     </a>
   </div>
   <button
@@ -135,7 +135,7 @@ const AddCsvModal = ({ show, onClose, field }) => {
                   className="btn btn-primary w-100"
                   disabled={loading || !csvFile}
                 >
-                  {loading ? "Registering..." : "Register"}
+                  {loading ? "Imporing..." : "Import"}
                 </button>
               </form>
             </div>
