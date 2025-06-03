@@ -280,6 +280,8 @@ setChartData2(chartData2);
 
     const fetchAll = async () => {
       try {
+          
+
         await Promise.allSettled([
           fetchPieChart1(),
           fetchPieChart2(),
