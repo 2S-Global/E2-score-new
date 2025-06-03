@@ -72,7 +72,7 @@ const AddCsvModal = ({ show, onClose, field }) => {
 
     const fileExtension = file.name.split(".").pop().toLowerCase();
     if (fileExtension !== "csv") {
-      setError("No file selected.");
+      setError("Only CSV files are allowed.");
       setErrorId(Date.now());
       setCsvFile(null);
       return;
