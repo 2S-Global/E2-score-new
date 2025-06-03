@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import PersonalModal from "./modal/PersonalModal";
+import PersonalModal from "./modal/PersonalModal2";
 
 const PersonalSection = () => {
   // Modal state
@@ -12,7 +12,7 @@ const PersonalSection = () => {
     gender: "Male",
     maritalStatus: "Single / Unmarried",
     moreinfo: "",
-    dob: "13 Oct 2000",
+    dob: "13 Oct 2001",
     category: "",
     differentlyAbled: "No",
     careerBreak: "",
@@ -126,7 +126,12 @@ const PersonalSection = () => {
                 {/* DOB */}
                 <div className="mt-3 mb-1">
                   <strong>Date of Birth</strong>
-                  <div className="typ-14Medium">{personalDetails.dob}</div>
+                  <div
+                    className="typ-14Medium"
+                    onClick={() => openModalRH("dob")}
+                  >
+                    {personalDetails.dob}
+                  </div>
                 </div>
 
                 {/* Category */}
@@ -152,7 +157,10 @@ const PersonalSection = () => {
                 {/* Differently abled */}
                 <div className="mt-3 mb-1">
                   <strong>Differently Abled</strong>
-                  <div className="typ-14Medium">
+                  <div
+                    className="typ-14Medium"
+                    onClick={() => openModalRH("differentlyAbled")}
+                  >
                     {personalDetails.differentlyAbled}
                   </div>
                 </div>

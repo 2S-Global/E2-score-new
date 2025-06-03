@@ -2,11 +2,19 @@ import React, { useState, useEffect, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Select from "react-select";
 import LanguageProficiency from "../academicbox_component/language";
+import axios from "axios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import CustomizedProgressBars from "@/components/common/loader";
 
+import PersonalInfoForm from "../personal_details_component/personal_detailsform";
 const PersonalModal = ({ show, onClose, focusSection }) => {
-  console.log("Your focus section is:", focusSection);
+  const [formData, setFormData] = useState({
+    gender: "",
+    dob: null,
+    more_info: [],
+  });
 
-  const [selectedGender, setSelectedGender] = useState("Male");
   const [selectedMaritalStatus, setSelectedMaritalStatus] =
     useState("Single/unmarried");
   const [selectedInfo, setSelectedInfo] = useState([]);
@@ -14,6 +22,12 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
   const [selectedAbled, setSelectedAbled] = useState("No");
   const [selectedCareerBreak, setSelectedCareerBreak] = useState("No");
   const [selectedLocations, setSelectedLocations] = useState([]);
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const token = localStorage.getItem("candidate_token");
+  if (!token) {
+    console.log("No token");
+  }
+  const [loading, setLoading] = useState(true);
 
   const old_locations = [
     "United Kingdom",
@@ -56,7 +70,11 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
     label: location,
     value: location,
   }));
-
+  const handleDateChange = (date) => {
+    if (date) {
+      setFormData({ ...formData, dob: date }); // Store raw Date object
+    }
+  };
   const handleChange = (selectedOptions) => {
     if (selectedOptions.length <= 10) {
       setSelectedLocations(selectedOptions);
@@ -97,6 +115,13 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
       });
     }
   }, [show, focusSection]);
+
+  const today = new Date();
+  const eighteenYearsAgo = new Date(
+    today.getFullYear() - 18,
+    today.getMonth(),
+    today.getDate()
+  );
 
   if (!show) return null;
 
@@ -161,28 +186,40 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
               <p className="text-muted">
                 This information helps employers know you better.
               </p>
-
+              {loading ? (
+                <>{/*   <CustomizedProgressBars /> */}</>
+              ) : (
+                <PersonalInfoForm
+                  formData={formData}
+                  setFormData={setFormData}
+                  focusSection={focusSection}
+                  show={show}
+                  setLoading={setLoading}
+                />
+              )}
               <form>
                 <div ref={personalInfo}>
                   {/* Gender Selection */}
-                  <div className="mb-3">
+                  {/* Gender Selection */}
+                  {/*  <div className="mb-3">
                     <label className="form-label">
                       <b>Gender</b>
+                      <span style={{ color: "red" }}>*</span>
                     </label>
                     <div className="d-flex gap-2 flex-wrap">
-                      {["Male", "Female", "Transgender"].map((gender) => (
+                      {Genders.map((gender) => (
                         <button
-                          key={gender}
-                          onClick={(e) => handleSelect("gender", gender, e)}
+                          key={gender.id}
+                          onClick={(e) => handleSelect("gender", gender.id, e)}
                           className={`btn option-btn rounded-pill ${
-                            selectedGender === gender ? "active" : ""
+                            formData.gender == gender.id ? "active" : ""
                           }`}
                         >
-                          {gender}
+                          {gender.name}
                         </button>
                       ))}
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* More Information Section */}
                   <div className="mb-3">
@@ -243,45 +280,24 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
 
                   {/* Date of Birth Section */}
                   <div className="mb-3">
-                    <label className="form-label">
+                    <label className="form-label d-block">
                       <b>Date of Birth</b>
+                      <span style={{ color: "red" }}>*</span>
                     </label>
-                    <div className="d-flex gap-2">
-                      <select className="form-select">
-                        {[...Array(31)].map((_, i) => (
-                          <option key={i + 1} value={i + 1}>
-                            {i + 1}
-                          </option>
-                        ))}
-                      </select>
-                      <select className="form-select">
-                        {[
-                          "Jan",
-                          "Feb",
-                          "Mar",
-                          "Apr",
-                          "May",
-                          "Jun",
-                          "Jul",
-                          "Aug",
-                          "Sep",
-                          "Oct",
-                          "Nov",
-                          "Dec",
-                        ].map((month, i) => (
-                          <option key={i} value={month}>
-                            {month}
-                          </option>
-                        ))}
-                      </select>
-                      <select className="form-select">
-                        {[...Array(70)].map((_, i) => (
-                          <option key={i} value={2000 - i}>
-                            {2000 - i}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                    <DatePicker
+                      selected={formData.dob ? new Date(formData.dob) : null}
+                      onChange={handleDateChange}
+                      dateFormat="dd/MM/yyyy"
+                      className="form-control"
+                      maxDate={eighteenYearsAgo}
+                      showYearDropdown
+                      scrollableYearDropdown
+                      yearDropdownItemNumber={100}
+                      required
+                      placeholderText="dd/mm/yyyy"
+                      width="100%"
+                      withPortal
+                    />
                   </div>
                 </div>
 
