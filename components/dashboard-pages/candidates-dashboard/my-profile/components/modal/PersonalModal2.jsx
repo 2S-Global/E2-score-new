@@ -33,7 +33,7 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
     pincode: "",
     languages: [
       {
-        language: "",
+        language: "5",
         proficiency: "",
         read: false,
         write: false,

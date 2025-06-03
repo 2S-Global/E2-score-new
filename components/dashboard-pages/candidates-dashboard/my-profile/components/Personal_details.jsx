@@ -210,7 +210,12 @@ const PersonalSection = () => {
                 {/* Address */}
                 <div className="mt-3 mb-1">
                   <strong>Address</strong>
-                  <div className="typ-14Medium">{personalDetails.address}</div>
+                  <div
+                    className="typ-14Medium"
+                    onClick={() => openModalRH("address")}
+                  >
+                    {personalDetails.address}
+                  </div>
                 </div>
               </div>
             </div>

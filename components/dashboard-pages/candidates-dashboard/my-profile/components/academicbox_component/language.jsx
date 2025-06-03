@@ -1,7 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const LanguageProficiency = () => {
-  const [languages, setLanguages] = useState([{}]);
+const LanguageProficiency = ({ formData, setFormData, apiurl }) => {
+  const [languages, setLanguages] = useState(formData.languages || []);
+
+  const [languageOptions, setLanguageOptions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    setFormData((prevData) => ({ ...prevData, languages }));
+  }, [languages]);
+
+  useEffect(() => {
+    const fetchLanguageOptions = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${apiurl}/api/sql/dropdown/language`);
+        const data = await response.json();
+        setLanguageOptions(data.data);
+      } catch (error) {
+        console.error("Error fetching language options:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLanguageOptions();
+  }, [apiurl]);
 
   const addLanguage = () => {
     setLanguages([
@@ -42,7 +64,13 @@ const LanguageProficiency = () => {
         Language proficiency
       </label>
 
-      <p className="text-muted" style={{ fontSize: "14px" }}>
+      <p
+        className="text-muted"
+        style={{ fontSize: "14px" }}
+        onClick={() => {
+          console.log("Language :", languages);
+        }}
+      >
         Strengthen your resume by letting recruiters know you can communicate in
         multiple languages
       </p>
@@ -61,7 +89,7 @@ const LanguageProficiency = () => {
               <label className="form-label">
                 <b>Language</b>
               </label>
-              <input
+              {/*  <input
                 type="text"
                 placeholder="Enter language"
                 className="form-control"
@@ -70,7 +98,22 @@ const LanguageProficiency = () => {
                   handleChange(index, "language", e.target.value)
                 }
                 style={{ width: "100%", padding: "8px", marginTop: "5px" }}
-              />
+              /> */}
+              <select
+                className="form-select"
+                value={lang.language}
+                onChange={(e) =>
+                  handleChange(index, "language", e.target.value)
+                }
+                style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+              >
+                <option value="">Select language</option>
+                {languageOptions.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div style={{ flex: 1 }}>
               <label className="form-label">

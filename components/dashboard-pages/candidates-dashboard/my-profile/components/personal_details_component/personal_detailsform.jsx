@@ -28,6 +28,7 @@ const PersonalInfoForm = ({ formData, setFormData, focusSection, show }) => {
   const languages = useRef(null);
   const dob = useRef(null);
   const differentlyAbled = useRef(null);
+  const address = useRef(null);
 
   const today = new Date();
   const eighteenYearsAgo = new Date(
@@ -51,6 +52,7 @@ const PersonalInfoForm = ({ formData, setFormData, focusSection, show }) => {
         languages: languages,
         dob: dob,
         differentlyAbled: differentlyAbled,
+        address: address,
       };
       console.log("Scrolling to focus section:", focusSection);
       sections[focusSection]?.current?.scrollIntoView({
@@ -203,8 +205,6 @@ const PersonalInfoForm = ({ formData, setFormData, focusSection, show }) => {
       ) : (
         <>
           <form className="default-form">
-            <p>this is from PersonalInfoForm</p>
-
             <div ref={personalInfo}>
               {/* Gender Selection */}
               <div className="mb-3 form-group">
@@ -433,7 +433,63 @@ const PersonalInfoForm = ({ formData, setFormData, focusSection, show }) => {
               </div>
             </div>
 
-            <p>this is End PersonalInfoForm</p>
+            <div className="" ref={address}>
+              <div className="mb-3 form-group">
+                <label className="form-label">
+                  <b>Permanent address</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter Your Permanent address"
+                  name="permanent_address"
+                  value={formData.permanent_address}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      permanent_address: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="mb-3 form-group">
+                <label className="form-label">
+                  <b>Hometown</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter Your Hometown"
+                  name="hometown"
+                  value={formData.hometown}
+                  onChange={(e) =>
+                    setFormData({ ...formData, hometown: e.target.value })
+                  }
+                />
+              </div>
+              <div className="mb-3 form-group">
+                <label className="form-label">
+                  <b>Pincode</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter Your Pincode"
+                  name="pincode"
+                  value={formData.pincode}
+                  onChange={(e) =>
+                    setFormData({ ...formData, pincode: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+            <div ref={languages}>
+              <LanguageProficiency
+                formData={formData}
+                setFormData={setFormData}
+                apiurl={apiurl}
+              />
+            </div>
           </form>
         </>
       )}
