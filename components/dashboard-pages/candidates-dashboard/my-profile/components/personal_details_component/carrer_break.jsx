@@ -2,9 +2,17 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CustomizedProgressBars from "@/components/common/loader";
 
+const getComparableDateValue = (year, month) => {
+  if (!year || !month) return null;
+  return parseInt(year) * 100 + parseInt(month); // e.g., 202405
+};
 const CareerBreak = ({ formData, setFormData, apiurl }) => {
   const [careerBreakOptions, setCareerBreakOptions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1; // getMonth() is 0-indexed
 
   useEffect(() => {
     /* /api/sql/dropdown/career_break_reason */
@@ -23,6 +31,62 @@ const CareerBreak = ({ formData, setFormData, apiurl }) => {
     };
     fetchCareerBreakOptions();
   }, [apiurl]);
+
+  // Validation logic
+  useEffect(() => {
+    const startValue = getComparableDateValue(
+      formData.career_break_start_year,
+      formData.career_break_start_month
+    );
+    const endValue = getComparableDateValue(
+      formData.career_break_end_year,
+      formData.career_break_end_month
+    );
+
+    if (startValue && endValue) {
+      if (startValue > endValue) {
+        setError("Break start date cannot be after break end date.");
+      } else {
+        setError("");
+      }
+    }
+  }, [
+    formData.career_break_start_year,
+    formData.career_break_start_month,
+    formData.career_break_end_year,
+    formData.career_break_end_month,
+    formData.currently_on_career_break,
+  ]);
+
+  useEffect(() => {
+    if (formData.currently_on_career_break) {
+      setError("");
+    }
+  }, [formData.currently_on_career_break]);
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const generateMonthOptions = (selectedYear) => {
+    const maxMonth = selectedYear === currentYear ? currentMonth : 12;
+    return monthNames.slice(0, maxMonth).map((month, index) => (
+      <option key={index + 1} value={index + 1}>
+        {month}
+      </option>
+    ));
+  };
 
   return (
     <>
@@ -59,8 +123,7 @@ const CareerBreak = ({ formData, setFormData, apiurl }) => {
           {/* break start from */}
           <div className="mb-3 form-group row">
             <label className="form-label">
-              <b>Break started from</b>
-              <span style={{ color: "red" }}>*</span>
+              <b>Break started from</b> <span style={{ color: "red" }}>*</span>
             </label>
             <div className="col-md-6">
               <select
@@ -70,12 +133,13 @@ const CareerBreak = ({ formData, setFormData, apiurl }) => {
                   setFormData({
                     ...formData,
                     career_break_start_year: e.target.value,
+                    career_break_start_month: "", // reset month on year change
                   })
                 }
               >
                 <option value="">Select Year</option>
                 {Array.from({ length: 30 }, (_, i) => {
-                  const year = new Date().getFullYear() - i;
+                  const year = currentYear - i;
                   return (
                     <option key={year} value={year}>
                       {year}
@@ -96,24 +160,9 @@ const CareerBreak = ({ formData, setFormData, apiurl }) => {
                 }
               >
                 <option value="">Select Month</option>
-                {[
-                  "January",
-                  "February",
-                  "March",
-                  "April",
-                  "May",
-                  "June",
-                  "July",
-                  "August",
-                  "September",
-                  "October",
-                  "November",
-                  "December",
-                ].map((month, index) => (
-                  <option key={index + 1} value={index + 1}>
-                    {month}
-                  </option>
-                ))}
+                {generateMonthOptions(
+                  parseInt(formData.career_break_start_year)
+                )}
               </select>
             </div>
           </div>
@@ -121,8 +170,7 @@ const CareerBreak = ({ formData, setFormData, apiurl }) => {
             <>
               <div className="mb-3 form-group row">
                 <label className="form-label">
-                  <b>Break ended in</b>
-                  <span style={{ color: "red" }}>*</span>
+                  <b>Break ended in</b> <span style={{ color: "red" }}>*</span>
                 </label>
                 <div className="col-md-6">
                   <select
@@ -132,12 +180,13 @@ const CareerBreak = ({ formData, setFormData, apiurl }) => {
                       setFormData({
                         ...formData,
                         career_break_end_year: e.target.value,
+                        career_break_end_month: "", // reset month on year change
                       })
                     }
                   >
                     <option value="">Select Year</option>
                     {Array.from({ length: 30 }, (_, i) => {
-                      const year = new Date().getFullYear() - i;
+                      const year = currentYear - i;
                       return (
                         <option key={year} value={year}>
                           {year}
@@ -158,29 +207,15 @@ const CareerBreak = ({ formData, setFormData, apiurl }) => {
                     }
                   >
                     <option value="">Select Month</option>
-                    {[
-                      "January",
-                      "February",
-                      "March",
-                      "April",
-                      "May",
-                      "June",
-                      "July",
-                      "August",
-                      "September",
-                      "October",
-                      "November",
-                      "December",
-                    ].map((month, index) => (
-                      <option key={index + 1} value={index + 1}>
-                        {month}
-                      </option>
-                    ))}
+                    {generateMonthOptions(
+                      parseInt(formData.career_break_end_year)
+                    )}
                   </select>
                 </div>
               </div>
             </>
           )}
+          {error && <div className="text-danger mb-3">{error}</div>}
           {formData.currently_on_career_break && (
             <>
               <div className="form-group mb-3 col-md-3">

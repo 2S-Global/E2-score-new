@@ -39,6 +39,7 @@ const PersonalInfoForm = ({ formData, setFormData, focusSection, show }) => {
 
   //loading state
   const [loading, setLoading] = useState(false);
+  const [onpincode, setOnPincode] = useState(false);
 
   //use effects
   useEffect(() => {
@@ -402,6 +403,9 @@ const PersonalInfoForm = ({ formData, setFormData, focusSection, show }) => {
                       })
                     }
                   >
+                    <option value="" disabled>
+                      Select Visa Type
+                    </option>
                     {UsaVisaList.map((option) => (
                       <option key={option.id} value={option.id}>
                         {option.visa_name}
@@ -477,10 +481,23 @@ const PersonalInfoForm = ({ formData, setFormData, focusSection, show }) => {
                   placeholder="Enter Your Pincode"
                   name="pincode"
                   value={formData.pincode}
-                  onChange={(e) =>
-                    setFormData({ ...formData, pincode: e.target.value })
-                  }
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    // Allow only digits
+                    if (/^\d{0,6}$/.test(value)) {
+                      setFormData({ ...formData, pincode: value });
+                    }
+                  }}
+                  onFocus={() => setOnPincode(true)}
+                  onBlur={() => setOnPincode(false)}
                 />
+                {formData.pincode.length > 0 &&
+                  formData.pincode.length !== 6 &&
+                  !onpincode && (
+                    <small className="text-danger">
+                      Pincode must be exactly 6 digits.
+                    </small>
+                  )}
               </div>
             </div>
             <div ref={languages}>
