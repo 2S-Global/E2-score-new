@@ -8,7 +8,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import CustomizedProgressBars from "@/components/common/loader";
 import Disability from "./disability";
 import CareerBreak from "./carrer_break";
-const PersonalInfoForm = ({ formData, setFormData, focusSection, show }) => {
+const PersonalInfoForm = ({
+  formData,
+  setFormData,
+  focusSection,
+  show,
+  setWrongDate,
+}) => {
   //main
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -384,6 +390,7 @@ const PersonalInfoForm = ({ formData, setFormData, focusSection, show }) => {
                     formData={formData}
                     setFormData={setFormData}
                     apiurl={apiurl}
+                    setWrongDate={setWrongDate}
                   />
                 </>
               ) : null}

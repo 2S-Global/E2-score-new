@@ -6,7 +6,7 @@ const getComparableDateValue = (year, month) => {
   if (!year || !month) return null;
   return parseInt(year) * 100 + parseInt(month); // e.g., 202405
 };
-const CareerBreak = ({ formData, setFormData, apiurl }) => {
+const CareerBreak = ({ formData, setFormData, apiurl, setWrongDate }) => {
   const [careerBreakOptions, setCareerBreakOptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -46,8 +46,10 @@ const CareerBreak = ({ formData, setFormData, apiurl }) => {
     if (startValue && endValue) {
       if (startValue > endValue) {
         setError("Break start date cannot be after break end date.");
+        setWrongDate(true);
       } else {
         setError("");
+        setWrongDate(false);
       }
     }
   }, [

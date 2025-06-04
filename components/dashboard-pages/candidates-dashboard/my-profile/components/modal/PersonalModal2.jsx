@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, use } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Select from "react-select";
-import LanguageProficiency from "../academicbox_component/language";
 import axios from "axios";
-import DatePicker from "react-datepicker";
+
 import "react-datepicker/dist/react-datepicker.css";
-import CustomizedProgressBars from "@/components/common/loader";
 
 import PersonalInfoForm from "../personal_details_component/personal_detailsform";
+import { set } from "date-fns";
+
 const PersonalModal = ({ show, onClose, focusSection }) => {
   const [formData, setFormData] = useState({
     gender: "",
@@ -42,12 +41,166 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
     ],
   });
 
+  const [loading, setLoading] = useState(false);
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const token = localStorage.getItem("candidate_token");
   if (!token) {
     console.log("No token");
   }
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [wrongdate, setWrongDate] = useState(false);
+  const [wrongdate2, setWrongDate2] = useState(false);
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    /* /get_personal_details */
+    const fetchPersonalDetails = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `${apiurl}/api/candidate/personal/get_personal_details`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          console.log("Personal details fetched successfully");
+          console.log(response.data);
+          setData(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching personal details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPersonalDetails();
+  }, [apiurl, token]);
+
+  useEffect(() => {
+    setIsFormValid(validateForm());
+  }, [formData]);
+
+  useEffect(() => {
+    if (formData.currently_on_career_break) {
+      setWrongDate2(false);
+    } else {
+      if (wrongdate) {
+        setWrongDate2(true);
+      } else {
+        setWrongDate2(false);
+      }
+    }
+  }, [formData.currently_on_career_break]);
+
+  useEffect(() => {
+    setWrongDate2(wrongdate);
+  }, [wrongdate]);
+
+  const validateForm = () => {
+    if (!formData.gender || formData.gender.toString().trim() === "") {
+      return false;
+    }
+    if (!formData.dob) {
+      return false;
+    }
+    if (formData.differently_abled === "Yes") {
+      if (
+        !formData.disability_type ||
+        formData.disability_type.toString().trim() === ""
+      ) {
+        return false;
+      }
+      if (formData.disability_type == 999) {
+        if (
+          !formData.disability_description ||
+          formData.disability_description.toString().trim() === ""
+        ) {
+          return false;
+        }
+      }
+    }
+    if (formData.career_break === "Yes") {
+      if (
+        !formData.career_break_reason ||
+        formData.career_break_reason.toString().trim() === ""
+      ) {
+        return false;
+      }
+      if (
+        !formData.career_break_start_year ||
+        formData.career_break_start_year.toString().trim() === ""
+      ) {
+        return false;
+      }
+      if (
+        !formData.career_break_start_month ||
+        formData.career_break_start_month.toString().trim() === ""
+      ) {
+        return false;
+      }
+
+      if (formData.currently_on_career_break === false) {
+        if (
+          !formData.career_break_end_year ||
+          formData.career_break_end_year.toString().trim() === ""
+        ) {
+          return false;
+        }
+        if (
+          !formData.career_break_end_month ||
+          formData.career_break_end_month.toString().trim() === ""
+        ) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  };
+
+  useEffect(() => {
+    if (data) {
+      console.log("Data received:", data);
+    }
+  }, [data]);
 
   if (!show) return null;
+
+  const handleSave = async () => {
+    if (!token) {
+      console.error("Authorization token is missing. Please log in.");
+      return;
+    }
+
+    if (!validateForm()) {
+      console.log("Please fill in all required fields.");
+      return;
+    }
+    setSaving(true);
+    try {
+      const response = await axios.post(
+        `${apiurl}/api/candidate/personal/submit_personal_details`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Response:", response.data);
+      setSaving(false);
+      onClose();
+    } catch (error) {
+      console.error("Error saving personal details:", error);
+      setSaving(false);
+    }
+  };
 
   return (
     <>
@@ -113,7 +266,16 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
 
               <button
                 className="btn btn-primary"
-                onClick={() => console.log(formData)}
+                onClick={() =>
+                  console.log(
+                    formData,
+
+                    "wrong date:",
+                    wrongdate,
+                    "wrong date2:",
+                    wrongdate2
+                  )
+                }
               >
                 TEST
               </button>
@@ -123,6 +285,7 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
                 setFormData={setFormData}
                 focusSection={focusSection}
                 show={show}
+                setWrongDate={setWrongDate}
               />
             </div>
 
@@ -131,7 +294,52 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
               <button className="btn btn-secondary" onClick={onClose}>
                 Cancel
               </button>
-              <button className="btn btn-primary">Save</button>
+              <style jsx>{`
+                .tooltip-wrapper {
+                  position: relative;
+                  display: inline-block;
+                }
+
+                .tooltip-wrapper .custom-tooltip {
+                  visibility: hidden;
+                  background-color: white;
+                  color: red;
+                  font-weight: bold;
+                  text-align: center;
+                  border: 1px solid red;
+                  border-radius: 4px;
+                  padding: 5px 10px;
+                  position: absolute;
+                  bottom: 100%;
+                  left: 0;
+                  margin-bottom: 6px;
+                  z-index: 1;
+                  white-space: nowrap;
+                }
+
+                .tooltip-wrapper:hover .custom-tooltip {
+                  visibility: visible;
+                }
+              `}</style>
+
+              <div className="tooltip-wrapper">
+                {!isFormValid && (
+                  <div className="custom-tooltip">
+                    Please fill all required fields
+                  </div>
+                )}
+                {wrongdate2 && (
+                  <div className="custom-tooltip">Not valid Date Range</div>
+                )}
+
+                <button
+                  className="btn btn-primary"
+                  onClick={handleSave}
+                  disabled={!isFormValid || saving || wrongdate2}
+                >
+                  <>{saving ? "Saving..." : "Save"}</>
+                </button>
+              </div>
             </div>
           </div>
         </div>
