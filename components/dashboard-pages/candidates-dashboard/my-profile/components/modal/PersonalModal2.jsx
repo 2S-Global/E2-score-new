@@ -5,8 +5,7 @@ import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 
 import PersonalInfoForm from "../personal_details_component/personal_detailsform";
-import { set } from "date-fns";
-
+import CustomizedProgressBars from "@/components/common/loader";
 const PersonalModal = ({ show, onClose, focusSection }) => {
   const [formData, setFormData] = useState({
     gender: "",
@@ -41,6 +40,56 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
     ],
   });
 
+  const formatPersonalDetailsResponse = (data) => {
+    return {
+      gender: String(data.gender || ""),
+      dob: data.dob ? new Date(data.dob) : null,
+      more_info: Array.isArray(data.more_info)
+        ? data.more_info.map(Number)
+        : [],
+      marital_status: String(data.marital_status || ""),
+      category: String(data.category || ""),
+      differently_abled: data.differently_abled || "",
+      disability_type: String(data.disability_type || ""),
+      disability_description: data.disability_description || "",
+      workplace_assistance: data.workplace_assistance || "",
+      career_break: data.career_break || "",
+      career_break_reason: String(data.career_break_reason || ""),
+      career_break_start_year: String(data.career_break_start_year || ""),
+      career_break_start_month: String(data.career_break_start_month || ""),
+      currently_on_career_break: !!data.currently_on_career_break,
+      career_break_end_year: String(data.career_break_end_year || ""),
+      career_break_end_month: String(data.career_break_end_month || ""),
+      usa_visa_type: String(data.usa_visa_type || ""),
+      work_permit_other_countries: Array.isArray(
+        data.work_permit_other_countries
+      )
+        ? data.work_permit_other_countries.map(Number)
+        : [],
+      permanent_address: data.permanent_address || "",
+      hometown: data.hometown || "",
+      pincode: data.pincode || "",
+      languages:
+        Array.isArray(data.languages) && data.languages.length > 0
+          ? data.languages.map((lang) => ({
+              language: String(lang.language || ""),
+              proficiency: String(lang.proficiency || ""),
+              read: !!lang.read,
+              write: !!lang.write,
+              speak: !!lang.speak,
+            }))
+          : [
+              {
+                language: "",
+                proficiency: "",
+                read: false,
+                write: false,
+                speak: false,
+              },
+            ],
+    };
+  };
+
   const [loading, setLoading] = useState(false);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const token = localStorage.getItem("candidate_token");
@@ -51,8 +100,6 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
   const [saving, setSaving] = useState(false);
   const [wrongdate, setWrongDate] = useState(false);
   const [wrongdate2, setWrongDate2] = useState(false);
-
-  const [data, setData] = useState([]);
 
   useEffect(() => {
     /* /get_personal_details */
@@ -69,8 +116,8 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
         );
         if (response.status === 200) {
           console.log("Personal details fetched successfully");
-          console.log(response.data);
-          setData(response.data);
+          const formatted = formatPersonalDetailsResponse(response.data);
+          setFormData(formatted);
         }
       } catch (error) {
         console.error("Error fetching personal details:", error);
@@ -163,12 +210,6 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
 
     return true;
   };
-
-  useEffect(() => {
-    if (data) {
-      console.log("Data received:", data);
-    }
-  }, [data]);
 
   if (!show) return null;
 
@@ -264,7 +305,7 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
                 This information helps employers know you better.
               </p>
 
-              <button
+              {/*     <button
                 className="btn btn-primary"
                 onClick={() =>
                   console.log(
@@ -278,15 +319,18 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
                 }
               >
                 TEST
-              </button>
-
-              <PersonalInfoForm
-                formData={formData}
-                setFormData={setFormData}
-                focusSection={focusSection}
-                show={show}
-                setWrongDate={setWrongDate}
-              />
+              </button> */}
+              {loading ? (
+                <CustomizedProgressBars />
+              ) : (
+                <PersonalInfoForm
+                  formData={formData}
+                  setFormData={setFormData}
+                  focusSection={focusSection}
+                  show={show}
+                  setWrongDate={setWrongDate}
+                />
+              )}
             </div>
 
             {/* Footer Buttons */}
