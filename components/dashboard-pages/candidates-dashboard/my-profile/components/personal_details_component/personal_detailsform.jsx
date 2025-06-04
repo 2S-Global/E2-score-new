@@ -329,11 +329,14 @@ const PersonalInfoForm = ({ formData, setFormData, focusSection, show }) => {
                     <label key={option} className="form-check-label">
                       <input
                         type="radio"
-                        name="differentlyAbled"
-                        value={formData.differentlyAbled}
-                        checked={formData.differentlyAbled === option}
+                        name="differently_abled"
+                        value={formData.differently_abled}
+                        checked={formData.differently_abled === option}
                         onChange={() =>
-                          setFormData({ ...formData, differentlyAbled: option })
+                          setFormData({
+                            ...formData,
+                            differently_abled: option,
+                          })
                         }
                         className="form-check-input me-2"
                       />
@@ -342,7 +345,7 @@ const PersonalInfoForm = ({ formData, setFormData, focusSection, show }) => {
                   ))}
                 </div>
               </div>
-              {formData.differentlyAbled === "Yes" ? (
+              {formData.differently_abled === "Yes" ? (
                 <>
                   <Disability
                     formData={formData}
