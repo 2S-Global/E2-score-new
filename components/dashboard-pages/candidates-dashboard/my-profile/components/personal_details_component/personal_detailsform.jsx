@@ -320,7 +320,7 @@ const PersonalInfoForm = ({ formData, setFormData, focusSection, show }) => {
               </div>
             </div>
             <div className="row" ref={differentlyAbled}>
-              <div className="mb-3 form-group" ref={differentlyAbled}>
+              <div className="mb-3 form-group">
                 <label className="form-label">
                   <b>Are you differently abled?</b>
                 </label>
