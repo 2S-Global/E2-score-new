@@ -38,10 +38,10 @@ const DashboardCandidatesHeader = () => {
                 <Link href="/">
                   <Image
                     alt="brand"
-                    src="/images/Logo(1).png"
-                    width={50}
-                    height={50}
-                    style={{ width: "90px", height: "60px" }}
+                    src="/images/Logo 3.png"
+                    width={154}
+                    height={60}
+                    style={{ height: "60px" }}
                     priority
                   />
                 </Link>
