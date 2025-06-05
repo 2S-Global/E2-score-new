@@ -33,7 +33,7 @@ const Header = () => {
                   <Image
                     width={154}
                     height={50}
-                    src="/images/logo 3.png"
+                    src="/images/Logo 3.png"
                     alt="logo"
                     title="brand"
                   />
