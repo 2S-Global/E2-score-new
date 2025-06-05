@@ -29,15 +29,7 @@ const PersonalModal = ({ show, onClose, focusSection, reload, setReload }) => {
     permanent_address: "",
     hometown: "",
     pincode: "",
-    languages: [
-      {
-        language: "",
-        proficiency: "",
-        read: false,
-        write: false,
-        speak: false,
-      },
-    ],
+    languages: [],
   });
 
   const formatPersonalDetailsResponse = (data) => {
@@ -78,15 +70,7 @@ const PersonalModal = ({ show, onClose, focusSection, reload, setReload }) => {
               write: !!lang.write,
               speak: !!lang.speak,
             }))
-          : [
-              {
-                language: "",
-                proficiency: "",
-                read: false,
-                write: false,
-                speak: false,
-              },
-            ],
+          : [],
     };
   };
 
@@ -207,7 +191,22 @@ const PersonalModal = ({ show, onClose, focusSection, reload, setReload }) => {
         }
       }
     }
-
+    if (formData.languages.length > 0) {
+      for (let i = 0; i < formData.languages.length; i++) {
+        if (
+          !formData.languages[i].language ||
+          formData.languages[i].language.toString().trim() === ""
+        ) {
+          return false;
+        }
+        if (
+          !formData.languages[i].proficiency ||
+          formData.languages[i].proficiency.toString().trim() === ""
+        ) {
+          return false;
+        }
+      }
+    }
     return true;
   };
 
@@ -306,7 +305,7 @@ const PersonalModal = ({ show, onClose, focusSection, reload, setReload }) => {
                 This information helps employers know you better.
               </p>
 
-              {/*     <button
+              <button
                 className="btn btn-primary"
                 onClick={() =>
                   console.log(
@@ -320,7 +319,7 @@ const PersonalModal = ({ show, onClose, focusSection, reload, setReload }) => {
                 }
               >
                 TEST
-              </button> */}
+              </button>
               {loading ? (
                 <CustomizedProgressBars />
               ) : (

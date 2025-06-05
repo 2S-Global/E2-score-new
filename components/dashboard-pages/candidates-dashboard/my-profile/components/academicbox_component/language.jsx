@@ -108,6 +108,7 @@ const LanguageProficiency = ({ formData, setFormData, apiurl }) => {
             <div style={{ flex: 1 }}>
               <label className="form-label">
                 <b>Language</b>
+                <span style={{ color: "red" }}>*</span>
               </label>
               {/*  <input
                 type="text"
@@ -138,6 +139,7 @@ const LanguageProficiency = ({ formData, setFormData, apiurl }) => {
             <div style={{ flex: 1 }}>
               <label className="form-label">
                 <b>Proficiency</b>
+                <span style={{ color: "red" }}>*</span>
               </label>
               <select
                 className="form-select"
