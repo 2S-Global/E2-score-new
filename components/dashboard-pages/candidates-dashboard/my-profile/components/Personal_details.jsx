@@ -1,6 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PersonalModal from "./modal/PersonalModal2";
+import axios from "axios";
+import CustomizedProgressBars from "@/components/common/loader";
 
 const PersonalSection = () => {
   // Modal state
@@ -9,25 +11,59 @@ const PersonalSection = () => {
 
   // Personal details state (initial data)
   const [personalDetails, setPersonalDetails] = useState({
-    gender: "Male",
-    maritalStatus: "Single / Unmarried",
+    gender: "",
+    maritalStatus: "",
     moreinfo: "",
-    dob: "13 Oct 2001",
+    dob: "",
     category: "",
-    differentlyAbled: "No",
+    differentlyAbled: "",
+    disabilityType: "",
+    disabilityDescription: "",
+    workplaceAssistance: "",
+
     careerBreak: "",
+    careerBreakReason: "",
+    careerBreakStartYear: "",
+    careerBreakStartMonth: "",
+    currentlyOnCareerBreak: false,
+    careerBreakEndYear: "",
+    careerBreakEndMonth: "",
+
     workPermit: "",
-    address: "Newtown, Kolkata, 700156",
-    languages: [
-      {
-        language: "English",
-        proficiency: "Expert",
-        read: true,
-        write: true,
-        speak: true,
-      },
-    ],
+    address: "",
+    languages: [],
   });
+
+  const [reload, setReload] = useState(false);
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const [sectionloading, setSectionloading] = useState(true);
+
+  useEffect(() => {
+    const fetchuserdata = async () => {
+      try {
+        setSectionloading(true);
+        const token = localStorage.getItem("candidate_token");
+        const response = await axios.get(
+          `${apiurl}/api/candidate/personal/get_personal_details_with_name`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status == 200) {
+          const maindata = response.data.data;
+
+          setPersonalDetails(maindata);
+        }
+      } catch (error) {
+        console.error("Error fetching skills:", error);
+      } finally {
+        setSectionloading(false);
+      }
+    };
+    fetchuserdata();
+  }, [reload]);
 
   // Open and close modal handlers
   const openModalRH = (type) => {
@@ -39,40 +75,6 @@ const PersonalSection = () => {
     setModalType(null);
     setFocusSection(null); // reset focus section
     document.body.style.overflow = "auto";
-  };
-
-  // Handle data update from modal
-  const handleModalSubmit = (type, data) => {
-    switch (type) {
-      case "personalInfo":
-        setPersonalDetails((prev) => ({
-          ...prev,
-          gender: data.gender,
-          maritalStatus: data.maritalStatus,
-        }));
-        break;
-      case "category":
-        setPersonalDetails((prev) => ({ ...prev, category: data.category }));
-        break;
-      case "careerBreak":
-        setPersonalDetails((prev) => ({
-          ...prev,
-          careerBreak: data.careerBreak,
-        }));
-        break;
-      case "workPermit":
-        setPersonalDetails((prev) => ({
-          ...prev,
-          workPermit: data.workPermit,
-        }));
-        break;
-      case "languages":
-        setPersonalDetails((prev) => ({ ...prev, languages: data.languages }));
-        break;
-      default:
-        break;
-    }
-    closeModalRH(); // Close modal after submission
   };
 
   return (
@@ -97,17 +99,192 @@ const PersonalSection = () => {
               aria-label="Edit Personal Details"
             ></i>
           </div>
+          {sectionloading ? (
+            <CustomizedProgressBars />
+          ) : (
+            <>
+              {/* Personal Details */}
+              <div className="widget-content">
+                <div className="container">
+                  <div className="row">
+                    {/* Personal Section */}
+                    <div className="col-md-6 mb-4">
+                      <strong>Personal</strong>
+                      <div className="typ-14Medium mt-1">
+                        <div>
+                          {[
+                            personalDetails.gender,
+                            personalDetails.maritalStatus,
+                            personalDetails.moreinfo,
+                          ]
+                            .filter(Boolean)
+                            .join(", ")}
 
-          {/* Personal Details */}
-          <div className="widget-content">
-            <div className="row p-3">
-              <div className="col-md-6">
-                {/* Gender & Marital Status */}
-                <strong>Personal</strong>
-                <div className="typ-14Medium">
-                  {personalDetails.gender}, {personalDetails.maritalStatus},{" "}
+                          {![
+                            personalDetails.gender,
+                            personalDetails.maritalStatus,
+                            personalDetails.moreinfo,
+                          ].every(Boolean) && (
+                            <span
+                              className="ms-2 text-primary fw-bold"
+                              style={{ cursor: "pointer", fontSize: "16px" }}
+                              onClick={() => openModalRH("personalInfo")}
+                            >
+                              Add more info
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Career Break */}
+                    <div className="col-md-6 mb-4">
+                      <strong>Career Break</strong>
+                      <div className="typ-14Medium mt-1">
+                        {personalDetails.careerBreak ? (
+                          personalDetails.careerBreak.toLowerCase() ===
+                          "yes" ? (
+                            <div className="d-flex flex-wrap gap-3 mt-1">
+                              <div>
+                                Yes
+                                {personalDetails.careerBreakReason && (
+                                  <> – {personalDetails.careerBreakReason}</>
+                                )}
+                              </div>
+                              <div className="d-flex flex-wrap gap-3">
+                                <div>
+                                  <strong>From:</strong>{" "}
+                                  {personalDetails.careerBreakStartMonth}{" "}
+                                  {personalDetails.careerBreakStartYear}
+                                </div>
+                                <div>
+                                  <strong>To:</strong>{" "}
+                                  {personalDetails.currentlyOnCareerBreak
+                                    ? "Present"
+                                    : `${personalDetails.careerBreakEndMonth} ${personalDetails.careerBreakEndYear}`}
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            <span>{personalDetails.careerBreak}</span>
+                          )
+                        ) : (
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "16px" }}
+                            onClick={() => openModalRH("careerBreak")}
+                          >
+                            Add Career Break
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Date of Birth */}
+                    <div className="col-md-6 mb-4">
+                      <strong>Date of Birth</strong>
+                      <div className="typ-14Medium mt-1">
+                        {personalDetails.dob || (
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "16px" }}
+                            onClick={() => openModalRH("dob")}
+                          >
+                            Add Date of Birth
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Category */}
+                    <div className="col-md-6 mb-4">
+                      <strong>Category</strong>
+                      <div className="typ-14Medium mt-1">
+                        {personalDetails.category || (
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "16px" }}
+                            onClick={() => openModalRH("category")}
+                          >
+                            Add Category
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Work Permit */}
+                    <div className="col-md-6 mb-4">
+                      <strong>Work Permit</strong>
+                      <div className="typ-14Medium mt-1">
+                        {personalDetails.workPermit || (
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "16px" }}
+                            onClick={() => openModalRH("workPermit")}
+                          >
+                            Add Work Permit
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Address */}
+                    <div className="col-md-6 mb-4">
+                      <strong>Address</strong>
+                      <div className="typ-14Medium mt-1">
+                        {personalDetails.address || (
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "16px" }}
+                            onClick={() => openModalRH("address")}
+                          >
+                            Add Address
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Differently Abled */}
+                    <div className="col-md-6 mb-4">
+                      <strong>Differently Abled</strong>
+                      <div className="typ-14Medium mt-1">
+                        {personalDetails.differentlyAbled ? (
+                          personalDetails.differentlyAbled.toLowerCase() ===
+                          "yes" ? (
+                            <span>
+                              {[
+                                personalDetails.differentlyAbled,
+                                personalDetails.disabilityType,
+                                personalDetails.disabilityDescription,
+                                personalDetails.workplaceAssistance,
+                              ]
+                                .filter(Boolean)
+                                .join(", ")}
+                            </span>
+                          ) : (
+                            <span>{personalDetails.differentlyAbled}</span>
+                          )
+                        ) : (
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "16px" }}
+                            onClick={() => openModalRH("differentlyAbled")}
+                          >
+                            Add Differently Abled Status
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <hr />
+
+                {/* Languages Section */}
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <h5 className="fw-bold mb-0">Languages</h5>
                   <span
-                    onClick={() => openModalRH("personalInfo")}
+                    onClick={() => openModalRH("languages")}
                     style={{
                       cursor: "pointer",
                       color: "#275df5",
@@ -115,157 +292,40 @@ const PersonalSection = () => {
                       fontSize: "16px",
                     }}
                   >
-                    {personalDetails.moreinfo &&
-                    personalDetails.gender &&
-                    personalDetails.maritalStatus
-                      ? "Edit"
-                      : "Add more info"}
+                    {personalDetails.languages.length > 0
+                      ? "Edit Languages"
+                      : "Add Languages"}
                   </span>
                 </div>
 
-                {/* DOB */}
-                <div className="mt-3 mb-1">
-                  <strong>Date of Birth</strong>
-                  <div
-                    className="typ-14Medium"
-                    onClick={() => openModalRH("dob")}
-                  >
-                    {personalDetails.dob}
-                  </div>
-                </div>
-
-                {/* Category */}
-                <div className="mt-3 mb-1">
-                  <strong>Category</strong>
-                  <div className="typ-14Medium">
-                    {personalDetails.category || (
-                      <span
-                        onClick={() => openModalRH("category")}
-                        style={{
-                          cursor: "pointer",
-                          color: "#275df5",
-                          fontWeight: 700,
-                          fontSize: "16px",
-                        }}
-                      >
-                        Add Category
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Differently abled */}
-                <div className="mt-3 mb-1">
-                  <strong>Differently Abled</strong>
-                  <div
-                    className="typ-14Medium"
-                    onClick={() => openModalRH("differentlyAbled")}
-                  >
-                    {personalDetails.differentlyAbled}
-                  </div>
-                </div>
+                {/* Language Table */}
+                {personalDetails.languages.length > 0 && (
+                  <table className="table mt-3">
+                    <thead>
+                      <tr>
+                        <th>Language</th>
+                        <th>Proficiency</th>
+                        <th>Read</th>
+                        <th>Write</th>
+                        <th>Speak</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {personalDetails.languages.map((lang, index) => (
+                        <tr key={index}>
+                          <td>{lang.language}</td>
+                          <td>{lang.proficiency}</td>
+                          <td>{lang.read ? "✔️" : "❌"}</td>
+                          <td>{lang.write ? "✔️" : "❌"}</td>
+                          <td>{lang.speak ? "✔️" : "❌"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
               </div>
-
-              <div className="col-md-6">
-                {/* Career Break */}
-                <div className="mt-3 mb-1">
-                  <strong>Career Break</strong>
-                  <div className="typ-14Medium">
-                    {personalDetails.careerBreak || (
-                      <span
-                        onClick={() => openModalRH("careerBreak")}
-                        style={{
-                          cursor: "pointer",
-                          color: "#275df5",
-                          fontWeight: 700,
-                          fontSize: "16px",
-                        }}
-                      >
-                        Add Career break
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Work Permit */}
-                <div className="mt-3 mb-1">
-                  <strong>Work Permit</strong>
-                  <div className="typ-14Medium">
-                    {personalDetails.workPermit || (
-                      <span
-                        onClick={() => openModalRH("workPermit")}
-                        style={{
-                          cursor: "pointer",
-                          color: "#275df5",
-                          fontWeight: 700,
-                          fontSize: "16px",
-                        }}
-                      >
-                        Add Work permit
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Address */}
-                <div className="mt-3 mb-1">
-                  <strong>Address</strong>
-                  <div
-                    className="typ-14Medium"
-                    onClick={() => openModalRH("address")}
-                  >
-                    {personalDetails.address}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <hr />
-
-            {/* Languages */}
-            <div className="d-flex justify-content-between align-items-center">
-              <h5 className="fw-bold mb-0">Languages</h5>
-              <span
-                onClick={() => openModalRH("languages")}
-                style={{
-                  cursor: "pointer",
-                  color: "#275df5",
-                  fontWeight: 700,
-                  fontSize: "16px",
-                }}
-              >
-                {personalDetails.languages.length > 0
-                  ? "Edit languages"
-                  : "Add languages"}
-              </span>
-            </div>
-
-            {/* Language Table */}
-            {personalDetails.languages.length > 0 && (
-              <table className="table mt-3">
-                <thead>
-                  <tr>
-                    <th>Languages</th>
-                    <th>Proficiency</th>
-                    <th>Read</th>
-                    <th>Write</th>
-                    <th>Speak</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {personalDetails.languages.map((lang, index) => (
-                    <tr key={index}>
-                      <td>{lang.language}</td>
-                      <td>{lang.proficiency}</td>
-                      <td>{lang.read ? "✔️" : "❌"}</td>
-                      <td>{lang.write ? "✔️" : "❌"}</td>
-                      <td>{lang.speak ? "✔️" : "❌"}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -274,10 +334,9 @@ const PersonalSection = () => {
         <PersonalModal
           show={!!modalType}
           onClose={closeModalRH}
-          modalType={modalType}
-          onSubmit={handleModalSubmit}
-          data={personalDetails}
           focusSection={focusSection}
+          reload={reload}
+          setReload={setReload}
         />
       )}
     </>

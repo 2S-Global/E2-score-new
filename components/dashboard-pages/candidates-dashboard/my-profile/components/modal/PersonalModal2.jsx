@@ -6,7 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import PersonalInfoForm from "../personal_details_component/personal_detailsform";
 import CustomizedProgressBars from "@/components/common/loader";
-const PersonalModal = ({ show, onClose, focusSection }) => {
+const PersonalModal = ({ show, onClose, focusSection, reload, setReload }) => {
   const [formData, setFormData] = useState({
     gender: "",
     dob: null,
@@ -236,6 +236,7 @@ const PersonalModal = ({ show, onClose, focusSection }) => {
       );
       console.log("Response:", response.data);
       setSaving(false);
+      setReload(!reload);
       onClose();
     } catch (error) {
       console.error("Error saving personal details:", error);
