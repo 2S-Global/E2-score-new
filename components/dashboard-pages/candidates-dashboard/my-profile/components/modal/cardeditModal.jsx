@@ -254,7 +254,7 @@ const Cardedit = ({ show, onClose }) => {
         tabIndex="-1"
         style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
       >
-        <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-dialog modal-dialog-centered ">
           <div className="modal-content">
             {/* Modal Header */}
             <div className="modal-header">

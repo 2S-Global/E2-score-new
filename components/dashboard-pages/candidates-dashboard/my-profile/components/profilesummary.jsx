@@ -6,9 +6,8 @@ import Profilesum from "./modal/profilesum";
 
 const ProfilesumerySection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [profilesummary, setProfilesummary] = useState(
-    "Highlight your key career achievements to help employers know your potentials."
-  );
+  const [profilesummary, setProfilesummary] = useState();
+
   const openModalRH = () => {
     setIsModalOpen(true);
     document.body.style.overflow = "hidden"; // Disable background scrolling
@@ -58,12 +57,19 @@ const ProfilesumerySection = () => {
                 fontSize: "16px",
               }}
             >
-              Add profile summary
+              {profilesummary?.trim()
+                ? "Edit profile summary"
+                : "Add profile summary"}
             </span>
           </div>
           {/* Display Resume Headline */}
+          {/*   */}
           <div className="widget-content">
-            <p>{profilesummary}</p>
+            <p>
+              {profilesummary?.trim()
+                ? profilesummary
+                : "Highlight your key career achievements to help employers know your potentials."}
+            </p>
           </div>
         </div>
       </div>
@@ -73,8 +79,8 @@ const ProfilesumerySection = () => {
         <Profilesum
           show={isModalOpen}
           onClose={closeModalRH}
-          profilesummary={profilesummary}
-          setProfilesummary={setProfilesummary}
+          mainprofilesummary={profilesummary}
+          mainsetProfilesummary={setProfilesummary}
         />
       )}
     </>

@@ -5,9 +5,12 @@ import axios from "axios";
 const ResumeHeadline = ({
   show,
   onClose,
-  setResumeHeadline,
-  resumeHeadline,
+  mainresumeHeadline,
+  mainsetResumeHeadline,
 }) => {
+  const [resumeHeadline, setResumeHeadline] = useState(
+    mainresumeHeadline || ""
+  );
   const [isGenerated, setIsGenerated] = useState(false); // Track button presses
   const token = localStorage.getItem("candidate_token");
   if (!token) {
@@ -46,6 +49,9 @@ const ResumeHeadline = ({
           },
         }
       );
+      if (response.status === 201) {
+        mainsetResumeHeadline(resumeHeadline);
+      }
     } catch (error) {
       console.error("Error updating data:", error);
     }

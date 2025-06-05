@@ -2,8 +2,18 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Sparkles } from "lucide-react";
 import axios from "axios";
+import { Trash2 } from "lucide-react";
 
-const Profilesum = ({ show, onClose, profilesummary, setProfilesummary }) => {
+const Profilesum = ({
+  show,
+  onClose,
+  mainprofilesummary,
+  mainsetProfilesummary,
+}) => {
+  const [profilesummary, setProfilesummary] = useState(
+    mainprofilesummary || ""
+  );
+
   const [isGenerated, setIsGenerated] = useState(false); // Track button presses
   const token = localStorage.getItem("candidate_token");
   if (!token) {
@@ -42,10 +52,41 @@ const Profilesum = ({ show, onClose, profilesummary, setProfilesummary }) => {
           },
         }
       );
+      if (response.status === 201) {
+        mainsetProfilesummary(profilesummary);
+      }
     } catch (error) {
       console.error("Error uploading data:", error);
     }
     onClose();
+  };
+  const handleDelete = async () => {
+    if (!token) {
+      console.error("Authorization token is missing. Please log in.");
+      return;
+    }
+    try {
+      const response = await axios.delete(
+        `${apiurl}/api/useraction/delete_profile_summary`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status !== 200) {
+        throw new Error("Failed to delete education record");
+      }
+      mainsetProfilesummary("");
+      onClose();
+    } catch (error) {
+      console.error("Error deleting education record:", error);
+    }
+  };
+  const handleConfirmDelete = () => {
+    if (window.confirm("Are you sure you want to delete this record?")) {
+      handleDelete();
+    }
   };
 
   return (
@@ -89,7 +130,7 @@ const Profilesum = ({ show, onClose, profilesummary, setProfilesummary }) => {
         tabIndex="-1"
         style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
       >
-        <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-dialog modal-dialog-centered modal-lg">
           <div className="modal-content">
             {/* Modal Header */}
             <div className="modal-header">
@@ -103,10 +144,25 @@ const Profilesum = ({ show, onClose, profilesummary, setProfilesummary }) => {
 
             {/* Modal Body */}
             <div className="modal-body">
-              <p style={{ color: "black" }}>
+              <p
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  color: "black",
+                }}
+              >
                 Give recruiters a brief overview of the highlights of your
                 career, key achievements, and career goals to help recruiters
-                know your profile better.{" "}
+                know your profile better.
+                {mainprofilesummary && (
+                  <span
+                    style={{ color: "red", cursor: "pointer" }}
+                    className="ms-2"
+                  >
+                    <Trash2 size={20} onClick={handleConfirmDelete} />
+                  </span>
+                )}
               </p>
 
               {/* Textarea Input */}
@@ -155,7 +211,7 @@ const Profilesum = ({ show, onClose, profilesummary, setProfilesummary }) => {
                 type="button"
                 className="btn btn-primary"
                 onClick={handelSubmit}
-                disabled={profilesummary.trim().split(" ").length < 5}
+                disabled={profilesummary.trim().length < 1}
               >
                 Save
               </button>
