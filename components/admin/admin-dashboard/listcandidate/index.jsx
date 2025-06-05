@@ -4,22 +4,33 @@ import DashboardEmployerSidebar from "../../../header/DashboardAdminsidebar";
 
 import CopyrightFooter from "../../CopyrightFooter";
 
-import Institutetable from "./components/table";
+import Candidatetable from "./components/table";
 
 import AddCompanyModal from "./components/modals/addinstitute";
-
+import AddCsvModal from "./components/modals/csv";
 import { useState } from "react";
+// import { display } from "html2canvas/dist/types/css/property-descriptors/display";
 const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
   const openModalRH = () => {
     setIsModalOpen(true);
-    document.body.style.overflow = "hidden"; 
+    document.body.style.overflow = "hidden";
   };
 
   const closeModalRH = () => {
     setIsModalOpen(false);
-    document.body.style.overflow = "auto"; 
+    document.body.style.overflow = "auto";
+  };
+
+  const openCsvModal = () => {
+    setIsCsvModalOpen(true);
+    document.body.style.overflow = "hidden"; // Disable background scrolling
+  };
+
+  const closeModalCsv = () => {
+    setIsCsvModalOpen(false);
+    document.body.style.overflow = "auto"; // Re-enable background scrolling
   };
   return (
     <>
@@ -40,10 +51,14 @@ const Index = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="applicants-widget ls-widget">
-                  <div className="widget-title">
+                  <div className="widget-title"
+                  
+                  style={{ display:"flex",justifyContent:"space-between",alignItems:"center" }}>
                     <h4>Candidate List</h4>
 
-                    {/* <span
+
+                   <div style={{ display: "flex", gap: "15px" }}>
+                    <span
                       onClick={openModalRH}
                       style={{
                         cursor: "pointer",
@@ -53,10 +68,23 @@ const Index = () => {
                         fontSize: "16px",
                       }}
                     >
-                      Add Institute
-                    </span> */}
+                      Add Candidate
+                    </span>
+
+                     <span
+                        onClick={openCsvModal}
+                        style={{
+                          cursor: "pointer",
+                          color: "#13cfcf",
+                          fontWeight: 500,
+                          fontSize: "16px",
+                        }}
+                      >
+                        Import CSV
+                      </span>
+                      </div>
                   </div>
-                  <Institutetable />
+                  <Candidatetable />
                 </div>
               </div>
             </div>
@@ -71,6 +99,10 @@ const Index = () => {
       {/* Render Modal if isModalOpen is true */}
       {isModalOpen && (
         <AddCompanyModal show={isModalOpen} onClose={closeModalRH} />
+      )}
+
+      {isCsvModalOpen && (
+        <AddCsvModal show={openCsvModal} onClose={closeModalCsv} />
       )}
     </>
   );

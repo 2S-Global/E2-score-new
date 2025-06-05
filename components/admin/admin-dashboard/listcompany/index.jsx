@@ -79,11 +79,11 @@ const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
                         style={{
                           cursor: "pointer",
                           color: "#13cfcf",
-                          fontWeight: 700,
+                          fontWeight: 500,
                           fontSize: "16px",
                         }}
                       >
-                        Import Csv
+                        Import CSV
                       </span>
                     </div>
                   </div>

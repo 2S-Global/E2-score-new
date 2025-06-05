@@ -7,6 +7,7 @@ import employerMenuData from "../../data/adminHeadermenuData";
 /* import HeaderNavContent from "./HeaderNavContent"; */
 import { isActiveLink } from "../../utils/linkActiveChecker";
 import { usePathname } from "next/navigation";
+import { color } from "framer-motion";
 
 const DashboardHeader = () => {
   const [navbar, setNavbar] = useState(false);
@@ -61,9 +62,12 @@ const DashboardHeader = () => {
               textTransform: "uppercase",
             }}
           >
-            <span style={{ color: "red" }}>Global</span>{" "}
-            <span style={{ fontWeight: "900" }}>Employment</span>{" "}
-            <span style={{ fontStyle: "italic" }}>Platform</span>
+            <span ><span style={{color:"red"}}>G</span>LOBAL</span>{" "}
+            <span ><span style={{color:"red"}}>E</span>MPLOYABILITY</span>{" "}
+            <span ><span style={{color:"red"}}>I</span>NFORMATION</span>{" "}
+            <span ><span style={{color:"red"}}>S</span>ERVICES</span>{" "}
+            <span ><span style={{color:"red"}}>I</span>NDIA</span>{" "}
+            <span ><span style={{color:"red"}}>L</span>IMITED</span>{" "}
           </p>{" "}
           <div className="outer-box">
             {/* End notification-icon */}

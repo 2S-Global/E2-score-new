@@ -12,7 +12,7 @@ import {
   Send,
   FilePen,
   Mailbox,
-  ShoppingCart 
+  ShoppingCart,
 } from "lucide-react";
 import EditfieldModal from "./modals/editfield";
 import EditplanModal from "./modals/planmodal";
@@ -69,7 +69,7 @@ const Companytable = () => {
     document.body.style.overflow = "auto"; // Re-enable background scrolling
     console.log("close modal plan");
   };
-    const handlecart = (company) => {
+  const handlecart = (company) => {
     router.push(`/admin/cart?id=${company._id}`);
   };
 
@@ -85,7 +85,7 @@ const Companytable = () => {
         setLoading(true);
         const response = await axios.post(
           `${apiurl}/api/companyRoutes/list-companies`,
-           { role: 3 },
+          { role: 3 },
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -119,7 +119,7 @@ const Companytable = () => {
     try {
       const response = await axios.post(
         `${apiurl}/api/companyRoutes/delete-companies`,
-        { companyId: id,role: 3 },
+        { companyId: id, role: 3 },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -156,7 +156,7 @@ const Companytable = () => {
         {
           companyId: id,
           status: !currentStatus,
-           role: 3,
+          role: 3,
         },
         {
           headers: {
@@ -179,10 +179,6 @@ const Companytable = () => {
       setError("Something went wrong while toggling status.");
     }
   };
-
-
-
-
 
   return (
     <>
@@ -287,36 +283,39 @@ const Companytable = () => {
 
                         <td className="text-center">
                           <div className="d-flex justify-content-center gap-3">
-                            
-                              <span title="Edit">
-                                <Pencil
-                                  className="text-primary"
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() => openModalRH(company)}
-                                  size={20}
-                                />
-                              </span>
-                              <span title="Plan">
-                                <PackageOpen
-                                  className="text-info"
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() => openModalPlanRH(company)}
-                                  size={20}
-                                />
-                              </span>
-                      
+                            <span title="Edit">
+                              <Pencil
+                                className="text-primary"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => openModalRH(company)}
+                                size={20}
+                              />
+                            </span>
+                            <span title="Plan">
+                              <PackageOpen
+                                className="text-info"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => openModalPlanRH(company)}
+                                size={20}
+                              />
+                            </span>
 
-                              <span title="Delete">
-                                <Trash2
-                                  size={20}
-                                  className="text-danger"
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() => handleDelete(company._id)}
-                                />
-                              </span>
-                            </div>
-                
-                  
+                            <span title="Delete">
+                              <Trash2
+                                size={20}
+                                className="text-danger"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  const confirmDelete = window.confirm(
+                                    "Are you sure you want to delete this Institute?"
+                                  );
+                                  if (confirmDelete) {
+                                    handleDelete(company._id);
+                                  }
+                                }}
+                              />
+                            </span>
+                          </div>
                         </td>
                       </tr>
                     ))

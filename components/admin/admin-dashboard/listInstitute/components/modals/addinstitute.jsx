@@ -195,7 +195,7 @@ const AddInstituteModal = ({ show, onClose }) => {
 
       setSuccess(response.data.message);
       window.location.reload();
-      router.push("/admin/listcompany");
+      // router.push("/admin/listcompany");
     } catch (err) {
       setError(
         err.response?.data?.message || "Registration failed. Try again."

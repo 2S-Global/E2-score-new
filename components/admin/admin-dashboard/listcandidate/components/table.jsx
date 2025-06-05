@@ -225,7 +225,11 @@ const Companytable = () => {
                         <td style={{ textAlign: "center" }}>{company.email}</td>
                         <td style={{ textAlign: "center" }}>
                           <div className="form-check form-switch d-flex justify-content-center align-items-center">
-                            <input className="form-check-input" type="checkbox" role="switch" id={`switch-${company._id}`}
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              role="switch"
+                              id={`switch-${company._id}`}
                               checked={company.is_active}
                               onChange={() =>
                                 toggleStatus(company._id, company.is_active)
@@ -278,12 +282,27 @@ const Companytable = () => {
                         </td>
                         <td className="text-center">
                           <div className="d-flex justify-content-center gap-3">
+                            <span title="Edit">
+                              <Pencil
+                                className="text-primary"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => openModalRH(company)}
+                                size={20}
+                              />
+                            </span>
                             <span title="Delete">
                               <Trash2
                                 size={20}
                                 className="text-danger"
                                 style={{ cursor: "pointer" }}
-                                onClick={() => handleDelete(company._id)}
+                                onClick={() => {
+                                  const confirmDelete = window.confirm(
+                                    "Are you sure you want to delelte this candidate?"
+                                  );
+                                  if (confirmDelete) {
+                                    handleDelete(company._id);
+                                  }
+                                }}
                               />
                             </span>
                           </div>

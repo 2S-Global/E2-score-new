@@ -175,7 +175,7 @@ const EditfieldModal = ({ show, onClose, field }) => {
         `${apiurl}/api/companyRoutes/edit_user`,
          {
           ...formData, 
-          role: 3, 
+          role: 1, 
         },
         {
           headers: {
@@ -186,7 +186,7 @@ const EditfieldModal = ({ show, onClose, field }) => {
 
       setSuccess(response.data.message);
       window.location.reload();
-      router.push("/admin/listcompany");
+      // router.push("/admin/listcompany");
     } catch (err) {
       setError(
         err.response?.data?.message || "Something went wrong. Try again."
@@ -305,7 +305,7 @@ const EditfieldModal = ({ show, onClose, field }) => {
                   />
                 </div>
 
-                <div className="mb-3 col-md-6">
+                {/* <div className="mb-3 col-md-6">
                   <label htmlFor="gst_no" className="form-label">
                     GST Number
                   </label>
@@ -334,7 +334,7 @@ const EditfieldModal = ({ show, onClose, field }) => {
                       Invalid GST Number. Please enter a valid one.
                     </div>
                   )}
-                </div>
+                </div> */}
 
                 {/*   <div className="mb-3 col-md-6">
                   <label htmlFor="package_id" className="form-label">

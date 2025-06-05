@@ -179,7 +179,7 @@ const AddCompanyModal = ({ show, onClose }) => {
 
       setSuccess(response.data.message);
       window.location.reload();
-      router.push("/admin/listinstitute");
+      // router.push("/admin/listinstitute");
     } catch (err) {
       setError(
         err.response?.data?.message || "Registration failed. Try again."
