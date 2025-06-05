@@ -173,9 +173,9 @@ const EditfieldModal = ({ show, onClose, field }) => {
     try {
       const response = await axios.post(
         `${apiurl}/api/companyRoutes/edit_user`,
-         {
-          ...formData, 
-          role: 3, 
+        {
+          ...formData,
+          role: 3,
         },
         {
           headers: {
@@ -247,7 +247,8 @@ const EditfieldModal = ({ show, onClose, field }) => {
 
                 <div className="mb-3 col-md-6">
                   <label htmlFor="email" className="form-label">
-                    Official Email Address <span style={{ color: "red" }}>*</span>
+                    Official Email Address{" "}
+                    <span style={{ color: "red" }}>*</span>
                   </label>
                   <input
                     type="email"
@@ -326,7 +327,11 @@ const EditfieldModal = ({ show, onClose, field }) => {
                       });
 
                       // Set error if invalid GST
-                      setGstError(!isValidGST(trimmed));
+                      if (trimmed === "") {
+                        setGstError(false); // No error for empty field
+                      } else {
+                        setGstError(!isValidGST(trimmed));
+                      }
                     }}
                   />
                   {gstError && (

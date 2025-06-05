@@ -326,7 +326,11 @@ const EditfieldModal = ({ show, onClose, field }) => {
                       });
 
                       // Set error if invalid GST
-                      setGstError(!isValidGST(trimmed));
+        if (trimmed === "") {
+    setGstError(false); // No error for empty field
+  } else {
+    setGstError(!isValidGST(trimmed));
+  }
                     }}
                   />
                   {gstError && (
