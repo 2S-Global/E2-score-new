@@ -521,7 +521,7 @@ const AddCompanyModal = ({ show, onClose }) => {
                 <button
                   type="submit"
                   className="btn btn-primary w-100"
-                  disabled={loading}
+                  disabled={loading || gstError}
                 >
                   {loading ? "Registering..." : "Register"}
                 </button>

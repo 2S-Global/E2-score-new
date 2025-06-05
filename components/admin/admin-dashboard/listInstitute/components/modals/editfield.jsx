@@ -495,7 +495,7 @@ const EditfieldModal = ({ show, onClose, field }) => {
               <button
                 type="submit"
                 className="btn btn-primary w-100"
-                disabled={loading}
+                disabled={loading || gstError}
               >
                 {loading ? "Updating..." : "Update"}
               </button>
