@@ -16,7 +16,8 @@ import Academysection from "./components/academicsection";
 import ItkeySection from "./components/Itskillsection";
 import ProjectSection from "./components/projectSection";
 import ProfilesumerySection from "./components/profilesummary";
-import AcomSection from "./components/accomsection";
+import AcomSection from "./components/accomsection2";
+import AcomSectiondemo from "./components/accomsection";
 import Carrersection from "./components/carrersection";
 import PersonalSection from "./components/Personal_details";
 
@@ -73,6 +74,8 @@ const index = () => {
               <Academysection />
               {/* Acom Section */}
               <AcomSection />
+              <AcomSectiondemo />
+
               {/* carrer section  */}
               <Carrersection />
 

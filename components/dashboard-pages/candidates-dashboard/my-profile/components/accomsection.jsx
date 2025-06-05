@@ -55,7 +55,7 @@ const accomplishments = [
   },
 ];
 
-const AcomSection = () => {
+const AcomSectiondemo = () => {
   const [activeModal, setActiveModal] = useState(null); // Stores the currently active modal key
 
   // Open modal dynamically and disable scrolling
@@ -75,7 +75,7 @@ const AcomSection = () => {
       <div className="ls-widget">
         <div className="tabs-box">
           <div className="widget-title">
-            <h4>Accomplishments</h4>
+            <h4>Accomplishments (demo for testing)</h4>
           </div>
 
           <div className="widget-content">
@@ -108,10 +108,10 @@ const AcomSection = () => {
         (item) =>
           activeModal === item.key && (
             <item.component key={item.key} show={true} onClose={closeModal} />
-          ),
+          )
       )}
     </>
   );
 };
 
-export default AcomSection;
+export default AcomSectiondemo;
