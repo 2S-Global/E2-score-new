@@ -305,7 +305,7 @@ const PersonalModal = ({ show, onClose, focusSection, reload, setReload }) => {
                 This information helps employers know you better.
               </p>
 
-              <button
+              {/* <button
                 className="btn btn-primary"
                 onClick={() =>
                   console.log(
@@ -319,7 +319,7 @@ const PersonalModal = ({ show, onClose, focusSection, reload, setReload }) => {
                 }
               >
                 TEST
-              </button>
+              </button> */}
               {loading ? (
                 <CustomizedProgressBars />
               ) : (
