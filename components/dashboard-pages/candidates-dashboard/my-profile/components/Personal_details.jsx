@@ -33,6 +33,7 @@ const PersonalSection = () => {
     workPermit: "",
     address: "",
     languages: [],
+    usa_visa_type: "",
   });
 
   const [reload, setReload] = useState(false);
@@ -223,15 +224,27 @@ const PersonalSection = () => {
                     <div className="col-md-6 mb-4">
                       <strong>Work Permit</strong>
                       <div className="typ-14Medium mt-1">
-                        {personalDetails.workPermit || (
-                          <span
-                            className="text-primary fw-bold"
-                            style={{ cursor: "pointer", fontSize: "16px" }}
-                            onClick={() => openModalRH("workPermit")}
-                          >
-                            Add Work Permit
-                          </span>
+                        {/* Show visa type if available */}
+                        {personalDetails.usa_visa_type && (
+                          <div>{personalDetails.usa_visa_type}</div>
                         )}
+
+                        {/* Show work permit if available */}
+                        {personalDetails.workPermit && (
+                          <div>{personalDetails.workPermit}</div>
+                        )}
+
+                        {/* Show Add Work Permit only if both are missing */}
+                        {!personalDetails.usa_visa_type &&
+                          !personalDetails.workPermit && (
+                            <div
+                              className="text-primary fw-bold"
+                              style={{ cursor: "pointer", fontSize: "16px" }}
+                              onClick={() => openModalRH("workPermit")}
+                            >
+                              Add Work Permit
+                            </div>
+                          )}
                       </div>
                     </div>
 
@@ -299,9 +312,7 @@ const PersonalSection = () => {
                       fontSize: "16px",
                     }}
                   >
-                    {personalDetails.languages.length > 0
-                      ? "Edit Languages"
-                      : "Add Languages"}
+                    {personalDetails.languages.length > 0 ? "Edit" : "Add"}
                   </span>
                 </div>
 

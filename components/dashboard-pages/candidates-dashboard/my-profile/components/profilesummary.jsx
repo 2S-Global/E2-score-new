@@ -70,9 +70,7 @@ const ProfilesumerySection = () => {
                 fontSize: "16px",
               }}
             >
-              {profilesummary?.trim()
-                ? "Edit profile summary"
-                : "Add profile summary"}
+              {profilesummary?.trim() ? "Edit" : "Add"}
             </span>
           </div>
           {/* Display Resume Headline */}

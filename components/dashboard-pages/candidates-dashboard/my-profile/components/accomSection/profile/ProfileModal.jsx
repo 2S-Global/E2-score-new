@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Sparkles } from "lucide-react";
+import axios from "axios";
 const ProfileModal = ({ show, onClose, setItem, item }) => {
   if (!show) return null;
 
-  const safeItem = item || {};
-
   const [formData, setFormData] = useState({
-    _id: safeItem._id || "",
-    socialProfile: safeItem.socialProfile || "",
-    url: safeItem.url || "",
-    description: safeItem.description || "",
+    _id: item._id || "",
+    socialProfile: item.socialProfile || "",
+    url: item.url || "",
+    description: item.description || "",
   });
 
   const [description, setDescription] = useState("");
@@ -28,6 +27,9 @@ const ProfileModal = ({ show, onClose, setItem, item }) => {
       return false;
     }
     if (!formData.url || formData.url.toString().trim() === "") {
+      return false;
+    }
+    if (formData.url && !validateURL(formData.url)) {
       return false;
     }
 
@@ -53,10 +55,11 @@ const ProfileModal = ({ show, onClose, setItem, item }) => {
       console.error("Authorization token is missing. Please log in.");
       return;
     }
+    console.log("Saving personal details:", formData);
     setSaving(true);
     /* /api/candidate/accomplishments/add_online_profile */
     try {
-      const response = await axios.post(
+      /* const response = await axios.post(
         `${apiurl}/api/candidate/accomplishments/add_online_profile`,
         formData,
         {
@@ -71,10 +74,29 @@ const ProfileModal = ({ show, onClose, setItem, item }) => {
       } else {
         console.error("Error saving personal details:", response.data.message);
         setSaving(false);
-      }
+      } */
     } catch (error) {
       console.error("Error saving personal details:", error);
       setSaving(false);
+    }
+  };
+
+  const [urlError, setUrlError] = useState("");
+
+  const validateURL = (url) => {
+    try {
+      const pattern = new URL(url); // Will throw if invalid
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const handleBlur = () => {
+    if (!validateURL(formData.url)) {
+      setUrlError("Please enter a valid URL (include https://)");
+    } else {
+      setUrlError("");
     }
   };
 
@@ -127,7 +149,10 @@ const ProfileModal = ({ show, onClose, setItem, item }) => {
               <button
                 type="button"
                 className="btn-close"
-                onClick={onClose}
+                onClick={() => {
+                  setFormData(null); // or reset object
+                  onClose();
+                }}
               ></button>
             </div>
 
@@ -162,14 +187,16 @@ const ProfileModal = ({ show, onClose, setItem, item }) => {
                 </label>
                 <input
                   type="text"
-                  className="form-control"
+                  className={`form-control ${urlError ? "is-invalid" : ""}`}
                   placeholder="Enter Your Social profile URL"
                   value={formData.url}
                   onChange={(e) =>
                     setFormData({ ...formData, url: e.target.value })
                   }
+                  onBlur={handleBlur}
                   required
                 />
+                {urlError && <div className="invalid-feedback">{urlError}</div>}
               </div>
               {/* Description */}
               <div className="mb-3">
@@ -206,7 +233,10 @@ const ProfileModal = ({ show, onClose, setItem, item }) => {
               <button
                 type="button"
                 className="btn btn-secondary"
-                onClick={onClose}
+                onClick={() => {
+                  setFormData(null); // or reset object
+                  onClose();
+                }}
               >
                 Cancel
               </button>
@@ -249,7 +279,7 @@ const ProfileModal = ({ show, onClose, setItem, item }) => {
                   onClick={handleSave}
                   disabled={!isFormValid || saving}
                 >
-                  {safeItem._id ? (
+                  {item._id ? (
                     <>{saving ? "Updating..." : "Update"}</>
                   ) : (
                     <>{saving ? "Saving..." : "Save"}</>

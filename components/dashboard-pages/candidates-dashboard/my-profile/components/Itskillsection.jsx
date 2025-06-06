@@ -52,7 +52,7 @@ const ItkeySection = () => {
                 fontSize: "16px",
               }}
             >
-              Add details
+              Add
             </span>
           </div>
           {/* Display Resume Headline */}

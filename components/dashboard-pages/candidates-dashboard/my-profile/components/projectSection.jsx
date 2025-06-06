@@ -36,7 +36,7 @@ const ProjectSection = () => {
                 fontSize: "16px",
               }}
             >
-              Add project
+              Add
             </span>
           </div>
           {/* Display Resume Headline */}

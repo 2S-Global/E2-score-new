@@ -138,7 +138,7 @@ const Academysection = () => {
                     fontSize: "16px",
                   }}
                 >
-                  Add education
+                  Add
                 </span>
               </div>
               <CustomizedProgressBars />
@@ -161,7 +161,7 @@ const Academysection = () => {
                     fontSize: "16px",
                   }}
                 >
-                  Add education
+                  Add
                 </span>
               </div>
 

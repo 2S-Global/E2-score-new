@@ -71,7 +71,7 @@ const Employsection = () => {
                 fontSize: "16px",
               }}
             >
-              Add employment
+              Add
             </span>
           </div>
 

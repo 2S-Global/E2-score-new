@@ -83,7 +83,7 @@ const DegreeForm = ({
           {" "}
           {/* Searchable Inputs */}
           <SearchableInput
-            label="Institute name"
+            label="Institute Name"
             name="institute_name"
             value={collegeSearch}
             onChange={(e) => {
