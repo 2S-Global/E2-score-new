@@ -5,13 +5,15 @@ import ClgDisplay from "./academicbox_component/clgdisplay";
 import SchoolDisplay from "./academicbox_component/schooldisplay";
 import axios from "axios";
 import CustomizedProgressBars from "@/components/common/loader";
-
+import MessageComponent from "@/components/common/ResponseMsg";
 const Academysection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expanded, setExpanded] = useState({}); // Track expanded descriptions
   const [listlevel, setListlevel] = useState([]);
   const [reload, setReload] = useState(false);
   const [missingLevels, setMissingLevels] = useState([]);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const [userdata, setUserdata] = useState([]);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
@@ -114,6 +116,12 @@ const Academysection = () => {
 
   return (
     <>
+      <MessageComponent
+        error={error}
+        success={success}
+        setError={setError}
+        setSuccess={setSuccess}
+      />
       {sectionloading ? (
         <>
           <div className="ls-widget">
@@ -210,6 +218,8 @@ const Academysection = () => {
           setReload={setReload}
           selectedLevel={selectedLevel}
           edit_id={edit_id}
+          setError={setError}
+          setSuccess={setSuccess}
         />
       )}
     </>

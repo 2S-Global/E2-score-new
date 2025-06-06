@@ -13,6 +13,8 @@ const EducationModal = ({
   setReload,
   selectedLevel,
   edit_id,
+  setError,
+  setSuccess,
 }) => {
   const token = localStorage.getItem("candidate_token");
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
@@ -224,10 +226,12 @@ const EducationModal = ({
         console.log("Education data saved successfully:", response.data);
       }
 
+      setSuccess("Education data saved successfully");
       setReload(!reload);
       onClose();
     } catch (error) {
       console.error("Error saving education data:", error);
+      setError("Error saving education data");
     } finally {
       setSaving(false);
     }
