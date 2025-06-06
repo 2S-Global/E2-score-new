@@ -1,12 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Sparkles } from "lucide-react";
 const ProfileModal = ({ show, onClose, setItem, item }) => {
   if (!show) return null;
 
+  const safeItem = item || {};
+
+  const [formData, setFormData] = useState({
+    _id: safeItem._id || "",
+    socialProfile: safeItem.socialProfile || "",
+    url: safeItem.url || "",
+    description: safeItem.description || "",
+  });
+
   const [description, setDescription] = useState("");
   const [isGenerated, setIsGenerated] = useState(false); // Track button presses
+  const token = localStorage.getItem("candidate_token");
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const validateForm = () => {
+    if (
+      !formData.socialProfile ||
+      formData.socialProfile.toString().trim() === ""
+    ) {
+      return false;
+    }
+    if (!formData.url || formData.url.toString().trim() === "") {
+      return false;
+    }
+
+    return true;
+  };
+  useEffect(() => {
+    setIsFormValid(validateForm());
+  }, [formData]);
   const handleGenerateHeadline = () => {
     if (isGenerated) {
       setDescription(""); // Clear text if pressed again
@@ -16,6 +45,36 @@ const ProfileModal = ({ show, onClose, setItem, item }) => {
         "Developed and deployed a scalable web application using React.js and Node.js, ensuring high performance and seamless user experience. Designed and implemented RESTful APIs, optimized database queries, and integrated third-party services for enhanced functionality. Focused on system architecture, security, and responsive UI/UX to deliver a robust and efficient solution."
       );
       setIsGenerated(true);
+    }
+  };
+
+  const handleSave = async () => {
+    if (!token) {
+      console.error("Authorization token is missing. Please log in.");
+      return;
+    }
+    setSaving(true);
+    /* /api/candidate/accomplishments/add_online_profile */
+    try {
+      const response = await axios.post(
+        `${apiurl}/api/candidate/accomplishments/add_online_profile`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        setSaving(false);
+        onClose();
+      } else {
+        console.error("Error saving personal details:", response.data.message);
+        setSaving(false);
+      }
+    } catch (error) {
+      console.error("Error saving personal details:", error);
+      setSaving(false);
     }
   };
 
@@ -82,22 +141,34 @@ const ProfileModal = ({ show, onClose, setItem, item }) => {
               <div className="mb-3">
                 <label className="form-label">
                   <b>Social profile</b>
+                  <span style={{ color: "red" }}>*</span>
                 </label>
                 <input
                   type="text"
                   className="form-control"
                   placeholder="Enter Social profile name"
+                  value={formData.socialProfile}
+                  onChange={(e) =>
+                    setFormData({ ...formData, socialProfile: e.target.value })
+                  }
+                  required
                 />
               </div>
               {/* URL */}
               <div className="mb-3">
                 <label className="form-label">
                   <b>URL</b>
+                  <span style={{ color: "red" }}>*</span>
                 </label>
                 <input
                   type="text"
                   className="form-control"
                   placeholder="Enter Your Social profile URL"
+                  value={formData.url}
+                  onChange={(e) =>
+                    setFormData({ ...formData, url: e.target.value })
+                  }
+                  required
                 />
               </div>
               {/* Description */}
@@ -109,9 +180,13 @@ const ProfileModal = ({ show, onClose, setItem, item }) => {
                   className="form-control custom-textarea"
                   placeholder="Type here ..."
                   rows="3"
-                  value={description}
+                  value={formData.description || description}
                   onChange={(e) => {
                     setDescription(e.target.value);
+                    setFormData({
+                      ...formData,
+                      description: e.target.value,
+                    });
                     setIsGenerated(false); // Reset when user types
                   }}
                 ></textarea>
@@ -135,9 +210,52 @@ const ProfileModal = ({ show, onClose, setItem, item }) => {
               >
                 Cancel
               </button>
-              <button type="button" className="btn btn-primary">
-                Save
-              </button>
+              <style jsx>{`
+                .tooltip-wrapper {
+                  position: relative;
+                  display: inline-block;
+                }
+
+                .tooltip-wrapper .custom-tooltip {
+                  visibility: hidden;
+                  background-color: white;
+                  color: red;
+                  font-weight: bold;
+                  text-align: center;
+                  border: 1px solid red;
+                  border-radius: 4px;
+                  padding: 5px 10px;
+                  position: absolute;
+                  bottom: 100%;
+                  left: 0;
+                  margin-bottom: 6px;
+                  z-index: 1;
+                  white-space: nowrap;
+                }
+
+                .tooltip-wrapper:hover .custom-tooltip {
+                  visibility: visible;
+                }
+              `}</style>
+
+              <div className="tooltip-wrapper">
+                {!isFormValid && (
+                  <div className="custom-tooltip">
+                    Please fill all required fields
+                  </div>
+                )}
+                <button
+                  className="btn btn-primary"
+                  onClick={handleSave}
+                  disabled={!isFormValid || saving}
+                >
+                  {safeItem._id ? (
+                    <>{saving ? "Updating..." : "Update"}</>
+                  ) : (
+                    <>{saving ? "Saving..." : "Save"}</>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>

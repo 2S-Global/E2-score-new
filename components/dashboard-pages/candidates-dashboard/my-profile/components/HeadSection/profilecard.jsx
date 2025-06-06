@@ -14,12 +14,14 @@ import Cardedit from "../modal/cardeditModal";
 const ProfileCard = ({
   name,
   degree,
-  university,
   location,
   phone,
   email,
   gender,
   dob,
+  setReload,
+  setError,
+  setSuccess,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -86,7 +88,15 @@ const ProfileCard = ({
           </div> */}
         </div>
       </div>
-      {isModalOpen && <Cardedit show={isModalOpen} onClose={closeModalRH} />}
+      {isModalOpen && (
+        <Cardedit
+          show={isModalOpen}
+          onClose={closeModalRH}
+          setReload={setReload}
+          setError_main={setError}
+          setSuccess_main={setSuccess}
+        />
+      )}
     </>
   );
 };

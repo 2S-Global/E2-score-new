@@ -2,9 +2,14 @@
 import React, { useState, useEffect } from "react";
 import ResumeHeadline from "./modal/resumeheadline"; // Import the modal component
 import axios from "axios";
+import CustomizedProgressBars from "@/components/common/loader";
+
 const ResumeHeadlineSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resumeHeadline, setResumeHeadline] = useState("");
+
+  const [sectionloading, setSectionloading] = useState(true);
+
   const openModalRH = () => {
     setIsModalOpen(true);
     document.body.style.overflow = "hidden"; // Disable background scrolling
@@ -18,6 +23,7 @@ const ResumeHeadlineSection = () => {
   useEffect(() => {
     const fetchResumeHeadline = async () => {
       try {
+        setSectionloading(true);
         const token = localStorage.getItem("candidate_token");
         const response = await axios.get(
           `${apiurl}/api/userdata/resume_headline`,
@@ -32,6 +38,8 @@ const ResumeHeadlineSection = () => {
         setResumeHeadline(response.data.resumeHeadline);
       } catch (error) {
         console.error("Error fetching profile pic:", error);
+      } finally {
+        setSectionloading(false);
       }
     };
 
@@ -51,10 +59,18 @@ const ResumeHeadlineSection = () => {
               style={{ cursor: "pointer" }}
             ></i>
           </div>
+          {sectionloading ? (
+            <CustomizedProgressBars />
+          ) : (
+            <>
+              {" "}
+              <div className="widget-content">
+                <p>{resumeHeadline?.trim() || "Add Your Resume Headline"}</p>
+              </div>{" "}
+            </>
+          )}
+
           {/* Display Resume Headline */}
-          <div className="widget-content">
-            <p>{resumeHeadline?.trim() || "Add Your Resume Headline"}</p>
-          </div>
         </div>
       </div>
 

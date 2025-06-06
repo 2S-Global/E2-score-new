@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Profilepic from "../modal/ChangeProfilepic";
 
-const CircularProgress = ({ progress, imageSrc, setReload }) => {
+const CircularProgress = ({
+  progress,
+  imageSrc,
+  setReload,
+  setError,
+  setSuccess,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModalRH = () => setIsModalOpen(true);
   const closeModalRH = () => setIsModalOpen(false);
@@ -96,6 +102,8 @@ const CircularProgress = ({ progress, imageSrc, setReload }) => {
           onClose={closeModalRH}
           imageSrc={imageSrc}
           setReload={setReload}
+          setError_main={setError}
+          setSuccess_main={setSuccess}
         />
       )}
     </>

@@ -4,7 +4,13 @@ import CustomizedProgressBars from "@/components/common/loader";
 import DatePicker from "react-datepicker";
 import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
-const Cardedit = ({ show, onClose }) => {
+const Cardedit = ({
+  show,
+  onClose,
+  setReload,
+  setError_main,
+  setSuccess_main,
+}) => {
   const [countries, setCountries] = useState([]);
   const [Genders, setGenders] = useState([]);
   const [isResidingInIndia, setIsResidingInIndia] = useState(false);
@@ -201,10 +207,13 @@ const Cardedit = ({ show, onClose }) => {
         throw new Error(response.data.message || "An error occurred");
       }
       setSuccess("Details updated successfully!");
+      setSuccess_main("Details updated successfully!");
+      setReload(true);
       setTimeout(() => onClose(), 1500); // Close modal after success
     } catch (error) {
       console.error("Upload failed:", error);
-      setError("Failed to upload image. Please try again.");
+      setError("Failed to update Details. Please try again.");
+      setError_main("Failed to update Details. Please try again.");
     } finally {
       setLoading(false);
     }
