@@ -3,12 +3,13 @@ import React, { useState, useEffect } from "react";
 import PersonalModal from "./modal/PersonalModal2";
 import axios from "axios";
 import CustomizedProgressBars from "@/components/common/loader";
-
+import MessageComponent from "@/components/common/ResponseMsg";
 const PersonalSection = () => {
   // Modal state
   const [modalType, setModalType] = useState(null);
   const [focusSection, setFocusSection] = useState(null);
-
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   // Personal details state (initial data)
   const [personalDetails, setPersonalDetails] = useState({
     gender: "",
@@ -79,6 +80,12 @@ const PersonalSection = () => {
 
   return (
     <>
+      <MessageComponent
+        error={error}
+        success={success}
+        setError={setError}
+        setSuccess={setSuccess}
+      />
       <div className="ls-widget">
         <div className="tabs-box">
           {/* Title with Edit Icon */}
@@ -337,6 +344,8 @@ const PersonalSection = () => {
           focusSection={focusSection}
           reload={reload}
           setReload={setReload}
+          setError={setError}
+          setSuccess={setSuccess}
         />
       )}
     </>

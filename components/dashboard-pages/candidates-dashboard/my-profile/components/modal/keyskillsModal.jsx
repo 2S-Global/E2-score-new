@@ -3,12 +3,19 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import CustomizedProgressBars from "@/components/common/loader";
 
-const KeySkillsModal = ({ show, onClose, selectedSkills, setKeySkill }) => {
+const KeySkillsModal = ({
+  show,
+  onClose,
+  selectedSkills,
+  setKeySkill,
+  setError,
+  setSuccess,
+}) => {
   const [skills, setSkills] = useState(selectedSkills || []);
   const [suggestedSkills, setSuggestedSkills] = useState([]);
   const [allskills, setAllskills] = useState([]);
   const [newSkill, setNewSkill] = useState("");
-  const [error, setError] = useState("");
+
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [loading, setLoading] = useState(true);
 
@@ -97,9 +104,11 @@ const KeySkillsModal = ({ show, onClose, selectedSkills, setKeySkill }) => {
         .then((response) => {
           console.log("Skills updated successfully:", response.data);
           setKeySkill(skills || []);
+          setSuccess("Key Skills updated successfully");
         })
         .catch((error) => {
           console.error("Error updating skills:", error);
+          setError("Error updating skills");
         });
 
       onClose(skills);
@@ -187,8 +196,6 @@ const KeySkillsModal = ({ show, onClose, selectedSkills, setKeySkill }) => {
                       ))}
                     </datalist>
                   </div>
-
-                  {error && <p className="text-danger">{error}</p>}
 
                   {/* Suggested Skills */}
                   <div className="mt-3">

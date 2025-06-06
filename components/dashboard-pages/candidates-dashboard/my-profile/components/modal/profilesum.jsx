@@ -9,6 +9,8 @@ const Profilesum = ({
   onClose,
   mainprofilesummary,
   mainsetProfilesummary,
+  setError,
+  setSuccess,
 }) => {
   const [profilesummary, setProfilesummary] = useState(
     mainprofilesummary || ""
@@ -55,8 +57,10 @@ const Profilesum = ({
       if (response.status === 201) {
         mainsetProfilesummary(profilesummary);
       }
+      setSuccess("Profile Summary updated successfully");
     } catch (error) {
       console.error("Error uploading data:", error);
+      setError("Error uploading data");
     }
     onClose();
   };
@@ -79,6 +83,7 @@ const Profilesum = ({
       }
       mainsetProfilesummary("");
       onClose();
+      setError("Profile Summary deleted successfully");
     } catch (error) {
       console.error("Error deleting education record:", error);
     }

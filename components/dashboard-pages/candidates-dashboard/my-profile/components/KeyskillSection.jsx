@@ -2,10 +2,13 @@
 import React, { useState, useEffect } from "react";
 import KeySkillsModal from "./modal/keyskillsModal"; // Import the modal component
 import axios from "axios";
+import MessageComponent from "@/components/common/ResponseMsg";
 const Keyskillsection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [keyskill, setKeySkill] = useState([]);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   useEffect(() => {
     const fetchKeySkill = async () => {
       try {
@@ -39,6 +42,12 @@ const Keyskillsection = () => {
 
   return (
     <>
+      <MessageComponent
+        error={error}
+        success={success}
+        setError={setError}
+        setSuccess={setSuccess}
+      />
       {/* Resume Headline Section */}
       <div className="ls-widget">
         <div className="tabs-box">
@@ -78,6 +87,8 @@ const Keyskillsection = () => {
           onClose={closeModalRH}
           selectedSkills={keyskill}
           setKeySkill={setKeySkill}
+          setError={setError}
+          setSuccess={setSuccess}
         />
       )}
     </>

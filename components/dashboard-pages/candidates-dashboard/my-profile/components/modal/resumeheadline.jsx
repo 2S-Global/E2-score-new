@@ -7,6 +7,8 @@ const ResumeHeadline = ({
   onClose,
   mainresumeHeadline,
   mainsetResumeHeadline,
+  setError,
+  setSuccess,
 }) => {
   const [resumeHeadline, setResumeHeadline] = useState(
     mainresumeHeadline || ""
@@ -51,6 +53,7 @@ const ResumeHeadline = ({
       );
       if (response.status === 201) {
         mainsetResumeHeadline(resumeHeadline);
+        setSuccess("Resume Headline updated successfully");
       }
     } catch (error) {
       console.error("Error updating data:", error);

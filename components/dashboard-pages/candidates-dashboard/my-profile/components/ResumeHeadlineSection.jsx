@@ -3,12 +3,14 @@ import React, { useState, useEffect } from "react";
 import ResumeHeadline from "./modal/resumeheadline"; // Import the modal component
 import axios from "axios";
 import CustomizedProgressBars from "@/components/common/loader";
-
+import MessageComponent from "@/components/common/ResponseMsg";
 const ResumeHeadlineSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resumeHeadline, setResumeHeadline] = useState("");
 
   const [sectionloading, setSectionloading] = useState(true);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const openModalRH = () => {
     setIsModalOpen(true);
@@ -47,6 +49,12 @@ const ResumeHeadlineSection = () => {
   }, [apiurl]);
   return (
     <>
+      <MessageComponent
+        error={error}
+        success={success}
+        setError={setError}
+        setSuccess={setSuccess}
+      />
       {/* Resume Headline Section */}
       <div className="ls-widget">
         <div className="tabs-box">
@@ -81,6 +89,8 @@ const ResumeHeadlineSection = () => {
           onClose={closeModalRH}
           mainresumeHeadline={resumeHeadline}
           mainsetResumeHeadline={setResumeHeadline}
+          setError={setError}
+          setSuccess={setSuccess}
         />
       )}
     </>
