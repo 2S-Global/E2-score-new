@@ -274,7 +274,7 @@ const Cardedit = ({
                 onClick={onClose}
               ></button>
             </div>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="default-form">
               {/* Modal Body */}
               <div className="modal-body">
                 {loading ? (
@@ -284,7 +284,7 @@ const Cardedit = ({
                     {error && <div className="alert alert-danger">{error}</div>}
 
                     {/* Fullname */}
-                    <div className="mb-3">
+                    <div className="mb-3 form-group">
                       <label htmlFor="full_name" className="form-label">
                         <b>Full Name</b>
                         <span style={{ color: "red" }}>*</span>
@@ -301,7 +301,7 @@ const Cardedit = ({
                       />
                     </div>
                     {/* Gender Selection */}
-                    <div className="mb-3">
+                    <div className="mb-3 form-group">
                       <label className="form-label">
                         <b>Gender</b>
                         <span style={{ color: "red" }}>*</span>
@@ -324,7 +324,7 @@ const Cardedit = ({
                     </div>
 
                     {/* Date of Birth Section */}
-                    <div className="mb-3">
+                    <div className="mb-3 form-group">
                       <label className="form-label d-block">
                         <b>Date of Birth</b>
                         <span style={{ color: "red" }}>*</span>
@@ -346,7 +346,7 @@ const Cardedit = ({
                     </div>
 
                     {/* ckeckbox */}
-                    <div className="mb-3">
+                    <div className="mb-3 form-group">
                       <div className="form-check">
                         <input
                           className="form-check-input"
@@ -365,7 +365,7 @@ const Cardedit = ({
                     </div>
 
                     {!isResidingInIndia && (
-                      <div className="mb-3">
+                      <div className="mb-3 form-group">
                         <label htmlFor="country" className="form-label">
                           Country
                         </label>
@@ -384,7 +384,7 @@ const Cardedit = ({
                       </div>
                     )}
                     {/* current location */}
-                    <div className="mb-3">
+                    <div className="mb-3 form-group">
                       <label htmlFor="currentLocation" className="form-label">
                         Current Location
                       </label>
@@ -399,7 +399,7 @@ const Cardedit = ({
                       />
                     </div>
                     {/* Home-Town */}
-                    <div className="mb-3">
+                    <div className="mb-3 form-group">
                       <label htmlFor="hometown" className="form-label">
                         Hometown
                       </label>

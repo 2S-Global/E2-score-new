@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ProfileModal from "./ProfileModal";
+import WorksampleModal from "./WorksampleModal";
 
 const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,7 +23,7 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
     <>
       <div className="">
         <h5>
-          Online Profile
+          Work Sample
           <span
             onClick={() => openModal()}
             style={{
@@ -52,7 +52,7 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
                   color: "#000",
                 }}
               >
-                {item.socialProfileName}
+                {item.socialProfile}
                 <span
                   onClick={() => openModal(item)}
                   style={{
@@ -84,7 +84,7 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
           ))}
       </div>
       {isModalOpen && (
-        <ProfileModal
+        <WorksampleModal
           show={isModalOpen}
           onClose={closeModal}
           setItem={setItem}

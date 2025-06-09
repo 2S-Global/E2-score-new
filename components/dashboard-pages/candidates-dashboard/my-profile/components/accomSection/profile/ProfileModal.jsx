@@ -2,7 +2,17 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Sparkles } from "lucide-react";
 import axios from "axios";
-const ProfileModal = ({ setReload, show, onClose, setItem, item }) => {
+import CustomizedProgressBars from "@/components/common/loader";
+import { Trash2 } from "lucide-react";
+const ProfileModal = ({
+  setReload,
+  show,
+  onClose,
+  setItem,
+  item,
+  setError,
+  setSuccess,
+}) => {
   if (!show) return null;
 
   const [formData, setFormData] = useState({
@@ -16,6 +26,36 @@ const ProfileModal = ({ setReload, show, onClose, setItem, item }) => {
   const [isGenerated, setIsGenerated] = useState(false); // Track button presses
   const token = localStorage.getItem("candidate_token");
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
+
+  const [listsocialProfile, setListsocialProfile] = useState([]);
+
+  const fetchsocialProfile = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("candidate_token");
+      const response = await axios.get(
+        `${apiurl}/api/sql/dropdown/social_profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status == 200) {
+        setListsocialProfile(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching skills:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchsocialProfile();
+  }, [apiurl]);
+
+  const [loading, setLoading] = useState(false);
 
   const [isFormValid, setIsFormValid] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -73,12 +113,14 @@ const ProfileModal = ({ setReload, show, onClose, setItem, item }) => {
           setSaving(false);
           onClose();
           setReload(true);
+          setSuccess(response.data.message);
         } else {
           console.error(
             "Error saving personal details:",
             response.data.message
           );
           setSaving(false);
+          setError(response.data.message);
         }
       } else {
         const response = await axios.post(
@@ -94,12 +136,14 @@ const ProfileModal = ({ setReload, show, onClose, setItem, item }) => {
           setSaving(false);
           onClose();
           setReload(true);
+          setSuccess(response.data.message);
         } else {
           console.error(
             "Error saving personal details:",
             response.data.message
           );
           setSaving(false);
+          setError(response.data.message);
         }
       }
     } catch (error) {
@@ -124,6 +168,52 @@ const ProfileModal = ({ setReload, show, onClose, setItem, item }) => {
       setUrlError("Please enter a valid URL (include https://)");
     } else {
       setUrlError("");
+    }
+  };
+  const handleDelete = async () => {
+    setLoading(true);
+    if (!formData._id) {
+      console.error("No education record selected for deletion.");
+      return;
+    }
+    if (!token) {
+      console.error("Authorization token is missing. Please log in.");
+      return;
+    }
+    try {
+      setSaving(true);
+
+      /* /api/candidate/accomplishments/delete_online_profile */
+      const response = await axios.delete(
+        `${apiurl}/api/candidate/accomplishments/delete_online_profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          data: {
+            _id: formData._id,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        //setSaving(false);
+        onClose();
+        setReload(true);
+        setLoading(false);
+        setSuccess(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error deleting education record:", error);
+      setError("An error occurred while deleting the record.Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleConfirmDelete = () => {
+    if (window.confirm("Are you sure you want to delete this record?")) {
+      handleDelete();
     }
   };
 
@@ -182,79 +272,127 @@ const ProfileModal = ({ setReload, show, onClose, setItem, item }) => {
                 }}
               ></button>
             </div>
+            {loading ? (
+              <CustomizedProgressBars />
+            ) : (
+              <>
+                {/* Modal Body */}
+                <div className="modal-body">
+                  <p style={{ color: "black" }}>
+                    Add link to online professional profiles (e.g. LinkedIn,
+                    etc.)
+                  </p>
 
-            {/* Modal Body */}
-            <div className="modal-body">
-              <p style={{ color: "black" }}>
-                Add link to online professional profiles (e.g. LinkedIn, etc.)
-              </p>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      color: "black",
+                    }}
+                    className="mb-3"
+                  >
+                    <span>
+                      Add link to online professional profiles (e.g. LinkedIn,
+                      etc.)
+                    </span>
+                    {formData._id && (
+                      <span style={{ color: "red", cursor: "pointer" }}>
+                        <Trash2 size={20} onClick={handleConfirmDelete} />
+                      </span>
+                    )}
+                  </div>
 
-              {/* Social profile */}
-              <div className="mb-3">
-                <label className="form-label">
-                  <b>Social profile</b>
-                  <span style={{ color: "red" }}>*</span>
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter Social profile name"
-                  value={formData.socialProfile}
-                  onChange={(e) =>
-                    setFormData({ ...formData, socialProfile: e.target.value })
-                  }
-                  required
-                />
-              </div>
-              {/* URL */}
-              <div className="mb-3">
-                <label className="form-label">
-                  <b>URL</b>
-                  <span style={{ color: "red" }}>*</span>
-                </label>
-                <input
-                  type="text"
-                  className={`form-control ${urlError ? "is-invalid" : ""}`}
-                  placeholder="Enter Your Social profile URL"
-                  value={formData.url}
-                  onChange={(e) =>
-                    setFormData({ ...formData, url: e.target.value })
-                  }
-                  onBlur={handleBlur}
-                  required
-                />
-                {urlError && <div className="invalid-feedback">{urlError}</div>}
-              </div>
-              {/* Description */}
-              <div className="mb-3">
-                <label className="form-label">
-                  <b>Description</b>
-                </label>
-                <textarea
-                  className="form-control custom-textarea"
-                  placeholder="Type here ..."
-                  rows="3"
-                  value={formData.description || description}
-                  onChange={(e) => {
-                    setDescription(e.target.value);
-                    setFormData({
-                      ...formData,
-                      description: e.target.value,
-                    });
-                    setIsGenerated(false); // Reset when user types
-                  }}
-                ></textarea>
-                <button
-                  type="button"
-                  className="suggestion-btn"
-                  onClick={handleGenerateHeadline}
-                >
-                  <Sparkles />
-                  {isGenerated ? "Clear" : "Help me write"}
-                </button>
-              </div>
-            </div>
-
+                  {/* Social profile */}
+                  <div className="mb-3 form-group">
+                    <label className="form-label">
+                      <b>Social profile</b>
+                      <span style={{ color: "red" }}>*</span>
+                    </label>
+                    {/*  <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Enter Social profile name"
+                      value={formData.socialProfile}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          socialProfile: e.target.value,
+                        })
+                      }
+                      required
+                    /> */}
+                    <select
+                      className="form-select"
+                      value={formData.socialProfile}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          socialProfile: e.target.value,
+                        })
+                      }
+                      required
+                    >
+                      <option value="">Select Social profile</option>
+                      {listsocialProfile.map((profile, index) => (
+                        <option key={index} value={profile.id}>
+                          {profile.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  {/* URL */}
+                  <div className="mb-3 form-group">
+                    <label className="form-label">
+                      <b>URL</b>
+                      <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className={`form-control ${urlError ? "is-invalid" : ""}`}
+                      placeholder="Enter Your Social profile URL"
+                      value={formData.url}
+                      onChange={(e) =>
+                        setFormData({ ...formData, url: e.target.value })
+                      }
+                      onBlur={handleBlur}
+                      required
+                    />
+                    {urlError && (
+                      <div className="invalid-feedback">{urlError}</div>
+                    )}
+                  </div>
+                  {/* Description */}
+                  <div className="mb-3 form-group">
+                    <label className="form-label">
+                      <b>Description</b>
+                    </label>
+                    <textarea
+                      className="form-control custom-textarea"
+                      placeholder="Type here ..."
+                      rows="3"
+                      value={formData.description || description}
+                      onChange={(e) => {
+                        setDescription(e.target.value);
+                        setFormData({
+                          ...formData,
+                          description: e.target.value,
+                        });
+                        setIsGenerated(false); // Reset when user types
+                      }}
+                    ></textarea>
+                    <button
+                      type="button"
+                      className="suggestion-btn"
+                      onClick={handleGenerateHeadline}
+                    >
+                      <Sparkles />
+                      {isGenerated ? "Clear" : "Help me write"}
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
             {/* Modal Footer */}
             <div className="modal-footer">
               <button

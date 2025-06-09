@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ProfileMain from "./accomSection/profile/main";
+import Workmain from "./accomSection/worksample/main";
 import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
 const AcomSection = () => {
@@ -70,13 +71,25 @@ const AcomSection = () => {
           ) : (
             <>
               <div className="widget-content">
-                <ProfileMain
-                  list={onlineProfilelist}
-                  setError={setError}
-                  setSuccess={setSuccess}
-                  reload={reloadonlineProfilelist}
-                  setReload={setReloadonlineProfilelist}
-                />
+                <div className="border-bottom my-3">
+                  <ProfileMain
+                    list={onlineProfilelist}
+                    setError={setError}
+                    setSuccess={setSuccess}
+                    reload={reloadonlineProfilelist}
+                    setReload={setReloadonlineProfilelist}
+                  />
+                </div>
+
+                <div className="my-3">
+                  <Workmain
+                    list={onlineProfilelist}
+                    setError={setError}
+                    setSuccess={setSuccess}
+                    reload={reloadonlineProfilelist}
+                    setReload={setReloadonlineProfilelist}
+                  />
+                </div>
               </div>
             </>
           )}

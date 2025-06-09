@@ -258,7 +258,7 @@ const PersonalInfoForm = ({
               </div>
 
               {/* Marital Status Section */}
-              <div className="mb-3">
+              <div className="mb-3 form-group">
                 <label className="form-label">
                   <b>Marital Status</b>
                 </label>
@@ -302,7 +302,7 @@ const PersonalInfoForm = ({
                 />
               </div>
             </div>
-            <div className="mb-3" ref={category}>
+            <div className="mb-3 form-group" ref={category}>
               <label className="form-label">
                 <b>Category</b>
               </label>
@@ -397,7 +397,7 @@ const PersonalInfoForm = ({
             </div>
 
             <div ref={workPermit}>
-              <div className="mb-3">
+              <div className="mb-3 form-group">
                 <label className="form-label">
                   <b>Work permit for USA</b>
                 </label>
@@ -425,7 +425,7 @@ const PersonalInfoForm = ({
                 </div>
               </div>
 
-              <div className="mb-3">
+              <div className="mb-3 form-group">
                 <label className="form-label">
                   <b>Work permit for other countries (Max 3)</b>
                 </label>
