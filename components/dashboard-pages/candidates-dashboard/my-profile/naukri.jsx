@@ -22,10 +22,10 @@ import Carrersection from "./components/carrersection";
 import PersonalSection from "./components/Personal_details";
 
 import HeadSection from "./components/HeadSection";
-
+import QuickActionSidebar from "./components/quickaction";
 const index = () => {
   return (
-    <div className="page-wrapper dashboard">
+    <div className="page-wrapper dashboard ">
       <span className="header-span"></span>
       {/* <!-- Header Span for hight --> */}
 
@@ -38,7 +38,10 @@ const index = () => {
       <MobileMenu />
       {/* End MobileMenu */}
 
-      <DashboardCandidatesSidebar />
+      {/*   <DashboardCandidatesSidebar /> */}
+
+      <QuickActionSidebar />
+
       {/* <!-- End Candidates Sidebar Menu --> */}
 
       {/* <!-- Dashboard --> */}
@@ -51,46 +54,47 @@ const index = () => {
           {/* Collapsible sidebar button */}
 
           <div className="row">
-            <div className="col-lg-12">
-              {/* score Section */}
-              {/*  <ScoreSection/> */}
+            {/* Quick action section */}
 
-              {/* Profile Section */}
-              <HeadSection />
-
-              {/* E2 score section */}
-              {/* <EscoreSection/>
-               */}
-
-              {/* Resume Headline Section */}
-              <ResumeHeadlineSection />
-              {/* profile summery  */}
-              <ProfilesumerySection />
-              {/* Keyskill Section */}
-              <Keyskillsection />
-              {/* Personal details */}
-              <PersonalSection />
-              {/* Academy Section  */}
-              <Academysection />
-              {/* Acom Section */}
-              <AcomSection />
-              <AcomSectiondemo />
-
-              {/* carrer section  */}
-              <Carrersection />
-
-              {/* Employment Section */}
-              <Employsection />
-
-              {/* IT Key Section */}
-              <ItkeySection />
-              {/* project  */}
-              <ProjectSection />
-
-              {/* Resume */}
-              <div className="ls-widget">
+            <div className="col-lg-12 col-md-12">
+              <div id="head-section">
+                <HeadSection />
+              </div>
+              <div id="resume-headline">
+                <ResumeHeadlineSection />
+              </div>
+              <div id="profile-summary">
+                <ProfilesumerySection />
+              </div>
+              <div id="key-skill">
+                <Keyskillsection />
+              </div>
+              <div id="personal">
+                <PersonalSection />
+              </div>
+              <div id="academy">
+                <Academysection />
+              </div>
+              <div id="acom">
+                <AcomSection />
+              </div>
+              <div id="acom-demo">
+                <AcomSectiondemo />
+              </div>
+              <div id="career">
+                <Carrersection />
+              </div>
+              <div id="employment">
+                <Employsection />
+              </div>
+              <div id="it-key">
+                <ItkeySection />
+              </div>
+              <div id="projects">
+                <ProjectSection />
+              </div>
+              <div id="resume-box" className="ls-widget">
                 <div className="tabs-box">
-                  {/* Resume  */}
                   <ResumeBox />
                 </div>
               </div>

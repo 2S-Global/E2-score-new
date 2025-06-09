@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Sparkles } from "lucide-react";
 import axios from "axios";
-const ProfileModal = ({ show, onClose, setItem, item }) => {
+const ProfileModal = ({ setReload, show, onClose, setItem, item }) => {
   if (!show) return null;
 
   const [formData, setFormData] = useState({
@@ -59,22 +59,49 @@ const ProfileModal = ({ show, onClose, setItem, item }) => {
     setSaving(true);
     /* /api/candidate/accomplishments/add_online_profile */
     try {
-      /* const response = await axios.post(
-        `${apiurl}/api/candidate/accomplishments/add_online_profile`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      if (formData._id) {
+        const response = await axios.put(
+          `${apiurl}/api/candidate/accomplishments/edit_online_profile`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.data.success) {
+          setSaving(false);
+          onClose();
+          setReload(true);
+        } else {
+          console.error(
+            "Error saving personal details:",
+            response.data.message
+          );
+          setSaving(false);
         }
-      );
-      if (response.data.success) {
-        setSaving(false);
-        onClose();
       } else {
-        console.error("Error saving personal details:", response.data.message);
-        setSaving(false);
-      } */
+        const response = await axios.post(
+          `${apiurl}/api/candidate/accomplishments/add_online_profile`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.data.success) {
+          setSaving(false);
+          onClose();
+          setReload(true);
+        } else {
+          console.error(
+            "Error saving personal details:",
+            response.data.message
+          );
+          setSaving(false);
+        }
+      }
     } catch (error) {
       console.error("Error saving personal details:", error);
       setSaving(false);
