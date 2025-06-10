@@ -90,7 +90,7 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
           setItem={setItem}
           item={item}
           setReload={setReload}
-          setError={setError}
+          setmainError={setError}
           setSuccess={setSuccess}
         />
       )}

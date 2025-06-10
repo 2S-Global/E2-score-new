@@ -70,13 +70,15 @@ module.exports = [
     routePath: "/candidates-dashboard/change-password",
     active: "",
   },
+  /* 
+  do not use id 11 anywhere other than logout
   {
     id: 11,
     name: "Logout",
     icon: "la-sign-out",
     routePath: "/",
     active: "",
-  },
+  }, */
   /*   {
     id: 12,
     name: "Delete Profile",

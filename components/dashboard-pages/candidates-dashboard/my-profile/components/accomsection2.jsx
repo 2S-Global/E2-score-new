@@ -11,6 +11,7 @@ const AcomSection = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [onlineProfilelist, setOnlineProfilelist] = useState([]);
+  const [worksamplelist, setWorksamplelist] = useState([]);
   const [reloadonlineProfilelist, setReloadonlineProfilelist] = useState(false);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -19,6 +20,7 @@ const AcomSection = () => {
     try {
       setSectionloading(true);
       fetchonlineProfilelist();
+      fetchWorksamplelist();
     } catch (error) {
       console.error(error);
     } finally {
@@ -47,6 +49,25 @@ const AcomSection = () => {
       );
       if (response.status == 200) {
         setOnlineProfilelist(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching skills:", error);
+    }
+  };
+
+  const fetchWorksamplelist = async () => {
+    try {
+      const token = localStorage.getItem("candidate_token");
+      const response = await axios.get(
+        `${apiurl}/api/candidate/accomplishments/get_work_samples`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status == 200) {
+        setWorksamplelist(response.data.data);
       }
     } catch (error) {
       console.error("Error fetching skills:", error);
@@ -83,7 +104,7 @@ const AcomSection = () => {
 
                 <div className="my-3">
                   <Workmain
-                    list={onlineProfilelist}
+                    list={worksamplelist}
                     setError={setError}
                     setSuccess={setSuccess}
                     reload={reloadonlineProfilelist}

@@ -45,6 +45,25 @@ const DashboardCandidatesSidebar = () => {
               </Link>
             </li>
           ))}
+          {/*   {
+    id: 11,
+    name: "Logout",
+    icon: "la-sign-out",
+    routePath: "/",
+    active: "",
+  }, */}
+
+          <li
+            className={`${
+              isActiveLink("/", usePathname()) ? "active" : ""
+            } mb-1`}
+            key={11}
+            onClick={menuToggleHandler}
+          >
+            <Link href="/" onClick={() => localStorage.clear()}>
+              <i className={`la la-sign-out`}></i>Logout
+            </Link>
+          </li>
         </ul>
         {/* End navigation */}
 
