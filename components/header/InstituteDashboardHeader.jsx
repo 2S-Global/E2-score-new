@@ -7,10 +7,14 @@ import employerMenuData from "../../data/InstituteMenuRight";
 import HeaderNavContent from "./HeaderNavContent";
 import { isActiveLink } from "../../utils/linkActiveChecker";
 import { usePathname } from "next/navigation";
+import styles from "./DashboardHeader.module.css";
+import { useRouter } from "next/navigation";
+
+import axios from "axios";
 
 const DashboardHeader = () => {
   const [navbar, setNavbar] = useState(false);
-
+  const [userData, setUserData] = useState();
   const changeBackground = () => {
     if (window.scrollY >= 0) {
       setNavbar(true);
@@ -21,8 +25,31 @@ const DashboardHeader = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", changeBackground);
+
+    const fetchSwitchedRoleUser = async () => {
+      try {
+        const apiurl = process.env.NEXT_PUBLIC_API_URL;
+        const token = localStorage.getItem("Institute_token"); // Or whichever token you're using
+        const response = await axios.get(
+          `${apiurl}/api/companyRoutes/switched-role-user`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setUserData(response.data.check_role);
+        console.log("Switched user data:", response.data);
+      } catch (error) {
+        console.error("Failed to fetch switched role user:", error);
+      }
+    };
+
+    fetchSwitchedRoleUser();
   }, []);
 
+  const router = useRouter();
   return (
     // <!-- Main Header-->
     <header
@@ -98,6 +125,28 @@ const DashboardHeader = () => {
                     </Link>
                   </li>
                 ))}
+                {userData && (
+                  <>
+                    <li>
+                      <hr className="dropdown-divider" />
+                    </li>
+
+                    <li>
+                      <button
+                        className="dropdown-item"
+                        onClick={() => {
+                          const token = localStorage.getItem("Institute_token");
+
+                          localStorage.setItem("employer_token", token);
+                          //  console.log(localStorage.getItem("employer_token"));
+                          router.replace("/employers-dashboard/dashboard");
+                        }}
+                      >
+                        Switch to Company
+                      </button>
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
             {/* End dropdown */}
