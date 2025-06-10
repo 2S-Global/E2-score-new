@@ -19,6 +19,7 @@ const EditfieldModal = ({ show, onClose, field }) => {
     email: "",
     discount_percent: "",
     id: "",
+    check_role: "",
   });
   const [formErrors, setFormErrors] = useState({
     name: "",
@@ -32,6 +33,7 @@ const EditfieldModal = ({ show, onClose, field }) => {
     gst_no: "",
     package_id: "",
     discount_percent: "",
+    check_role: "",
   });
 
   const [touched, setTouched] = useState({
@@ -68,6 +70,7 @@ const EditfieldModal = ({ show, onClose, field }) => {
         package_id: field.package_id || "",
         discount_percent: field.discount_percent || "",
         email: field.email || "",
+        check_role: field.check_role ?? false,
       });
     }
   }, [field]);
@@ -341,161 +344,26 @@ const EditfieldModal = ({ show, onClose, field }) => {
                   )}
                 </div>
 
-                {/*   <div className="mb-3 col-md-6">
-                  <label htmlFor="package_id" className="form-label">
-                    Package
+                <div className="mb-3 col-md-6">
+                  <label htmlFor="check_role" className="form-label">
+                    Company Role Include
                   </label>
                   <select
-                    name="package_id"
                     className="form-select"
-                    required
-                    value={formData.package_id}
-                    onChange={handleChange}
+                    id="check_role"
+                    name="check_role"
+                    value={formData.check_role.toString()}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                       check_role: e.target.value === "true",
+                      }))
+                    }
                   >
-                    <option value="">Select Package</option>
-                    <option value="1">
-                      All( PAN, Aadhaar, EPIC, Driving License, Passport )
-                    </option>
-                    <option value="2">Individual</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
                   </select>
                 </div>
-
-                <div className="mb-3 col-md-6">
-                  <label htmlFor="transaction_fee" className="form-label">
-                    Transaction Fee
-                  </label>
-                  <input
-                    type="number"
-                    name="transaction_fee"
-                    className="form-control"
-                    placeholder="Transaction Fee"
-                    required
-                    value={formData.transaction_fee}
-                    onChange={handleChange}
-                    onBlur={(e) => {
-                      const { name, value } = e.target;
-
-                      let trimmedValue = value.trim();
-
-                      // If it's a decimal like 0.1234, keep the leading 0
-                      if (/^0\.\d+$/.test(trimmedValue)) {
-                        // do nothing, keep as is
-                      } else {
-                        // Remove leading zeros, but preserve decimal portion
-                        trimmedValue =
-                          trimmedValue.replace(/^0+(?=\d)/, "") || "0";
-                      }
-
-                      setFormData({
-                        ...formData,
-                        [name]: trimmedValue,
-                      });
-                    }}
-                  />
-                </div>
-                {formData.package_id === "" ? null : formData.package_id ==
-                  2 ? (
-                  <div className="mb-3 text-center">
-                    <strong className="d-block mb-2">
-                      Allowed Verifications
-                    </strong>
-                    <div className="d-flex justify-content-center flex-wrap gap-3">
-                      {verificationOptions.map((item, index) => (
-                        <div className="form-check" key={index}>
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id={`check-${index}`}
-                            value={item}
-                            checked={selectedVerifications.includes(item)}
-                            onChange={handleCheckboxChange}
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor={`check-${index}`}
-                          >
-                            {item}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="mb-4 text-center col-md-12">
-                    <span className="fw-semibold fs-5 text-success">
-                      All verifications are selected by default ( PAN, Aadhaar,
-                      EPIC, Driving License, Passport )
-                    </span>
-                  </div>
-                )}
-
-                <div className="mb-3 col-md-6">
-                  <label htmlFor="discount_percent" className="form-label">
-                    Discount Percentage (%)
-                  </label>
-                  <input
-                    type="number"
-                    name="discount_percent"
-                    className="form-control"
-                    placeholder="Discount Percentage"
-                    required
-                    value={formData.discount_percent}
-                    onChange={handleChange}
-                    onBlur={(e) => {
-                      const { name, value } = e.target;
-
-                      let trimmedValue = value.trim();
-
-                      // If it's a decimal like 0.1234, keep the leading 0
-                      if (/^0\.\d+$/.test(trimmedValue)) {
-                        // do nothing, keep as is
-                      } else {
-                        // Remove leading zeros, but preserve decimal portion
-                        trimmedValue =
-                          trimmedValue.replace(/^0+(?=\d)/, "") || "0";
-                      }
-
-                      setFormData({
-                        ...formData,
-                        [name]: trimmedValue,
-                      });
-                    }}
-                  />
-                </div>
-
-                <div className="mb-3 col-md-6">
-                  <label htmlFor="transaction_gst" className="form-label">
-                    Transaction GST (%)
-                  </label>
-                  <input
-                    type="number"
-                    name="transaction_gst"
-                    className="form-control"
-                    placeholder="Transaction GST"
-                    required
-                    value={formData.transaction_gst}
-                    onChange={handleChange}
-                    onBlur={(e) => {
-                      const { name, value } = e.target;
-
-                      let trimmedValue = value.trim();
-
-                      // If it's a decimal like 0.1234, keep the leading 0
-                      if (/^0\.\d+$/.test(trimmedValue)) {
-                        // do nothing, keep as is
-                      } else {
-                        // Remove leading zeros, but preserve decimal portion
-                        trimmedValue =
-                          trimmedValue.replace(/^0+(?=\d)/, "") || "0";
-                      }
-
-                      setFormData({
-                        ...formData,
-                        [name]: trimmedValue,
-                      });
-                    }}
-                  />
-                </div> */}
               </div>
               <button
                 type="submit"
