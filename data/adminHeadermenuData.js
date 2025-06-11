@@ -13,11 +13,11 @@ module.exports = [
     routePath: "#",
     active: false,
   },
-  {
-    id: 3,
-    name: "Logout",
-    icon: "la-sign-out",
-    routePath: "/",
-    active: false,
-  },
+  // {
+  //   id: 3,
+  //   name: "Logout",
+  //   icon: "la-sign-out",
+  //   routePath: "/",
+  //   active: false,
+  // },
 ];
