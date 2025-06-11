@@ -5,4 +5,5 @@ export const metadata = {
 import AuthWrapper from "./AuthWrapper";
 export default function Layout({ children }) {
   return <AuthWrapper>{children}</AuthWrapper>;
+  /*   return <>{children}</>; */
 }
