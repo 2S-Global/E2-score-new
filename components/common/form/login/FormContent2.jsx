@@ -69,7 +69,7 @@ const [token, setToken] = useState(null);
 
   return (
     <div className="form-inner">
-      <h3>Login to E²-Score</h3>
+      <h3>Login to GEISIL</h3>
       <MessageComponent error={error} success={success} />
       {/* <!--Login Form--> */}
       <form onSubmit={handleSubmit}>
