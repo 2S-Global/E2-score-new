@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "GEISIL-Admin Dashboard",
-  description: "E²-Score Job portal",
+  title: "GEISIL-Admin",
+  description: "GEISIL-Admin",
 };
 import AuthWrapper from "./AuthWrapper";
 export default function Layout({ children }) {

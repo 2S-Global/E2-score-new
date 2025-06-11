@@ -1,8 +1,8 @@
 export const metadata = {
-  title: "E²-Score Employeers Dashboard",
-  description: "E²-Score Job portal",
+  title: "GEISIL-Institute",
+  description: "GEISIL-Institute",
 };
-
+import AuthWrapper from "./AuthWrapper";
 export default function Layout({ children }) {
-  return <>{children}</>;
+  return <><AuthWrapper>{children}</AuthWrapper></>;
 }

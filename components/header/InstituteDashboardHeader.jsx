@@ -125,6 +125,18 @@ const DashboardHeader = () => {
                     </Link>
                   </li>
                 ))}
+
+                  <li
+            className={`${
+              isActiveLink("/", usePathname()) ? "active" : ""
+            } mb-1`}
+            key={11}
+ 
+          >
+            <Link href="/" onClick={() => localStorage.clear()}>
+              <i className={`la la-sign-out`}></i>Logout
+            </Link>
+          </li>
                 {userData && (
                   <>
                     <li>

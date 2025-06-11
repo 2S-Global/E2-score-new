@@ -13,13 +13,13 @@ module.exports = [
     routePath: "#",
     active: "",
   },
-  {
-    id: 3,
-    name: "Logout",
-    icon: "la-paper-plane",
-    routePath: "/",
-    active: "",
-  },
+  // {
+  //   id: 3,
+  //   name: "Logout",
+  //   icon: "la-paper-plane",
+  //   routePath: "/",
+  //   active: "",
+  // },
   // {
   //   id: 4,
   //   name: "Manage Jobs",
