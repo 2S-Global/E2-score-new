@@ -92,9 +92,19 @@ const PatentMain = ({ setReload, list = [], setError, setSuccess }) => {
               <br />
               <span>Application number: {item.application_number}</span>
               <br />
-              <span>
-                Issued on: {monthNames[item.issue_month - 1]} {item.issue_year}
-              </span>
+              {item.status === "Patent pending" ? (
+                <>
+                  <span>Issued on: -</span>
+                </>
+              ) : (
+                <>
+                  <span>
+                    Issued on: {monthNames[item.issue_month - 1]}{" "}
+                    {item.issue_year}
+                  </span>
+                </>
+              )}
+
               <br />
               <span>{item.description}</span>
             </div>
