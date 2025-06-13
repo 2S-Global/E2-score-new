@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PatentModal from "./PatentModal";
+import PatentModal from "./patentModal.jsx";
 
 const PatentMain = ({ setReload, list = [], setError, setSuccess }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
