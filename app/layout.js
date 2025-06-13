@@ -40,7 +40,7 @@ export default function RootLayout({ children }) {
 
       <body>
         <Provider store={store}>
-          <div className="container">
+          <div className="container shadow-lg">
             <div className="page-wrapper">
               {children}
 
