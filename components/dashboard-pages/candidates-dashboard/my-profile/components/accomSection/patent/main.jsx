@@ -19,6 +19,21 @@ const PatentMain = ({ setReload, list = [], setError, setSuccess }) => {
     setIsModalOpen(false);
     document.body.style.overflow = "auto"; // Re-enable background scrolling
   };
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
   return (
     <>
       <div className="">
@@ -77,7 +92,9 @@ const PatentMain = ({ setReload, list = [], setError, setSuccess }) => {
               <br />
               <span>Application number: {item.application_number}</span>
               <br />
-              <span>{item.description}</span>
+              <span>
+                Issued on: {monthNames[item.issue_month - 1]} {item.issue_year}
+              </span>
               <br />
               <span>{item.description}</span>
             </div>
