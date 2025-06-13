@@ -25,7 +25,10 @@ import HeadSection from "./components/HeadSection";
 import QuickActionSidebar from "./components/quickaction";
 const index = () => {
   return (
-    <div className="page-wrapper dashboard ">
+    <div
+      className="page-wrapper dashboard container"
+      style={{ paddingLeft: "10px", paddingRight: "10px" }}
+    >
       <span className="header-span"></span>
       {/* <!-- Header Span for hight --> */}
 
@@ -37,75 +40,76 @@ const index = () => {
 
       <MobileMenu />
       {/* End MobileMenu */}
+      <div className="row">
+        {/*   <DashboardCandidatesSidebar /> */}
+        <div className="col-lg-3 col-md-3">
+          <QuickActionSidebar />
+        </div>
 
-      {/*   <DashboardCandidatesSidebar /> */}
+        {/* <!-- End Candidates Sidebar Menu --> */}
 
-      <QuickActionSidebar />
+        {/* <!-- Dashboard --> */}
+        <section className="user-dashboard col-lg-9 col-md-9">
+          <div className="dashboard-outer">
+            <BreadCrumb title="My Profile!" />
+            {/* breadCrumb */}
 
-      {/* <!-- End Candidates Sidebar Menu --> */}
+            {/*      <MenuToggler /> */}
+            {/* Collapsible sidebar button */}
 
-      {/* <!-- Dashboard --> */}
-      <section className="user-dashboard">
-        <div className="dashboard-outer">
-          <BreadCrumb title="My Profile!" />
-          {/* breadCrumb */}
+            <div className="row">
+              {/* Quick action section */}
 
-          <MenuToggler />
-          {/* Collapsible sidebar button */}
-
-          <div className="row">
-            {/* Quick action section */}
-
-            <div className="col-lg-12 col-md-12">
-              <div id="head-section">
-                <HeadSection />
-              </div>
-              <div id="resume-headline">
-                <ResumeHeadlineSection />
-              </div>
-              <div id="profile-summary">
-                <ProfilesumerySection />
-              </div>
-              <div id="key-skill">
-                <Keyskillsection />
-              </div>
-              <div id="personal">
-                <PersonalSection />
-              </div>
-              <div id="academy">
-                <Academysection />
-              </div>
-              <div id="acom">
-                <AcomSection />
-              </div>
-              <div id="acom-demo">
-                <AcomSectiondemo />
-              </div>
-              <div id="career">
-                <Carrersection />
-              </div>
-              <div id="employment">
-                <Employsection />
-              </div>
-              <div id="it-key">
-                <ItkeySection />
-              </div>
-              <div id="projects">
-                <ProjectSection />
-              </div>
-              <div id="resume-box" className="ls-widget">
-                <div className="tabs-box">
-                  <ResumeBox />
+              <div className="col-lg-12 col-md-12">
+                <div id="head-section">
+                  <HeadSection />
+                </div>
+                <div id="resume-headline">
+                  <ResumeHeadlineSection />
+                </div>
+                <div id="profile-summary">
+                  <ProfilesumerySection />
+                </div>
+                <div id="key-skill">
+                  <Keyskillsection />
+                </div>
+                <div id="personal">
+                  <PersonalSection />
+                </div>
+                <div id="academy">
+                  <Academysection />
+                </div>
+                <div id="acom">
+                  <AcomSection />
+                </div>
+                <div id="acom-demo">
+                  <AcomSectiondemo />
+                </div>
+                <div id="career">
+                  <Carrersection />
+                </div>
+                <div id="employment">
+                  <Employsection />
+                </div>
+                <div id="it-key">
+                  <ItkeySection />
+                </div>
+                <div id="projects">
+                  <ProjectSection />
+                </div>
+                <div id="resume-box" className="ls-widget">
+                  <div className="tabs-box">
+                    <ResumeBox />
+                  </div>
                 </div>
               </div>
             </div>
+            {/* End .row */}
           </div>
-          {/* End .row */}
-        </div>
-        {/* End dashboard-outer */}
-      </section>
-      {/* <!-- End Dashboard --> */}
-
+          {/* End dashboard-outer */}
+        </section>
+        {/* <!-- End Dashboard --> */}
+      </div>
       <CopyrightFooter />
       {/* <!-- End Copyright --> */}
     </div>

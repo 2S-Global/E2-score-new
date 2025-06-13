@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Sparkles } from "lucide-react";
+/* this is demo */
 const PatentModal = ({ show, onClose }) => {
   if (!show) return null;
   const years = Array.from(
     { length: 50 },
-    (_, i) => new Date().getFullYear() - i,
+    (_, i) => new Date().getFullYear() - i
   ); // Last 50 years
   const months = [
     "January",
@@ -34,7 +35,7 @@ const PatentModal = ({ show, onClose }) => {
       setIsGenerated(false);
     } else {
       setDescription(
-        "Developed and deployed a scalable web application using React.js and Node.js, ensuring high performance and seamless user experience. Designed and implemented RESTful APIs, optimized database queries, and integrated third-party services for enhanced functionality. Focused on system architecture, security, and responsive UI/UX to deliver a robust and efficient solution.",
+        "Developed and deployed a scalable web application using React.js and Node.js, ensuring high performance and seamless user experience. Designed and implemented RESTful APIs, optimized database queries, and integrated third-party services for enhanced functionality. Focused on system architecture, security, and responsive UI/UX to deliver a robust and efficient solution."
       );
       setIsGenerated(true);
     }

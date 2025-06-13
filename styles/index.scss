@@ -24,7 +24,7 @@
 }
 
 /* 2nd, 3rd, and 4th steps - Add left arrow */
-.step:nth-child(n+2) {
+.step:nth-child(n + 2) {
   clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%, 5% 50%);
 }
 
@@ -42,6 +42,10 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+}
+
+.user-sidebar {
+  position: absolute;
 }
 
 .step-icon {
@@ -73,8 +77,6 @@
   color: #c7c5c5 !important;
   font-size: 15px !important;
 }
-
-
 
 .user-sidebar .navigation li a {
   padding: 10px 25px;

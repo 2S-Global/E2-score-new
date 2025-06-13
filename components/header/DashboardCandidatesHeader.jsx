@@ -9,7 +9,7 @@ import { isActiveLink } from "../../utils/linkActiveChecker";
 
 import { usePathname } from "next/navigation";
 const DashboardCandidatesHeader = () => {
-  const [navbar, setNavbar] = useState(false);
+  const [navbar, setNavbar] = useState(true);
 
   const changeBackground = () => {
     if (window.scrollY >= 0) {

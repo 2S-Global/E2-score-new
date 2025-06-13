@@ -65,7 +65,7 @@ const HeadSection = () => {
                   {/* Left Section - Circular Progress */}
                   <div className="col-md-2 d-flex justify-content-center align-items-center p-4">
                     <CircularProgress
-                      progress={85}
+                      progress={100}
                       imageSrc={profile_pic}
                       setReload={setReload}
                       setError={setError}

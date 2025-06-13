@@ -41,16 +41,16 @@ const ProfileCard = ({
         {/* Name & Degree Section */}
         <div className="">
           <h4 className="fw-bold mb-1 d-flex align-items-center gap-1">
-            <span>{name}</span>
+            <span style={{ fontSize: "12px" }}>{name}</span>
             {gender && (
               <span style={{ fontSize: "12px", fontWeight: "normal" }}>
                 ({gender})
               </span>
             )}
             <i
-              className="la la-pencil-alt fs-5"
+              className="la la-pencil-alt "
               onClick={openModalRH}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", fontSize: "16px" }}
             ></i>
           </h4>
 

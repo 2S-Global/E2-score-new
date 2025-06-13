@@ -40,24 +40,26 @@ export default function RootLayout({ children }) {
 
       <body>
         <Provider store={store}>
-          <div className="page-wrapper">
-            {children}
+          <div className="container">
+            <div className="page-wrapper">
+              {children}
 
-            {/* Toastify */}
-            <ToastContainer
-              position="bottom-right"
-              autoClose={500}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="colored"
-            />
-            {/* <!-- Scroll To Top --> */}
-            <ScrollToTop />
+              {/* Toastify */}
+              <ToastContainer
+                position="bottom-right"
+                autoClose={500}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+              />
+              {/* <!-- Scroll To Top --> */}
+              <ScrollToTop />
+            </div>
           </div>
         </Provider>
       </body>

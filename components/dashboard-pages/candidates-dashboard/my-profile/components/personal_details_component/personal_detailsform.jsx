@@ -47,26 +47,53 @@ const PersonalInfoForm = ({
   const [loading, setLoading] = useState(false);
   const [onpincode, setOnPincode] = useState(false);
 
-  //use effects
   useEffect(() => {
-    if (loading) return; // Skip scrolling if still loading
-    if (show && focusSection) {
-      const sections = {
-        personalInfo: personalInfo,
-        category: category,
-        careerBreak: careerBreak,
-        workPermit: workPermit,
-        languages: languages,
-        dob: dob,
-        differentlyAbled: differentlyAbled,
-        address: address,
-      };
-      console.log("Scrolling to focus section:", focusSection);
-      sections[focusSection]?.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
+    if (loading || !show || !focusSection) return;
+
+    const sectionRefs = {
+      personalInfo,
+      category,
+      careerBreak,
+      workPermit,
+      languages,
+      dob,
+      differentlyAbled,
+      address,
+    };
+
+    const targetRef = sectionRefs[focusSection];
+
+    if (!targetRef) {
+      console.warn("No matching ref for focusSection:", focusSection);
+      return;
     }
+
+    setTimeout(() => {
+      if (targetRef.current) {
+        try {
+          targetRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+
+          // Optional highlight effect
+          targetRef.current.style.transition = "background-color 0.5s ease";
+          const originalBg = targetRef.current.style.backgroundColor;
+          targetRef.current.style.backgroundColor = "#ffffcc";
+
+          setTimeout(() => {
+            if (targetRef.current) {
+              targetRef.current.style.backgroundColor =
+                originalBg || "transparent";
+            }
+          }, 1500);
+        } catch (err) {
+          console.error("Scroll error:", err);
+        }
+      } else {
+        console.warn("Ref is null at scroll time for:", focusSection);
+      }
+    }, 100);
   }, [show, focusSection, loading]);
 
   useEffect(() => {
@@ -212,7 +239,7 @@ const PersonalInfoForm = ({
       ) : (
         <>
           <form className="default-form">
-            <div ref={personalInfo}>
+            <div ref={personalInfo} id="personalInfo">
               {/* Gender Selection */}
               <div className="mb-3 form-group">
                 <label className="form-label">
@@ -281,7 +308,7 @@ const PersonalInfoForm = ({
               </div>
 
               {/* Date of Birth Selection */}
-              <div className="mb-3 col-md-4 form-group" ref={dob}>
+              <div className="mb-3 col-md-4 form-group" ref={dob} id="dob">
                 <label className="form-label d-block">
                   <b>Date of Birth</b>
                   <span style={{ color: "red" }}>*</span>
@@ -302,7 +329,7 @@ const PersonalInfoForm = ({
                 />
               </div>
             </div>
-            <div className="mb-3 form-group" ref={category}>
+            <div className="mb-3 form-group" ref={category} id="category">
               <label className="form-label">
                 <b>Category</b>
               </label>
@@ -325,7 +352,7 @@ const PersonalInfoForm = ({
                 ))}
               </div>
             </div>
-            <div className="row" ref={differentlyAbled}>
+            <div className="row" ref={differentlyAbled} id="differentlyAbled">
               <div className="mb-3 form-group">
                 <label className="form-label">
                   <b>Are you differently abled?</b>
@@ -362,7 +389,7 @@ const PersonalInfoForm = ({
               ) : null}
             </div>
 
-            <div className="mb-3 form-group" ref={careerBreak}>
+            <div className="mb-3 form-group" ref={careerBreak} id="careerBreak">
               <label className="form-label">
                 <b>Have you taken a career break?</b>
               </label>
@@ -396,7 +423,7 @@ const PersonalInfoForm = ({
               ) : null}
             </div>
 
-            <div ref={workPermit}>
+            <div ref={workPermit} id="workPermit">
               <div className="mb-3 form-group">
                 <label className="form-label">
                   <b>Work permit for USA</b>
@@ -447,7 +474,7 @@ const PersonalInfoForm = ({
               </div>
             </div>
 
-            <div className="" ref={address}>
+            <div className="" ref={address} id="address">
               <div className="mb-3 form-group">
                 <label className="form-label">
                   <b>Permanent address</b>
@@ -510,7 +537,7 @@ const PersonalInfoForm = ({
                   )}
               </div>
             </div>
-            <div ref={languages}>
+            <div ref={languages} id="languages">
               <LanguageProficiency
                 formData={formData}
                 setFormData={setFormData}

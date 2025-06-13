@@ -1,6 +1,6 @@
 const QuickActionSidebar = ({ menu, menuToggleHandler, activeSection }) => {
   const sections = [
-    { label: "Head", targetId: "head-section" },
+    { label: "Overview", targetId: "head-section" },
     { label: "Resume Headline", targetId: "resume-headline" },
     { label: "Profile Summary", targetId: "profile-summary" },
     { label: "Key Skills", targetId: "key-skill" },
@@ -27,7 +27,33 @@ const QuickActionSidebar = ({ menu, menuToggleHandler, activeSection }) => {
 
   return (
     <>
-      <div className={`user-sidebar ${menu ? "sidebar_open" : ""}`}>
+      {/*     overflow: auto;
+    transition: all 300ms ease;
+    z-index: 9;
+    border: 1px solid #ecedf2;
+    box-shadow: 0px 6px 15px rgba(64, 79, 104, 0.05);
+    
+    
+    user-sidebar
+    */}
+      <div
+        className={`user-sidebar ${menu ? "sidebar_open" : ""}`}
+        style={{
+          paddingTop: "100px",
+          paddingLeft: "20px",
+          left: "auto",
+          bottom: "auto",
+          height: "100vh",
+          overflowY: "auto",
+          background: "#fff",
+          borderRight: "1px solid #ecedf2",
+          padding: "20px",
+          overflow: "auto",
+          transition: "all 300ms ease",
+          zIndex: 9,
+          position: "fixed", // ✅ valid here now
+        }}
+      >
         <div className="sidebar-inner">
           <h5>Quick Actions</h5>
           <ul className="navigation">

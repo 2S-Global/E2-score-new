@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProfileModal from "./ProfileModal";
 
-const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
+const PresentationMain = ({ setReload, list = [], setError, setSuccess }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [item, setItem] = useState([]);
 
@@ -23,7 +23,7 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
     <>
       <div className="">
         <h5>
-          Online Profile
+          Presentation
           <span
             onClick={() => openModal()}
             style={{
@@ -38,7 +38,7 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
           </span>
         </h5>
         <span className="text-muted mb-2 mt-1">
-          Add link to online professional profiles (e.g. LinkedIn, etc.)
+          Add links to your online presentations (e.g. SlideShare, etc.)
         </span>
 
         {/* dont render if list is empty */}
@@ -52,7 +52,7 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
                   color: "#000",
                 }}
               >
-                {item.socialProfileName}
+                {item.title}
 
                 <i
                   onClick={() => openModal(item)}
@@ -93,4 +93,4 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
   );
 };
 
-export default ProfileMain;
+export default PresentationMain;

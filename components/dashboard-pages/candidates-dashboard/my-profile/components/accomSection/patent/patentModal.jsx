@@ -4,7 +4,7 @@ import { Sparkles } from "lucide-react";
 import axios from "axios";
 import CustomizedProgressBars from "@/components/common/loader";
 import { Trash2 } from "lucide-react";
-const ProfileModal = ({
+const PatentModal = ({
   setReload,
   show,
   onClose,
@@ -16,8 +16,13 @@ const ProfileModal = ({
 
   const [formData, setFormData] = useState({
     _id: item._id || "",
-    socialProfile: item.socialProfile || "",
+    title: item.title || "",
     url: item.url || "",
+    patent_office: item.patent_office || "",
+    status: item.status || "",
+    application_number: item.application_number || "",
+    issue_year: item.issue_year || "",
+    issue_month: item.issue_month || "",
     description: item.description || "",
   });
 
@@ -25,43 +30,12 @@ const ProfileModal = ({
   const token = localStorage.getItem("candidate_token");
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
-  const [listsocialProfile, setListsocialProfile] = useState([]);
-
-  const fetchsocialProfile = async () => {
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("candidate_token");
-      const response = await axios.get(
-        `${apiurl}/api/sql/dropdown/social_profile`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.status == 200) {
-        setListsocialProfile(response.data.data);
-      }
-    } catch (error) {
-      console.error("Error fetching skills:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchsocialProfile();
-  }, [apiurl]);
-
   const [loading, setLoading] = useState(false);
 
   const [isFormValid, setIsFormValid] = useState(false);
   const [saving, setSaving] = useState(false);
   const validateForm = () => {
-    if (
-      !formData.socialProfile ||
-      formData.socialProfile.toString().trim() === ""
-    ) {
+    if (!formData.title || formData.title.toString().trim() === "") {
       return false;
     }
     if (!formData.url || formData.url.toString().trim() === "") {
@@ -104,7 +78,7 @@ const ProfileModal = ({
     try {
       if (formData._id) {
         const response = await axios.put(
-          `${apiurl}/api/candidate/accomplishments/edit_online_profile`,
+          `${apiurl}/api/candidate/accomplishments/update_patent`,
           formData,
           {
             headers: {
@@ -119,7 +93,7 @@ const ProfileModal = ({
           setSuccess(response.data.message);
         } else {
           console.error(
-            "Error saving personal details:",
+            "Error saving Presentation details:",
             response.data.message
           );
           setSaving(false);
@@ -127,7 +101,7 @@ const ProfileModal = ({
         }
       } else {
         const response = await axios.post(
-          `${apiurl}/api/candidate/accomplishments/add_online_profile`,
+          `${apiurl}/api/candidate/accomplishments/add_patent`,
           formData,
           {
             headers: {
@@ -142,7 +116,7 @@ const ProfileModal = ({
           setSuccess(response.data.message);
         } else {
           console.error(
-            "Error saving personal details:",
+            "Error saving presentation details:",
             response.data.message
           );
           setSaving(false);
@@ -188,7 +162,7 @@ const ProfileModal = ({
 
       /* /api/candidate/accomplishments/delete_online_profile */
       const response = await axios.delete(
-        `${apiurl}/api/candidate/accomplishments/delete_online_profile`,
+        `${apiurl}/api/candidate/accomplishments/delete_patent`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -219,7 +193,31 @@ const ProfileModal = ({
       handleDelete();
     }
   };
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1; // getMonth() is 0-indexed
 
+  const generateMonthOptions = (selectedYear) => {
+    const maxMonth = selectedYear === currentYear ? currentMonth : 12;
+    return monthNames.slice(0, maxMonth).map((month, index) => (
+      <option key={index + 1} value={index + 1}>
+        {month}
+      </option>
+    ));
+  };
   return (
     <>
       <style>
@@ -261,11 +259,11 @@ const ProfileModal = ({
         tabIndex="-1"
         style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
       >
-        <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-dialog modal-dialog-centered ">
           <div className="modal-content">
             {/* Modal Header */}
             <div className="modal-header">
-              <h5 className="modal-title">Online profiles</h5>
+              <h5 className="modal-title">Patent</h5>
               <button
                 type="button"
                 className="btn-close"
@@ -279,8 +277,8 @@ const ProfileModal = ({
               <CustomizedProgressBars />
             ) : (
               <>
-                {/* Modal Body */}
                 <form className="default-form">
+                  {/* Modal Body */}
                   <div className="modal-body">
                     <div
                       style={{
@@ -291,10 +289,7 @@ const ProfileModal = ({
                       }}
                       className="mb-3"
                     >
-                      <span>
-                        Add link to online professional profiles (e.g. LinkedIn,
-                        etc.)
-                      </span>
+                      <span>Add details of patents you have filed.</span>
                       {formData._id && (
                         <span style={{ color: "red", cursor: "pointer" }}>
                           <Trash2 size={20} onClick={handleConfirmDelete} />
@@ -302,43 +297,26 @@ const ProfileModal = ({
                       )}
                     </div>
 
-                    {/* Social profile */}
+                    {/* Title */}
                     <div className="mb-3 form-group">
                       <label className="form-label">
-                        <b>Social profile</b>
+                        <b>Title</b>
                         <span style={{ color: "red" }}>*</span>
                       </label>
-                      {/*  <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter Social profile name"
-                      value={formData.socialProfile}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          socialProfile: e.target.value,
-                        })
-                      }
-                      required
-                    /> */}
-                      <select
-                        className="form-select form-control"
-                        value={formData.socialProfile}
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="title"
+                        placeholder="Enter Presentation title"
+                        value={formData.title}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
-                            socialProfile: e.target.value,
+                            title: e.target.value,
                           })
                         }
                         required
-                      >
-                        <option value="">Select Social profile</option>
-                        {listsocialProfile.map((profile, index) => (
-                          <option key={index} value={profile.id}>
-                            {profile.name}
-                          </option>
-                        ))}
-                      </select>
+                      />
                     </div>
                     {/* URL */}
                     <div className="mb-3 form-group">
@@ -361,21 +339,156 @@ const ProfileModal = ({
                         <div className="invalid-feedback">{urlError}</div>
                       )}
                     </div>
+                    {/* Patent office */}
+                    <div className="mb-3 form-group">
+                      <label className="form-label">
+                        <b>Patent office</b>
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Enter Patent office"
+                        name="patent_office"
+                        value={formData.patent_office}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            patent_office: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    {/* Status */}
+                    <div className="mb-3 form-group">
+                      <label className="form-label">
+                        <b>Status</b>
+                      </label>
+                      {/* radio buttons */}
+                      <div className="form-check">
+                        <input
+                          className="form-check-input "
+                          type="radio"
+                          name="status"
+                          id="status1"
+                          value="Patent issued"
+                          checked={formData.status === "Patent issued"}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              status: e.target.value,
+                            })
+                          }
+                        />
+                        <label className="form-check-label" htmlFor="status1">
+                          Patent issued
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="status"
+                          id="status2"
+                          value="Patent pending"
+                          checked={formData.status === "Patent pending"}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              status: e.target.value,
+                            })
+                          }
+                        />
+                        <label className="form-check-label" htmlFor="status2">
+                          Patent pending
+                        </label>
+                      </div>
+                    </div>
+                    {/*Application number*/}
+                    <div className="mb-3 form-group">
+                      <label className="form-label">
+                        <b>Application number</b>
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Enter Application number"
+                        name="application_number"
+                        value={formData.application_number}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            application_number: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    {formData.status !== "Patent pending" && (
+                      <>
+                        {/* patent issue date */}
+                        <div className="mb-3 row form-group">
+                          <label className="form-label">
+                            <b>Issue date</b>
+                          </label>
+                          <div className="col-md-6">
+                            <select
+                              className="form-select form-control"
+                              value={formData.issue_year || ""}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  issue_year: e.target.value,
+                                  issue_month: "", // reset month on year change
+                                })
+                              }
+                            >
+                              <option value="">Select Year</option>
+                              {Array.from({ length: 30 }, (_, i) => {
+                                const year = currentYear - i;
+                                return (
+                                  <option key={year} value={year}>
+                                    {year}
+                                  </option>
+                                );
+                              })}
+                            </select>
+                          </div>
+                          <div className="col-md-6">
+                            <select
+                              className="form-select form-control"
+                              value={formData.issue_month || ""}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  issue_month: e.target.value,
+                                })
+                              }
+                            >
+                              <option value="">Select Month</option>
+                              {generateMonthOptions(
+                                parseInt(formData.issue_year)
+                              )}
+                            </select>
+                          </div>
+                        </div>
+                      </>
+                    )}
+
                     {/* Description */}
                     <div className="mb-3 form-group">
                       <label className="form-label">
                         <b>Description</b>
                       </label>
                       <textarea
-                        className="form-control custom-textarea"
+                        className="form-control"
                         placeholder="Type here ..."
-                        rows="2"
+                        rows="2" // default height = 1 row
+                        name="description"
                         style={{
                           padding: "10px",
                           minheight: "2.5em",
                           height: "auto",
                           resize: "vertical", // allow only vertical resizing
-                          minHeight: "2.5em",
+                          minHeight: "2.5em", // ensures 1 row minimum height (adjust as needed)
                         }}
                         value={formData.description}
                         onChange={(e) => {
@@ -385,7 +498,7 @@ const ProfileModal = ({
                           });
                           setIsGenerated(false); // Reset when user types
                         }}
-                      ></textarea>
+                      />
                       <button
                         type="button"
                         className="suggestion-btn"
@@ -465,4 +578,4 @@ const ProfileModal = ({
   );
 };
 
-export default ProfileModal;
+export default PatentModal;

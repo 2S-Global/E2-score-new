@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import ProfileModal from "./ProfileModal";
+import PatentModal from "./PatentModal";
 
-const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
+const PatentMain = ({ setReload, list = [], setError, setSuccess }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [item, setItem] = useState([]);
 
@@ -23,7 +23,7 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
     <>
       <div className="">
         <h5>
-          Online Profile
+          Patent
           <span
             onClick={() => openModal()}
             style={{
@@ -38,7 +38,7 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
           </span>
         </h5>
         <span className="text-muted mb-2 mt-1">
-          Add link to online professional profiles (e.g. LinkedIn, etc.)
+          Add details of patents you have filed
         </span>
 
         {/* dont render if list is empty */}
@@ -52,7 +52,7 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
                   color: "#000",
                 }}
               >
-                {item.socialProfileName}
+                {item.title}
 
                 <i
                   onClick={() => openModal(item)}
@@ -73,13 +73,18 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
               >
                 {item.url}
               </a>
-
+              <span>Patent office: {item.patent_office}</span>
+              <br />
+              <span>Application number: {item.application_number}</span>
+              <br />
+              <span>{item.description}</span>
+              <br />
               <span>{item.description}</span>
             </div>
           ))}
       </div>
       {isModalOpen && (
-        <ProfileModal
+        <PatentModal
           show={isModalOpen}
           onClose={closeModal}
           setItem={setItem}
@@ -93,4 +98,4 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
   );
 };
 
-export default ProfileMain;
+export default PatentMain;

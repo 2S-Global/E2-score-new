@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import WorksampleModal from "./WorksampleModal";
 
-const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
+const Workmain = ({ setReload, list = [], setError, setSuccess }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [item, setItem] = useState([]);
 
@@ -38,7 +38,7 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
           </span>
         </h5>
         <span className="text-muted mb-2 mt-1">
-          Add link to online professional profiles (e.g. LinkedIn, etc.)
+          Link relevant work samples (e.g. GitHub, Behance)
         </span>
 
         {/* dont render if list is empty */}
@@ -52,18 +52,13 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
                   color: "#000",
                 }}
               >
-                {item.socialProfile}
-                <span
+                {item.workTitle}
+
+                <i
                   onClick={() => openModal(item)}
-                  style={{
-                    cursor: "pointer",
-                    color: "#275df5",
-                    fontSize: "14px",
-                    marginLeft: "6px",
-                  }}
-                >
-                  ✎
-                </span>
+                  className="la la-pencil-alt ms-2"
+                  style={{ cursor: "pointer" }}
+                ></i>
               </span>
 
               <a
@@ -78,6 +73,12 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
               >
                 {item.url}
               </a>
+
+              <span className="text-muted">
+                Duration: {item.durationFrom.month} {item.durationFrom.year} -{" "}
+                {item.durationTo.month} {item.durationTo.year}
+              </span>
+              <br />
 
               <span>{item.description}</span>
             </div>
@@ -98,4 +99,4 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
   );
 };
 
-export default ProfileMain;
+export default Workmain;

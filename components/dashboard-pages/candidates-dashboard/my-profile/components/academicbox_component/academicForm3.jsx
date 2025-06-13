@@ -359,127 +359,159 @@ const EducationForm = ({
   };
   return (
     <>
-      {loading ? (
-        <CustomizedProgressBars />
+      {/* {loading ? (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(255, 255, 255, 0.7)", // light overlay
+            zIndex: 9999, // make sure it's above everything
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CustomizedProgressBars />
+        </div>
       ) : (
-        <>
-          <form className="default-form">
-            <div className="form-group">
-              <label>
-                Select Level
-                <span style={{ color: "red" }}>*</span>
-              </label>
-              <select
-                className="form-control"
-                name="level"
-                value={formData.level}
-                onChange={handleLevelChange}
-                required
-                disabled={selectedLevel_main}
-              >
-                <option value="">Select Level</option>
-                {levels.map((level) => (
-                  <option key={level.id} value={level.id}>
-                    {formatLevelName(level.id)}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {formData.level ? (
-              <div className="border p-3 mb-3">
-                <h4 className="text-center">
-                  {formatLevelName(formData.level)}
-                </h4>
-                <div className="row">
-                  <div className="form-group">
-                    <label>State</label>
-                    <span style={{ color: "red" }}>*</span>
-                    <select
-                      className="form-control"
-                      name="state"
-                      value={formData.state}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="">Select State</option>
-                      {states.map((state) => (
-                        <option key={state.id} value={state.id}>
-                          {state.name}
-                        </option>
-                      ))}
-                    </select>
+        ""
+      )} */}
 
-                    {formData.level == 1 || formData.level == 2 ? (
-                      <SchoolForm
-                        formData={formData}
-                        setFormData={setFormData}
-                        handleChange={handleChange}
-                        listboard={listboard}
-                        listmedium={listmedium}
-                        stateselected={stateselected}
-                        handleTranscriptChange={handleTranscriptChange}
-                        handleCertificateChange={handleCertificateChange}
-                        handleFocus={handleFocus}
-                        handleBlur={handleBlur}
-                        isFocused={isFocused}
-                        setIsFocused={setIsFocused}
-                        handleSearchChange={handleSearchChange}
-                        filteredBoard={filteredBoard}
-                        setFilteredBoard={setFilteredBoard}
-                        boardSearch={boardSearch}
-                        setBoardSearch={setBoardSearch}
-                        handleSelect={handleSelect}
-                      />
-                    ) : (
-                      <DegreeForm
-                        formData={formData}
-                        setFormData={setFormData}
-                        handleChange={handleChange}
-                        stateselected={stateselected}
-                        university={university}
-                        handleSearchChange={handleSearchChange}
-                        universityselected={universityselected}
-                        collegeselected={collegeselected}
-                        collegeSearch={collegeSearch}
-                        setCollegeSearch={setCollegeSearch}
-                        filteredColleges={filteredColleges}
-                        setFilteredColleges={setFilteredColleges}
-                        colleges={colleges}
-                        handleSelect={handleSelect}
-                        courseSearch={courseSearch}
-                        setCourseSearch={setCourseSearch}
-                        setFilteredCourses={setFilteredCourses}
-                        filteredCourses={filteredCourses}
-                        courses={courses}
-                        course_mode={course_mode}
-                        grading_systems={grading_systems}
-                        handleTranscriptChange={handleTranscriptChange}
-                        handleCertificateChange={handleCertificateChange}
-                        handleFocus={handleFocus}
-                        handleBlur={handleBlur}
-                        isFocused={isFocused}
-                        setIsFocused={setIsFocused}
-                        universitySearch={universitySearch}
-                        setUniversitySearch={setUniversitySearch}
-                        filteredUniversity={filteredUniversity}
-                        setFilteredUniversity={setFilteredUniversity}
-                        boardSearch={boardSearch}
-                        setBoardSearch={setBoardSearch}
-                      />
-                    )}
-                  </div>
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          //backgroundColor: "rgba(255, 255, 255, 0.7)", // light overlay
+          zIndex: 9999, // make sure it's above everything
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          visibility: loading ? "visible" : "hidden",
+        }}
+      >
+        <CustomizedProgressBars />
+      </div>
+      <>
+        <form className="default-form">
+          <div className="form-group">
+            <label>
+              Select Level
+              <span style={{ color: "red" }}>*</span>
+            </label>
+            <select
+              className="form-control"
+              name="level"
+              value={formData.level}
+              onChange={handleLevelChange}
+              required
+              disabled={selectedLevel_main}
+            >
+              <option value="">Select Level</option>
+              {levels.map((level) => (
+                <option key={level.id} value={level.id}>
+                  {formatLevelName(level.id)}
+                </option>
+              ))}
+            </select>
+          </div>
+          {formData.level ? (
+            <div className="border p-3 mb-3">
+              <h4 className="text-center">{formatLevelName(formData.level)}</h4>
+              <div className="row">
+                <div className="form-group">
+                  <label>State</label>
+                  <span style={{ color: "red" }}>*</span>
+                  <select
+                    className="form-control"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Select State</option>
+                    {states.map((state) => (
+                      <option key={state.id} value={state.id}>
+                        {state.name}
+                      </option>
+                    ))}
+                  </select>
+
+                  {formData.level == 1 || formData.level == 2 ? (
+                    <SchoolForm
+                      formData={formData}
+                      setFormData={setFormData}
+                      handleChange={handleChange}
+                      listboard={listboard}
+                      listmedium={listmedium}
+                      stateselected={stateselected}
+                      handleTranscriptChange={handleTranscriptChange}
+                      handleCertificateChange={handleCertificateChange}
+                      handleFocus={handleFocus}
+                      handleBlur={handleBlur}
+                      isFocused={isFocused}
+                      setIsFocused={setIsFocused}
+                      handleSearchChange={handleSearchChange}
+                      filteredBoard={filteredBoard}
+                      setFilteredBoard={setFilteredBoard}
+                      boardSearch={boardSearch}
+                      setBoardSearch={setBoardSearch}
+                      handleSelect={handleSelect}
+                    />
+                  ) : (
+                    <DegreeForm
+                      formData={formData}
+                      setFormData={setFormData}
+                      handleChange={handleChange}
+                      stateselected={stateselected}
+                      university={university}
+                      handleSearchChange={handleSearchChange}
+                      universityselected={universityselected}
+                      collegeselected={collegeselected}
+                      collegeSearch={collegeSearch}
+                      setCollegeSearch={setCollegeSearch}
+                      filteredColleges={filteredColleges}
+                      setFilteredColleges={setFilteredColleges}
+                      colleges={colleges}
+                      handleSelect={handleSelect}
+                      courseSearch={courseSearch}
+                      setCourseSearch={setCourseSearch}
+                      setFilteredCourses={setFilteredCourses}
+                      filteredCourses={filteredCourses}
+                      courses={courses}
+                      course_mode={course_mode}
+                      grading_systems={grading_systems}
+                      handleTranscriptChange={handleTranscriptChange}
+                      handleCertificateChange={handleCertificateChange}
+                      handleFocus={handleFocus}
+                      handleBlur={handleBlur}
+                      isFocused={isFocused}
+                      setIsFocused={setIsFocused}
+                      universitySearch={universitySearch}
+                      setUniversitySearch={setUniversitySearch}
+                      filteredUniversity={filteredUniversity}
+                      setFilteredUniversity={setFilteredUniversity}
+                      boardSearch={boardSearch}
+                      setBoardSearch={setBoardSearch}
+                    />
+                  )}
                 </div>
               </div>
-            ) : (
-              <div>
-                <div className="col-md-12">
-                  <span style={{ color: "red" }}>Please select a level</span>
-                </div>
+            </div>
+          ) : (
+            <div>
+              <div className="col-md-12">
+                <span style={{ color: "red" }}>Please select a level</span>
               </div>
-            )}
-          </form>
-        </>
-      )}
+            </div>
+          )}
+        </form>
+      </>
     </>
   );
 };

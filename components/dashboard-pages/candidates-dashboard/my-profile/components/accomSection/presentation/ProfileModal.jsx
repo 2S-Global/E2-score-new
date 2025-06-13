@@ -16,7 +16,7 @@ const ProfileModal = ({
 
   const [formData, setFormData] = useState({
     _id: item._id || "",
-    socialProfile: item.socialProfile || "",
+    title: item.title || "",
     url: item.url || "",
     description: item.description || "",
   });
@@ -25,43 +25,12 @@ const ProfileModal = ({
   const token = localStorage.getItem("candidate_token");
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
-  const [listsocialProfile, setListsocialProfile] = useState([]);
-
-  const fetchsocialProfile = async () => {
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("candidate_token");
-      const response = await axios.get(
-        `${apiurl}/api/sql/dropdown/social_profile`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.status == 200) {
-        setListsocialProfile(response.data.data);
-      }
-    } catch (error) {
-      console.error("Error fetching skills:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchsocialProfile();
-  }, [apiurl]);
-
   const [loading, setLoading] = useState(false);
 
   const [isFormValid, setIsFormValid] = useState(false);
   const [saving, setSaving] = useState(false);
   const validateForm = () => {
-    if (
-      !formData.socialProfile ||
-      formData.socialProfile.toString().trim() === ""
-    ) {
+    if (!formData.title || formData.title.toString().trim() === "") {
       return false;
     }
     if (!formData.url || formData.url.toString().trim() === "") {
@@ -104,7 +73,7 @@ const ProfileModal = ({
     try {
       if (formData._id) {
         const response = await axios.put(
-          `${apiurl}/api/candidate/accomplishments/edit_online_profile`,
+          `${apiurl}/api/candidate/accomplishments/update_presentaion`,
           formData,
           {
             headers: {
@@ -119,7 +88,7 @@ const ProfileModal = ({
           setSuccess(response.data.message);
         } else {
           console.error(
-            "Error saving personal details:",
+            "Error saving Presentation details:",
             response.data.message
           );
           setSaving(false);
@@ -127,7 +96,7 @@ const ProfileModal = ({
         }
       } else {
         const response = await axios.post(
-          `${apiurl}/api/candidate/accomplishments/add_online_profile`,
+          `${apiurl}/api/candidate/accomplishments/add_presentaion`,
           formData,
           {
             headers: {
@@ -142,7 +111,7 @@ const ProfileModal = ({
           setSuccess(response.data.message);
         } else {
           console.error(
-            "Error saving personal details:",
+            "Error saving presentation details:",
             response.data.message
           );
           setSaving(false);
@@ -188,7 +157,7 @@ const ProfileModal = ({
 
       /* /api/candidate/accomplishments/delete_online_profile */
       const response = await axios.delete(
-        `${apiurl}/api/candidate/accomplishments/delete_online_profile`,
+        `${apiurl}/api/candidate/accomplishments/delete_presentaion`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -261,11 +230,11 @@ const ProfileModal = ({
         tabIndex="-1"
         style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
       >
-        <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-dialog modal-dialog-centered ">
           <div className="modal-content">
             {/* Modal Header */}
             <div className="modal-header">
-              <h5 className="modal-title">Online profiles</h5>
+              <h5 className="modal-title">Presentation</h5>
               <button
                 type="button"
                 className="btn-close"
@@ -279,8 +248,8 @@ const ProfileModal = ({
               <CustomizedProgressBars />
             ) : (
               <>
-                {/* Modal Body */}
                 <form className="default-form">
+                  {/* Modal Body */}
                   <div className="modal-body">
                     <div
                       style={{
@@ -292,8 +261,8 @@ const ProfileModal = ({
                       className="mb-3"
                     >
                       <span>
-                        Add link to online professional profiles (e.g. LinkedIn,
-                        etc.)
+                        Add links to your online presentations (e.g. Slideshare
+                        presentation links etc.).
                       </span>
                       {formData._id && (
                         <span style={{ color: "red", cursor: "pointer" }}>
@@ -302,43 +271,26 @@ const ProfileModal = ({
                       )}
                     </div>
 
-                    {/* Social profile */}
+                    {/* Title */}
                     <div className="mb-3 form-group">
                       <label className="form-label">
-                        <b>Social profile</b>
+                        <b>Title</b>
                         <span style={{ color: "red" }}>*</span>
                       </label>
-                      {/*  <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter Social profile name"
-                      value={formData.socialProfile}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          socialProfile: e.target.value,
-                        })
-                      }
-                      required
-                    /> */}
-                      <select
-                        className="form-select form-control"
-                        value={formData.socialProfile}
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="title"
+                        placeholder="Enter Presentation title"
+                        value={formData.title}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
-                            socialProfile: e.target.value,
+                            title: e.target.value,
                           })
                         }
                         required
-                      >
-                        <option value="">Select Social profile</option>
-                        {listsocialProfile.map((profile, index) => (
-                          <option key={index} value={profile.id}>
-                            {profile.name}
-                          </option>
-                        ))}
-                      </select>
+                      />
                     </div>
                     {/* URL */}
                     <div className="mb-3 form-group">
@@ -367,15 +319,16 @@ const ProfileModal = ({
                         <b>Description</b>
                       </label>
                       <textarea
-                        className="form-control custom-textarea"
+                        className="form-control"
                         placeholder="Type here ..."
-                        rows="2"
+                        rows="2" // default height = 1 row
+                        name="description"
                         style={{
                           padding: "10px",
                           minheight: "2.5em",
                           height: "auto",
                           resize: "vertical", // allow only vertical resizing
-                          minHeight: "2.5em",
+                          minHeight: "2.5em", // ensures 1 row minimum height (adjust as needed)
                         }}
                         value={formData.description}
                         onChange={(e) => {
@@ -385,7 +338,7 @@ const ProfileModal = ({
                           });
                           setIsGenerated(false); // Reset when user types
                         }}
-                      ></textarea>
+                      />
                       <button
                         type="button"
                         className="suggestion-btn"

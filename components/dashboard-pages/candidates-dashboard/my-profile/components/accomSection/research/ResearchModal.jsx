@@ -3,14 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Sparkles } from "lucide-react";
 import axios from "axios";
 import { Trash2 } from "lucide-react";
-import CustomizedProgressBars from "@/components/common/loader";
-
-const getComparableDateValue = (year, month) => {
-  if (!year || !month) return null;
-  return parseInt(year) * 100 + parseInt(month); // e.g., 202405
-};
-
-const WorksampleModal = ({
+const ResearchModal = ({
   show,
   onClose,
   item,
@@ -19,64 +12,21 @@ const WorksampleModal = ({
   setmainError,
 }) => {
   if (!show) return null;
-  const [error, setError] = useState("");
-  const [wrongDate, setWrongDate] = useState(false);
 
+  const [formData, setFormData] = useState({
+    _id: item._id || "",
+    title: item.title || "",
+    url: item.url || "",
+    publishYear: item.publishedOn?.year || "",
+    publishMonth: item.publishedOn?.month_id || "",
+    description: item.description || "",
+  });
+  const [error, setError] = useState("");
   const [isGenerated, setIsGenerated] = useState(false); // Track button presses
   const token = localStorage.getItem("candidate_token");
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
-  const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().getMonth() + 1; // getMonth() is 0-indexed
-
-  const [formData, setFormData] = useState({
-    _id: item._id || "",
-    workTitle: item.workTitle || "",
-    url: item.url || "",
-    description: item.description || "",
-    durationFromYear: item.durationFrom?.year || "",
-    durationFromMonth: item.durationFrom?.month_id || "",
-    durationToYear: item.durationTo?.year || "",
-    durationToMonth: item.durationTo?.month_id || "",
-    currentlyWorking: item.currentlyWorking || false,
-  });
-
-  // Validation logic
-  useEffect(() => {
-    const startValue = getComparableDateValue(
-      formData.durationFromYear,
-      formData.durationFromMonth
-    );
-    const endValue = getComparableDateValue(
-      formData.durationToYear,
-      formData.durationToMonth
-    );
-
-    if (startValue && endValue) {
-      if (startValue > endValue) {
-        setError("End date cannot be before start date.");
-        setWrongDate(true);
-      } else {
-        setError("");
-        setWrongDate(false);
-      }
-    }
-  }, [
-    formData.durationFromYear,
-    formData.durationFromMonth,
-    formData.durationToYear,
-    formData.durationToMonth,
-    formData.currentlyWorking,
-  ]);
-
-  useEffect(() => {
-    if (formData.currentlyWorking) {
-      setError("");
-    }
-  }, [formData.currentlyWorking]);
-
   const [urlError, setUrlError] = useState("");
-
   const validateURL = (url) => {
     try {
       const pattern = new URL(url); // Will throw if invalid
@@ -107,6 +57,9 @@ const WorksampleModal = ({
     "November",
     "December",
   ];
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1; // getMonth() is 0-indexed
+
   const generateMonthOptions = (selectedYear) => {
     const maxMonth = selectedYear === currentYear ? currentMonth : 12;
     return monthNames.slice(0, maxMonth).map((month, index) => (
@@ -115,12 +68,10 @@ const WorksampleModal = ({
       </option>
     ));
   };
-
   const [isFormValid, setIsFormValid] = useState(false);
   const [saving, setSaving] = useState(false);
-
   const validateForm = () => {
-    if (!formData.workTitle || formData.workTitle.toString().trim() === "") {
+    if (!formData.title || formData.title.toString().trim() === "") {
       return false;
     }
     if (!formData.url || formData.url.toString().trim() === "") {
@@ -128,9 +79,6 @@ const WorksampleModal = ({
     }
     if (formData.url && !validateURL(formData.url)) {
       return false;
-    }
-
-    if (formData.currentlyWorking === false) {
     }
 
     return true;
@@ -155,6 +103,8 @@ const WorksampleModal = ({
       setIsGenerated(true);
     }
   };
+  //actions
+
   const [loading, setLoading] = useState(false);
   const handleSave = async () => {
     if (!token) {
@@ -167,7 +117,7 @@ const WorksampleModal = ({
     try {
       if (formData._id) {
         const response = await axios.put(
-          `${apiurl}/api/candidate/accomplishments/edit_work_samples`,
+          `${apiurl}/api/candidate/accomplishments/update_research_publication`,
           formData,
           {
             headers: {
@@ -190,7 +140,7 @@ const WorksampleModal = ({
         }
       } else {
         const response = await axios.post(
-          `${apiurl}/api/candidate/accomplishments/add_work_samples`,
+          `${apiurl}/api/candidate/accomplishments/add_research_publication`,
           formData,
           {
             headers: {
@@ -231,7 +181,7 @@ const WorksampleModal = ({
       setSaving(true);
 
       const response = await axios.delete(
-        `${apiurl}/api/candidate/accomplishments/delete_work_sample`,
+        `${apiurl}/api/candidate/accomplishments/delete_research_publication`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -271,7 +221,8 @@ const WorksampleModal = ({
     font-size: 15px !important;
   
   }
-      .suggestion-btn {
+
+   .suggestion-btn {
             
             bottom: -0px;
             left: 10;
@@ -298,6 +249,7 @@ const WorksampleModal = ({
           }
 `}
       </style>
+
       <div
         className="modal fade show d-block"
         tabIndex="-1"
@@ -307,16 +259,17 @@ const WorksampleModal = ({
           <div className="modal-content">
             {/* Modal Header */}
             <div className="modal-header">
-              <h5 className="modal-title">Work samples</h5>
+              <h5 className="modal-title">
+                White paper / Research publication / Journal entry
+              </h5>
               <button
                 type="button"
                 className="btn-close"
                 onClick={onClose}
               ></button>
             </div>
-
-            {/* Modal Body */}
             <form className="default-form">
+              {/* Modal Body */}
               <div className="modal-body">
                 <div
                   style={{
@@ -327,7 +280,7 @@ const WorksampleModal = ({
                   }}
                   className="mb-3"
                 >
-                  <span>Link relevant work samples (e.g. Github, Behance)</span>
+                  <span>Add links to your online publications</span>
                   {formData._id && (
                     <span style={{ color: "red", cursor: "pointer" }}>
                       <Trash2 size={20} onClick={handleConfirmDelete} />
@@ -345,10 +298,10 @@ const WorksampleModal = ({
                     type="text"
                     className="form-control"
                     placeholder="Enter Work title"
-                    name="workTitle"
-                    value={formData.workTitle}
+                    name="title"
+                    value={formData.title}
                     onChange={(e) =>
-                      setFormData({ ...formData, workTitle: e.target.value })
+                      setFormData({ ...formData, title: e.target.value })
                     }
                   />
                 </div>
@@ -361,7 +314,7 @@ const WorksampleModal = ({
                   <input
                     type="text"
                     className={`form-control ${urlError ? "is-invalid" : ""}`}
-                    placeholder="Enter Your URL"
+                    placeholder="Enter Your Social profile URL"
                     value={formData.url}
                     onChange={(e) =>
                       setFormData({ ...formData, url: e.target.value })
@@ -377,17 +330,17 @@ const WorksampleModal = ({
                 {/* Duration From */}
                 <div className="mb-3 row form-group">
                   <label className="form-label">
-                    <b>Duration From</b>
+                    <b>Published on</b>
                   </label>
                   <div className="col-md-6">
                     <select
-                      className="form-select form-control "
-                      value={formData.durationFromYear || ""}
+                      className="form-select form-control"
+                      value={formData.publishYear || ""}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          durationFromYear: e.target.value,
-                          durationFromMonth: "", // reset month on year change
+                          publishYear: e.target.value,
+                          publishMonth: "", // reset month on year change
                         })
                       }
                     >
@@ -405,93 +358,17 @@ const WorksampleModal = ({
                   <div className="col-md-6">
                     <select
                       className="form-select form-control"
-                      value={formData.durationFromMonth || ""}
+                      value={formData.publishMonth || ""}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          durationFromMonth: e.target.value,
+                          publishMonth: e.target.value,
                         })
                       }
                     >
                       <option value="">Select Month</option>
-                      {generateMonthOptions(
-                        parseInt(formData.durationFromYear)
-                      )}
+                      {generateMonthOptions(parseInt(formData.publishYear))}
                     </select>
-                  </div>
-                </div>
-
-                {/* Duration To */}
-                {!formData.currentlyWorking && (
-                  <>
-                    <div className="mb-3 row form-group">
-                      <label className="form-label">
-                        <b>Duration To</b>
-                      </label>
-                      <div className="col-md-6">
-                        <select
-                          className="form-select"
-                          value={formData.durationToYear || ""}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              durationToYear: e.target.value,
-                              durationToMonth: "", // reset month on year change
-                            })
-                          }
-                        >
-                          <option value="">Select Year</option>
-                          {Array.from({ length: 30 }, (_, i) => {
-                            const year = currentYear - i;
-                            return (
-                              <option key={year} value={year}>
-                                {year}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </div>
-                      <div className="col-md-6">
-                        <select
-                          className="form-select"
-                          value={formData.durationToMonth || ""}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              durationToMonth: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">Select month</option>
-                          {generateMonthOptions(
-                            parseInt(formData.durationToYear)
-                          )}
-                        </select>
-                      </div>
-                    </div>
-                  </>
-                )}
-                {error && <div className="text-danger mb-3">{error}</div>}
-                {/* Checkbox */}
-                <div className="mb-3 form-group">
-                  <div className="checkbox-container">
-                    <input
-                      type="checkbox"
-                      id="currentlyWorking"
-                      checked={formData.currentlyWorking}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          currentlyWorking: e.target.checked,
-                        })
-                      }
-                    />
-                    <label
-                      htmlFor="currentlyWorking"
-                      className="form-label ms-2"
-                    >
-                      I am currently working on this
-                    </label>
                   </div>
                 </div>
 
@@ -576,22 +453,11 @@ const WorksampleModal = ({
                     Please fill all required fields
                   </div>
                 )}
-                {!formData.currentlyWorking && wrongDate && (
-                  <div className="custom-tooltip">
-                    Please select correct date
-                  </div>
-                )}
-                {error && <div className="custom-tooltip">{error}</div>}
 
                 <button
                   className="btn btn-primary"
                   onClick={handleSave}
-                  disabled={
-                    !isFormValid ||
-                    saving ||
-                    !token ||
-                    (!formData.currentlyWorking && wrongDate)
-                  }
+                  disabled={!isFormValid || saving || !token}
                 >
                   {item._id ? (
                     <>{saving ? "Updating..." : "Update"}</>
@@ -608,4 +474,4 @@ const WorksampleModal = ({
   );
 };
 
-export default WorksampleModal;
+export default ResearchModal;

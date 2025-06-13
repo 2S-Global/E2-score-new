@@ -2,8 +2,15 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+
+//components
 import ProfileMain from "./accomSection/profile/main";
 import Workmain from "./accomSection/worksample/main";
+import ResearchMain from "./accomSection/research/main";
+import PresentationMain from "./accomSection/presentation/main";
+import PatentMain from "./accomSection/patent/main";
+
+//utils
 import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
 const AcomSection = () => {
@@ -12,7 +19,14 @@ const AcomSection = () => {
   const [success, setSuccess] = useState(null);
   const [onlineProfilelist, setOnlineProfilelist] = useState([]);
   const [worksamplelist, setWorksamplelist] = useState([]);
+  const [researchlist, setResearchlist] = useState([]);
+  const [presentationlist, setPresentationlist] = useState([]);
+  const [patentlist, setPatentlist] = useState([]);
   const [reloadonlineProfilelist, setReloadonlineProfilelist] = useState(false);
+  const [reloadWorksamplelist, setReloadWorksamplelist] = useState(false);
+  const [reloadresearchlist, setReloadresearchlist] = useState(false);
+  const [reloadpresentationlist, setReloadpresentationlist] = useState(false);
+  const [reloadpatentlist, setReloadpatentlist] = useState(false);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
   //main use effect
@@ -21,6 +35,9 @@ const AcomSection = () => {
       setSectionloading(true);
       fetchonlineProfilelist();
       fetchWorksamplelist();
+      fetchResearchlist();
+      fetchPresentationlist();
+      fetchPatentlist();
     } catch (error) {
       console.error(error);
     } finally {
@@ -34,6 +51,34 @@ const AcomSection = () => {
       setReloadonlineProfilelist(false);
     }
   }, [reloadonlineProfilelist]);
+
+  useEffect(() => {
+    if (reloadWorksamplelist) {
+      fetchWorksamplelist();
+      setReloadWorksamplelist(false);
+    }
+  }, [reloadWorksamplelist]);
+
+  useEffect(() => {
+    if (reloadresearchlist) {
+      fetchResearchlist();
+      setReloadresearchlist(false);
+    }
+  }, [reloadresearchlist]);
+
+  useEffect(() => {
+    if (reloadpresentationlist) {
+      fetchPresentationlist();
+      setReloadpresentationlist(false);
+    }
+  }, [reloadpresentationlist]);
+
+  useEffect(() => {
+    if (reloadpatentlist) {
+      fetchPatentlist();
+      setReloadpatentlist(false);
+    }
+  }, [reloadpatentlist]);
 
   //functions
   const fetchonlineProfilelist = async () => {
@@ -74,6 +119,63 @@ const AcomSection = () => {
     }
   };
 
+  const fetchResearchlist = async () => {
+    try {
+      const token = localStorage.getItem("candidate_token");
+      const response = await axios.get(
+        `${apiurl}/api/candidate/accomplishments/get_research_publication`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status == 200) {
+        setResearchlist(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching skills:", error);
+    }
+  };
+
+  const fetchPresentationlist = async () => {
+    try {
+      const token = localStorage.getItem("candidate_token");
+      const response = await axios.get(
+        `${apiurl}/api/candidate/accomplishments/get_presentaion`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status == 200) {
+        setPresentationlist(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching skills:", error);
+    }
+  };
+
+  const fetchPatentlist = async () => {
+    try {
+      const token = localStorage.getItem("candidate_token");
+      const response = await axios.get(
+        `${apiurl}/api/candidate/accomplishments/list_patent`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status == 200) {
+        setPatentlist(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching skills:", error);
+    }
+  };
+
   return (
     <>
       <MessageComponent
@@ -102,13 +204,43 @@ const AcomSection = () => {
                   />
                 </div>
 
-                <div className="my-3">
+                <div className="border-bottom my-3">
                   <Workmain
                     list={worksamplelist}
                     setError={setError}
                     setSuccess={setSuccess}
-                    reload={reloadonlineProfilelist}
-                    setReload={setReloadonlineProfilelist}
+                    reload={reloadWorksamplelist}
+                    setReload={setReloadWorksamplelist}
+                  />
+                </div>
+
+                <div className="border-bottom my-3">
+                  <ResearchMain
+                    list={researchlist}
+                    setError={setError}
+                    setSuccess={setSuccess}
+                    reload={reloadresearchlist}
+                    setReload={setReloadresearchlist}
+                  />
+                </div>
+
+                <div className="border-bottom my-3">
+                  <PresentationMain
+                    list={presentationlist}
+                    setError={setError}
+                    setSuccess={setSuccess}
+                    reload={reloadpresentationlist}
+                    setReload={setReloadpresentationlist}
+                  />
+                </div>
+
+                <div className="border-bottom my-3">
+                  <PatentMain
+                    list={patentlist}
+                    setError={setError}
+                    setSuccess={setSuccess}
+                    reload={reloadpatentlist}
+                    setReload={setReloadpatentlist}
                   />
                 </div>
               </div>

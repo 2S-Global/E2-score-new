@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import {
+  CircularProgressbarWithChildren,
+  buildStyles,
+} from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 import Profilepic from "../modal/ChangeProfilepic";
 
 const CircularProgress = ({
@@ -13,12 +18,7 @@ const CircularProgress = ({
   const openModalRH = () => setIsModalOpen(true);
   const closeModalRH = () => setIsModalOpen(false);
 
-  const radius = 70; // Increased radius
-  const strokeWidth = 10;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (progress / 100) * circumference;
-
-  // Determine stroke color based on progress
+  // Color logic
   const getStrokeColor = () => {
     if (progress < 50) return "#EF4444"; // Red
     if (progress < 80) return "#F59E0B"; // Orange
@@ -27,75 +27,62 @@ const CircularProgress = ({
 
   return (
     <>
-      <div
-        className="position-relative"
-        style={{ width: "200px", height: "200px" }}
-      >
-        {/* SVG Progress Ring */}
-        <svg width="100%" height="100%" viewBox="0 0 220 220">
-          {/* Background Circle */}
-          <circle
-            cx="110"
-            cy="110"
-            r={radius}
-            fill="none"
-            stroke="#E5E7EB"
-            strokeWidth={strokeWidth}
-          />
-          {/* Progress Circle */}
-          <circle
-            cx="110"
-            cy="110"
-            r={radius}
-            fill="none"
-            stroke={getStrokeColor()}
-            strokeWidth={strokeWidth}
-            strokeDasharray={circumference}
-            strokeDashoffset={offset}
-            strokeLinecap="round"
-            transform="rotate(-90 110 110)"
-          />
-        </svg>
-
-        {/* Profile Image with Hover Effect & Click to Open Modal */}
-        <div
-          className="position-absolute top-50 start-50 translate-middle border border-white shadow-lg rounded-circle overflow-hidden"
-          style={{ width: "110px", height: "110px", cursor: "pointer" }}
-          onClick={openModalRH}
-        >
-          <img
-            src={imageSrc || "/images/resource/no_user.png"}
-            alt="Profile"
-            className="w-100 h-100 object-cover"
-          />
-          {/* Hover Overlay */}
-          <div
-            className="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white fw-bold"
-            style={{
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-              opacity: "0",
-              transition: "opacity 0.3s",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = "0")}
+      <div className="d-flex justify-content-center align-items-center p-3">
+        <div style={{ width: 120, height: 120 }}>
+          <CircularProgressbarWithChildren
+            value={progress}
+            styles={buildStyles({
+              pathColor: getStrokeColor(),
+              trailColor: "#E5E7EB",
+              strokeLinecap: "round",
+            })}
           >
-            <span>Replace Photo</span>
+            {/* Profile Image */}
+            <div
+              onClick={openModalRH}
+              style={{
+                width: 90,
+                height: 90,
+                borderRadius: "50%",
+                overflow: "hidden",
+                cursor: "pointer",
+                boxShadow: "0 0 5px rgba(0,0,0,0.2)",
+              }}
+              className="position-relative"
+            >
+              <img
+                src={imageSrc || "/images/resource/no_user.png"}
+                alt="Profile"
+                className="w-100 h-100"
+                style={{ objectFit: "cover" }}
+              />
+              <div
+                className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-white fw-bold"
+                style={{
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                  opacity: 0,
+                  transition: "opacity 0.3s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = "0")}
+              >
+                Replace
+              </div>
+            </div>
+          </CircularProgressbarWithChildren>
+          <div
+            className="text-center fw-semibold mt-2"
+            style={{
+              color: getStrokeColor(),
+              fontSize: "0.9rem",
+            }}
+          >
+            {progress}%
           </div>
-        </div>
-
-        {/* Percentage Label */}
-        <div
-          className="position-absolute bottom-0 start-50 translate-middle-x bg-white px-3 py-1 rounded-pill fw-semibold shadow-sm"
-          style={{
-            color: getStrokeColor(),
-            border: `1px solid ${getStrokeColor()}`,
-          }}
-        >
-          {progress}%
         </div>
       </div>
 
-      {/* Render Modal if isModalOpen is true */}
+      {/* Modal */}
       {isModalOpen && (
         <Profilepic
           show={isModalOpen}
