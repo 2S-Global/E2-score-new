@@ -18,7 +18,6 @@ const CircularProgress = ({
   const openModalRH = () => setIsModalOpen(true);
   const closeModalRH = () => setIsModalOpen(false);
 
-  // Color logic
   const getStrokeColor = () => {
     if (progress < 50) return "#EF4444"; // Red
     if (progress < 80) return "#F59E0B"; // Orange
@@ -27,8 +26,8 @@ const CircularProgress = ({
 
   return (
     <>
-      <div className="d-flex justify-content-center align-items-center p-3">
-        <div style={{ width: 120, height: 120 }}>
+      <div className="d-flex justify-content-center align-items-center p-3 w-100">
+        <div style={{ width: "100%", maxWidth: "10rem", aspectRatio: 1 }}>
           <CircularProgressbarWithChildren
             value={progress}
             styles={buildStyles({
@@ -37,18 +36,17 @@ const CircularProgress = ({
               strokeLinecap: "round",
             })}
           >
-            {/* Profile Image */}
             <div
               onClick={openModalRH}
+              className="position-relative mx-auto"
               style={{
-                width: 90,
-                height: 90,
+                width: "85%",
+                aspectRatio: 1,
                 borderRadius: "50%",
                 overflow: "hidden",
                 cursor: "pointer",
                 boxShadow: "0 0 5px rgba(0,0,0,0.2)",
               }}
-              className="position-relative"
             >
               <img
                 src={imageSrc || "/images/resource/no_user.png"}
@@ -70,11 +68,13 @@ const CircularProgress = ({
               </div>
             </div>
           </CircularProgressbarWithChildren>
+
           <div
             className="text-center fw-semibold mt-2"
             style={{
               color: getStrokeColor(),
-              fontSize: "0.9rem",
+              fontSize: "1rem",
+              wordBreak: "break-word",
             }}
           >
             {progress}%
@@ -82,7 +82,6 @@ const CircularProgress = ({
         </div>
       </div>
 
-      {/* Modal */}
       {isModalOpen && (
         <Profilepic
           show={isModalOpen}
