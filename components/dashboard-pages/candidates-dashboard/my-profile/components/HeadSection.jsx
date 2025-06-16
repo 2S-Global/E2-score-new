@@ -63,7 +63,7 @@ const HeadSection = () => {
               <div className="widget-content">
                 <div className="row">
                   {/* Left Section - Circular Progress */}
-                  <div className="col-md-2 d-flex justify-content-center align-items-center p-4">
+                  <div className="col-lg-2 d-flex justify-content-center align-items-center p-2">
                     <CircularProgress
                       progress={100}
                       imageSrc={profile_pic}
@@ -74,7 +74,7 @@ const HeadSection = () => {
                   </div>
 
                   {/* Center Section - Profile Card */}
-                  <div className="col-md-4  d-flex justify-content-center align-items-center p-4">
+                  <div className="col-lg-4  d-flex justify-content-center align-items-center p-4">
                     <ProfileCard
                       name={user.name}
                       degree={user.degree}
@@ -91,7 +91,7 @@ const HeadSection = () => {
                   </div>
 
                   {/* Right Section - Image */}
-                  <div className="col-md-2 d-flex justify-content-center align-items-center p-4">
+                  <div className="col-lg-2 d-flex justify-content-center align-items-center p-4">
                     {/*<EscoreSection score_og={score} label_og={label} /> */}
                     <img
                       src="/images/resource/nextUpdate.png"
@@ -100,7 +100,7 @@ const HeadSection = () => {
                       style={{ width: "150px", height: "180px" }}
                     />
                   </div>
-                  <div className="col-md-2 d-flex justify-content-center align-items-center p-4">
+                  <div className="col-lg-2 d-flex justify-content-center align-items-center p-4">
                     {/*                 <EscoreSection score_og={score} label_og={label} /> */}
                     <img
                       src="/images/resource/cibil.png"
@@ -109,7 +109,7 @@ const HeadSection = () => {
                       style={{ width: "150px", height: "180px" }}
                     />
                   </div>
-                  <div className="col-md-2 d-flex justify-content-center align-items-center p-4">
+                  <div className="col-lg-2 d-flex justify-content-center align-items-center p-4">
                     {/*                 <EscoreSection score_og={score} label_og={label} /> */}
                     <img
                       src="/images/resource/experian.png"

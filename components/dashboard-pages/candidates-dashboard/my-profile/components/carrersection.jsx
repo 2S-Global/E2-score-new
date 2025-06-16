@@ -50,39 +50,39 @@ const CareerSection = () => {
             >
               <div>
                 <strong>Current Industry</strong>
-                <div className="typ-14Medium">IT Services & Consulting</div>
+                <div className="">IT Services & Consulting</div>
               </div>
               <div>
                 <strong>Department</strong>
-                <div className="typ-14Medium">Engineering - Software & QA</div>
+                <div className="">Engineering - Software & QA</div>
               </div>
               <div>
                 <strong>Role Category</strong>
-                <div className="typ-14Medium">Software Development</div>
+                <div className="">Software Development</div>
               </div>
               <div>
                 <strong>Job Role</strong>
-                <div className="typ-14Medium">Full Stack Developer</div>
+                <div className="">Full Stack Developer</div>
               </div>
               <div>
                 <strong>Desired Job Type</strong>
-                <div className="typ-14Medium">Contractual, Permanent</div>
+                <div className="">Contractual, Permanent</div>
               </div>
               <div>
                 <strong>Desired Employment Type</strong>
-                <div className="typ-14Medium">Full Time</div>
+                <div className="">Full Time</div>
               </div>
               <div>
                 <strong>Preferred Shift</strong>
-                <div className="typ-14Medium">Flexible</div>
+                <div className="">Flexible</div>
               </div>
               <div>
                 <strong>Preferred Work Location</strong>
-                <div className="typ-14Medium">Kolkata</div>
+                <div className="">Kolkata</div>
               </div>
               <div>
                 <strong>Expected Salary</strong>
-                <div className="typ-14Medium">₹4,50,000</div>
+                <div className="">₹4,50,000</div>
               </div>
             </div>
           </div>
