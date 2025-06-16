@@ -9,6 +9,7 @@ import Workmain from "./accomSection/worksample/main";
 import ResearchMain from "./accomSection/research/main";
 import PresentationMain from "./accomSection/presentation/main";
 import PatentMain from "./accomSection/patent/main";
+import CertificateMain from "./accomSection/certificate/main";
 
 //utils
 import CustomizedProgressBars from "@/components/common/loader";
@@ -22,11 +23,13 @@ const AcomSection = () => {
   const [researchlist, setResearchlist] = useState([]);
   const [presentationlist, setPresentationlist] = useState([]);
   const [patentlist, setPatentlist] = useState([]);
+  const [certificatelist, setCertificatelist] = useState([]);
   const [reloadonlineProfilelist, setReloadonlineProfilelist] = useState(false);
   const [reloadWorksamplelist, setReloadWorksamplelist] = useState(false);
   const [reloadresearchlist, setReloadresearchlist] = useState(false);
   const [reloadpresentationlist, setReloadpresentationlist] = useState(false);
   const [reloadpatentlist, setReloadpatentlist] = useState(false);
+  const [reloadcertificatelist, setReloadcertificatelist] = useState(false);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
   //main use effect
@@ -38,6 +41,7 @@ const AcomSection = () => {
       fetchResearchlist();
       fetchPresentationlist();
       fetchPatentlist();
+      fetchCertificatelist();
     } catch (error) {
       console.error(error);
     } finally {
@@ -79,6 +83,13 @@ const AcomSection = () => {
       setReloadpatentlist(false);
     }
   }, [reloadpatentlist]);
+
+  useEffect(() => {
+    if (reloadcertificatelist) {
+      fetchCertificatelist();
+      setReloadcertificatelist(false);
+    }
+  }, [reloadcertificatelist]);
 
   //functions
   const fetchonlineProfilelist = async () => {
@@ -176,6 +187,25 @@ const AcomSection = () => {
     }
   };
 
+  const fetchCertificatelist = async () => {
+    try {
+      const token = localStorage.getItem("candidate_token");
+      const response = await axios.get(
+        `${apiurl}/api/candidate/accomplishments/list_certificate`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status == 200) {
+        setCertificatelist(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching skills:", error);
+    }
+  };
+
   return (
     <>
       <MessageComponent
@@ -241,6 +271,16 @@ const AcomSection = () => {
                     setSuccess={setSuccess}
                     reload={reloadpatentlist}
                     setReload={setReloadpatentlist}
+                  />
+                </div>
+
+                <div className="border-bottom my-3">
+                  <CertificateMain
+                    list={certificatelist}
+                    setError={setError}
+                    setSuccess={setSuccess}
+                    reload={reloadcertificatelist}
+                    setReload={setReloadcertificatelist}
                   />
                 </div>
               </div>
