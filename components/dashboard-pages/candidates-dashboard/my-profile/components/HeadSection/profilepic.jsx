@@ -27,7 +27,7 @@ const CircularProgress = ({
   return (
     <>
       <div className="d-flex justify-content-center align-items-center p-3 w-100">
-        <div style={{ width: "100%", maxWidth: "10rem", aspectRatio: 1 }}>
+        <div style={{ width: "100%", maxWidth: "7.5rem", aspectRatio: 1 }}>
           <CircularProgressbarWithChildren
             value={progress}
             styles={buildStyles({
@@ -40,7 +40,7 @@ const CircularProgress = ({
               onClick={openModalRH}
               className="position-relative mx-auto"
               style={{
-                width: "85%",
+                width: "80%",
                 aspectRatio: 1,
                 borderRadius: "50%",
                 overflow: "hidden",
@@ -73,7 +73,7 @@ const CircularProgress = ({
             className="text-center fw-semibold mt-2"
             style={{
               color: getStrokeColor(),
-              fontSize: "1rem",
+              fontSize: "0.9rem",
               wordBreak: "break-word",
             }}
           >
