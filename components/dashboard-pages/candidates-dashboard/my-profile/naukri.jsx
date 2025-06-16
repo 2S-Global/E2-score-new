@@ -82,9 +82,9 @@ const index = () => {
                 <div id="acom">
                   <AcomSection />
                 </div>
-                <div id="acom-demo">
+                {/* <div id="acom-demo">
                   <AcomSectiondemo />
-                </div>
+                </div> */}
                 <div id="career">
                   <Carrersection />
                 </div>
