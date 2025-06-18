@@ -41,8 +41,8 @@ const CareerModal = ({
   const [formData, setFormData] = useState({
     _id: item._id || "",
     industry: item.industry || "",
-    department: item.department || "",
-    job_role: item.job_role || "",
+    department: item.department || "146",
+    job_role: item.job_role || "291",
     job_type: item.job_type || "",
     employment_type: item.employment_type || "",
     work_location: item.work_location || [],
@@ -340,12 +340,12 @@ const CareerModal = ({
               </p>
 
               {/* test button */}
-              <button
+              {/*      <button
                 className="btn btn-primary"
                 onClick={() => console.log(formData)}
               >
                 Test
-              </button>
+              </button> */}
 
               <div
                 style={{
@@ -392,6 +392,7 @@ const CareerModal = ({
                   <span style={{ color: "red" }}>*</span>
                   <select
                     className="form-select form-control"
+                    value={formData.department || ""}
                     onChange={(e) =>
                       setFormData({ ...formData, department: e.target.value })
                     }
@@ -411,6 +412,7 @@ const CareerModal = ({
                   <span style={{ color: "red" }}>*</span>
                   <select
                     className="form-select form-control"
+                    value={formData.job_role || ""}
                     onChange={(e) =>
                       setFormData({ ...formData, job_role: e.target.value })
                     }
