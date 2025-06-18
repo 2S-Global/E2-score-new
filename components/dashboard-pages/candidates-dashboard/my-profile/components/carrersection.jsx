@@ -1,11 +1,87 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CareerModal from "./modal/CareerModal";
-
+import axios from "axios";
+import CustomizedProgressBars from "@/components/common/loader";
+import MessageComponent from "@/components/common/ResponseMsg";
+import { de } from "date-fns/locale";
 const CareerSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [focusSection, setFocusSection] = useState(null);
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const token = localStorage.getItem("candidate_token");
+  if (!token) {
+    console.log("No token");
+  }
 
-  const openModalRH = () => {
+  const salaryCurrencies = [
+    { label: "₹", value: "INR" },
+    { label: "$", value: "USD" },
+    { label: "€", value: "EUR" },
+    { label: "£", value: "GBP" },
+  ];
+
+  const [userdata, setUserdata] = useState({
+    industry: "",
+    industry_name: "",
+    department: "",
+    department_name: "",
+    job_role: "",
+    job_role_name: "",
+    job_type: "",
+    employment_type: "",
+    work_location: "",
+    work_location_name: "",
+    currency_type: "",
+    expected_salary: "",
+    shift: "",
+  });
+
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [reload, setReload] = useState(false);
+
+  //useEffect
+  useEffect(() => {
+    fetchuserdata();
+  }, [token]);
+  useEffect(() => {
+    if (reload) {
+      fetchuserdata();
+      setReload(false);
+    }
+  }, [reload]);
+
+  //function
+  const fetchuserdata = async () => {
+    try {
+      const token = localStorage.getItem("candidate_token");
+      const response = await axios.get(
+        `${apiurl}/api/useraction/get_career_profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        setUserdata(response.data.data);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const openModalRH = (section) => {
+    if (section) {
+      console.log(section);
+      setFocusSection(section);
+    } else {
+      setFocusSection(null);
+      console.log("no section");
+    }
     setIsModalOpen(true);
     document.body.style.overflow = "hidden"; // Disable background scrolling
   };
@@ -17,6 +93,12 @@ const CareerSection = () => {
 
   return (
     <>
+      <MessageComponent
+        error={error}
+        success={success}
+        setError={setError}
+        setSuccess={setSuccess}
+      />
       <div className="ls-widget">
         <div className="tabs-box">
           {/* Title with Edit Icon */}
@@ -31,7 +113,7 @@ const CareerSection = () => {
             <h4>Career Profile</h4>
             <i
               className="la la-pencil-alt"
-              onClick={openModalRH}
+              onClick={() => openModalRH("")}
               style={{ cursor: "pointer" }}
               role="button"
               aria-label="Edit Career Profile"
@@ -39,58 +121,196 @@ const CareerSection = () => {
           </div>
 
           {/* Career Profile Details */}
-          <div className="widget-content">
-            <div
-              className="career-details"
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "20px",
-              }}
-            >
-              <div>
-                <strong>Current Industry</strong>
-                <div className="">IT Services & Consulting</div>
+          {loading ? (
+            <CustomizedProgressBars />
+          ) : (
+            <>
+              <div className="widget-content container">
+                <div className="row">
+                  <div className="col-md-6 mb-4">
+                    <strong>Current Industry</strong>
+                    <div className="">
+                      {userdata.industry_name ? (
+                        userdata.industry_name
+                      ) : (
+                        <>
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "16px" }}
+                            onClick={() => openModalRH("industry_section")}
+                          >
+                            Add Current Industry
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="col-md-6 mb-4">
+                    <strong>Department</strong>
+                    <div className="">
+                      {userdata.department_name ? (
+                        userdata.department_name
+                      ) : (
+                        <>
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "16px" }}
+                            onClick={() => openModalRH("department_section")}
+                          >
+                            Add Department
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="col-md-6 mb-4">
+                    <strong>Job Role</strong>
+                    <div className="">
+                      {userdata.job_role_name ? (
+                        userdata.job_role_name
+                      ) : (
+                        <>
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "16px" }}
+                            onClick={() => openModalRH("job_role_section")}
+                          >
+                            Add Job Role
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="col-md-6 mb-4">
+                    <strong>Desired Job Type</strong>
+                    <div className="">
+                      {userdata.job_type ? (
+                        userdata.job_type
+                      ) : (
+                        <>
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "16px" }}
+                            onClick={() => openModalRH("job_type_section")}
+                          >
+                            Add Job Type
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="col-md-6 mb-4">
+                    <strong>Desired Employment Type</strong>
+                    <div className="">
+                      {userdata.employment_type ? (
+                        userdata.employment_type
+                      ) : (
+                        <>
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "16px" }}
+                            onClick={() =>
+                              openModalRH("employment_type_section")
+                            }
+                          >
+                            Add Employment Type
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="col-md-6 mb-4">
+                    <strong>Preferred Shift</strong>
+                    <div className="">
+                      {userdata.shift ? (
+                        userdata.shift
+                      ) : (
+                        <>
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "16px" }}
+                            onClick={() => openModalRH("shift_section")}
+                          >
+                            Add Shift
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="col-md-6 mb-4">
+                    <strong>Preferred Work Location</strong>
+                    <div className="">
+                      {userdata.work_location_name ? (
+                        userdata.work_location_name
+                      ) : (
+                        <>
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "16px" }}
+                            onClick={() => openModalRH("work_location_section")}
+                          >
+                            Add Work Location
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  {/* const salaryCurrencies = [
+    { label: "₹", value: "INR" },
+    { label: "$", value: "USD" },
+    { label: "€", value: "EUR" },
+    { label: "£", value: "GBP" },
+  ]; */}
+                  <div className="col-md-6 mb-4">
+                    <strong>Expected Salary</strong>
+                    <div className="">
+                      {userdata.expected_salary ? (
+                        <>
+                          {
+                            // Find the symbol by currency type
+                            salaryCurrencies.find(
+                              (c) => c.value === userdata.currency_type
+                            )?.label
+                          }
+
+                          {userdata.expected_salary}
+                        </>
+                      ) : (
+                        <>
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "16px" }}
+                            onClick={() =>
+                              openModalRH("expected_salary_section")
+                            }
+                          >
+                            Add Expected Salary
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div>
-                <strong>Department</strong>
-                <div className="">Engineering - Software & QA</div>
-              </div>
-              <div>
-                <strong>Role Category</strong>
-                <div className="">Software Development</div>
-              </div>
-              <div>
-                <strong>Job Role</strong>
-                <div className="">Full Stack Developer</div>
-              </div>
-              <div>
-                <strong>Desired Job Type</strong>
-                <div className="">Contractual, Permanent</div>
-              </div>
-              <div>
-                <strong>Desired Employment Type</strong>
-                <div className="">Full Time</div>
-              </div>
-              <div>
-                <strong>Preferred Shift</strong>
-                <div className="">Flexible</div>
-              </div>
-              <div>
-                <strong>Preferred Work Location</strong>
-                <div className="">Kolkata</div>
-              </div>
-              <div>
-                <strong>Expected Salary</strong>
-                <div className="">₹4,50,000</div>
-              </div>
-            </div>
-          </div>
+            </>
+          )}
         </div>
       </div>
 
       {/* Employment Modal */}
-      {isModalOpen && <CareerModal show={isModalOpen} onClose={closeModalRH} />}
+      {isModalOpen && (
+        <CareerModal
+          show={isModalOpen}
+          onClose={closeModalRH}
+          focusSection={focusSection}
+          item={userdata}
+          setError={setError}
+          setSuccess={setSuccess}
+          setReload={setReload}
+          salaryCurrencies={salaryCurrencies}
+        />
+      )}
     </>
   );
 };
