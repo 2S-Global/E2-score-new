@@ -1,26 +1,159 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Sparkles } from "lucide-react";
+import axios from "axios";
+import CustomizedProgressBars from "@/components/common/loader";
+import { Trash2 } from "lucide-react";
 
-const ProjectModal = ({ show, onClose }) => {
-  const [headline, setHeadline] = useState("");
+const getComparableDateValue = (year, month) => {
+  if (!year || !month) return null;
+  return parseInt(year) * 100 + parseInt(month); // e.g., 202405
+};
 
+const ProjectModal = ({
+  setReload,
+  show,
+  onClose,
+  item,
+  setError,
+  setSuccess,
+}) => {
   const [description, setDescription] = useState("");
   const [isGenerated, setIsGenerated] = useState(false); // Track button presses
+  const [childerror, setChildError] = useState(null);
+  const [wrongDate, setWrongDate] = useState(false);
+
+  const [formData, setFormData] = useState({
+    _id: item._id || "",
+    title: item.title || "",
+    taggedWith: item.taggedWith || "",
+    client: item.client || "",
+    status: item.status || "",
+    workfromyear: item.workfromyear || "",
+    workfrommonth: item.workfrommonth || "",
+    worktoyear: item.worktoyear || "",
+    worktomonth: item.worktomonth || "",
+    description: item.description || "",
+  });
+  const token = localStorage.getItem("candidate_token");
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const [tagoptions, setTagoptions] = useState([]);
+
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    fetchtagoptions();
+  }, [apiurl]);
+
+  const fetchtagoptions = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${apiurl}/api/candidate/project/get_project_tag`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (response.data.success) {
+        setTagoptions(response.data.data);
+      }
+    } catch (error) {
+      console.error(error);
+      setError("Failed to fetch tags.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleGenerateHeadline = () => {
     if (isGenerated) {
-      setDescription(""); // Clear text if pressed again
+      setFormData({
+        ...formData,
+        description: "",
+      });
       setIsGenerated(false);
     } else {
-      setDescription(
-        "Developed and deployed a scalable web application using React.js and Node.js, ensuring high performance and seamless user experience. Designed and implemented RESTful APIs, optimized database queries, and integrated third-party services for enhanced functionality. Focused on system architecture, security, and responsive UI/UX to deliver a robust and efficient solution.",
-      );
+      setFormData({
+        ...formData,
+        description:
+          "Developed and deployed a scalable web application using React.js and Node.js, ensuring high performance and seamless user experience. Designed and implemented RESTful APIs, optimized database queries, and integrated third-party services for enhanced functionality. Focused on system architecture, security, and responsive UI/UX to deliver a robust and efficient solution.",
+      });
       setIsGenerated(true);
     }
   };
 
   if (!show) return null;
+
+  useEffect(() => {
+    if (formData.status === "in-progress") {
+      setChildError("");
+      setWrongDate(false);
+    } else {
+      const startValue = getComparableDateValue(
+        formData.workfromyear,
+        formData.workfrommonth
+      );
+      const endValue = getComparableDateValue(
+        formData.worktoyear,
+        formData.worktomonth
+      );
+
+      if (startValue && endValue) {
+        if (startValue > endValue) {
+          setChildError("End date cannot be before start date.");
+          setWrongDate(true);
+        } else {
+          setChildError("");
+          setWrongDate(false);
+        }
+      }
+    }
+  }, [
+    formData.workfromyear,
+    formData.workfrommonth,
+    formData.worktoyear,
+    formData.worktomonth,
+    formData.status,
+  ]);
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1; // getMonth() is 0-indexed
+
+  const generateMonthOptions = (selectedYear) => {
+    const maxMonth = selectedYear === currentYear ? currentMonth : 12;
+    return monthNames.slice(0, maxMonth).map((month, index) => (
+      <option key={index + 1} value={index + 1}>
+        {month}
+      </option>
+    ));
+  };
+
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  const validateForm = () => {
+    // Title is required
+    if (!formData.title || formData.title.toString().trim() === "") {
+      return false;
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    setIsFormValid(validateForm());
+  }, [formData]);
 
   return (
     <>
@@ -76,193 +209,295 @@ const ProjectModal = ({ show, onClose }) => {
                 onClick={onClose}
               ></button>
             </div>
-
-            {/* Modal Body */}
-            <div className="modal-body">
-              <p style={{ color: "black" }}>
-                Stand out for employers by adding details about projects you
-                have done in college, internships, or at work
-              </p>
-              <div className="form-group">
-                {/* Project title */}
-                <label htmlFor="projectTitle">Project Title:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="projectTitle"
-                  placeholder="Enter project title"
-                  value={headline}
-                  onChange={(e) => setHeadline(e.target.value)}
-                  required
-                ></input>
-              </div>
-              {/* Tag this project with your employment/education */}
-              <div className="form-group">
-                <label htmlFor="projectTag">
-                  Tag this project with your employment/education:
-                </label>
-                <select className="form-control" id="projectTag" required>
-                  <option value="">Select your role/education</option>
-                  <option value="college">College</option>
-                  <option value="university">University</option>
-                  <option value="work">Work</option>
-                  <option value="internship">Internship</option>
-                  <option value="graduate">Graduate</option>
-                  <option value="phd">PhD</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-              {/* Client */}
-              <div className="form-group">
-                <label htmlFor="projectClient">Client:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="projectClient"
-                  placeholder="Enter client name"
-                ></input>
-              </div>
-              {/* Project status*/}
-              <div className="form-group">
-                <label htmlFor="projectStatus">Project Status:</label>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    id="projectStatus1"
-                    name="projectStatus"
-                    value="ongoing"
-                    required
-                  />
-                  <label className="form-check-label" htmlFor="projectStatus1">
-                    Ongoing
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    id="projectStatus2"
-                    name="projectStatus"
-                    value="completed"
-                    required
-                  />
-                  <label className="form-check-label" htmlFor="projectStatus2">
-                    Completed
-                  </label>
-                </div>
-              </div>
-
-              {/* Worked from */}
-              <div className="form-group">
-                <label htmlFor="workedFromYear">Worked from</label>
-                <div className="row">
-                  {/* Year Dropdown */}
-                  <div className="col-md-6">
-                    <select
-                      className="form-control"
-                      id="workedFromYear"
-                      required
+            {loading ? (
+              <CustomizedProgressBars />
+            ) : (
+              <>
+                <form className="default-form">
+                  {/* Modal Body */}
+                  <div className="modal-body">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        color: "black",
+                      }}
+                      className="mb-3"
                     >
-                      <option value="">Select Year</option>
-                      {Array.from({ length: 26 }, (_, i) => i + 2000).map(
-                        (year) => (
-                          <option key={year} value={year}>
-                            {year}
-                          </option>
-                        ),
+                      <span>
+                        Stand out for employers by adding details about projects
+                        you have done in college, internships, or at work.
+                      </span>
+                      {formData._id && (
+                        <span style={{ color: "red", cursor: "pointer" }}>
+                          <Trash2 size={20} onClick={handleConfirmDelete} />
+                        </span>
                       )}
-                    </select>
-                  </div>
-
-                  {/* Month Dropdown */}
-                  <div className="col-md-6">
-                    <select
-                      className="form-control"
-                      id="workedFromMonth"
-                      required
+                    </div>
+                    {/*   <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={() => console.log(formData)}
                     >
-                      <option value="">Select Month</option>
-                      {Array.from({ length: 12 }, (_, i) => (
-                        <option key={i} value={i + 1}>
-                          {new Date(0, i).toLocaleString("default", {
-                            month: "long",
-                          })}
-                        </option>
-                      ))}
-                    </select>
+                      Test
+                    </button> */}
+
+                    <div className="mb-3 form-group">
+                      {/* Project title */}
+                      <label htmlFor="projectTitle">Project Title </label>
+                      <span className="ms-1" style={{ color: "red" }}>
+                        *
+                      </span>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="projectTitle"
+                        placeholder="Enter project title"
+                        value={formData.title}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            title: e.target.value,
+                          })
+                        }
+                        required
+                      ></input>
+                    </div>
+                    {/* Tag this project with your employment/education */}
+                    {tagoptions.length > 0 && (
+                      <>
+                        <div className="mb-3 form-group">
+                          <label htmlFor="projectTag">
+                            Tag this project with your employment/education
+                          </label>
+                          <select
+                            className="form-control"
+                            id="projectTag"
+                            value={formData.taggedWith || ""}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                taggedWith: e.target.value,
+                              })
+                            }
+                            required
+                          >
+                            <option value="">Select your role/education</option>
+                            {tagoptions.map((option) => (
+                              <option key={option._id} value={option._id}>
+                                {option.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </>
+                    )}
+
+                    {/* Client */}
+                    <div className="mb-3 form-group">
+                      <label htmlFor="projectClient">Client</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="projectClient"
+                        placeholder="Enter client name"
+                        value={formData.client}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            client: e.target.value,
+                          })
+                        }
+                      ></input>
+                    </div>
+                    {/* Project status*/}
+                    <div className="mb-3 form-group">
+                      <label htmlFor="projectStatus">Project Status</label>
+                      {/* radio buttons */}
+                      <div className="form-check">
+                        <input
+                          className="form-check-input "
+                          type="radio"
+                          name="status"
+                          id="status1"
+                          value="finished"
+                          checked={formData.status === "finished"}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              status: e.target.value,
+                            })
+                          }
+                        />
+                        <label className="form-check-label" htmlFor="status1">
+                          Finished
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="status"
+                          id="status2"
+                          value="in-progress"
+                          checked={formData.status === "in-progress"}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              status: e.target.value,
+                            })
+                          }
+                        />
+                        <label className="form-check-label" htmlFor="status2">
+                          In progress
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Worked from */}
+                    <div className=" mb-3 form-group">
+                      <label htmlFor="workedFromYear">Worked from</label>
+                      <div className="row">
+                        {/* Year Dropdown */}
+                        <div className="col-md-6 mb-1">
+                          <select
+                            className="form-select form-control "
+                            value={formData.workfromyear || ""}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                workfromyear: e.target.value,
+                                workfrommonth: "", // reset month on year change
+                              })
+                            }
+                          >
+                            <option value="">Select Year</option>
+                            {Array.from({ length: 30 }, (_, i) => {
+                              const year = currentYear - i;
+                              return (
+                                <option key={year} value={year}>
+                                  {year}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </div>
+                        <div className="col-md-6 mb-1">
+                          <select
+                            className="form-select form-control"
+                            value={formData.workfrommonth || ""}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                workfrommonth: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">Select Month</option>
+                            {generateMonthOptions(
+                              parseInt(formData.workfromyear)
+                            )}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* work till */}
+                    {formData.status !== "in-progress" && (
+                      <>
+                        <div className="mb-3 form-group">
+                          <label htmlFor="workedFromYear">Worked till</label>
+                          <div className="row">
+                            {/* Year Dropdown */}
+                            <div className="col-md-6 mb-1">
+                              <select
+                                className="form-select"
+                                value={formData.worktoyear || ""}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    worktoyear: e.target.value,
+                                    worktomonth: "", // reset month on year change
+                                  })
+                                }
+                              >
+                                <option value="">Select Year</option>
+                                {Array.from({ length: 30 }, (_, i) => {
+                                  const year = currentYear - i;
+                                  return (
+                                    <option key={year} value={year}>
+                                      {year}
+                                    </option>
+                                  );
+                                })}
+                              </select>
+                            </div>
+                            <div className="col-md-6 mb-1">
+                              <select
+                                className="form-select"
+                                value={formData.worktomonth || ""}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    worktomonth: e.target.value,
+                                  })
+                                }
+                              >
+                                <option value="">Select month</option>
+                                {generateMonthOptions(
+                                  parseInt(formData.worktoyear)
+                                )}
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        {childerror && (
+                          <div className="text-danger mb-3">{childerror}</div>
+                        )}
+                      </>
+                    )}
+
+                    {/* Description */}
+                    <div className="mb-3 form-group">
+                      <label className="form-label">
+                        <b>Description</b>
+                      </label>
+                      <textarea
+                        className="form-control mb-1"
+                        placeholder="Type here ..."
+                        rows="2" // default height = 1 row
+                        name="description"
+                        style={{
+                          padding: "10px",
+                          minheight: "2.5em",
+                          height: "auto",
+                          resize: "vertical", // allow only vertical resizing
+                          minHeight: "2.5em", // ensures 1 row minimum height (adjust as needed)
+                        }}
+                        value={formData.description}
+                        onChange={(e) => {
+                          setFormData({
+                            ...formData,
+                            description: e.target.value,
+                          });
+                          setIsGenerated(false); // Reset when user types
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="suggestion-btn"
+                        onClick={handleGenerateHeadline}
+                      >
+                        <Sparkles />
+                        {isGenerated ? "Clear" : "Help me write"}
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </div>
-
-              {/* work till */}
-              <div className="form-group">
-                <label htmlFor="workedFromYear">Worked till</label>
-                <div className="row">
-                  {/* Year Dropdown */}
-                  <div className="col-md-6">
-                    <select
-                      className="form-control"
-                      id="workedFromYear"
-                      required
-                    >
-                      <option value="">Select Year</option>
-                      {Array.from({ length: 26 }, (_, i) => i + 2000).map(
-                        (year) => (
-                          <option key={year} value={year}>
-                            {year}
-                          </option>
-                        ),
-                      )}
-                    </select>
-                  </div>
-
-                  {/* Month Dropdown */}
-                  <div className="col-md-6">
-                    <select
-                      className="form-control"
-                      id="workedFromMonth"
-                      required
-                    >
-                      <option value="">Select Month</option>
-                      {Array.from({ length: 12 }, (_, i) => (
-                        <option key={i} value={i + 1}>
-                          {new Date(0, i).toLocaleString("default", {
-                            month: "long",
-                          })}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="form-group">
-                <label htmlFor="projectDescription">Description:</label>
-                <textarea
-                  className="form-control"
-                  id="projectDescription"
-                  value={description}
-                  onChange={(e) => {
-                    setDescription(e.target.value);
-                    setIsGenerated(false); // Reset when user types
-                  }}
-                  rows="5"
-                  placeholder="Enter project description"
-                  required
-                ></textarea>
-                <button
-                  type="button"
-                  className="suggestion-btn"
-                  onClick={handleGenerateHeadline}
-                >
-                  <Sparkles />
-                  {isGenerated ? "Clear" : "Help me write"}
-                </button>
-              </div>
-            </div>
-
+                </form>
+              </>
+            )}
             {/* Modal Footer */}
             <div className="modal-footer">
               <button
@@ -272,13 +507,57 @@ const ProjectModal = ({ show, onClose }) => {
               >
                 Cancel
               </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={onClose}
-              >
-                Save
-              </button>
+              <style jsx>{`
+                .tooltip-wrapper {
+                  position: relative;
+                  display: inline-block;
+                }
+
+                .tooltip-wrapper .custom-tooltip {
+                  visibility: hidden;
+                  background-color: white;
+                  color: red;
+                  font-weight: bold;
+                  text-align: center;
+                  border: 1px solid red;
+                  border-radius: 4px;
+                  padding: 5px 10px;
+                  position: absolute;
+                  bottom: 100%;
+                  left: 0;
+                  margin-bottom: 6px;
+                  z-index: 1;
+                  white-space: nowrap;
+                }
+
+                .tooltip-wrapper:hover .custom-tooltip {
+                  visibility: visible;
+                }
+              `}</style>
+
+              <div className="tooltip-wrapper">
+                {!isFormValid && (
+                  <div className="custom-tooltip">
+                    Please fill all required fields
+                  </div>
+                )}
+                {isFormValid && wrongDate && (
+                  <div className="custom-tooltip">
+                    Please enter a valid date
+                  </div>
+                )}
+                <button
+                  className="btn btn-primary"
+                  /*    onClick={handleSave} */
+                  disabled={!isFormValid || saving || wrongDate}
+                >
+                  {item._id ? (
+                    <>{saving ? "Updating..." : "Update"}</>
+                  ) : (
+                    <>{saving ? "Saving..." : "Save"}</>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>

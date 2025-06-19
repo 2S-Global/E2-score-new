@@ -7,6 +7,12 @@ const ProjectSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const resumeHeadline =
     "Stand out to employers by adding details about projects that you have done so far";
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+
+  const [reload, setReload] = useState(false);
+  const [item, setItem] = useState([]);
 
   const openModalRH = () => {
     setIsModalOpen(true);
@@ -48,7 +54,14 @@ const ProjectSection = () => {
 
       {/* Render Modal if isModalOpen is true */}
       {isModalOpen && (
-        <ProjectModal show={isModalOpen} onClose={closeModalRH} />
+        <ProjectModal
+          show={isModalOpen}
+          onClose={closeModalRH}
+          item={item}
+          setReload={setReload}
+          setError={setError}
+          setSuccess={setSuccess}
+        />
       )}
     </>
   );
