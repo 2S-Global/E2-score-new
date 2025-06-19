@@ -49,7 +49,13 @@ const SearchableInput = ({
       {isFocused && value && options.length > 0 && (
         <ul
           className="dropdown-menu show"
-          style={{ position: "absolute", width: "100%", zIndex: 1000 }}
+          style={{
+            position: "absolute",
+            width: "100%",
+            zIndex: 1000,
+            maxHeight: "200px", // 👈 limit height
+            overflowY: "auto", // 👈 make scrollable
+          }}
         >
           {options.map((option, index) => (
             <li

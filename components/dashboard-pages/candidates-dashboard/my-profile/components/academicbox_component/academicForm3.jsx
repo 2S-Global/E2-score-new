@@ -313,13 +313,46 @@ const EducationForm = ({
     return levelObj ? levelObj.level : "Unknown Level";
   };
 
-  const handleSearchChange = (e, setSearch, setFiltered, list) => {
-    const value = e.target.value;
+  const handleSearchChange = (e, setSearch, setFiltered, list, key = "") => {
+    const value = e.target.value.trim(); // normalise input
     setSearch(value);
-    setFiltered(
-      list.filter((item) => item.toLowerCase().includes(value.toLowerCase()))
-    );
+
+    // Show everything while the box is empty
+    if (!value) {
+      setFiltered(list);
+      return;
+    }
+
+    const query = value.toLowerCase();
+    const getText = (item) => (key ? item[key] : item).toString().toLowerCase();
+
+    const filtered = list
+      .filter((item) => getText(item).includes(query))
+      .sort((a, b) => {
+        const aText = getText(a);
+        const bText = getText(b);
+
+        // 1️⃣ exact match beats everything
+        if (aText === query && bText !== query) return -1;
+        if (bText === query && aText !== query) return 1;
+
+        // 2️⃣ prefix match comes next
+        const aPrefix = aText.startsWith(query);
+        const bPrefix = bText.startsWith(query);
+        if (aPrefix && !bPrefix) return -1;
+        if (!aPrefix && bPrefix) return 1;
+
+        // 3️⃣ otherwise, earlier index wins
+        const posDiff = aText.indexOf(query) - bText.indexOf(query);
+        if (posDiff !== 0) return posDiff;
+
+        // 4️⃣ finally, alphabetical as a stable tiebreaker
+        return aText.localeCompare(bText);
+      });
+
+    setFiltered(filtered);
   };
+
   const handleSelect = (value, setSearch, setFiltered) => {
     setSearch(value);
     setFiltered([]);
