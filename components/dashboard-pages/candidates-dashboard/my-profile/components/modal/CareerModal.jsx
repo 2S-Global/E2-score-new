@@ -6,7 +6,7 @@ import Select from "react-select";
 import axios from "axios";
 import CustomizedProgressBars from "@/components/common/loader";
 import AsyncSelect from "react-select/async";
-import { se } from "date-fns/locale";
+
 const CareerModal = ({
   show,
   onClose,

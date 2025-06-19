@@ -4,8 +4,7 @@ import CareerModal from "./modal/CareerModal";
 import axios from "axios";
 import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
-import { de } from "date-fns/locale";
-import { fi } from "@faker-js/faker";
+
 const CareerSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [focusSection, setFocusSection] = useState(null);
