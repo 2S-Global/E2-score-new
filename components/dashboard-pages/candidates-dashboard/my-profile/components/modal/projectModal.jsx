@@ -154,7 +154,111 @@ const ProjectModal = ({
   useEffect(() => {
     setIsFormValid(validateForm());
   }, [formData]);
+  const handleSave = async () => {
+    if (!token) {
+      console.error("Authorization token is missing. Please log in.");
+      return;
+    }
+    console.log("Saving personal details:", formData);
+    setSaving(true);
+    try {
+      if (formData._id) {
+        const response = await axios.put(
+          `${apiurl}/api/candidate/project/edit_project_details`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.data.success) {
+          setSaving(false);
+          onClose();
+          setReload(true);
+          setSuccess(response.data.message);
+        } else {
+          console.error(
+            "Error saving Presentation details:",
+            response.data.message
+          );
+          setSaving(false);
+          setError(response.data.message);
+        }
+      } else {
+        const response = await axios.post(
+          `${apiurl}/api/candidate/project/add_project_details`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.data.success) {
+          setSaving(false);
+          onClose();
+          setReload(true);
+          setSuccess(response.data.message);
+        } else {
+          console.error(
+            "Error saving presentation details:",
+            response.data.message
+          );
+          setSaving(false);
+          setError(response.data.message);
+        }
+      }
+    } catch (error) {
+      console.error("Error saving personal details:", error);
+      setSaving(false);
+    }
+  };
+  const handleDelete = async () => {
+    setLoading(true);
+    if (!formData._id) {
+      console.error("No id selected for deletion.");
+      return;
+    }
+    if (!token) {
+      console.error("Authorization token is missing. Please log in.");
+      return;
+    }
+    try {
+      setSaving(true);
 
+      const response = await axios.delete(
+        `${apiurl}/api/candidate/project/delete_project_details`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          data: {
+            _id: formData._id,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        //setSaving(false);
+        onClose();
+        setReload(true);
+        setLoading(false);
+        setSuccess(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error deleting education record:", error);
+      setError("An error occurred while deleting the record.Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleConfirmDelete = () => {
+    if (window.confirm("Are you sure you want to delete this record?")) {
+      handleDelete();
+    }
+  };
   return (
     <>
       <style>
@@ -548,7 +652,7 @@ const ProjectModal = ({
                 )}
                 <button
                   className="btn btn-primary"
-                  /*    onClick={handleSave} */
+                  onClick={handleSave}
                   disabled={!isFormValid || saving || wrongDate}
                 >
                   {item._id ? (

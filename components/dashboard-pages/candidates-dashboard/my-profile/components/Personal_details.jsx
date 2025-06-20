@@ -152,7 +152,7 @@ const PersonalSection = () => {
                         {personalDetails.careerBreak ? (
                           personalDetails.careerBreak.toLowerCase() ===
                           "yes" ? (
-                            <div className="d-flex flex-wrap gap-3 mt-1">
+                            <div className="d-flex flex-wrap ">
                               <div>
                                 Yes
                                 {personalDetails.careerBreakReason && (
