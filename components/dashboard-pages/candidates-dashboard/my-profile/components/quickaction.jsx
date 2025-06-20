@@ -10,6 +10,7 @@ const QuickActionSidebar = ({ menu, menuToggleHandler, activeSection }) => {
     { label: "Career Profile", targetId: "career" },
     { label: "Employment", targetId: "employment" },
     { label: "IT skills", targetId: "it-key" },
+    { label: "Other Skills", targetId: "other-skill" },
     { label: "Projects", targetId: "projects" },
     { label: "Resume", targetId: "resume-box" },
   ];

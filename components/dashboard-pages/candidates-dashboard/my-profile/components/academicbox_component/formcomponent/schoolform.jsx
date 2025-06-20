@@ -105,11 +105,13 @@ const SchoolForm = ({
         {/* marks */}
         <div className="form-group">
           <label>
-            Marks
+            Marks (%)
             <span style={{ color: "red" }}>*</span>
           </label>
           <input
             type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
             name="marks"
             placeholder="Enter Marks"
             onChange={handleChange}
@@ -121,7 +123,7 @@ const SchoolForm = ({
             <div className="row">
               <div className="form-group col-md-6">
                 <label>
-                  Marks in English
+                  Marks in English (%)
                   <span style={{ color: "red" }}>*</span>
                 </label>
                 <input
@@ -134,7 +136,7 @@ const SchoolForm = ({
               </div>
               <div className="form-group col-md-6">
                 <label>
-                  Marks in Math
+                  Marks in Math (%)
                   <span style={{ color: "red" }}>*</span>
                 </label>
                 <input

@@ -307,7 +307,7 @@ const WorksampleModal = ({
           <div className="modal-content">
             {/* Modal Header */}
             <div className="modal-header">
-              <h5 className="modal-title">Work samples</h5>
+              <h5 className="modal-title">Work Profiles</h5>
               <button
                 type="button"
                 className="btn-close"
@@ -327,7 +327,9 @@ const WorksampleModal = ({
                   }}
                   className="mb-3"
                 >
-                  <span>Link relevant work samples (e.g. Github, Behance)</span>
+                  <span>
+                    Link relevant work profiles (e.g. Github, Behance)
+                  </span>
                   {formData._id && (
                     <span style={{ color: "red", cursor: "pointer" }}>
                       <Trash2 size={20} onClick={handleConfirmDelete} />

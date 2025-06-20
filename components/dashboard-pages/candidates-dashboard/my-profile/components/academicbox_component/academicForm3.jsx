@@ -281,30 +281,28 @@ const EducationForm = ({
   //handel changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
 
-    if (name === "state") {
-      if (value) {
-        setStateselected(true);
-      } else {
-        setStateselected(false);
+    // Handle marks: only allow 0-100 numeric
+    if (name === "marks" || name === "eng_marks" || name === "math_marks") {
+      const numericValue = value.replace(/[^0-9]/g, "");
+      if (numericValue === "" || Number(numericValue) <= 100) {
+        setFormData((prev) => ({ ...prev, [name]: numericValue }));
       }
+      return; // Stop here for "marks"
     }
 
-    if (name === "university") {
-      if (value) {
-        setUniversityselected(true);
-      } else {
-        setUniversityselected(false);
-      }
-    }
+    // Update formData normally
+    setFormData((prev) => ({ ...prev, [name]: value }));
 
-    if (name === "institute_name") {
-      if (value) {
-        setCollegeselected(true);
-      } else {
-        setCollegeselected(false);
-      }
+    // Common toggle logic
+    const toggleSetters = {
+      state: setStateselected,
+      university: setUniversityselected,
+      institute_name: setCollegeselected,
+    };
+
+    if (toggleSetters[name]) {
+      toggleSetters[name](!!value.trim());
     }
   };
 

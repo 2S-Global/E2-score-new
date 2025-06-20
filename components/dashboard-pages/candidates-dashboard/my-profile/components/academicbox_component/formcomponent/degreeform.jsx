@@ -43,7 +43,7 @@ const DegreeForm = ({
         </div>
       )}
       <div
-        className="row"
+        className="row mt-3"
         style={{
           pointerEvents: !stateselected ? "none" : "auto",
           opacity: !stateselected ? 0.5 : 1,
@@ -161,7 +161,7 @@ const DegreeForm = ({
         </div>
         <div className="form-group row align-items-center mt-2">
           <label className="col-12">
-            Course Duration
+            Course Start and End Year
             <span style={{ color: "red" }}>*</span>
           </label>
           <div className="col-md-5">

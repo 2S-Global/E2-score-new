@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import CustomizedProgressBars from "@/components/common/loader";
+import MessageComponent from "@/components/common/ResponseMsg";
 
 const ResumeBox = () => {
+  const [loading, setLoading] = useState(false);
   const [transcriptFile, setTranscriptFile] = useState(null);
   const [uploadDate, setUploadDate] = useState(null);
 
@@ -15,7 +18,7 @@ const ResumeBox = () => {
           month: "short",
           day: "2-digit",
           year: "numeric",
-        }),
+        })
       );
     }
   }, []);
@@ -28,7 +31,7 @@ const ResumeBox = () => {
     accept,
     width = "340px",
   }) => (
-    <div className="form-group col-lg-4 col-md-12">
+    <div className="form-group ">
       <div className="uploadButton">
         <input
           className="uploadButton-input"
@@ -55,41 +58,56 @@ const ResumeBox = () => {
   }, []);
 
   return (
-    <div className="resume-container">
-      <strong className="resume-title">Resume </strong>
-      <span style={{ color: "green" }}>Add 10%</span>
-
-      {transcriptFile && (
-        <div className="resume-details">
-          <p className="resume-file">{transcriptFile.name}</p>
-          {uploadDate && (
-            <p className="upload-date">Uploaded on {uploadDate}</p>
-          )}
-          <div className="resume-actions">
-            <a
-              href={URL.createObjectURL(transcriptFile)}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              📥 Download
-            </a>
-            <button onClick={handleDelete} className="delete-btn">
-              🗑 Delete
-            </button>
+    <>
+      <div className="ls-widget">
+        <div className="tabs-box">
+          <div className="widget-title">
+            <h4>Resume</h4>
+            {/* Open modal using an onClick function */}
           </div>
+          {loading ? (
+            <CustomizedProgressBars />
+          ) : (
+            <>
+              <div className="widget-content">
+                {transcriptFile && (
+                  <div className="resume-details">
+                    <p className="resume-file">{transcriptFile.name}</p>
+                    {uploadDate && (
+                      <p className="upload-date">Uploaded on {uploadDate}</p>
+                    )}
+                    <div className="resume-actions">
+                      <a
+                        href={URL.createObjectURL(transcriptFile)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        📥 Download
+                      </a>
+                      <button onClick={handleDelete} className="delete-btn">
+                        🗑 Delete
+                      </button>
+                    </div>
+                  </div>
+                )}
+                <div
+                  className="upload-wrapper d-flex justify-content-center"
+                  style={{ width: "100%" }}
+                >
+                  <UploadButton
+                    label="Upload Resume"
+                    id="resume"
+                    file={transcriptFile}
+                    onChange={handleFileChange}
+                    accept="image/*, .pdf"
+                  />
+                </div>
+              </div>
+            </>
+          )}
         </div>
-      )}
-
-      <div className="upload-wrapper">
-        <UploadButton
-          label="Upload Resume"
-          id="resume"
-          file={transcriptFile}
-          onChange={handleFileChange}
-          accept="image/*, .pdf"
-        />
       </div>
-    </div>
+    </>
   );
 };
 

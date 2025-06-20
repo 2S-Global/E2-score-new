@@ -211,7 +211,7 @@ const LanguageProficiency = ({ formData, setFormData, apiurl }) => {
           cursor: "pointer",
         }}
       >
-        Add another language
+        Add language
       </button>
     </div>
   );

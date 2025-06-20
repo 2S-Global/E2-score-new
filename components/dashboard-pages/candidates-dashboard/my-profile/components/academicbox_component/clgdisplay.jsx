@@ -6,9 +6,9 @@ const ClgDisplay = ({ data, openModalRH }) => {
       <div className="resume-item emp-list pb-3">
         <div className="item title typ-14Bold">
           <span className="truncate emp-desg">
-            <strong>
-              {data?.level} {data?.courseName}
-            </strong>
+            <strong>{data?.level}</strong>
+            <br />
+            {data?.courseName}
           </span>
           <i
             className="la la-pencil-alt"
@@ -19,6 +19,8 @@ const ClgDisplay = ({ data, openModalRH }) => {
 
         <div className="item experienceType typ-14Regular">
           <span className="truncate expType">{data.instituteName}</span>
+          <br />
+          <span className="truncate expType">{data.universityName}</span>
           <br />
           <span className="truncate">
             {data.duration.from}-{data.duration.to} | {data.courseType}

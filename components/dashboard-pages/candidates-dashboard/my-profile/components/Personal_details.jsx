@@ -4,6 +4,7 @@ import PersonalModal from "./modal/PersonalModal2";
 import axios from "axios";
 import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
+import { CircleCheck, CircleX } from "lucide-react";
 const PersonalSection = () => {
   // Modal state
   const [modalType, setModalType] = useState(null);
@@ -333,9 +334,27 @@ const PersonalSection = () => {
                         <tr key={index}>
                           <td>{lang.language}</td>
                           <td>{lang.proficiency}</td>
-                          <td>{lang.read ? "✔️" : "❌"}</td>
-                          <td>{lang.write ? "✔️" : "❌"}</td>
-                          <td>{lang.speak ? "✔️" : "❌"}</td>
+                          <td>
+                            {lang.read ? (
+                              <CircleCheck color="#00A85A" size={18} />
+                            ) : (
+                              <CircleX color="#FF0000" size={18} />
+                            )}
+                          </td>
+                          <td>
+                            {lang.write ? (
+                              <CircleCheck color="#00A85A" size={18} />
+                            ) : (
+                              <CircleX color="#FF0000" size={18} />
+                            )}
+                          </td>
+                          <td>
+                            {lang.speak ? (
+                              <CircleCheck color="#00A85A" size={18} />
+                            ) : (
+                              <CircleX color="#FF0000" size={18} />
+                            )}
+                          </td>
                         </tr>
                       ))}
                     </tbody>

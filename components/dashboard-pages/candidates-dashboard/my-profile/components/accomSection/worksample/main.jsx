@@ -23,7 +23,7 @@ const Workmain = ({ setReload, list = [], setError, setSuccess }) => {
     <>
       <div className="">
         <h5>
-          Work Sample
+          Work Profile
           <span
             onClick={() => openModal()}
             style={{

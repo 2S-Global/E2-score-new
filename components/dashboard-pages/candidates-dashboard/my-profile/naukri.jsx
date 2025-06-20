@@ -14,6 +14,7 @@ import Keyskillsection from "./components/KeyskillSection";
 import Employsection from "./components/Employmentsection";
 import Academysection from "./components/academicsection";
 import ItkeySection from "./components/Itskillsection";
+import OtherskillSection from "./components/otherskillsection";
 import ProjectSection from "./components/projectSection";
 import ProfilesumerySection from "./components/profilesummary";
 import AcomSection from "./components/accomsection2";
@@ -96,13 +97,14 @@ const index = () => {
                   <div id="it-key">
                     <ItkeySection />
                   </div>
+                  <div id="other-skill">
+                    <OtherskillSection />
+                  </div>
                   <div id="projects">
                     <ProjectSection />
                   </div>
-                  <div id="resume-box" className="ls-widget">
-                    <div className="tabs-box">
-                      <ResumeBox />
-                    </div>
+                  <div id="resume-box">
+                    <ResumeBox />
                   </div>
                 </div>
               </div>
