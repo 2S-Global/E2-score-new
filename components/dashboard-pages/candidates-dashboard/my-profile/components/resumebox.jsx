@@ -110,7 +110,7 @@ const ResumeBox = () => {
         setSuccess(response.data.message);
 
         setMessage({ type: "success", text: "Resume uploaded successfully!" });
-        setResumeUrl(response.data.data?.fileUrl || "updated link"); // replace with actual value if backend returns it
+        setResumeUrl(response.data.pdfUrl?.fileUrl || "updated link"); // replace with actual value if backend returns it
       } catch (error) {
         setMessage({ type: "error", text: "Upload failed. Please try again." });
         console.error("Upload error:", error);
