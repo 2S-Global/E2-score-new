@@ -5,7 +5,7 @@ import axios from "axios";
 import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
 import { Download, Trash2 } from "lucide-react";
-import { set } from "date-fns";
+import Swal from "sweetalert2";
 
 const ResumeBox = () => {
   const [loading, setLoading] = useState(false);
@@ -193,6 +193,21 @@ const ResumeBox = () => {
       setLoading(false);
     }
   }, [apiurl]);
+  const confirmDelete = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDelete();
+      }
+    });
+  };
 
   return (
     <div className="ls-widget">
@@ -237,7 +252,7 @@ const ResumeBox = () => {
                     </a>
                   )}
                   <button
-                    onClick={handleDelete}
+                    onClick={confirmDelete}
                     className="btn btn-outline-danger btn-sm d-flex align-items-center gap-2"
                   >
                     <Trash2 size={16} />
