@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Sparkles } from "lucide-react";
 import axios from "axios";
+import { Trash2 } from "lucide-react";
 const getComparableDateValue = (year, month) => {
   if (!year || !month) return null;
   return parseInt(year) * 100 + parseInt(month); // e.g., 202405
@@ -136,7 +137,7 @@ const EmploymentModal = ({
     try {
       if (formData._id) {
         const response = await axios.put(
-          `${apiurl}/api/candidate/accomplishments/edit_work_samples`,
+          `${apiurl}/api/candidate/employment/edit_employment `,
           formData,
           {
             headers: {
@@ -187,7 +188,6 @@ const EmploymentModal = ({
     }
   };
   const handleDelete = async () => {
-    setLoading(true);
     if (!formData._id) {
       console.error("No id selected for deletion.");
       return;
@@ -200,7 +200,7 @@ const EmploymentModal = ({
       setSaving(true);
 
       const response = await axios.delete(
-        `${apiurl}/api/candidate/accomplishments/delete_work_sample`,
+        `${apiurl}/api/candidate/employment/delete_employment`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -215,14 +215,11 @@ const EmploymentModal = ({
         //setSaving(false);
         onClose();
         setReload(true);
-        setLoading(false);
         setSuccess(response.data.message);
       }
     } catch (error) {
       console.error("Error deleting education record:", error);
       setError("An error occurred while deleting the record.Please try again.");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -392,10 +389,26 @@ const EmploymentModal = ({
               ></button>
             </div>
             <div className="modal-body">
-              <p style={{ color: "black" }}>
-                Details like job title, company name, etc, help employers
-                understand your work
-              </p>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  color: "black",
+                }}
+                className="mb-3"
+              >
+                <span>
+                  {" "}
+                  Details like job title, company name, etc, help employers
+                  understand your work
+                </span>
+                {formData._id && (
+                  <span style={{ color: "red", cursor: "pointer" }}>
+                    <Trash2 size={20} onClick={handleConfirmDelete} />
+                  </span>
+                )}
+              </div>
 
               <button
                 type="button"

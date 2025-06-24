@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import EmploymentModal from "./modal.jsx"; // Import the modal component
 import axios from "axios";
+import { BadgeCheck, BadgeX } from "lucide-react";
 //utils
 import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
@@ -15,7 +16,13 @@ const Employsectionmain = () => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [item, setItem] = useState([]);
   const [userdata, setUserdata] = useState([]);
-  const openModalRH = () => {
+  const openModalRH = (Edit_item) => {
+    if (Edit_item) {
+      setItem(Edit_item);
+      console.log("Selected Item:", item);
+    } else {
+      setItem([]);
+    }
     setIsModalOpen(true);
     document.body.style.overflow = "hidden"; // Disable background scrolling
   };
@@ -106,10 +113,10 @@ const Employsectionmain = () => {
                             title={row.job_title}
                           >
                             <strong>{row.job_title}</strong>
-                          </span>
+                          </span>{" "}
                           <i
                             className="la la-pencil-alt"
-                            onClick={openModalRH}
+                            onClick={() => openModalRH(row)}
                             style={{ cursor: "pointer" }}
                           ></i>
                         </div>
@@ -139,7 +146,16 @@ const Employsectionmain = () => {
                         <div className="item experienceType typ-14Regular">
                           <span className="truncate expType">
                             {row.employmenttype?.charAt(0).toUpperCase() +
-                              row.employmenttype?.slice(1).toLowerCase()}
+                              row.employmenttype?.slice(1).toLowerCase()}{" "}
+                            {row.jobTypeVerified ? (
+                              <>
+                                <BadgeCheck size={20} color="green" />
+                              </>
+                            ) : (
+                              <>
+                                <BadgeX size={20} color="red" />
+                              </>
+                            )}
                           </span>
                           <br />
                           <span className="truncate">
@@ -151,6 +167,15 @@ const Employsectionmain = () => {
                                 {" "}
                                 {row.leaving_month_name} {row.leaving_year}
                               </>
+                            )}{" "}
+                            {row.jobDurationVerified ? (
+                              <>
+                                <BadgeCheck size={20} color="green" />
+                              </>
+                            ) : (
+                              <>
+                                <BadgeX size={20} color="red" />
+                              </>
                             )}
                           </span>
                         </div>
@@ -158,7 +183,7 @@ const Employsectionmain = () => {
                         {/* Notice Period (Only if exists) */}
                         {row.notice_period && (
                           <div className="item emp-notice-prd typ-14Medium">
-                            {row.notice_period} Notice Period
+                            Notice Period : {row.notice_period_name}
                           </div>
                         )}
 
