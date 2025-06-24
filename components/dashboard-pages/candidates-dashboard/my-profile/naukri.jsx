@@ -11,7 +11,8 @@ import MenuToggler from "../../MenuToggler";
 import ResumeBox from "./components/resumebox";
 import ResumeHeadlineSection from "./components/ResumeHeadlineSection";
 import Keyskillsection from "./components/KeyskillSection";
-import Employsection from "./components/Employmentsection";
+import Employsectiondemo from "./components/Employmentsection";
+import Employsectionmain from "./components/employment/main";
 import Academysection from "./components/academicsection";
 import ItkeySection from "./components/Itskillsection";
 import OtherskillSection from "./components/otherskillsection";
@@ -92,7 +93,10 @@ const index = () => {
                     <Carrersection />
                   </div>
                   <div id="employment">
-                    <Employsection />
+                    <Employsectionmain />
+                  </div>
+                  <div id="employment demo">
+                    <Employsectiondemo />
                   </div>
                   <div id="it-key">
                     <ItkeySection />

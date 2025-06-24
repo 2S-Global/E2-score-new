@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import EmploymentModal from "./modal/employmentModal"; // Import the modal component
+import EmploymentModal from "./modal.jsx"; // Import the modal component
 
-const Employsectiondemo = () => {
+const Employsectionmain = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expanded, setExpanded] = useState({}); // Track expanded descriptions
 
@@ -60,7 +60,7 @@ const Employsectiondemo = () => {
       <div className="ls-widget">
         <div className="tabs-box">
           <div className="widget-title">
-            <h4>Employment (demo)</h4>
+            <h4>Employment (main)</h4>
             <span
               onClick={openModalRH}
               style={{
@@ -184,4 +184,4 @@ const Employsectiondemo = () => {
   );
 };
 
-export default Employsectiondemo;
+export default Employsectionmain;
