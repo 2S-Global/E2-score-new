@@ -426,14 +426,6 @@ const EmploymentModal = ({
                 )}
               </div>
 
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => console.log("Formdata:", formData)}
-              >
-                Test
-              </button>
-
               {/* Skills List */}
 
               <form className="default-form" onSubmit={handleSave}>
@@ -493,7 +485,7 @@ const EmploymentModal = ({
                 </div>
 
                 <div className="mb-3 form-group">
-                  <label className="form-label">Employment type</label>
+                  <label className="form-label">Employment Type</label>
                   <span style={{ color: "red" }} className="ms-1">
                     *
                   </span>
@@ -589,7 +581,7 @@ const EmploymentModal = ({
                 {/* Company name */}
                 <div className="mb-3 form-group position-relative">
                   <label className="form-label">
-                    Company name
+                    Company Name
                     <span style={{ color: "red" }} className="ms-1">
                       *
                     </span>
@@ -647,7 +639,7 @@ const EmploymentModal = ({
                 {/* Job Title */}
                 <div className="mb-3 form-group">
                   <label className="form-label">
-                    Job title
+                    Job Title
                     <span style={{ color: "red" }} className="ms-1">
                       *
                     </span>
@@ -762,7 +754,7 @@ const EmploymentModal = ({
                             })
                           }
                         >
-                          <option value="">Select month</option>
+                          <option value="">Select Month</option>
                           {generateMonthOptions(
                             parseInt(formData.leaving_year || currentYear)
                           )}
@@ -777,7 +769,7 @@ const EmploymentModal = ({
                   <>
                     {/* notice_period */}
                     <div className="mb-3 form-group">
-                      <label className="form-label">Notice period</label>
+                      <label className="form-label">Notice Period</label>
                       {/* select list_notice_period */}
                       <select
                         className="form-select"
@@ -789,7 +781,7 @@ const EmploymentModal = ({
                           })
                         }
                       >
-                        <option value="">Select Notice period</option>
+                        <option value="">Select Notice Period</option>
                         {list_notice_period.map((item, index) => (
                           <option key={item.id} value={item.id}>
                             {item.name}
@@ -801,9 +793,7 @@ const EmploymentModal = ({
                 )}
                 {/* Job profile */}
                 <div className="mb-3 form-group">
-                  <label className="form-label">
-                    <b>Job profile</b>
-                  </label>
+                  <label className="form-label">Job Profile</label>
                   <textarea
                     className="form-control mb-2"
                     placeholder="Type here ..."

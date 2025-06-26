@@ -65,7 +65,7 @@ const index = () => {
                 {/* Quick action section */}
 
                 <div className="col-lg-12 col-md-12">
-                  {/*  <div id="head-section">
+                  <div id="head-section">
                     <HeadSection />
                   </div>
                   <div id="resume-headline">
@@ -87,16 +87,14 @@ const index = () => {
                     <AcomSection />
                   </div>
 
-                  <div id="career">
+                  {/*  <div id="career">
                     <Carrersection />
-                  </div> */}
+                  </div>
                   <div id="employment">
                     <Employsectionmain />
                   </div>
-                  <div id="employment demo">
-                    <Employsectiondemo />
-                  </div>
-                  {/* <div id="it-key">
+
+                  <div id="it-key">
                     <ItkeySection />
                   </div>
                   <div id="other-skill">
@@ -104,10 +102,10 @@ const index = () => {
                   </div>
                   <div id="projects">
                     <ProjectSection />
-                  </div> */}
+                  </div>
                   <div id="resume-box">
                     <ResumeBox />
-                  </div>
+                  </div> */}
                 </div>
               </div>
               {/* End .row */}
