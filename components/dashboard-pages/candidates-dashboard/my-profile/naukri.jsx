@@ -68,12 +68,12 @@ const index = () => {
                   <div id="head-section">
                     <HeadSection />
                   </div>
-                  <div id="resume-headline">
+                  {/*    <div id="resume-headline">
                     <ResumeHeadlineSection />
                   </div>
                   <div id="profile-summary">
                     <ProfilesumerySection />
-                  </div>
+                  </div> */}
                   <div id="key-skill">
                     <Keyskillsection />
                   </div>
