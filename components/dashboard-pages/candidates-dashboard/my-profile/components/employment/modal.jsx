@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Sparkles } from "lucide-react";
 import axios from "axios";
 import { Trash2 } from "lucide-react";
+import { f } from "html2pdf.js";
 const getComparableDateValue = (year, month) => {
   if (!year || !month) return null;
   return parseInt(year) * 100 + parseInt(month); // e.g., 202405
@@ -26,7 +27,7 @@ const EmploymentModal = ({
   const token = localStorage.getItem("candidate_token");
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [list_notice_period, setList_notice_period] = useState([]);
-
+  const [testdata, setTestdata] = useState([]);
   const fetchNoticePeriod = async () => {
     try {
       const response = await axios.get(
@@ -334,8 +335,23 @@ const EmploymentModal = ({
   const handleSuggestionClick = (name) => {
     setFormData({ ...formData, company_name: name });
     setShowDropdown(false);
+    fetchcompanydetails(name);
   };
 
+  const fetchcompanydetails = async (name) => {
+    try {
+      const res = await axios.get(
+        `${apiurl}/api/candidate/employment/all_company_details`,
+        {
+          params: { company_name: name },
+        }
+      );
+      setTestdata(res.data.data);
+    } catch (err) {
+      console.error("Error fetching companies:", err);
+      setSuggestions([]);
+    }
+  };
   return (
     <>
       <style>
@@ -609,6 +625,25 @@ const EmploymentModal = ({
                     </ul>
                   )}
                 </div>
+
+                <div className="mb-3 form-group">
+                  <label className="form-label"> Testing</label>
+                  <textarea
+                    style={{
+                      padding: "10px",
+                      minheight: "2.5em",
+                      height: "auto",
+                      resize: "vertical", // allow only vertical resizing
+                      minHeight: "2.5em", // ensures 1 row minimum height (adjust as needed)
+                      overflowY: "auto",
+                    }}
+                    className="form-control custom-textarea"
+                    placeholder="Enter your company description"
+                    value={JSON.stringify(testdata, null, 2)}
+                    rows={3}
+                  />
+                </div>
+
                 {/* Job Title */}
                 <div className="mb-3 form-group">
                   <label className="form-label">
