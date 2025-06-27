@@ -45,7 +45,7 @@ const PersonalModal = ({
       gender: String(data.gender || ""),
       dob: data.dob ? new Date(data.dob) : null,
       more_info: Array.isArray(data.more_info)
-        ? data.more_info.map(Number)
+        ? data.more_info.map(String)
         : [],
       marital_status: String(data.marital_status || ""),
       category: String(data.category || ""),
@@ -316,7 +316,7 @@ const PersonalModal = ({
                 This information helps employers know you better.
               </p>
 
-              {/* <button
+              <button
                 className="btn btn-primary"
                 onClick={() =>
                   console.log(
@@ -330,7 +330,7 @@ const PersonalModal = ({
                 }
               >
                 TEST
-              </button> */}
+              </button>
               {loading ? (
                 <CustomizedProgressBars />
               ) : (
