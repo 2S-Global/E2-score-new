@@ -65,31 +65,34 @@ const index = () => {
                 {/* Quick action section */}
 
                 <div className="col-lg-12 col-md-12">
-                  <div id="head-section">
-                    <HeadSection />
-                  </div>
-                  {/*    <div id="resume-headline">
-                    <ResumeHeadlineSection />
-                  </div>
-                  <div id="profile-summary">
-                    <ProfilesumerySection />
+                  {/*  <div id="part1">
+                    <div id="head-section">
+                      <HeadSection />
+                    </div>
+                    <div id="resume-headline">
+                      <ResumeHeadlineSection />
+                    </div>
+                    <div id="profile-summary">
+                      <ProfilesumerySection />
+                    </div>
+                    <div id="key-skill">
+                      <Keyskillsection />
+                    </div>
                   </div> */}
-                  <div id="key-skill">
-                    <Keyskillsection />
-                  </div>
                   <div id="personal">
                     <PersonalSection />
                   </div>
-                  <div id="academy">
+                  {/*  <div id="academy">
                     <Academysection />
                   </div>
                   <div id="acom">
                     <AcomSection />
                   </div>
 
-                  {/*  <div id="career">
+                  <div id="career">
                     <Carrersection />
                   </div>
+
                   <div id="employment">
                     <Employsectionmain />
                   </div>
@@ -100,12 +103,13 @@ const index = () => {
                   <div id="other-skill">
                     <OtherskillSection />
                   </div>
+                  */}
                   <div id="projects">
                     <ProjectSection />
                   </div>
                   <div id="resume-box">
                     <ResumeBox />
-                  </div> */}
+                  </div>
                 </div>
               </div>
               {/* End .row */}

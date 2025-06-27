@@ -16,6 +16,8 @@ const HeadSection = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
+  const [progress, setProgress] = useState(0);
+
   const [reload, setReload] = useState(false);
 
   const [sectionloading, setSectionloading] = useState(true);
@@ -33,6 +35,10 @@ const HeadSection = () => {
         });
         if (response.data?.profilePicture) {
           setProfile_pic(response.data.profilePicture);
+        }
+
+        if (response.data?.progress) {
+          setProgress(response.data.progress);
         }
 
         setUser(response.data);
@@ -65,7 +71,7 @@ const HeadSection = () => {
                   {/* Left Section - Circular Progress */}
                   <div className="col-lg-2 d-flex justify-content-center align-items-center p-2">
                     <CircularProgress
-                      progress={100}
+                      progress={progress}
                       imageSrc={profile_pic}
                       setReload={setReload}
                       setError={setError}
