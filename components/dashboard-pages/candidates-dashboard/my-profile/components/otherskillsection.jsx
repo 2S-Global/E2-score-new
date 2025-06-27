@@ -60,7 +60,7 @@ const OtherskillSection = () => {
   };
 
   useEffect(() => {
-    // fetchSkills();
+    //fetchSkills();
   }, [apiurl]);
 
   useEffect(() => {

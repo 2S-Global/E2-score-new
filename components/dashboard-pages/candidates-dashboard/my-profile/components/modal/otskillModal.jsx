@@ -24,7 +24,7 @@ const OTskillModal = ({
   const [allskills, setAllskills] = useState([]);
   const [filteredSkills, setFilteredSkills] = useState(allskills);
 
-  const [forcedisable, setForcedisable] = useState(false);
+  const [forcedisable, setForcedisable] = useState(true);
 
   useEffect(() => {
     fetchskills();
