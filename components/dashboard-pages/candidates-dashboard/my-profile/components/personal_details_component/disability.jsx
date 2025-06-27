@@ -6,6 +6,8 @@ const Disability = ({ formData, setFormData, apiurl }) => {
   const [disabilityOptions, setDisabilityOptions] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [other_id, setOtherId] = useState(null);
+
   useEffect(() => {
     const fetchDisabilityOptions = async () => {
       setLoading(true);
@@ -14,6 +16,9 @@ const Disability = ({ formData, setFormData, apiurl }) => {
           `${apiurl}/api/sql/dropdown/disability_type`
         );
         setDisabilityOptions(response.data.data);
+        setOtherId(
+          response.data.data.find((item) => item.name === "Others")?.id
+        );
       } catch (error) {
         console.error("Error fetching disability options:", error);
       } finally {
@@ -42,7 +47,7 @@ const Disability = ({ formData, setFormData, apiurl }) => {
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  disability_type: parseInt(e.target.value),
+                  disability_type: e.target.value,
                   disability_description: "", // Reset on change
                 })
               }
@@ -56,7 +61,7 @@ const Disability = ({ formData, setFormData, apiurl }) => {
             </select>
           </div>
 
-          {formData.disability_type == 999 && (
+          {formData.disability_type == other_id && (
             <div className="form-group">
               <label htmlFor="disabilityDescription">
                 <b>Disability Description</b>
