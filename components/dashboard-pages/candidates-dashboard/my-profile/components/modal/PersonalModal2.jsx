@@ -64,7 +64,7 @@ const PersonalModal = ({
       work_permit_other_countries: Array.isArray(
         data.work_permit_other_countries
       )
-        ? data.work_permit_other_countries.map(Number)
+        ? data.work_permit_other_countries.map(String)
         : [],
       permanent_address: data.permanent_address || "",
       hometown: data.hometown || "",
