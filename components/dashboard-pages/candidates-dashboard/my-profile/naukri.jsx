@@ -100,10 +100,11 @@ const index = () => {
                   <div id="it-key">
                     <ItkeySection />
                   </div>
+                  */}
                   <div id="other-skill">
                     <OtherskillSection />
                   </div>
-                  */}
+
                   <div id="projects">
                     <ProjectSection />
                   </div>

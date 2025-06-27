@@ -133,7 +133,7 @@ const OTskillModal = ({
       let response = null;
       if (_id) {
         response = await axios.put(
-          `${apiurl}/api/candidate/itskill//edititskill`,
+          `${apiurl}/api/candidate/itskill/edititskill`,
           {
             _id,
             skillSearch,
@@ -279,7 +279,7 @@ const OTskillModal = ({
                           allskills
                         )
                       }
-                      options={filteredSkills}
+                      options={filteredSkills.slice(0, 10)}
                       onSelect={(value) =>
                         handleSelect(value, setSkillSearch, setFilteredSkills)
                       }
