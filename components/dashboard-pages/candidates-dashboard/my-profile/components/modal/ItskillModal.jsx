@@ -131,7 +131,7 @@ const ItskillModal = ({
       let response = null;
       if (_id) {
         response = await axios.put(
-          `${apiurl}/api/candidate/itskill//edititskill`,
+          `${apiurl}/api/candidate/itskill/edititskill`,
           {
             _id,
             skillSearch,
