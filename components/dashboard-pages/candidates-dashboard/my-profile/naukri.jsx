@@ -82,10 +82,10 @@ const index = () => {
                   <div id="personal">
                     <PersonalSection />
                   </div>
-                  <div id="academy">
+                  {/*   <div id="academy">
                     <Academysection />
-                  </div>
-                  {/* 
+                  </div> */}
+
                   <div id="acom">
                     <AcomSection />
                   </div>
@@ -97,7 +97,7 @@ const index = () => {
                   <div id="employment">
                     <Employsectionmain />
                   </div>
-*/}
+
                   <div id="it-key">
                     <ItkeySection />
                   </div>
