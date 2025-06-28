@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import EmploymentModal from "./modal.jsx"; // Import the modal component
 import axios from "axios";
-import { BadgeCheck, BadgeX } from "lucide-react";
+import { BadgeCheck, BadgeAlert } from "lucide-react";
 //utils
 import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
@@ -82,7 +82,7 @@ const Employsectionmain = () => {
       <div className="ls-widget">
         <div className="tabs-box">
           <div className="widget-title">
-            <h4>Employment (main)</h4>
+            <h4>Employment </h4>
             <span
               onClick={openModalRH}
               style={{
@@ -153,7 +153,7 @@ const Employsectionmain = () => {
                               </>
                             ) : (
                               <>
-                                <BadgeX size={20} color="red" />
+                                <BadgeAlert size={20} color="orange" />
                               </>
                             )}
                           </span>
@@ -174,7 +174,7 @@ const Employsectionmain = () => {
                               </>
                             ) : (
                               <>
-                                <BadgeX size={20} color="red" />
+                                <BadgeAlert size={20} color="orange" />
                               </>
                             )}
                           </span>

@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Sparkles } from "lucide-react";
 import axios from "axios";
 import { Trash2 } from "lucide-react";
-import { f } from "html2pdf.js";
+
 const getComparableDateValue = (year, month) => {
   if (!year || !month) return null;
   return parseInt(year) * 100 + parseInt(month); // e.g., 202405
@@ -50,7 +50,7 @@ const EmploymentModal = ({
   const [formData, setFormData] = useState({
     _id: item._id || "",
     currentlyWorking: item.currentlyWorking || false,
-    employmenttype: item.employmenttype || "",
+    employmenttype: item.employmenttype || "full-time",
     experience_yr: item.experience_yr || "",
     experience_month: item.experience_month || "",
     company_name: item.company_name || "",
@@ -534,11 +534,10 @@ const EmploymentModal = ({
                 </div>
 
                 {/* total Experience year and month drop down */}
-                <div className="mb-3 form-group">
+                {/* <div className="mb-3 form-group">
                   <label className="form-label">Total Experience</label>
 
                   <div className="d-flex gap-3">
-                    {/* Years Dropdown */}
                     <select
                       className="form-select"
                       name="experience_yr"
@@ -557,7 +556,6 @@ const EmploymentModal = ({
                       ))}
                     </select>
 
-                    {/* Months Dropdown */}
                     <select
                       className="form-select"
                       name="experience_month"
@@ -576,7 +574,7 @@ const EmploymentModal = ({
                       ))}
                     </select>
                   </div>
-                </div>
+                </div> */}
 
                 {/* Company name */}
                 <div className="mb-3 form-group position-relative">
@@ -618,7 +616,7 @@ const EmploymentModal = ({
                   )}
                 </div>
 
-                <div className="mb-3 form-group">
+                {/* <div className="mb-3 form-group">
                   <label className="form-label"> Testing</label>
                   <textarea
                     style={{
@@ -634,7 +632,7 @@ const EmploymentModal = ({
                     value={JSON.stringify(testdata, null, 2)}
                     rows={3}
                   />
-                </div>
+                </div> */}
 
                 {/* Job Title */}
                 <div className="mb-3 form-group">

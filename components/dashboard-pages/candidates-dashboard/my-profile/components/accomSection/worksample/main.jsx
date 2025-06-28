@@ -38,7 +38,7 @@ const Workmain = ({ setReload, list = [], setError, setSuccess }) => {
           </span>
         </h5>
         <span className="text-muted mb-2 mt-1">
-          Link relevant work samples (e.g. GitHub, Behance)
+          Link relevant work Profile (e.g. GitHub, Behance)
         </span>
 
         {/* dont render if list is empty */}

@@ -153,16 +153,16 @@ const PersonalSection = () => {
                         {personalDetails.careerBreak ? (
                           personalDetails.careerBreak.toLowerCase() ===
                           "yes" ? (
-                            <div className="d-flex flex-wrap ">
+                            <div className="">
                               <div>
                                 Yes
                                 {personalDetails.careerBreakReason && (
-                                  <> – {personalDetails.careerBreakReason}</>
+                                  <> – {personalDetails.careerBreakReason} </>
                                 )}
                               </div>
-                              <div className="d-flex flex-wrap gap-3">
+                              <div className="d-flex flex-wrap gap-1">
                                 <div>
-                                  <strong>From:</strong>{" "}
+                                  <strong> From:</strong>{" "}
                                   {personalDetails.careerBreakStartMonth}{" "}
                                   {personalDetails.careerBreakStartYear}
                                 </div>
