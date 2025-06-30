@@ -41,8 +41,8 @@ const CareerModal = ({
   const [formData, setFormData] = useState({
     _id: item._id || "",
     industry: item.industry || "",
-    department: item.department || "146",
-    job_role: item.job_role || "291",
+    department: item.department || "",
+    job_role: item.job_role || "",
     job_type: item.job_type || "",
     employment_type: item.employment_type || "",
     work_location: item.work_location || [],
@@ -50,6 +50,8 @@ const CareerModal = ({
     expected_salary: item.expected_salary || 0,
     shift: item.shift || "",
   });
+
+  console.log("Form Data:", formData);
 
   useEffect(() => {
     if (loading || !show || !focusSection) return;
@@ -408,7 +410,9 @@ const CareerModal = ({
 
                 {/* Current job role */}
                 <div className="my-2 form-group" ref={job_role_section}>
-                  <label className="form-label">Job role</label>
+                  <label className="form-label">
+                    Job role ({formData.job_role || "not selected"})
+                  </label>
                   <span style={{ color: "red" }}>*</span>
                   <select
                     className="form-select form-control"
