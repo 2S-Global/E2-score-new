@@ -6,15 +6,15 @@ const ClgDisplay = ({ data, openModalRH }) => {
       <div className="resume-item emp-list pb-3">
         <div className="item title typ-14Bold">
           <span className="truncate emp-desg">
-            <strong>{data?.level}</strong>
+            <strong>{data?.level}</strong>{" "}
+            <i
+              className="la la-pencil-alt"
+              onClick={() => openModalRH(data.level_id, data._id)}
+              style={{ cursor: "pointer" }}
+            ></i>
             <br />
             {data?.courseName}
           </span>
-          <i
-            className="la la-pencil-alt"
-            onClick={() => openModalRH(data.level_id, data._id)}
-            style={{ cursor: "pointer" }}
-          ></i>
         </div>
 
         <div className="item experienceType typ-14Regular">
