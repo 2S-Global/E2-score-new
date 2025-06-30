@@ -80,6 +80,18 @@ const PersonalSection = () => {
     document.body.style.overflow = "auto";
   };
 
+  const getFormattedDOB = (dob) => {
+    if (!dob) return "";
+    const date = new Date(dob); // Input: UTC string like "2000-10-12T18:30:00.000Z"
+    const options = {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      timeZone: "Asia/Kolkata", // Force IST conversion
+    };
+    return date.toLocaleDateString("en-GB", options); // e.g., "13 Oct 2000"
+  };
+
   return (
     <>
       <MessageComponent
@@ -193,7 +205,7 @@ const PersonalSection = () => {
                     <div className="col-md-6 mb-4">
                       <strong>Date of Birth</strong>
                       <div className="typ-14Medium mt-1">
-                        {personalDetails.dob || (
+                        {getFormattedDOB(personalDetails.dob) || (
                           <span
                             className="text-primary fw-bold"
                             style={{ cursor: "pointer", fontSize: "16px" }}

@@ -1,18 +1,79 @@
-const QuickActionSidebar = ({ menu, menuToggleHandler, activeSection }) => {
+const QuickActionSidebar = ({
+  menu,
+  menuToggleHandler,
+  activeSection,
+  setShowPart1,
+  setShowPart2,
+  setShowPart3,
+  setShowPart4,
+  setShowPart5,
+}) => {
   const sections = [
-    { label: "Overview", targetId: "head-section" },
-    { label: "Resume Headline", targetId: "resume-headline" },
-    { label: "Profile Summary", targetId: "profile-summary" },
-    { label: "Key Skills", targetId: "key-skill" },
-    { label: "Personal Details", targetId: "personal" },
-    { label: "Education", targetId: "academy" },
-    { label: "Accomplishments", targetId: "acom" },
-    { label: "Career Profile", targetId: "career" },
-    { label: "Employment", targetId: "employment" },
-    { label: "IT skills", targetId: "it-key" },
-    { label: "Other Skills", targetId: "other-skill" },
-    { label: "Projects", targetId: "projects" },
-    { label: "Resume", targetId: "resume-box" },
+    {
+      label: "Overview",
+      targetId: "head-section",
+      onClick: () => setShowPart1(true),
+    },
+    {
+      label: "Resume Headline",
+      targetId: "resume-headline",
+      onClick: () => setShowPart1(true),
+    },
+    {
+      label: "Profile Summary",
+      targetId: "profile-summary",
+      onClick: () => setShowPart1(true),
+    },
+    {
+      label: "Key Skills",
+      targetId: "key-skill",
+      onClick: () => setShowPart1(true),
+    },
+    {
+      label: "Personal Details",
+      targetId: "personal",
+      onClick: () => setShowPart2(true),
+    },
+    {
+      label: "Education",
+      targetId: "academy",
+      onClick: () => setShowPart3(true),
+    },
+    {
+      label: "Accomplishments",
+      targetId: "acom",
+      onClick: () => setShowPart4(true),
+    },
+    {
+      label: "Career Profile",
+      targetId: "career",
+      onClick: () => setShowPart4(true),
+    },
+    {
+      label: "Employment",
+      targetId: "employment",
+      onClick: () => setShowPart5(true),
+    },
+    {
+      label: "IT skills",
+      targetId: "it-key",
+      onClick: () => setShowPart5(true),
+    },
+    {
+      label: "Other Skills",
+      targetId: "other-skill",
+      onClick: () => setShowPart5(true),
+    },
+    {
+      label: "Projects",
+      targetId: "projects",
+      onClick: () => setShowPart5(true),
+    },
+    {
+      label: "Resume",
+      targetId: "resume-box",
+      onClick: () => setShowPart5(true),
+    },
   ];
 
   const scrollToSection = (id) => {
@@ -61,12 +122,14 @@ const QuickActionSidebar = ({ menu, menuToggleHandler, activeSection }) => {
             {sections.map((section) => (
               <li
                 key={section.targetId}
-                className={`navItem ${
-                  activeSection === section.targetId ? "active" : ""
-                }`}
+                className={`navItem ${activeSection === section.targetId ? "active" : ""}`}
                 onClick={() => {
                   scrollToSection(section.targetId);
                   if (menuToggleHandler) menuToggleHandler();
+                  // remove section.onClick from here if not needed on click
+                }}
+                onMouseEnter={() => {
+                  if (section.onClick) section.onClick(); // trigger on hover
                 }}
               >
                 {section.label}

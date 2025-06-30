@@ -30,11 +30,13 @@ const EducationForm = ({
   const [university, setUniversity] = useState([]);
   const [colleges, setColleges] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [schools, setSchools] = useState([]); // Added for school level
 
   //tools
   const [stateselected, setStateselected] = useState(false);
   const [universityselected, setUniversityselected] = useState(false);
   const [collegeselected, setCollegeselected] = useState(false);
+  const [filteredSchools, setFilteredSchools] = useState(schools);
   const [filteredColleges, setFilteredColleges] = useState(colleges);
   const [filteredCourses, setFilteredCourses] = useState(courses);
   const [filteredUniversity, setFilteredUniversity] = useState(university);
@@ -45,6 +47,7 @@ const EducationForm = ({
   const [coursetype, setCoursetype] = useState(formData.level_type);
   const [universitySearch, setUniversitySearch] = useState(formData.university);
   const [collegeSearch, setCollegeSearch] = useState(formData.institute_name);
+  const [schoolSearch, setSchoolSearch] = useState(formData.school_name);
 
   //use Effect
   useEffect(() => {
@@ -188,9 +191,26 @@ const EducationForm = ({
       }
     };
 
+    const fetchschools = async () => {
+      setLoading(true);
+      try {
+        /* for now using university */
+        const response = await axios.get(
+          `${apiurl}/api/sql/dropdown/university_state?state_id=${formData.state}`
+        );
+        setSchools(response.data.data);
+        setFilteredSchools(response.data.data);
+      } catch (error) {
+        // console.error("Error fetching universities:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchuniversity();
     fetchboard();
     fetchmedium();
+    fetchschools();
   }, [formData.state]);
 
   useEffect(() => {
@@ -493,6 +513,11 @@ const EducationForm = ({
                       boardSearch={boardSearch}
                       setBoardSearch={setBoardSearch}
                       handleSelect={handleSelect}
+                      schoolSearch={schoolSearch}
+                      setSchoolSearch={setSchoolSearch}
+                      filteredSchools={filteredSchools}
+                      setFilteredSchools={setFilteredSchools}
+                      schools={schools}
                     />
                   ) : (
                     <DegreeForm

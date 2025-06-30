@@ -276,7 +276,7 @@ const CareerSection = () => {
                             )?.label
                           }
 
-                          {userdata.expected_salary}
+                          {userdata.expected_salary?.toLocaleString("en-IN")}
                         </>
                       ) : (
                         <>

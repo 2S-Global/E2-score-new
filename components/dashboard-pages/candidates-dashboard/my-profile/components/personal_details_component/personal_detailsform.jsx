@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, use } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Select from "react-select";
 import LanguageProficiency from "../academicbox_component/language";
@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import CustomizedProgressBars from "@/components/common/loader";
 import Disability from "./disability";
 import CareerBreak from "./carrer_break";
+import { tr } from "date-fns/locale";
 const PersonalInfoForm = ({
   formData,
   setFormData,
@@ -25,6 +26,21 @@ const PersonalInfoForm = ({
   const [marriageStatusList, setMarriageStatusList] = useState([]);
   const [categories, setCategories] = useState([]);
   const [UsaVisaList, setUsaVisaList] = useState([]);
+
+  const [renderLanguages, setRenderLanguages] = useState(false);
+
+  useEffect(() => {
+    console.log("focusSection changed:", focusSection);
+    if (!focusSection) {
+      setRenderLanguages(true);
+    }
+
+    if (focusSection === "languages") {
+      setRenderLanguages(true);
+    } else {
+      setRenderLanguages(false);
+    }
+  }, [focusSection]);
 
   //utlity
   const personalInfo = useRef(null);
@@ -69,6 +85,10 @@ const PersonalInfoForm = ({
     }
 
     setTimeout(() => {
+      if (focusSection === "languages") {
+        setRenderLanguages(true);
+        return;
+      }
       if (targetRef.current) {
         try {
           targetRef.current.scrollIntoView({
@@ -239,311 +259,332 @@ const PersonalInfoForm = ({
       ) : (
         <>
           <form className="default-form">
-            <div ref={personalInfo} id="personalInfo">
-              {/* Gender Selection */}
-              <div className="mb-3 form-group">
-                <label className="form-label">
-                  <b>Gender</b>
-                  <span style={{ color: "red" }}>*</span>
-                </label>
-                <div className="d-flex gap-2 flex-wrap">
-                  {Genders.map((gender) => (
-                    <button
-                      type="button"
-                      key={gender.id}
-                      onClick={(e) => handleSelect("gender", gender.id, e)}
-                      className={`btn option-btn rounded-pill ${
-                        formData.gender == gender.id ? "active" : ""
-                      }`}
-                    >
-                      {gender.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              {/* more info selection */}
-              <div className="mb-3 form-group">
-                <label className="form-label">
-                  <b>More Information</b>
-                </label>
-                <div className="d-flex gap-2 flex-wrap">
-                  {more_info_list.map((info) => (
-                    <button
-                      type="button"
-                      key={info.id}
-                      onClick={(e) =>
-                        handleMultiSelect("more_info", info.id, e)
-                      }
-                      className={`btn option-btn rounded-pill ${
-                        formData.more_info.includes(info.id) ? "active" : ""
-                      }`}
-                    >
-                      {info.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
+            {!renderLanguages && (
+              <>
+                <div ref={personalInfo} id="personalInfo">
+                  {/* Gender Selection */}
+                  <div className="mb-3 form-group">
+                    <label className="form-label">
+                      <b>Gender</b>
+                      <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <div className="d-flex gap-2 flex-wrap">
+                      {Genders.map((gender) => (
+                        <button
+                          type="button"
+                          key={gender.id}
+                          onClick={(e) => handleSelect("gender", gender.id, e)}
+                          className={`btn option-btn rounded-pill ${
+                            formData.gender == gender.id ? "active" : ""
+                          }`}
+                        >
+                          {gender.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  {/* more info selection */}
+                  <div className="mb-3 form-group">
+                    <label className="form-label">
+                      <b>More Information</b>
+                    </label>
+                    <div className="d-flex gap-2 flex-wrap">
+                      {more_info_list.map((info) => (
+                        <button
+                          type="button"
+                          key={info.id}
+                          onClick={(e) =>
+                            handleMultiSelect("more_info", info.id, e)
+                          }
+                          className={`btn option-btn rounded-pill ${
+                            formData.more_info.includes(info.id) ? "active" : ""
+                          }`}
+                        >
+                          {info.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
 
-              {/* Marital Status Section */}
-              <div className="mb-3 form-group">
-                <label className="form-label">
-                  <b>Marital Status</b>
-                </label>
-                <div className="d-flex gap-2 flex-wrap">
-                  {marriageStatusList.map((status) => (
-                    <button
-                      type="button"
-                      key={status.id}
-                      onClick={(e) =>
-                        handleSelect("marital_status", status.id, e)
-                      }
-                      className={`btn option-btn rounded-pill ${
-                        formData.marital_status == status.id ? "active" : ""
-                      }`}
-                    >
-                      {status.status}
-                    </button>
-                  ))}
-                </div>
-              </div>
+                  {/* Marital Status Section */}
+                  <div className="mb-3 form-group">
+                    <label className="form-label">
+                      <b>Marital Status</b>
+                    </label>
+                    <div className="d-flex gap-2 flex-wrap">
+                      {marriageStatusList.map((status) => (
+                        <button
+                          type="button"
+                          key={status.id}
+                          onClick={(e) =>
+                            handleSelect("marital_status", status.id, e)
+                          }
+                          className={`btn option-btn rounded-pill ${
+                            formData.marital_status == status.id ? "active" : ""
+                          }`}
+                        >
+                          {status.status}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
 
-              {/* Date of Birth Selection */}
-              <div className="mb-3 col-md-4 form-group" ref={dob} id="dob">
-                <label className="form-label d-block">
-                  <b>Date of Birth</b>
-                  <span style={{ color: "red" }}>*</span>
-                </label>
-                <DatePicker
-                  selected={formData.dob ? new Date(formData.dob) : null}
-                  onChange={handleDateChange}
-                  dateFormat="dd/MM/yyyy"
-                  className="form-control"
-                  maxDate={eighteenYearsAgo}
-                  showYearDropdown
-                  scrollableYearDropdown
-                  yearDropdownItemNumber={100}
-                  required
-                  placeholderText="dd/mm/yyyy"
-                  width="100%"
-                  withPortal
-                />
-              </div>
-            </div>
-            <div className="mb-3 form-group" ref={category} id="category">
-              <label className="form-label">
-                <b>Category</b>
-              </label>
-              <p className="text-muted" style={{ fontSize: "14px" }}>
-                Companies welcome people from various categories to bring
-                equality among all citizens.
-              </p>
-              <div className="d-flex gap-2 flex-wrap">
-                {categories.map((category) => (
-                  <button
-                    type="button"
-                    key={category.id}
-                    onClick={(e) => handleSelect("category", category.id, e)}
-                    className={`btn option-btn rounded-pill ${
-                      formData.category == category.id ? "active" : ""
-                    }`}
-                  >
-                    {category.category_name}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="row" ref={differentlyAbled} id="differentlyAbled">
-              <div className="mb-3 form-group">
-                <label className="form-label">
-                  <b>Are you differently abled?</b>
-                </label>
-                <div className="d-flex gap-3">
-                  {["Yes", "No"].map((option) => (
-                    <label key={option} className="form-check-label">
-                      <input
-                        type="radio"
-                        name="differently_abled"
-                        value={formData.differently_abled}
-                        checked={formData.differently_abled === option}
-                        onChange={() =>
+                  {/* Date of Birth Selection */}
+                  <div className="mb-3 col-md-4 form-group" ref={dob} id="dob">
+                    <label className="form-label d-block">
+                      <b>Date of Birth</b>
+                      <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <DatePicker
+                      selected={formData.dob ? new Date(formData.dob) : null}
+                      onChange={handleDateChange}
+                      dateFormat="dd/MM/yyyy"
+                      className="form-control"
+                      maxDate={eighteenYearsAgo}
+                      showYearDropdown
+                      scrollableYearDropdown
+                      yearDropdownItemNumber={100}
+                      required
+                      placeholderText="dd/mm/yyyy"
+                      width="100%"
+                      withPortal
+                    />
+                  </div>
+                </div>
+                <div className="mb-3 form-group" ref={category} id="category">
+                  <label className="form-label">
+                    <b>Category</b>
+                  </label>
+                  <p className="text-muted" style={{ fontSize: "14px" }}>
+                    Companies welcome people from various categories to bring
+                    equality among all citizens.
+                  </p>
+                  <div className="d-flex gap-2 flex-wrap">
+                    {categories.map((category) => (
+                      <button
+                        type="button"
+                        key={category.id}
+                        onClick={(e) =>
+                          handleSelect("category", category.id, e)
+                        }
+                        className={`btn option-btn rounded-pill ${
+                          formData.category == category.id ? "active" : ""
+                        }`}
+                      >
+                        {category.category_name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div
+                  className="row"
+                  ref={differentlyAbled}
+                  id="differentlyAbled"
+                >
+                  <div className="mb-3 form-group">
+                    <label className="form-label">
+                      <b>Are you differently abled?</b>
+                    </label>
+                    <div className="d-flex gap-3">
+                      {["Yes", "No"].map((option) => (
+                        <label key={option} className="form-check-label">
+                          <input
+                            type="radio"
+                            name="differently_abled"
+                            value={formData.differently_abled}
+                            checked={formData.differently_abled === option}
+                            onChange={() =>
+                              setFormData({
+                                ...formData,
+                                differently_abled: option,
+                              })
+                            }
+                            className="form-check-input me-2"
+                          />
+                          {option}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  {formData.differently_abled === "Yes" ? (
+                    <>
+                      <Disability
+                        formData={formData}
+                        setFormData={setFormData}
+                        apiurl={apiurl}
+                      />
+                    </>
+                  ) : null}
+                </div>
+
+                <div
+                  className="mb-3 form-group"
+                  ref={careerBreak}
+                  id="careerBreak"
+                >
+                  <label className="form-label">
+                    <b>Have you taken a career break?</b>
+                  </label>
+                  <div className="d-flex gap-3">
+                    {["Yes", "No"].map((option) => (
+                      <label key={option} className="form-check-label">
+                        <input
+                          type="radio"
+                          name="career_break"
+                          value={option}
+                          checked={formData.career_break === option}
+                          onChange={() =>
+                            setFormData({ ...formData, career_break: option })
+                          }
+                          className="form-check-input me-2"
+                        />
+                        {option}
+                      </label>
+                    ))}
+                  </div>
+
+                  {formData.career_break === "Yes" ? (
+                    <>
+                      <CareerBreak
+                        formData={formData}
+                        setFormData={setFormData}
+                        apiurl={apiurl}
+                        setWrongDate={setWrongDate}
+                      />
+                    </>
+                  ) : null}
+                </div>
+
+                <div ref={workPermit} id="workPermit">
+                  <div className="mb-3 form-group">
+                    <label className="form-label">
+                      <b>Work permit for USA</b>
+                    </label>
+                    <div className="d-flex gap-3">
+                      {/* Work permit for USA dropdown with type */}
+                      <select
+                        className="form-select"
+                        value={formData.usa_visa_type}
+                        onChange={(e) =>
                           setFormData({
                             ...formData,
-                            differently_abled: option,
+                            usa_visa_type: e.target.value,
                           })
                         }
-                        className="form-check-input me-2"
-                      />
-                      {option}
+                      >
+                        <option value="" disabled>
+                          Select Visa Type
+                        </option>
+                        {UsaVisaList.map((option) => (
+                          <option key={option.id} value={option.id}>
+                            {option.visa_name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="mb-3 form-group">
+                    <label className="form-label">
+                      <b>Work permit for other countries (Max 3)</b>
                     </label>
-                  ))}
-                </div>
-              </div>
-              {formData.differently_abled === "Yes" ? (
-                <>
-                  <Disability
-                    formData={formData}
-                    setFormData={setFormData}
-                    apiurl={apiurl}
-                  />
-                </>
-              ) : null}
-            </div>
-
-            <div className="mb-3 form-group" ref={careerBreak} id="careerBreak">
-              <label className="form-label">
-                <b>Have you taken a career break?</b>
-              </label>
-              <div className="d-flex gap-3">
-                {["Yes", "No"].map((option) => (
-                  <label key={option} className="form-check-label">
-                    <input
-                      type="radio"
-                      name="career_break"
-                      value={option}
-                      checked={formData.career_break === option}
-                      onChange={() =>
-                        setFormData({ ...formData, career_break: option })
+                    <Select
+                      isMulti
+                      options={countries}
+                      value={countries.filter((option) =>
+                        formData.work_permit_other_countries.includes(
+                          option.value
+                        )
+                      )}
+                      onChange={handleChange}
+                      placeholder="Tell us your location preferences to work"
+                      className="basic-multi-select"
+                      classNamePrefix="select"
+                      isOptionDisabled={(option) =>
+                        formData.work_permit_other_countries.length >= 3 &&
+                        !formData.work_permit_other_countries.includes(
+                          option.value
+                        )
                       }
-                      className="form-check-input me-2"
                     />
-                    {option}
-                  </label>
-                ))}
-              </div>
-
-              {formData.career_break === "Yes" ? (
-                <>
-                  <CareerBreak
-                    formData={formData}
-                    setFormData={setFormData}
-                    apiurl={apiurl}
-                    setWrongDate={setWrongDate}
-                  />
-                </>
-              ) : null}
-            </div>
-
-            <div ref={workPermit} id="workPermit">
-              <div className="mb-3 form-group">
-                <label className="form-label">
-                  <b>Work permit for USA</b>
-                </label>
-                <div className="d-flex gap-3">
-                  {/* Work permit for USA dropdown with type */}
-                  <select
-                    className="form-select"
-                    value={formData.usa_visa_type}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        usa_visa_type: e.target.value,
-                      })
-                    }
-                  >
-                    <option value="" disabled>
-                      Select Visa Type
-                    </option>
-                    {UsaVisaList.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.visa_name}
-                      </option>
-                    ))}
-                  </select>
+                  </div>
                 </div>
-              </div>
 
-              <div className="mb-3 form-group">
-                <label className="form-label">
-                  <b>Work permit for other countries (Max 3)</b>
-                </label>
-                <Select
-                  isMulti
-                  options={countries}
-                  value={countries.filter((option) =>
-                    formData.work_permit_other_countries.includes(option.value)
-                  )}
-                  onChange={handleChange}
-                  placeholder="Tell us your location preferences to work"
-                  className="basic-multi-select"
-                  classNamePrefix="select"
-                  isOptionDisabled={(option) =>
-                    formData.work_permit_other_countries.length >= 3 &&
-                    !formData.work_permit_other_countries.includes(option.value)
-                  }
+                <div className="" ref={address} id="address">
+                  <div className="mb-3 form-group">
+                    <label className="form-label">
+                      <b>Permanent address</b>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Enter Your Permanent address"
+                      name="permanent_address"
+                      value={formData.permanent_address}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          permanent_address: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="mb-3 form-group">
+                    <label className="form-label">
+                      <b>Hometown</b>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Enter Your Hometown"
+                      name="hometown"
+                      value={formData.hometown}
+                      onChange={(e) =>
+                        setFormData({ ...formData, hometown: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="mb-3 form-group">
+                    <label className="form-label">
+                      <b>Pincode</b>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Enter Your Pincode"
+                      name="pincode"
+                      value={formData.pincode}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        // Allow only digits
+                        if (/^\d{0,6}$/.test(value)) {
+                          setFormData({ ...formData, pincode: value });
+                        }
+                      }}
+                      onFocus={() => setOnPincode(true)}
+                      onBlur={() => setOnPincode(false)}
+                    />
+                    {formData.pincode.length > 0 &&
+                      formData.pincode.length !== 6 &&
+                      !onpincode && (
+                        <small className="text-danger">
+                          Pincode must be exactly 6 digits.
+                        </small>
+                      )}
+                  </div>
+                </div>
+              </>
+            )}
+            {/* render only if languages is true */}
+            {renderLanguages && (
+              <div ref={languages} id="languages">
+                <LanguageProficiency
+                  formData={formData}
+                  setFormData={setFormData}
+                  apiurl={apiurl}
                 />
               </div>
-            </div>
-
-            <div className="" ref={address} id="address">
-              <div className="mb-3 form-group">
-                <label className="form-label">
-                  <b>Permanent address</b>
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter Your Permanent address"
-                  name="permanent_address"
-                  value={formData.permanent_address}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      permanent_address: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className="mb-3 form-group">
-                <label className="form-label">
-                  <b>Hometown</b>
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter Your Hometown"
-                  name="hometown"
-                  value={formData.hometown}
-                  onChange={(e) =>
-                    setFormData({ ...formData, hometown: e.target.value })
-                  }
-                />
-              </div>
-              <div className="mb-3 form-group">
-                <label className="form-label">
-                  <b>Pincode</b>
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter Your Pincode"
-                  name="pincode"
-                  value={formData.pincode}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    // Allow only digits
-                    if (/^\d{0,6}$/.test(value)) {
-                      setFormData({ ...formData, pincode: value });
-                    }
-                  }}
-                  onFocus={() => setOnPincode(true)}
-                  onBlur={() => setOnPincode(false)}
-                />
-                {formData.pincode.length > 0 &&
-                  formData.pincode.length !== 6 &&
-                  !onpincode && (
-                    <small className="text-danger">
-                      Pincode must be exactly 6 digits.
-                    </small>
-                  )}
-              </div>
-            </div>
-            <div ref={languages} id="languages">
-              <LanguageProficiency
-                formData={formData}
-                setFormData={setFormData}
-                apiurl={apiurl}
-              />
-            </div>
+            )}
           </form>
         </>
       )}

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
+
 import MobileMenu from "../../../header/MobileMenu";
 import LoginPopup from "../../../common/form/login/LoginPopup";
 import DashboardCandidatesSidebar from "../../../header/DashboardCandidatesSidebar";
@@ -27,6 +28,49 @@ import HeadSection from "./components/HeadSection";
 import QuickActionSidebar from "./components/quickaction";
 
 const index = () => {
+  const [showPart1, setShowPart1] = useState(true);
+  const [showPart2, setShowPart2] = useState(false);
+  const [showPart3, setShowPart3] = useState(false);
+  const [showPart4, setShowPart4] = useState(false);
+  const [showPart5, setShowPart5] = useState(false);
+
+  useEffect(() => {
+    const timers = [];
+
+    timers.push(setTimeout(() => setShowPart1(true), 300000)); // Show after 300ms
+    timers.push(setTimeout(() => setShowPart2(true), 9000000)); // After 900ms
+    timers.push(setTimeout(() => setShowPart5(true), 15000000));
+    timers.push(setTimeout(() => setShowPart4(true), 200000));
+    timers.push(setTimeout(() => setShowPart3(true), 10000000));
+
+    return () => timers.forEach(clearTimeout); // Cleanup on unmount
+  }, []);
+
+  const useObserver = (callback, options = {}) => {
+    const ref = useRef();
+
+    useEffect(() => {
+      const observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          callback();
+        }
+      }, options);
+
+      if (ref.current) {
+        observer.observe(ref.current);
+      }
+
+      return () => observer.disconnect();
+    }, [callback]);
+
+    return ref;
+  };
+
+  const part1Ref = useObserver(() => setShowPart2(true));
+  const part2Ref = useObserver(() => setShowPart3(true));
+  const part3Ref = useObserver(() => setShowPart4(true));
+  const part4Ref = useObserver(() => setShowPart5(true));
+
   return (
     <>
       <div
@@ -47,7 +91,13 @@ const index = () => {
         <div className="row">
           {/*   <DashboardCandidatesSidebar /> */}
           <div className="col-lg-3 col-md-3">
-            <QuickActionSidebar />
+            <QuickActionSidebar
+              setShowPart1={setShowPart1}
+              setShowPart2={setShowPart2}
+              setShowPart3={setShowPart3}
+              setShowPart4={setShowPart4}
+              setShowPart5={setShowPart5}
+            />
           </div>
 
           {/* <!-- End Candidates Sidebar Menu --> */}
@@ -65,53 +115,69 @@ const index = () => {
                 {/* Quick action section */}
 
                 <div className="col-lg-12 col-md-12">
-                  <div id="part1">
-                    <div id="head-section">
-                      <HeadSection />
+                  {showPart1 && (
+                    <div id="part1" ref={part1Ref}>
+                      <div id="head-section">
+                        <HeadSection />
+                      </div>
+                      <div id="resume-headline">
+                        <ResumeHeadlineSection />
+                      </div>
+                      <div id="profile-summary">
+                        <ProfilesumerySection />
+                      </div>
+                      <div id="key-skill">
+                        <Keyskillsection />
+                      </div>
                     </div>
-                    <div id="resume-headline">
-                      <ResumeHeadlineSection />
+                  )}
+
+                  {showPart2 && (
+                    <div id="part2" ref={part2Ref}>
+                      <div id="personal">
+                        <PersonalSection />
+                      </div>
                     </div>
-                    <div id="profile-summary">
-                      <ProfilesumerySection />
+                  )}
+
+                  {showPart3 && (
+                    <div id="part3" ref={part3Ref}>
+                      <div id="academy">
+                        <Academysection />
+                      </div>
                     </div>
-                    <div id="key-skill">
-                      <Keyskillsection />
+                  )}
+
+                  {showPart4 && (
+                    <div id="part4" ref={part4Ref}>
+                      <div id="acom">
+                        <AcomSection />
+                      </div>
+                      <div id="career">
+                        <Carrersection />
+                      </div>
                     </div>
-                  </div>
-                  <div id="personal">
-                    <PersonalSection />
-                  </div>
-                  <div id="academy">
-                    <Academysection />
-                  </div>
+                  )}
 
-                  <div id="acom">
-                    <AcomSection />
-                  </div>
-
-                  <div id="career">
-                    <Carrersection />
-                  </div>
-
-                  <div id="employment">
-                    <Employsectionmain />
-                  </div>
-
-                  <div id="it-key">
-                    <ItkeySection />
-                  </div>
-
-                  <div id="other-skill">
-                    <OtherskillSection />
-                  </div>
-
-                  <div id="projects">
-                    <ProjectSection />
-                  </div>
-                  <div id="resume-box">
-                    <ResumeBox />
-                  </div>
+                  {showPart5 && (
+                    <div id="part5">
+                      <div id="employment">
+                        <Employsectionmain />
+                      </div>
+                      <div id="it-key">
+                        <ItkeySection />
+                      </div>
+                      <div id="other-skill">
+                        <OtherskillSection />
+                      </div>
+                      <div id="projects">
+                        <ProjectSection />
+                      </div>
+                      <div id="resume-box">
+                        <ResumeBox />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
               {/* End .row */}

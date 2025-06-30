@@ -20,6 +20,11 @@ const SchoolForm = ({
   filteredBoard,
   setFilteredBoard,
   handleSelect,
+  schoolSearch,
+  setSchoolSearch,
+  filteredSchools,
+  setFilteredSchools,
+  schools,
 }) => {
   return (
     <>
@@ -49,6 +54,28 @@ const SchoolForm = ({
             setFormData((prevFormData) => ({
               ...prevFormData,
               board: value,
+            }));
+          }}
+          handleFocus={handleFocus}
+          handleBlur={handleBlur}
+          isFocused={isFocused}
+          setIsFocused={setIsFocused}
+        />
+
+        <SearchableInput
+          label="School Name"
+          name="school_name"
+          value={formData.school_name || schoolSearch}
+          onChange={(e) => {
+            handleSearchChange(e, setSchoolSearch, setFilteredSchools, schools);
+            handleChange(e);
+          }}
+          options={filteredSchools}
+          onSelect={(value) => {
+            handleSelect(value, setSchoolSearch, setFilteredSchools);
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              school_name: value,
             }));
           }}
           handleFocus={handleFocus}
