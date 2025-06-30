@@ -29,6 +29,7 @@ const EducationModal = ({
     eng_marks: "",
     math_marks: "",
     university: "",
+    school_name: "",
     institute_name: "",
     course_name: "",
     course_type: "",
@@ -77,6 +78,7 @@ const EducationModal = ({
             setFormData({
               ...formData,
               _id: responseData._id || "",
+              school_name: responseData.schoolName || "",
               level: responseData.level || "",
               state: responseData.state || "",
               board: responseData.board || "",

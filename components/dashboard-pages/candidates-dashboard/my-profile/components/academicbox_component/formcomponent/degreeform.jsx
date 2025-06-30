@@ -52,7 +52,7 @@ const DegreeForm = ({
         <SearchableInput
           label="University Name"
           name="university"
-          value={universitySearch}
+          value={formData.university || universitySearch}
           onChange={(e) => {
             handleSearchChange(
               e,
@@ -60,6 +60,7 @@ const DegreeForm = ({
               setFilteredUniversity,
               university
             );
+            handleChange(e);
           }}
           options={filteredUniversity}
           onSelect={(value) => {
@@ -85,7 +86,7 @@ const DegreeForm = ({
           <SearchableInput
             label="Institute Name"
             name="institute_name"
-            value={collegeSearch}
+            value={formData.institute_name || collegeSearch}
             onChange={(e) => {
               handleSearchChange(
                 e,
@@ -93,6 +94,7 @@ const DegreeForm = ({
                 setFilteredColleges,
                 colleges
               );
+              handleChange(e);
             }}
             options={filteredColleges}
             onSelect={(value) => {

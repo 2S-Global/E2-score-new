@@ -38,10 +38,11 @@ const SchoolForm = ({
         <SearchableInput
           label="Board"
           name="board"
-          value={boardSearch}
-          onChange={(e) =>
-            handleSearchChange(e, setBoardSearch, setFilteredBoard, listboard)
-          }
+          value={formData.board || boardSearch}
+          onChange={(e) => {
+            handleSearchChange(e, setBoardSearch, setFilteredBoard, listboard);
+            handleChange(e);
+          }}
           options={filteredBoard}
           onSelect={(value) => {
             handleSelect(value, setBoardSearch, setFilteredBoard);
