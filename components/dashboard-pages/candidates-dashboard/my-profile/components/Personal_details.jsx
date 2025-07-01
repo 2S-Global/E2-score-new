@@ -331,46 +331,48 @@ const PersonalSection = () => {
 
                 {/* Language Table */}
                 {personalDetails.languages.length > 0 && (
-                  <table className="table mt-3">
-                    <thead>
-                      <tr>
-                        <th>Language</th>
-                        <th>Proficiency</th>
-                        <th>Read</th>
-                        <th>Write</th>
-                        <th>Speak</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {personalDetails.languages.map((lang, index) => (
-                        <tr key={index}>
-                          <td>{lang.language}</td>
-                          <td>{lang.proficiency}</td>
-                          <td>
-                            {lang.read ? (
-                              <CircleCheck color="#00A85A" size={18} />
-                            ) : (
-                              <CircleX color="#FF0000" size={18} />
-                            )}
-                          </td>
-                          <td>
-                            {lang.write ? (
-                              <CircleCheck color="#00A85A" size={18} />
-                            ) : (
-                              <CircleX color="#FF0000" size={18} />
-                            )}
-                          </td>
-                          <td>
-                            {lang.speak ? (
-                              <CircleCheck color="#00A85A" size={18} />
-                            ) : (
-                              <CircleX color="#FF0000" size={18} />
-                            )}
-                          </td>
+                  <div className="table-responsive mt-3">
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th>Language</th>
+                          <th>Proficiency</th>
+                          <th>Read</th>
+                          <th>Write</th>
+                          <th>Speak</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {personalDetails.languages.map((lang, index) => (
+                          <tr key={index}>
+                            <td>{lang.language}</td>
+                            <td>{lang.proficiency}</td>
+                            <td>
+                              {lang.read ? (
+                                <CircleCheck color="#00A85A" size={18} />
+                              ) : (
+                                <CircleX color="#FF0000" size={18} />
+                              )}
+                            </td>
+                            <td>
+                              {lang.write ? (
+                                <CircleCheck color="#00A85A" size={18} />
+                              ) : (
+                                <CircleX color="#FF0000" size={18} />
+                              )}
+                            </td>
+                            <td>
+                              {lang.speak ? (
+                                <CircleCheck color="#00A85A" size={18} />
+                              ) : (
+                                <CircleX color="#FF0000" size={18} />
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 )}
               </div>
             </>
