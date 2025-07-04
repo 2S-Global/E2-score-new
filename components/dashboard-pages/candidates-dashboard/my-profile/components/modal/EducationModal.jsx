@@ -78,7 +78,7 @@ const EducationModal = ({
             setFormData({
               ...formData,
               _id: responseData._id || "",
-              school_name: responseData.schoolName || "",
+              school_name: responseData.school_name || "",
               level: responseData.level || "",
               state: responseData.state || "",
               board: responseData.board || "",
