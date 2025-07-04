@@ -191,6 +191,12 @@ const EducationForm = ({
       }
     };
 
+    fetchuniversity();
+    fetchboard();
+    fetchmedium();
+  }, [formData.state]);
+
+  useEffect(() => {
     const fetchschools = async () => {
       setLoading(true);
       try {
@@ -206,12 +212,8 @@ const EducationForm = ({
         setLoading(false);
       }
     };
-
-    fetchuniversity();
-    fetchboard();
-    fetchmedium();
     fetchschools();
-  }, [formData.state]);
+  }, [formData.board]);
 
   useEffect(() => {
     if (!formData.university) return;
