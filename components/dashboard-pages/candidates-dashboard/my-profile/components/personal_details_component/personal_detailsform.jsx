@@ -461,29 +461,29 @@ const PersonalInfoForm = ({
                       <b>Do you have a Work permit for USA</b>
                     </label>
                     <div className="d-flex gap-3">
-                      {/* Work permit for USA dropdown with type */}
                       <select
                         className="form-select"
-                        value={!!formData.have_usa_visa}
+                        value={formData.have_usa_visa}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
-                            have_usa_visa: e.target.value,
+                            have_usa_visa: e.target.value === "true",
                           })
                         }
                       >
+                        <option value="">Select</option>
                         <option value="true">Yes</option>
                         <option value="false">No</option>
                       </select>
                     </div>
                   </div>
+
                   {formData.have_usa_visa && (
                     <div className="mb-3 form-group">
                       <label className="form-label">
                         <b>Work permit for USA</b>
                       </label>
                       <div className="d-flex gap-3">
-                        {/* Work permit for USA dropdown with type */}
                         <select
                           className="form-select"
                           value={formData.usa_visa_type}
