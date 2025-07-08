@@ -169,7 +169,7 @@ const KeySkillsModal = ({
                         key={index}
                         className="badge bg-secondary me-2 p-2 mt-2 "
                       >
-                        {skill}{" "}
+                        {skill.charAt(0).toUpperCase() + skill.slice(1)}{" "}
                         <button
                           className="btn btn-sm btn-light ms-2"
                           onClick={() => handleRemoveSkill(skill)}
@@ -208,7 +208,7 @@ const KeySkillsModal = ({
                         className="btn btn-outline-secondary m-1"
                         onClick={() => handleSelectSuggested(skill)}
                       >
-                        {skill}
+                        {skill.charAt(0).toUpperCase() + skill.slice(1)}
                       </button>
                     ))}
                   </div>

@@ -458,31 +458,54 @@ const PersonalInfoForm = ({
                 <div ref={workPermit} id="workPermit">
                   <div className="mb-3 form-group">
                     <label className="form-label">
-                      <b>Work permit for USA</b>
+                      <b>Do you have a Work permit for USA</b>
                     </label>
                     <div className="d-flex gap-3">
                       {/* Work permit for USA dropdown with type */}
                       <select
                         className="form-select"
-                        value={formData.usa_visa_type}
+                        value={!!formData.have_usa_visa}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
-                            usa_visa_type: e.target.value,
+                            have_usa_visa: e.target.value,
                           })
                         }
                       >
-                        <option value="" disabled>
-                          Select Visa Type
-                        </option>
-                        {UsaVisaList.map((option) => (
-                          <option key={option.id} value={option.id}>
-                            {option.visa_name}
-                          </option>
-                        ))}
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
                       </select>
                     </div>
                   </div>
+                  {formData.have_usa_visa && (
+                    <div className="mb-3 form-group">
+                      <label className="form-label">
+                        <b>Work permit for USA</b>
+                      </label>
+                      <div className="d-flex gap-3">
+                        {/* Work permit for USA dropdown with type */}
+                        <select
+                          className="form-select"
+                          value={formData.usa_visa_type}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              usa_visa_type: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="" disabled>
+                            Select Visa Type
+                          </option>
+                          {UsaVisaList.map((option) => (
+                            <option key={option.id} value={option.id}>
+                              {option.visa_name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="mb-3 form-group">
                     <label className="form-label">

@@ -38,6 +38,7 @@ const PersonalModal = ({
     hometown: "",
     pincode: "",
     languages: [],
+    have_usa_visa: false,
   });
 
   const formatPersonalDetailsResponse = (data) => {
@@ -47,6 +48,7 @@ const PersonalModal = ({
       more_info: Array.isArray(data.more_info)
         ? data.more_info.map(String)
         : [],
+      have_usa_visa: !!data.have_usa_visa,
       marital_status: String(data.marital_status || ""),
       category: String(data.category || ""),
       differently_abled: data.differently_abled || "",
