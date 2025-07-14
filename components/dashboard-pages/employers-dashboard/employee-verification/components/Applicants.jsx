@@ -1,8 +1,20 @@
 import Link from "next/link";
 import candidatesData from "../../../../../data/candidates";
 import Image from "next/image";
+import Modal from "./modal";
+import { useState } from "react";
 
 const Applicants = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModalRH = () => {
+    setIsModalOpen(true);
+    document.body.style.overflow = "hidden"; // Disable background scrolling
+  };
+  const closeModalRH = () => {
+    setIsModalOpen(false);
+    document.body.style.overflow = "auto"; // Re-enable background scrolling
+  };
   return (
     <>
       {candidatesData.slice(17, 23).map((candidate) => (
@@ -40,11 +52,11 @@ const Applicants = () => {
             <div className="option-box">
               <ul className="option-list">
                 <li>
-                  <button data-text="View Aplication">
+                  <button data-text="View Aplication" onClick={openModalRH}>
                     <span className="la la-eye"></span>
                   </button>
                 </li>
-                <li>
+                {/*  <li>
                   <button data-text="Approve Aplication">
                     <span className="la la-check"></span>
                   </button>
@@ -53,7 +65,7 @@ const Applicants = () => {
                   <button data-text="Reject Aplication">
                     <span className="la la-times-circle"></span>
                   </button>
-                </li>
+                </li> */}
                 <li>
                   <button data-text="Delete Aplication">
                     <span className="la la-trash"></span>
@@ -65,6 +77,8 @@ const Applicants = () => {
           </div>
         </div>
       ))}
+
+      <Modal show={isModalOpen} onClose={closeModalRH} />
     </>
   );
 };
