@@ -11,7 +11,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 
 const DashboardHeader = () => {
-  const [navbar, setNavbar] = useState(false);
+  const [navbar, setNavbar] = useState(true);
   const [userData, setUserData] = useState();
   const changeBackground = () => {
     if (window.scrollY >= 0) {
@@ -24,7 +24,7 @@ const DashboardHeader = () => {
   useEffect(() => {
     window.addEventListener("scroll", changeBackground);
 
-        const fetchSwitchedRoleUser = async () => {
+    const fetchSwitchedRoleUser = async () => {
       try {
         const apiurl = process.env.NEXT_PUBLIC_API_URL;
         const token = localStorage.getItem("employer_token"); // Or whichever token you're using
@@ -47,7 +47,7 @@ const DashboardHeader = () => {
     fetchSwitchedRoleUser();
   }, []);
 
-    const router = useRouter();
+  const router = useRouter();
 
   return (
     // <!-- Main Header-->
@@ -109,59 +109,55 @@ const DashboardHeader = () => {
                 <span className="name">My Account</span>
               </a>
 
-          <ul className="dropdown-menu">
-                          {employerMenuData.map((item) => (
-                            <li
-                              className={`${
-                                isActiveLink(item.routePath, usePathname())
-                                  ? "active"
-                                  : ""
-                              } mb-1`}
-                              key={item.id}
-                            >
-                              <Link href={item.routePath}>
-                                <i className={`la ${item.icon}`}></i> {item.name}
-                              </Link>
-                            </li>
+              <ul className="dropdown-menu">
+                {employerMenuData.map((item) => (
+                  <li
+                    className={`${
+                      isActiveLink(item.routePath, usePathname())
+                        ? "active"
+                        : ""
+                    } mb-1`}
+                    key={item.id}
+                  >
+                    <Link href={item.routePath}>
+                      <i className={`la ${item.icon}`}></i> {item.name}
+                    </Link>
+                  </li>
+                ))}
 
+                <li
+                  className={`${
+                    isActiveLink("/", usePathname()) ? "active" : ""
+                  } mb-1`}
+                  key={11}
+                >
+                  <Link href="/" onClick={() => localStorage.clear()}>
+                    <i className={`la la-sign-out`}></i>Logout
+                  </Link>
+                </li>
+                {userData && (
+                  <>
+                    <li>
+                      <hr className="dropdown-divider" />
+                    </li>
 
-                          ))}
+                    <li>
+                      <button
+                        className="dropdown-item"
+                        onClick={() => {
+                          const token = localStorage.getItem("employer_token");
 
-                          
-                      <li
-            className={`${
-              isActiveLink("/", usePathname()) ? "active" : ""
-            } mb-1`}
-            key={11}
- 
-          >
-            <Link href="/" onClick={() => localStorage.clear()}>
-              <i className={`la la-sign-out`}></i>Logout
-            </Link>
-          </li>
-                          {userData && (
-                            <>
-                              <li>
-                                <hr className="dropdown-divider" />
-                              </li>
-          
-                              <li>
-                                <button
-                                  className="dropdown-item"
-                                  onClick={() => {
-                                    const token = localStorage.getItem("employer_token");
-          
-                                    localStorage.setItem("Institute_token", token);
-                                    //  console.log(localStorage.getItem("employer_token"));
-                                    router.replace("/institute-dashboard/dashboard");
-                                  }}
-                                >
-                                  Switch to Institute
-                                </button>
-                              </li>
-                            </>
-                          )}
-                        </ul>
+                          localStorage.setItem("Institute_token", token);
+                          //  console.log(localStorage.getItem("employer_token"));
+                          router.replace("/institute-dashboard/dashboard");
+                        }}
+                      >
+                        Switch to Institute
+                      </button>
+                    </li>
+                  </>
+                )}
+              </ul>
             </div>
             {/* End dropdown */}
           </div>

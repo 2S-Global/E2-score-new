@@ -6,7 +6,14 @@ module.exports = [
     routePath: "/employers-dashboard/dashboard",
     active: "active",
   },
- 
+  {
+    id: 2,
+    name: "Employee Verification",
+    icon: "la-user-tie",
+    routePath: "/employers-dashboard/employee-verification",
+    active: "",
+  },
+
   {
     id: 14,
     name: "Change Password",
@@ -17,9 +24,8 @@ module.exports = [
   // {
   //   id: 15,
   //   name: "Logout",
-  //   icon: "la-sign-out",     
+  //   icon: "la-sign-out",
   //   routePath: "/",
   //   active: "",
   // },
-
 ];
