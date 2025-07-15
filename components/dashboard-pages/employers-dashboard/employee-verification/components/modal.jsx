@@ -18,6 +18,7 @@ const Modal = ({ show, onClose }) => {
     Verified: false,
     designation_verified: false,
     duration_verified: false,
+    employmenttype_verified: false,
     Serverd_notice_period: false,
     has_noc: false,
     has_due: false,
@@ -202,6 +203,22 @@ const Modal = ({ show, onClose }) => {
                         htmlFor="verifiedSwitch"
                       >
                         Verified
+                      </label>
+                    </div>
+
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="verifiedSwitch"
+                        checked={formdata.employmenttype_verified}
+                        onChange={handleToggle("employmenttype_verified")}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="verifiedSwitch"
+                      >
+                        Employment Type Verified
                       </label>
                     </div>
 
