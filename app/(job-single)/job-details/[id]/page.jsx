@@ -1,4 +1,6 @@
 "use client";
+import { use } from "react";
+import { useParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import jobs from "@/data/job-featured";
 import LoginPopup from "@/components/common/form/login/LoginPopup";
@@ -15,7 +17,8 @@ import JobDetailsDescriptions from "@/components/job-single-pages/shared-compone
 import ApplyJobModalContent from "@/components/job-single-pages/shared-components/ApplyJobModalContent";
 import Image from "next/image";
 
-const JobSingleDynamicV1 = ({ params }) => {
+const JobSingleDynamicV1 = () => {
+  const params = useParams(); // ✅ Don't wrap it with `use()`
   const id = params.id;
   const company = jobs.find((item) => item.id == id) || jobs[0];
 
@@ -170,19 +173,19 @@ const JobSingleDynamicV1 = ({ params }) => {
                     {/* <!-- Job Overview --> */}
                     <h4 className="widget-title">Job Overview</h4>
                     <JobOverView />
-
+                    {/* if you want to add map then uncomment this . but dont uncommint in dev mode  */}
                     {/* <!-- Map Widget --> */}
-                    <h4 className="widget-title mt-5">Job Location</h4>
+                    {/* <h4 className="widget-title mt-5">Job Location</h4>
                     <div className="widget-content">
                       <div className="map-outer">
                         <div style={{ height: "300px", width: "100%" }}>
                           <MapJobFinder />
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                     {/* <!--  Map Widget --> */}
 
-                    <h4 className="widget-title">Job Skills</h4>
+                    <h4 className="widget-title mt-2">Job Skills</h4>
                     <div className="widget-content">
                       <JobSkills />
                     </div>
