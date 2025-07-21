@@ -18,7 +18,7 @@ const PostBoxForm = () => {
     <form className="default-form">
       <div className="row">
         {/* <!-- Input --> */}
-        <div className="form-group col-lg-12 col-md-12">
+        <div className="form-group col-lg-12 col-md-12 mt-2">
           <label>Job Title</label>
           <input type="text" name="name" placeholder="Title" />
         </div>
