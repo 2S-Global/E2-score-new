@@ -1,191 +1,154 @@
 import Image from "next/image";
-import SearchBox from "./SearchBox";
+
+const users = [
+  {
+    name: "Darlene Robertson",
+    image: "candidate-1.png",
+    unread: 0,
+    role: "Team Lead",
+    active: true,
+  },
+  {
+    name: "Jane Cooper",
+    image: "candidate-2.png",
+    unread: 2,
+    role: "UI Designer",
+    active: false,
+  },
+  {
+    name: "Arlene McCoy",
+    image: "candidate-3.png",
+    unread: 2,
+    role: "Backend Dev",
+    active: true,
+  },
+  {
+    name: "Albert Flores",
+    image: "candidate-4.png",
+    unread: 0,
+    role: "Project Manager",
+    active: true,
+  },
+  {
+    name: "Williamson",
+    image: "candidate-5.png",
+    unread: 2,
+    role: "QA Engineer",
+    active: false,
+  },
+  {
+    name: "Kristin Watson",
+    image: "candidate-6.png",
+    unread: 0,
+    role: "Data Analyst",
+    active: false,
+  },
+  {
+    name: "Annette Black",
+    image: "candidate-7.png",
+    unread: 0,
+    role: "Product Owner",
+    active: true,
+  },
+  {
+    name: "Jacob Jones",
+    image: "candidate-8.png",
+    unread: 0,
+    role: "Mobile Dev",
+    active: false,
+  },
+];
 
 const ChatboxContactList = () => {
   return (
-    <ul className="contacts">
-      <li>
-        <a href="#">
-          <div className="d-flex bd-highlight">
-            <div className="img_cont">
-              <Image
-                src="/images/resource/candidate-1.png"
-                className="rounded-circle user_img"
-                alt="chatbox avatar"
-                width={90}
-                height={90}
-              />
-            </div>
-            <div className="user_info">
-              <span>Darlene Robertson</span>
-              <p> Head of Development</p>
-            </div>
-            <span className="info">35 mins</span>
-          </div>
-        </a>
-      </li>
-      {/* End single Contact List */}
+    <>
+      <ul className="list-unstyled mb-0">
+        {users.map((user, idx) => (
+          <li className="mb-2" key={idx}>
+            <a
+              href="#"
+              className="text-decoration-none text-dark px-2 py-2 d-block rounded hover-bg-light"
+            >
+              <div className="d-flex align-items-center">
+                <div className="avatar-wrapper me-3 position-relative">
+                  <Image
+                    src={`/images/resource/${user.image}`}
+                    alt={user.name}
+                    width={40}
+                    height={40}
+                    className="avatar-img"
+                  />
+                  <span
+                    className={`status-dot position-absolute ${
+                      user.active ? "bg-success" : "bg-secondary"
+                    }`}
+                    title={user.active ? "Active" : "Offline"}
+                  ></span>
+                </div>
 
-      <li>
-        <a href="#">
-          <div className="d-flex bd-highlight">
-            <div className="img_cont">
-              <Image
-                src="/images/resource/candidate-2.png"
-                className="rounded-circle user_img"
-                alt="chatbox avatar"
-                width={90}
-                height={90}
-              />
-            </div>
-            <div className="user_info">
-              <span>Jane Cooper</span>
-              <p>Head of Development</p>
-            </div>
-            <span className="info">
-              35 mins <span className="count">2</span>
-            </span>
-          </div>
-        </a>
-      </li>
-      {/* End single Contact List */}
+                <div className="flex-grow-1">
+                  <h6 className="mb-1 fw-semibold">{user.name}</h6>
+                  <small className="text-muted">{user.role}</small>
+                </div>
 
-      <li>
-        <a href="#">
-          <div className="d-flex bd-highlight">
-            <div className="img_cont">
-              <Image
-                src="/images/resource/candidate-3.png"
-                className="rounded-circle user_img"
-                alt="chatbox avatar"
-                width={90}
-                height={90}
-              />
-            </div>
-            <div className="user_info">
-              <span>Arlene McCoy</span>
-              <p>Head of Development</p>
-            </div>
-            <span className="info">
-              35 mins <span className="count bg-success">2</span>
-            </span>
-          </div>
-        </a>
-      </li>
-      {/* End single Contact List */}
+                <div className="text-end">
+                  <small className="text-muted d-block">35 mins</small>
+                  {user.unread > 0 && (
+                    <span className="badge bg-primary rounded-pill mt-1">
+                      {user.unread}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
 
-      <li>
-        <a href="#">
-          <div className="d-flex bd-highlight">
-            <div className="img_cont">
-              <Image
-                src="/images/resource/candidate-4.png"
-                className="rounded-circle user_img"
-                alt="chatbox avatar"
-                width={90}
-                height={90}
-              />
-            </div>
-            <div className="user_info">
-              <span>Albert Flores</span>
-              <p>Head of Development</p>
-            </div>
-            <span className="info">35 mins</span>
-          </div>
-        </a>
-      </li>
-      {/* End single Contact List */}
+      <style jsx>{`
+        ul {
+          max-height: 100%;
+          overflow-y: auto;
+        }
 
-      <li className="active">
-        <a href="#">
-          <div className="d-flex bd-highlight">
-            <div className="img_cont">
-              <Image
-                src="/images/resource/candidate-5.png"
-                className="rounded-circle user_img"
-                alt="chatbox avatar"
-                width={90}
-                height={90}
-              />
-            </div>
-            <div className="user_info">
-              <span>Williamson</span>
-              <p>Head of Development</p>
-            </div>
-            <span className="info">
-              35 mins <span className="count bg-warning">2</span>
-            </span>
-          </div>
-        </a>
-      </li>
-      {/* End single Contact List */}
+        .hover-bg-light:hover {
+          background-color: #f8f9fa;
+        }
 
-      <li>
-        <a href="#">
-          <div className="d-flex bd-highlight">
-            <div className="img_cont">
-              <Image
-                src="/images/resource/candidate-6.png"
-                className="rounded-circle user_img"
-                alt="chatbox avatar"
-                width={90}
-                height={90}
-              />
-            </div>
-            <div className="user_info">
-              <span>Kristin Watson</span>
-              <p>Head of Development</p>
-            </div>
-            <span className="info">35 mins</span>
-          </div>
-        </a>
-      </li>
-      {/* End single Contact List */}
+        h6 {
+          font-size: 0.95rem;
+        }
 
-      <li>
-        <a href="#">
-          <div className="d-flex bd-highlight">
-            <div className="img_cont">
-              <Image
-                src="/images/resource/candidate-7.png"
-                className="rounded-circle user_img"
-                alt="chatbox avatar"
-                width={90}
-                height={90}
-              />
-            </div>
-            <div className="user_info">
-              <span>Annette Black</span>
-              <p>Head of Development</p>
-            </div>
-            <span className="info">35 mins</span>
-          </div>
-        </a>
-      </li>
-      {/* End single Contact List */}
+        small {
+          font-size: 0.8rem;
+        }
 
-      <li>
-        <a href="#">
-          <div className="d-flex bd-highlight">
-            <div className="img_cont">
-              <Image
-                src="/images/resource/candidate-8.png"
-                className="rounded-circle user_img"
-                alt="chatbox avatar"
-                width={90}
-                height={90}
-              />
-            </div>
-            <div className="user_info">
-              <span>Jacob Jones</span>
-              <p>Head of Development</p>
-            </div>
-            <span className="info">35 mins</span>
-          </div>
-        </a>
-      </li>
-      {/* End single Contact List */}
-    </ul>
+        .avatar-wrapper {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          overflow: hidden;
+          position: relative;
+        }
+
+        .avatar-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+
+        .status-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          border: 2px solid #fff;
+          bottom: 0;
+          right: 0;
+          transform: translate(25%, 25%);
+        }
+      `}</style>
+    </>
   );
 };
 

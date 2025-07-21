@@ -12,7 +12,7 @@ const ChatBoxContentField = () => {
               height={48}
               src="/images/resource/candidate-8.png"
               alt="candidates"
-              className="rounded-circle user_img"
+              className=""
             />
           </div>
           <div className="user_info">
