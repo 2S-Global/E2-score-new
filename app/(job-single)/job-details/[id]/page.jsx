@@ -173,7 +173,7 @@ const JobSingleDynamicV1 = () => {
                     {/* <!-- Job Overview --> */}
                     <h4 className="widget-title">Job Overview</h4>
                     <JobOverView />
-                    {/* if you want to add map then uncomment this . but dont uncommint in dev mode  */}
+                    {/* if you want to add map then uncomment this . but dont uncommint in dev mode without map reconfiguration */}
                     {/* <!-- Map Widget --> */}
                     {/* <h4 className="widget-title mt-5">Job Location</h4>
                     <div className="widget-content">
