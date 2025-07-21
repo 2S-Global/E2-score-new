@@ -68,24 +68,25 @@ const Index = () => {
               </div>
             </div>
             {/* End .col */}
+          </div>
 
-            <div className="col-lg-12">
-              {/* <!-- applicants Widget --> */}
-              <div className="applicants-widget ls-widget">
-                <div className="widget-title">
-                  <h4>Recent Applicants</h4>
-                </div>
-                <div className="widget-content">
-                  <div className="row">
-                    {/* <!-- Candidate block three --> */}
+          <div className="col-lg-12">
+            {/* <!-- applicants Widget --> */}
+            <div className="applicants-widget ls-widget">
+              <div className="widget-title">
+                <h4>Recent Applicants</h4>
+              </div>
+              <div className="widget-content">
+                <div className="row">
+                  {/* <!-- Candidate block three --> */}
 
-                    <Applicants />
-                  </div>
+                  <Applicants />
                 </div>
               </div>
             </div>
-            {/* End .col */}
           </div>
+          {/* End .col */}
+
           {/* End .row profile and notificatins */}
         </div>
         {/* End dashboard-outer */}

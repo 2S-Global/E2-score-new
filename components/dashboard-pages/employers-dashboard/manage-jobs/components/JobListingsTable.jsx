@@ -4,13 +4,12 @@ import Image from "next/image.js";
 
 const JobListingsTable = () => {
   return (
-    <div className="tabs-box">
-      <div className="widget-title">
-        <h4>My Job Listings</h4>
+    <div className="tabs-box container-fluid px-0">
+      <div className="widget-title d-flex justify-content-between align-items-center mb-3">
+        <h4 className="mb-0">My Job Listings</h4>
 
         <div className="chosen-outer">
-          {/* <!--Tabs Box--> */}
-          <select className="chosen-single form-select">
+          <select className="form-select form-select-sm w-auto">
             <option>Last 6 Months</option>
             <option>Last 12 Months</option>
             <option>Last 16 Months</option>
@@ -19,13 +18,12 @@ const JobListingsTable = () => {
           </select>
         </div>
       </div>
-      {/* End filter top bar */}
 
-      {/* Start table widget content */}
+      {/* Responsive Table Section */}
       <div className="widget-content">
-        <div className="table-outer">
-          <table className="default-table manage-job-table">
-            <thead>
+        <div className="table-responsive">
+          <table className="table table-bordered table-hover align-middle mb-0">
+            <thead className="table-light">
               <tr>
                 <th>Title</th>
                 <th>Applications</th>
@@ -39,64 +37,61 @@ const JobListingsTable = () => {
               {jobs.slice(0, 4).map((item) => (
                 <tr key={item.id}>
                   <td>
-                    {/* <!-- Job Block --> */}
-                    <div className="job-block">
-                      <div className="inner-box">
-                        <div className="content">
-                          <span className="company-logo">
-                            <Image
-                              width={50}
-                              height={49}
-                              src={item.logo}
-                              alt="logo"
-                            />
-                          </span>
-                          <h4>
-                            <Link href={`/job-details/${item.id}`}>
-                              {item.jobTitle}
-                            </Link>
-                          </h4>
-                          <ul className="job-info">
-                            <li>
-                              <span className="icon flaticon-briefcase"></span>
-                              Segment
-                            </li>
-                            <li>
-                              <span className="icon flaticon-map-locator"></span>
-                              London, UK
-                            </li>
-                          </ul>
-                        </div>
+                    <div className="d-flex align-items-center gap-2">
+                      <Image
+                        width={50}
+                        height={49}
+                        src={item.logo}
+                        alt="logo"
+                      />
+                      <div>
+                        <small className="mb-1">
+                          <Link href={`/job-details/${item.id}`}>
+                            {item.jobTitle}
+                          </Link>
+                        </small>
+                        <br />
+                        <small className="text-muted">
+                          <i className="flaticon-briefcase me-1"></i> Segment
+                          <br />
+                          <i className="flaticon-map-locator me-1"></i> London,
+                          UK
+                        </small>
                       </div>
                     </div>
                   </td>
-                  <td className="applied">
-                    <a href="#">3+ Applied</a>
+                  <td>
+                    <small>
+                      <a href="#">3+ Applied</a>
+                    </small>
                   </td>
                   <td>
-                    October 27, 2017 <br />
-                    April 25, 2011
+                    <small>October 27, 2017</small> <br />
+                    <small>April 25, 2011</small>
                   </td>
-                  <td className="status">Active</td>
                   <td>
-                    <div className="option-box">
-                      <ul className="option-list">
-                        <li>
-                          <button data-text="View Aplication">
-                            <span className="la la-eye"></span>
-                          </button>
-                        </li>
-                        <li>
-                          <button data-text="Reject Aplication">
-                            <span className="la la-pencil"></span>
-                          </button>
-                        </li>
-                        <li>
-                          <button data-text="Delete Aplication">
-                            <span className="la la-trash"></span>
-                          </button>
-                        </li>
-                      </ul>
+                    <span className="badge bg-success">Active</span>
+                  </td>
+                  <td>
+                    <div className="d-flex gap-2">
+                      <button
+                        className="btn btn-outline-primary btn-sm"
+                        title="View"
+                      >
+                        <i className="la la-eye"></i>
+                      </button>
+                      <button
+                        className="btn btn-outline-secondary btn-sm"
+                        title="Edit"
+                      >
+                        <i className="la la-pencil"></i>
+                      </button>
+                      <button
+                        className="btn btn-outline-danger btn-sm"
+                        title="Delete"
+                      >
+                        <i className="la la-trash"></i>
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -105,7 +100,6 @@ const JobListingsTable = () => {
           </table>
         </div>
       </div>
-      {/* End table widget content */}
     </div>
   );
 };

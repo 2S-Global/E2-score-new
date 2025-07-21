@@ -68,20 +68,18 @@ const Index = () => {
                   </ul>
 
                   {/* Tab Content */}
-                  <div className="row">
-                    {activeTab === "pending" && (
-                      <>
-                        <span className="col-md-12">1</span>{" "}
-                        <PendingApplicants />
-                      </>
-                    )}
-                    {activeTab === "complete" && (
-                      <>
-                        <span className="col-md-12">2</span>{" "}
-                        <CompleteApplicants />
-                      </>
-                    )}
-                  </div>
+
+                  {activeTab === "pending" && (
+                    <>
+                      <span className="col-md-12">1</span> <PendingApplicants />
+                    </>
+                  )}
+                  {activeTab === "complete" && (
+                    <>
+                      <span className="col-md-12">2</span>{" "}
+                      <CompleteApplicants />
+                    </>
+                  )}
                 </div>
               </div>
             </div>
