@@ -19,7 +19,7 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend,
+  Legend
 );
 
 export const options = {
@@ -67,11 +67,10 @@ export const data = {
 
 const ProfileChart = () => {
   return (
-    <div className="tabs-box">
-      <div className="widget-title">
+    <div className="tabs-box w-100 h-100">
+      <div className="widget-title d-flex justify-content-between align-items-center">
         <h4>Your Profile Views</h4>
         <div className="chosen-outer">
-          {/* <!--Tabs Box--> */}
           <select className="chosen-single form-select">
             <option>Last 6 Months</option>
             <option>Last 12 Months</option>
@@ -81,12 +80,14 @@ const ProfileChart = () => {
           </select>
         </div>
       </div>
-      {/* End widget top bar */}
 
-      <div className="widget-content">
+      {/* Full height chart */}
+      <div
+        className="widget-content"
+        style={{ height: "100%", minHeight: "400px" }}
+      >
         <Line options={options} data={data} />
       </div>
-      {/* End  profile chart */}
     </div>
   );
 };

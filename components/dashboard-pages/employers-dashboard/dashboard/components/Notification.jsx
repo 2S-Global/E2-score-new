@@ -1,50 +1,82 @@
 const Notification = () => {
+  const notifications = [
+    {
+      id: 1,
+      name: "Henry Wilson",
+      job: "Product Designer",
+      status: "default",
+    },
+    {
+      id: 2,
+      name: "Raul Costa",
+      job: "Product Manager, Risk",
+      status: "success",
+    },
+    {
+      id: 3,
+      name: "Jack Milk",
+      job: "Technical Architect",
+      status: "default",
+    },
+    {
+      id: 4,
+      name: "Michel Arian",
+      job: "Software Engineer",
+      status: "success",
+    },
+    {
+      id: 5,
+      name: "Wade Warren",
+      job: "Web Developer",
+      status: "default",
+    },
+    {
+      id: 6,
+      name: "Michel Arian",
+      job: "Software Engineer",
+      status: "success",
+    },
+  ];
+
+  // Split notifications into 2 halves for the 2 columns
+  const middleIndex = Math.ceil(notifications.length / 2);
+  const firstColumn = notifications.slice(0, middleIndex);
+  const secondColumn = notifications.slice(middleIndex);
+
   return (
-    <ul className="notification-list">
-      <li>
-        <span className="icon flaticon-briefcase"></span>
-        <strong>Henry Wilson</strong> applied for a job
-        <span className="colored"> Product Designer</span>
-      </li>
-      {/* End li */}
+    <div className="row">
+      {/* Left Column */}
+      <div className="col-6 ">
+        <ul className="notification-list">
+          {firstColumn.map((note) => (
+            <li
+              key={note.id}
+              className={note.status === "success" ? "success" : ""}
+            >
+              <span className="icon flaticon-briefcase"></span>
+              <strong>{note.name}</strong> applied for a job
+              <span className="colored"> {note.job}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
 
-      <li className="success">
-        <span className="icon flaticon-briefcase"></span>
-        <strong>Raul Costa</strong> applied for a job
-        <span className="colored"> Product Manager, Risk</span>
-      </li>
-      {/* End li */}
-
-      <li>
-        <span className="icon flaticon-briefcase"></span>
-        <strong>Jack Milk</strong> applied for a job
-        <span className="colored"> Technical Architect</span>
-      </li>
-      {/* End li */}
-
-      <li className="success">
-        <span className="icon flaticon-briefcase"></span>
-        <strong>Michel Arian</strong>
-        applied for a job
-        <span className="colored"> Software Engineer</span>
-      </li>
-      {/* End li */}
-
-      <li>
-        <span className="icon flaticon-briefcase"></span>
-        <strong>Wade Warren</strong> applied for a job
-        <span className="colored"> Web Developer</span>
-      </li>
-      {/* End li */}
-
-      <li className="success">
-        <span className="icon flaticon-briefcase"></span>
-        <strong>Michel Arian</strong>
-        applied for a job
-        <span className="colored"> Software Engineer</span>
-      </li>
-      {/* End li */}
-    </ul>
+      {/* Right Column */}
+      <div className="col-6 border-start">
+        <ul className="notification-list ps-3">
+          {secondColumn.map((note) => (
+            <li
+              key={note.id}
+              className={note.status === "success" ? "success" : ""}
+            >
+              <span className="icon flaticon-briefcase"></span>
+              <strong>{note.name}</strong> applied for a job
+              <span className="colored"> {note.job}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 };
 

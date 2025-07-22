@@ -38,7 +38,7 @@ const Index = () => {
           <MenuToggler />
           {/* Collapsible sidebar button */}
 
-          <div className="row">
+          <div>
             <TopCardBlock />
           </div>
           {/*   <div className="row">
@@ -47,7 +47,7 @@ const Index = () => {
           {/* End .row top card block */}
 
           <div className="row">
-            <div className="col-xl-7 col-lg-12">
+            <div className="">
               {/* <!-- Graph widget --> */}
               <div className="graph-widget ls-widget">
                 <ProfileChart />
@@ -56,7 +56,7 @@ const Index = () => {
             </div>
             {/* End .col */}
 
-            <div className="col-xl-5 col-lg-12">
+            <div className="">
               {/* <!-- Notification Widget --> */}
               <div className="notification-widget ls-widget">
                 <div className="widget-title">
