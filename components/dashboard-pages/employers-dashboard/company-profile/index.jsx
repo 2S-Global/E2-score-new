@@ -33,6 +33,14 @@ const CompanyProfile = () => {
     pincode: "122002",
     gstin: "29ABCDE1234F1Z5",
   };
+  const tabs = [
+    { key: "profile", label: "My Profile" },
+    { key: "account", label: "Account Details" },
+    { key: "contact", label: "Contact Person Details" },
+    { key: "kyc", label: "KYC" },
+    { key: "social", label: "Social Network" },
+    { key: "brance", label: "Branch" },
+  ];
 
   return (
     <div className="page-wrapper dashboard">
@@ -51,94 +59,29 @@ const CompanyProfile = () => {
           <MenuToggler />
 
           {/* Tabs Navigation */}
-          <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-            <button
-              style={{
-                padding: "10px 15px",
-                border: "none",
-                background: activeTab === "profile" ? "#007bff" : "#eee",
-                color: activeTab === "profile" ? "white" : "black",
-                cursor: "pointer",
-                transition: "0.3s",
-                fontWeight: "bold",
-              }}
-              onClick={() => setActiveTab("profile")}
-            >
-              My Profile
-            </button>
-            <button
-              style={{
-                padding: "10px 15px",
-                border: "none",
-                background: activeTab === "account" ? "#007bff" : "#eee",
-                color: activeTab === "account" ? "white" : "black",
-                cursor: "pointer",
-                transition: "0.3s",
-                fontWeight: "bold",
-              }}
-              onClick={() => setActiveTab("account")}
-            >
-              Account Details
-            </button>
-            {/* KYC BOX */}
-            <button
-              style={{
-                padding: "10px 15px",
-                border: "none",
-                background: activeTab === "kyc" ? "#007bff" : "#eee",
-                color: activeTab === "kyc" ? "white" : "black",
-                cursor: "pointer",
-                transition: "0.3s",
-                fontWeight: "bold",
-              }}
-              onClick={() => setActiveTab("kyc")}
-            >
-              KYC
-            </button>
-            <button
-              style={{
-                padding: "10px 15px",
-                border: "none",
-                background: activeTab === "social" ? "#007bff" : "#eee",
-                color: activeTab === "social" ? "white" : "black",
-                cursor: "pointer",
-                transition: "0.3s",
-                fontWeight: "bold",
-              }}
-              onClick={() => setActiveTab("social")}
-            >
-              Social Network
-            </button>
 
-            <button
-              style={{
-                padding: "10px 15px",
-                border: "none",
-                background: activeTab === "brance" ? "#007bff" : "#eee",
-                color: activeTab === "brance" ? "white" : "black",
-                cursor: "pointer",
-                transition: "0.3s",
-                fontWeight: "bold",
-              }}
-              onClick={() => setActiveTab("brance")}
+          <div className="mb-3">
+            <div
+              className="d-flex flex-wrap justify-content-start gap-2"
+              style={{ borderBottom: "2px solid #ddd", paddingBottom: "10px" }}
             >
-              Branch
-            </button>
-
-            {/*      <button
-                            style={{
-                                padding: "10px 15px",
-                                border: "none",
-                                background: activeTab === "contact" ? "#007bff" : "#eee",
-                                color: activeTab === "contact" ? "white" : "black",
-                                cursor: "pointer",
-                                transition: "0.3s",
-                                fontWeight: "bold",
-                            }}
-                            onClick={() => setActiveTab("contact")}
-                        >
-                            Contact Information
-                        </button> */}
+              {tabs.map(({ key, label }) => (
+                <button
+                  key={key}
+                  className={`btn ${
+                    activeTab === key ? "btn-primary" : "btn-outline-primary"
+                  }`}
+                  style={{
+                    minWidth: "120px",
+                    fontWeight: "bold",
+                    borderRadius: "20px",
+                  }}
+                  onClick={() => setActiveTab(key)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Tab Content */}

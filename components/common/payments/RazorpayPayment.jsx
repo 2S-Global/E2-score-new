@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-
+import axios from "axios";
 const RazorpayPayment = ({ amount, razorpayKey, onSuccess, paymentIds }) => {
   const [isRazorpayLoaded, setIsRazorpayLoaded] = useState(false);
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const pay = amount;
   let pids = "";
   if (paymentIds) {
@@ -24,18 +25,30 @@ const RazorpayPayment = ({ amount, razorpayKey, onSuccess, paymentIds }) => {
     document.body.appendChild(script);
   }, []);
 
-  const handlePayment = () => {
+  const handlePayment = async() => {
     if (!isRazorpayLoaded) {
       console.error("Razorpay SDK is not loaded yet!");
       return;
     }
+    try {
+      // Use axios to create the order on the backend
+      // const response = await axios.post(`${apiurl}/api/payment/create-order`, { amount });
+      const response = await axios.post(`${apiurl}/api/payment/create-order`, {
+  amount: parseFloat(amount), // Ensure it's a number
+});
+const amountInPaise = Math.round(parseFloat(amount) * 100);
 
+      
+      const orderId = response.data.order.id;
+    
+    // console.log(orderId);
     const options = {
       key: razorpayKey,
-      amount: amount * 100, // Convert INR to paise
+      amount: amountInPaise,
       currency: "INR",
-      name: "E2 Score",
+      name: "Quikchek",
       description: "Payment for Verification",
+      order_id: orderId, 
       handler: function (response) {
         // alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
         console.log(response);
@@ -53,6 +66,9 @@ const RazorpayPayment = ({ amount, razorpayKey, onSuccess, paymentIds }) => {
 
     const rzp = new window.Razorpay(options);
     rzp.open();
+      } catch (error) {
+      console.error('Error during order creation:', error);
+    }
   };
 
   return (

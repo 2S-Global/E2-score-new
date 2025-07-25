@@ -1,38 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const MessageComponent = ({
-  error,
-  success,
-  errorId,
-  message_id,
-  setError,
-  setSuccess,
-}) => {
+const MessageComponent = ({ error, success, errorId, message_id }) => {
   const [showError, setShowError] = useState(null);
   const [showSuccess, setShowSuccess] = useState(null);
+  const time = Date.now();
 
   useEffect(() => {
     if (error) {
-      setShowError(`${error}-${Date.now()}`);
-      const timer = setTimeout(() => {
-        setShowError(null);
-        setError && setError(null);
-      }, 5000);
+      setShowError(`${error}-${Date.now()}`); // Force re-trigger
+      const timer = setTimeout(() => setShowError(null), 5000);
       return () => clearTimeout(timer);
     }
-  }, [error, errorId, setError]);
+  }, [error, errorId]);
 
   useEffect(() => {
     if (success) {
-      setShowSuccess(`${success}-${Date.now()}`);
-      const timer = setTimeout(() => {
-        setShowSuccess(null);
-        setSuccess && setSuccess(null);
-      }, 5000);
+      setShowSuccess(`${success}-${Date.now()}`); // Force re-trigger
+      const timer = setTimeout(() => setShowSuccess(null), 5000);
       return () => clearTimeout(timer);
     }
-  }, [success, message_id, setSuccess]);
+  }, [success, message_id]);
 
   const messageVariants = {
     hidden: { opacity: 0, y: -20, scale: 0.9 },
@@ -68,10 +56,7 @@ const MessageComponent = ({
               type="button"
               className="btn-close"
               aria-label="Close"
-              onClick={() => {
-                setShowError(null);
-                setError && setError(null);
-              }}
+              onClick={() => setShowError(null)}
             ></button>
           </motion.div>
         )}
@@ -90,10 +75,7 @@ const MessageComponent = ({
               type="button"
               className="btn-close"
               aria-label="Close"
-              onClick={() => {
-                setShowSuccess(null);
-                setSuccess && setSuccess(null);
-              }}
+              onClick={() => setShowSuccess(null)}
             ></button>
           </motion.div>
         )}

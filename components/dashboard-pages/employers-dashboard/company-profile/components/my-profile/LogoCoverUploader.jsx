@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const LogoCoverUploader = () => {
+const LogoCoverUploader = (formdata, setFormdata) => {
   const [logoImg, setLogoImg] = useState("");
   const [converImg, setCoverImg] = useState("");
 
