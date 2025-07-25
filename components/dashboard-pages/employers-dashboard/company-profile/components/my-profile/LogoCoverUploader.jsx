@@ -1,67 +1,129 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const LogoCoverUploader = (formdata, setFormdata) => {
-  const [logoImg, setLogoImg] = useState("");
-  const [converImg, setCoverImg] = useState("");
+const LogoCoverUploader = ({ formdata, setFormdata }) => {
+  const [logoImg, setLogoImg] = useState(null);
+  const [coverImg, setCoverImg] = useState(null);
 
-  // logo image
-  const logoHandler = (file) => {
-    setLogoImg(file);
+  // Preview URLs
+  const [logoPreview, setLogoPreview] = useState("");
+  const [coverPreview, setCoverPreview] = useState("");
+
+  // Generate preview when logo changes
+  useEffect(() => {
+    if (logoImg) {
+      const previewUrl = URL.createObjectURL(logoImg);
+      setLogoPreview(previewUrl);
+      setFormdata((prev) => ({ ...prev, logo: logoImg }));
+    }
+  }, [logoImg]);
+
+  // Generate preview when cover changes
+  useEffect(() => {
+    if (coverImg) {
+      const previewUrl = URL.createObjectURL(coverImg);
+      setCoverPreview(previewUrl);
+      setFormdata((prev) => ({ ...prev, cover: coverImg }));
+    }
+  }, [coverImg]);
+
+  const removeLogo = () => {
+    setLogoImg(null);
+    setLogoPreview("");
+    setFormdata((prev) => ({ ...prev, logo: null }));
   };
 
-  // cover image
-  const coverHandler = (file) => {
-    setCoverImg(file);
+  const removeCover = () => {
+    setCoverImg(null);
+    setCoverPreview("");
+    setFormdata((prev) => ({ ...prev, cover: null }));
   };
 
   return (
     <>
-      <div className="uploading-outer">
-        <div className="uploadButton">
+      {/* Logo Upload */}
+      <div className="uploading-outer mb-4">
+        <div className="uploadButton mb-2 mx-4">
           <input
             className="uploadButton-input"
             type="file"
-            name="attachments[]"
             accept="image/*"
-            id="upload"
-            required
-            onChange={(e) => logoHandler(e.target.files[0])}
+            id="upload_logo"
+            onChange={(e) => e.target.files[0] && setLogoImg(e.target.files[0])}
           />
-          <label className="uploadButton-button ripple-effect" htmlFor="upload">
-            {logoImg !== "" ? logoImg?.name : " Browse Logo"}
+          <label
+            className="uploadButton-button ripple-effect"
+            htmlFor="upload_logo"
+          >
+            {logoImg ? logoImg.name : "Browse Logo"}
           </label>
-          <span className="uploadButton-file-name"></span>
         </div>
-        <div className="text">
-          Max file size is 1MB, Minimum dimension: 330x300 And Suitable files
-          are .jpg & .png
-        </div>
+
+        {logoPreview && (
+          <div className="mb-3">
+            <div className="position-relative d-inline-block">
+              <img
+                src={logoPreview}
+                alt="Logo Preview"
+                className="img-thumbnail"
+                style={{ maxWidth: "150px", maxHeight: "150px" }}
+              />
+              <button
+                type="button"
+                className="btn btn-sm btn-danger position-absolute top-0 end-0"
+                onClick={removeLogo}
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className="text text-muted small">Format: .jpg, .png</div>
       </div>
 
-      <div className="uploading-outer">
-        <div className="uploadButton">
+      {/* Cover Upload */}
+      <div className="uploading-outer mb-4">
+        <div className="uploadButton mb-2 mx-4">
           <input
             className="uploadButton-input"
             type="file"
-            name="attachments[]"
-            accept="image/*, application/pdf"
+            accept="image/*"
             id="upload_cover"
-            onChange={(e) => coverHandler(e.target.files[0])}
+            onChange={(e) =>
+              e.target.files[0] && setCoverImg(e.target.files[0])
+            }
           />
           <label
             className="uploadButton-button ripple-effect"
             htmlFor="upload_cover"
           >
-            {converImg !== "" ? converImg?.name : "Browse Cover"}
+            {coverImg ? coverImg.name : "Browse Cover"}
           </label>
-          <span className="uploadButton-file-name"></span>
         </div>
-        <div className="text">
-          Max file size is 1MB, Minimum dimension: 330x300 And Suitable files
-          are .jpg & .png
-        </div>
+
+        {coverPreview && (
+          <div className="mb-3">
+            <div className="position-relative d-inline-block">
+              <img
+                src={coverPreview}
+                alt="Cover Preview"
+                className="img-thumbnail"
+                style={{ maxWidth: "300px", maxHeight: "100px" }}
+              />
+              <button
+                type="button"
+                className="btn btn-sm btn-danger position-absolute top-0 end-0"
+                onClick={removeCover}
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className="text text-muted small"> Format: .jpg, .png</div>
       </div>
     </>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import Select from "react-select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -11,11 +11,9 @@ import MessageComponent from "@/components/common/ResponseMsg";
 import axios from "axios";
 
 import { Search } from "lucide-react";
-import { es } from "date-fns/locale";
-import { about } from "@/data/mainMenuData";
-import { set } from "date-fns";
+
 const FormInfoBox = () => {
-  const catOptions = [
+  /*  const catOptions = [
     { value: "Banking", label: "Banking" },
     { value: "Digital & Creative", label: "Digital & Creative" },
     { value: "Retail", label: "Retail" },
@@ -24,22 +22,23 @@ const FormInfoBox = () => {
     { value: "Accounting & Finance", label: "Accounting & Finance" },
     { value: "Digital", label: "Digital" },
     { value: "Creative Art", label: "Creative Art" },
-  ];
-  /* cin 
-regex= "^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$"
-*/
+  ]; */
+  const [industries, setIndustry] = useState([]);
   const [disableform, setDisableform] = useState(true);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [errorId, setErrorId] = useState(null);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
-
   const [message_id, setMessageId] = useState(null);
-
   const [success, setSuccess] = useState(null);
 
+  useEffect(() => {
+    fetchindustries();
+  }, [apiurl]);
+
   const [formdata, setFormdata] = useState({
+    cin_id: "",
     cin: "",
     name: "",
     email: "",
@@ -54,7 +53,22 @@ regex= "^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$"
     logo: null,
     cover: null,
   });
-
+  const fetchindustries = async () => {
+    try {
+      const response = await axios.get(
+        `${apiurl}/api/sql/dropdown/get_industry `
+      );
+      if (response.data.success) {
+        const formatted = response.data.data.map((item) => ({
+          value: item.id,
+          label: item.job_industry,
+        }));
+        setIndustry(formatted);
+      }
+    } catch (error) {
+      console.error("Error fetching industries:", error);
+    }
+  };
   const handelcinsubmit = async () => {
     const regex =
       /^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$/;
@@ -76,19 +90,12 @@ regex= "^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$"
         if (response.data.success) {
           setFormdata({
             ...formdata,
+            cin_id: response.data.data._id,
             cin: response.data.data.cinnumber,
             name: response.data.data.companyname,
             email: response.data.data.companyemail,
             phone: response.data.data.companyphone,
             address: response.data.data.companyaddress,
-            /*    website: "",
-            established: "",
-            teamsize: "",
-            industry_type: [],
-            allowinsearch: true,
-            about: "",
-            logo: null,
-            cover: null, */
           });
 
           setError(null);
@@ -128,6 +135,14 @@ regex= "^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$"
           <CustomizedProgressBars />
         </div>
       )}
+
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={() => console.log(formdata)}
+      >
+        Test
+      </button>
 
       <form className="default-form">
         <div className="form-group">
@@ -269,12 +284,19 @@ regex= "^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$"
             <label>Industry Type</label>
             <Select
               isMulti
-              name="colors"
-              options={catOptions}
+              name="industry"
+              options={industries}
               className="basic-multi-select"
               classNamePrefix="select"
-              value={formdata.industry}
-              onChange={(e) => setFormdata({ ...formdata, industry: e })}
+              value={industries.filter((opt) =>
+                formdata.industry_type.includes(opt.value)
+              )}
+              onChange={(selectedOptions) =>
+                setFormdata({
+                  ...formdata,
+                  industry_type: selectedOptions.map((option) => option.value),
+                })
+              }
             />
           </div>
 
