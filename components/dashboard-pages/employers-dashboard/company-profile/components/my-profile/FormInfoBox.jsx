@@ -302,14 +302,6 @@ const FormInfoBox = ({ setActiveTab }) => {
         </div>
       )}
 
-      <button
-        type="button"
-        className="btn btn-primary"
-        onClick={() => console.log(formdata)}
-      >
-        Test
-      </button>
-
       <form
         className="default-form"
         onSubmit={handelsubmit}
