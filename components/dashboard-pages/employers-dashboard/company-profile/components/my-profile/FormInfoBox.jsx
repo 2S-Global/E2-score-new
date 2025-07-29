@@ -11,7 +11,6 @@ import MessageComponent from "@/components/common/ResponseMsg";
 import axios from "axios";
 
 import { Search } from "lucide-react";
-import { fi, se } from "date-fns/locale";
 
 const FormInfoBox = ({ setActiveTab }) => {
   const [industries, setIndustry] = useState([]);
@@ -40,6 +39,7 @@ const FormInfoBox = ({ setActiveTab }) => {
     website: "",
     established: "",
     teamsize: "",
+
     industry_type: [],
     allowinsearch: true,
     about: "",
@@ -253,6 +253,40 @@ const FormInfoBox = ({ setActiveTab }) => {
 
   return (
     <>
+      <style>
+        {`
+  .custom-textarea::placeholder {
+    color: #c7c5c5!important;
+    font-size: 15px !important;
+  
+  }
+      .suggestion-btn {
+            
+            bottom: -0px;
+            left: 10;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background-color: #e8f0fe;
+            color: #1a73e8;
+            border-radius: 20px;
+            padding: 6px 12px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+          }
+
+          .suggestion-btn:hover {
+            background-color: #d2e3fc;
+          }
+
+          .suggestion-btn svg {
+            width: 16px;
+            height: 16px;
+          }
+`}
+      </style>
       <MessageComponent
         error={error}
         success={success}
@@ -486,10 +520,43 @@ const FormInfoBox = ({ setActiveTab }) => {
               *
             </span>
             <textarea
+              className="form-control"
               required
+              style={{
+                padding: "10px",
+                minheight: "2.5em",
+                height: "auto",
+                resize: "vertical", // allow only vertical resizing
+                minHeight: "2.5em", // ensures 1 row minimum height (adjust as needed)
+              }}
+              rows="2"
               value={formdata.about}
               onChange={(e) =>
                 setFormdata({ ...formdata, about: e.target.value })
+              }
+              placeholder="Spent several years working on sheep on Wall Street. Had moderate success investing in Yugo's on Wall Street. Managed a small team buying and selling Pogo sticks for farmers. Spent several years licensing licorice in West Palm Beach, FL. Developed several new methods for working it banjos in the aftermarket. Spent a weekend importing banjos in West Palm Beach, FL.In this position, the Software Engineer collaborates with Evention's Development team to continuously enhance our current software solutions as well as create new solutions to eliminate the back-office operations and management challenges present"
+            ></textarea>
+          </div>
+          {/* Company  Address*/}
+          <div className="form-group col-lg-12 col-md-12">
+            <label>Company Address</label>
+            <span style={{ color: "red" }} className="ms-1">
+              *
+            </span>
+            <textarea
+              className="form-control"
+              required
+              style={{
+                padding: "10px",
+                minheight: "2.5em",
+                height: "auto",
+                resize: "vertical", // allow only vertical resizing
+                minHeight: "2.5em", // ensures 1 row minimum height (adjust as needed)
+              }}
+              rows="2"
+              value={formdata.address}
+              onChange={(e) =>
+                setFormdata({ ...formdata, address: e.target.value })
               }
               placeholder="Spent several years working on sheep on Wall Street. Had moderate success investing in Yugo's on Wall Street. Managed a small team buying and selling Pogo sticks for farmers. Spent several years licensing licorice in West Palm Beach, FL. Developed several new methods for working it banjos in the aftermarket. Spent a weekend importing banjos in West Palm Beach, FL.In this position, the Software Engineer collaborates with Evention's Development team to continuously enhance our current software solutions as well as create new solutions to eliminate the back-office operations and management challenges present"
             ></textarea>
