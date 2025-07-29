@@ -386,7 +386,7 @@ const FormInfoBox = ({ setActiveTab }) => {
             <input
               type="url"
               name="name"
-              placeholder="www.example.com"
+              placeholder="https://www.example.com"
               value={formdata.website}
               onChange={(e) =>
                 setFormdata({ ...formdata, website: e.target.value })

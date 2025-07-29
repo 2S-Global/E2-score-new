@@ -110,22 +110,24 @@ const DashboardHeader = () => {
               </a>
 
               <ul className="dropdown-menu">
-                {employerMenuData.map((item) => (
-                  <li
-                    className={`${
-                      isActiveLink(item.routePath, usePathname())
-                        ? "active"
-                        : ""
-                    } mb-1`}
-                    key={item.id}
-                  >
-                    <Link href={item.routePath}>
-                      <i className={`la ${item.icon}`}></i> {item.name}
-                    </Link>
-                  </li>
-                ))}
+                {employerMenuData
+                  .filter((item) => [16, 17, 18].includes(item.id))
+                  .map((item) => (
+                    <li
+                      className={`${
+                        isActiveLink(item.routePath, usePathname())
+                          ? "active"
+                          : ""
+                      } mb-1`}
+                      key={item.id}
+                    >
+                      <Link href={item.routePath}>
+                        <i className={`la ${item.icon}`}></i> {item.name}
+                      </Link>
+                    </li>
+                  ))}
 
-                <li
+                {/*    <li
                   className={`${
                     isActiveLink("/", usePathname()) ? "active" : ""
                   } mb-1`}
@@ -134,7 +136,7 @@ const DashboardHeader = () => {
                   <Link href="/" onClick={() => localStorage.clear()}>
                     <i className={`la la-sign-out`}></i>Logout
                   </Link>
-                </li>
+                </li> */}
                 {userData && (
                   <>
                     <li>
