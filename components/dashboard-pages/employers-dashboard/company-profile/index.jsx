@@ -94,7 +94,7 @@ const CompanyProfile = () => {
                       <div className="widget-title">
                         <h4>Company Profile</h4>
                       </div>
-                      <MyProfile />
+                      <MyProfile setActiveTab={setActiveTab} />
                     </div>
                   )}
 
@@ -104,7 +104,10 @@ const CompanyProfile = () => {
                         <h4>KYC</h4>
                       </div>
                       <div className="widget-content">
-                        <KycBox companyDetails={companyDetails} />
+                        <KycBox
+                          companyDetails={companyDetails}
+                          setActiveTab={setActiveTab}
+                        />
                       </div>
                     </div>
                   )}
@@ -115,7 +118,7 @@ const CompanyProfile = () => {
                         <h4>Social Network</h4>
                       </div>
                       <div className="widget-content">
-                        <SocialNetworkBox />
+                        <SocialNetworkBox setActiveTab={setActiveTab} />
                       </div>
                     </div>
                   )}
@@ -126,7 +129,7 @@ const CompanyProfile = () => {
                         <h4>Account Details</h4>
                       </div>
                       <div className="widget-content">
-                        <AccountBox />
+                        <AccountBox setActiveTab={setActiveTab} />
                       </div>
                     </div>
                   )}
@@ -137,14 +140,14 @@ const CompanyProfile = () => {
                         <h4>Contact Information</h4>
                       </div>
                       <div className="widget-content">
-                        <ContactInfoBox />
+                        <ContactInfoBox setActiveTab={setActiveTab} />
                       </div>
                     </div>
                   )}
 
                   {activeTab === "brance" && (
                     <div>
-                      <BranchBox />
+                      <BranchBox setActiveTab={setActiveTab} />
                     </div>
                   )}
                 </div>

@@ -1,14 +1,26 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
-const LogoCoverUploader = ({ formdata, setFormdata }) => {
+import { Trash2 } from "lucide-react";
+import Swal from "sweetalert2";
+const LogoCoverUploader = ({ formdata, setFormdata, Deletecover }) => {
   const [logoImg, setLogoImg] = useState(null);
   const [coverImg, setCoverImg] = useState(null);
 
   // Preview URLs
-  const [logoPreview, setLogoPreview] = useState(formdata?.logo || "");
-  const [coverPreview, setCoverPreview] = useState(formdata?.cover || "");
+  const [logoPreview, setLogoPreview] = useState(formdata?.logo_preview || "");
+  const [coverPreview, setCoverPreview] = useState(
+    formdata?.cover_preview || ""
+  );
+
+  useEffect(() => {
+    if (formdata.logo_preview) {
+      setLogoPreview(formdata.logo_preview);
+    }
+    if (formdata.cover_preview) {
+      setCoverPreview(formdata.cover_preview);
+    }
+  }, [formdata.logo_preview, formdata.cover_preview]);
 
   // Generate preview when logo changes
   useEffect(() => {
@@ -31,13 +43,30 @@ const LogoCoverUploader = ({ formdata, setFormdata }) => {
   const removeLogo = () => {
     setLogoImg(null);
     setLogoPreview("");
-    setFormdata((prev) => ({ ...prev, logo: null }));
+    setFormdata((prev) => ({ ...prev, logo: null, logo_preview: null }));
   };
 
   const removeCover = () => {
     setCoverImg(null);
     setCoverPreview("");
-    setFormdata((prev) => ({ ...prev, cover: null }));
+    setFormdata((prev) => ({ ...prev, cover: null, cover_preview: null }));
+  };
+  const DeleteCover = async () => {
+    const confirmed = await Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete the cover photo.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    });
+
+    if (confirmed.isConfirmed) {
+      setCoverImg(null);
+      setCoverPreview("");
+      setFormdata((prev) => ({ ...prev, cover: null, cover_preview: null }));
+      Deletecover();
+    }
   };
 
   return (
@@ -45,6 +74,7 @@ const LogoCoverUploader = ({ formdata, setFormdata }) => {
       {/* Logo Upload */}
       <div className="form-group ">
         <label>Company Logo</label>
+        <span className="text-danger ms-1">*</span>
         <div className="uploading-outer mb-4">
           <div className="uploadButton mb-2 mx-4">
             <input
@@ -122,15 +152,7 @@ const LogoCoverUploader = ({ formdata, setFormdata }) => {
                 }
               }}
             />
-            {/*  <input
-              className="uploadButton-input"
-              type="file"
-              accept="image/*"
-              id="upload_cover"
-              onChange={(e) =>
-                e.target.files[0] && setCoverImg(e.target.files[0])
-              }
-            /> */}
+
             <label
               className="uploadButton-button ripple-effect"
               htmlFor="upload_cover"
@@ -152,13 +174,28 @@ const LogoCoverUploader = ({ formdata, setFormdata }) => {
                     maxWidth: "300px",
                   }}
                 />
-                <button
-                  type="button"
-                  className="btn btn-sm btn-danger position-absolute top-0 end-0 ms-2"
-                  onClick={removeCover}
-                >
-                  ×
-                </button>
+                {/* Remove Button */}
+                {coverPreview === formdata.cover_preview ? (
+                  <>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-danger position-absolute top-0 end-0"
+                      onClick={DeleteCover}
+                    >
+                      <Trash2 />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-danger position-absolute top-0 end-0 ms-2"
+                      onClick={removeCover}
+                    >
+                      ×
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           )}

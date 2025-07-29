@@ -11,30 +11,23 @@ import MessageComponent from "@/components/common/ResponseMsg";
 import axios from "axios";
 
 import { Search } from "lucide-react";
+import { fi, se } from "date-fns/locale";
 
-const FormInfoBox = () => {
-  /*  const catOptions = [
-    { value: "Banking", label: "Banking" },
-    { value: "Digital & Creative", label: "Digital & Creative" },
-    { value: "Retail", label: "Retail" },
-    { value: "Human Resources", label: "Human Resources" },
-    { value: "Managemnet", label: "Managemnet" },
-    { value: "Accounting & Finance", label: "Accounting & Finance" },
-    { value: "Digital", label: "Digital" },
-    { value: "Creative Art", label: "Creative Art" },
-  ]; */
+const FormInfoBox = ({ setActiveTab }) => {
   const [industries, setIndustry] = useState([]);
   const [disableform, setDisableform] = useState(true);
-
+  const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [errorId, setErrorId] = useState(null);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [message_id, setMessageId] = useState(null);
   const [success, setSuccess] = useState(null);
+  const token = localStorage.getItem("employer_token");
 
   useEffect(() => {
     fetchindustries();
+    FetchCompanyDetails();
   }, [apiurl]);
 
   const [formdata, setFormdata] = useState({
@@ -52,6 +45,8 @@ const FormInfoBox = () => {
     about: "",
     logo: null,
     cover: null,
+    logo_preview: null,
+    cover_preview: null,
   });
   const fetchindustries = async () => {
     try {
@@ -119,6 +114,143 @@ const FormInfoBox = () => {
     }
   };
 
+  const FetchCompanyDetails = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${apiurl}/api/companyprofile/get_company_details`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (response.data.success) {
+        const data = response.data.data;
+
+        const updatedFormData = {
+          ...formdata,
+          cin_id: data.cin_id,
+          cin: data.cin,
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          address: data.address,
+          website: data.website,
+          established: data.established,
+          teamsize: data.teamsize,
+          industry_type: data.industry_type
+            ?.split(",")
+            .map((item) => parseInt(item.trim(), 10)),
+          allowinsearch: data.allowinsearch,
+          about: data.about,
+          logo_preview: data.logo,
+          cover_preview: data.cover,
+        };
+
+        setFormdata(updatedFormData);
+        setDisableform(false);
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (formdata.logo_preview) {
+      console.log("Updated formdata.logo_preview:", formdata.logo_preview); // ✅ Correct place
+    }
+  }, [formdata.logo_preview]);
+
+  const handelsubmit = async (e) => {
+    console.log(formdata);
+    e.preventDefault();
+    setLoading(true);
+    setSubmitting(true);
+    setError(null);
+    setErrorId(null);
+    setSuccess(null);
+    setMessageId(null);
+    try {
+      const payload = new FormData();
+      for (const key in formdata) {
+        if (formdata[key] !== null && formdata[key] !== undefined) {
+          payload.append(key, formdata[key]);
+        }
+      }
+
+      const response = await axios.post(
+        `${apiurl}/api/companyprofile/add_or_update_company`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        setError(null);
+        setErrorId(null);
+        setSuccess(response.data.message);
+        setMessageId(Date.now());
+
+        //wait for 2 seconds then setActiveTab= "account"
+        setTimeout(() => {
+          setActiveTab("account");
+        }, 2000);
+      }
+    } catch (error) {
+      setError("Error Saving Details Please Try Again");
+      setErrorId(Date.now());
+    } finally {
+      setLoading(false);
+      setSubmitting(false);
+    }
+  };
+
+  const Deletecover = async () => {
+    // Reset previous states
+    setError(null);
+    setErrorId(null);
+    setSuccess(null);
+    setMessageId(null);
+    setLoading(true);
+
+    try {
+      const response = await axios.delete(
+        `${apiurl}/api/companyprofile/delete_cover_photo`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        // Update the form state
+        setFormdata((prev) => ({
+          ...prev,
+          cover_preview: null,
+        }));
+
+        // Show success
+        setSuccess("Cover photo deleted");
+        setMessageId(Date.now());
+      } else {
+        setError("Failed to delete cover photo");
+        setErrorId(Date.now());
+      }
+    } catch (error) {
+      setError("Failed to delete cover photo Please Try Again");
+      setMessageId(Date.now());
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const isDisabled =
+    loading || submitting || (!formdata.logo && !formdata.logo_preview);
+
   return (
     <>
       <MessageComponent
@@ -144,9 +276,15 @@ const FormInfoBox = () => {
         Test
       </button>
 
-      <form className="default-form">
+      <form
+        className="default-form"
+        onSubmit={handelsubmit}
+        type="multipart/form-data"
+        method="post"
+      >
         <div className="form-group">
           <label className="mb-1">CIN</label>
+          <span className="text-danger ms-1">*</span>
           <div className="d-flex align-items-stretch gap-2">
             <input
               type="text"
@@ -158,6 +296,7 @@ const FormInfoBox = () => {
               }
               required
               className="form-control"
+              pattern="^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$"
             />
             <button
               type="button"
@@ -187,6 +326,9 @@ const FormInfoBox = () => {
           {/* <!-- Input --> */}
           <div className="form-group col-lg-6 col-md-12">
             <label>Company name</label>
+            <span style={{ color: "red" }} className="ms-1">
+              *
+            </span>
             <input
               type="text"
               name="name"
@@ -202,6 +344,9 @@ const FormInfoBox = () => {
           {/* <!-- Input --> */}
           <div className="form-group col-lg-6 col-md-12">
             <label>Email address</label>
+            <span style={{ color: "red" }} className="ms-1">
+              *
+            </span>
             <input
               type="email"
               name="name"
@@ -217,6 +362,9 @@ const FormInfoBox = () => {
           {/* <!-- Input --> */}
           <div className="form-group col-lg-6 col-md-12">
             <label>Phone</label>
+            <span style={{ color: "red" }} className="ms-1">
+              *
+            </span>
             <input
               type="text"
               name="name"
@@ -232,8 +380,11 @@ const FormInfoBox = () => {
           {/* <!-- Input --> */}
           <div className="form-group col-lg-6 col-md-12">
             <label>Website</label>
+            <span style={{ color: "red" }} className="ms-1">
+              *
+            </span>
             <input
-              type="text"
+              type="url"
               name="name"
               placeholder="www.example.com"
               value={formdata.website}
@@ -246,7 +397,13 @@ const FormInfoBox = () => {
 
           {/* <!-- Input --> */}
           <div className="form-group col-lg-6 col-md-12 d-flex flex-column">
-            <label>Est. Since</label>
+            <label>
+              Est. Since
+              <span style={{ color: "red" }} className="ms-1">
+                *
+              </span>
+            </label>
+
             <DatePicker
               selected={
                 formdata.established ? new Date(formdata.established) : null
@@ -263,6 +420,9 @@ const FormInfoBox = () => {
           {/* <!-- Input --> */}
           <div className="form-group col-lg-6 col-md-12">
             <label>Team Size</label>
+            <span style={{ color: "red" }} className="ms-1">
+              *
+            </span>
             <select
               className="chosen-single form-select"
               required
@@ -282,8 +442,12 @@ const FormInfoBox = () => {
           {/* <!-- Search Select --> */}
           <div className="form-group col-lg-6 col-md-12">
             <label>Industry Type</label>
+            <span style={{ color: "red" }} className="ms-1">
+              *
+            </span>
             <Select
               isMulti
+              required
               name="industry"
               options={industries}
               className="basic-multi-select"
@@ -318,7 +482,11 @@ const FormInfoBox = () => {
           {/* <!-- About Company --> */}
           <div className="form-group col-lg-12 col-md-12">
             <label>About Company</label>
+            <span style={{ color: "red" }} className="ms-1">
+              *
+            </span>
             <textarea
+              required
               value={formdata.about}
               onChange={(e) =>
                 setFormdata({ ...formdata, about: e.target.value })
@@ -327,13 +495,23 @@ const FormInfoBox = () => {
             ></textarea>
           </div>
 
-          <LogoCoverUploader formdata={formdata} setFormdata={setFormdata} />
+          <LogoCoverUploader
+            formdata={formdata}
+            setFormdata={setFormdata}
+            Deletecover={Deletecover}
+          />
           {/* End logo and cover photo components */}
 
-          {/* <!-- Input --> */}
-          <div className="form-group col-lg-6 col-md-12">
-            <button className="theme-btn btn-style-one">Save</button>
-          </div>
+          <button
+            className="theme-btn btn-style-one"
+            type="submit"
+            disabled={isDisabled}
+            style={{
+              cursor: isDisabled ? "not-allowed" : "pointer",
+            }}
+          >
+            {loading || submitting ? "Saving..." : "Save"}
+          </button>
         </div>
       </form>
     </>

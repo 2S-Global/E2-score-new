@@ -1,10 +1,10 @@
 import FormInfoBox from "./FormInfoBox";
 /* import LogoCoverUploader from "./LogoCoverUploader"; */
 
-const index = () => {
+const index = ({ setActiveTab }) => {
   return (
     <div className="widget-content">
-      <FormInfoBox />
+      <FormInfoBox setActiveTab={setActiveTab} />
       {/* compnay info box */}
       {/*      <LogoCoverUploader /> */}
       {/* End logo and cover photo components */}
