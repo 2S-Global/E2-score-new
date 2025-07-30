@@ -37,7 +37,7 @@ const CompanyProfile = () => {
     { key: "profile", label: "Company Profile" },
     { key: "account", label: "Account Details" },
     { key: "contact", label: "Contact Person Details" },
-    { key: "kyc", label: "KYC" },
+    { key: "kyc", label: "KYC (Work Pending)" },
     { key: "social", label: "Social Network" },
     { key: "brance", label: "Branch" },
   ];
