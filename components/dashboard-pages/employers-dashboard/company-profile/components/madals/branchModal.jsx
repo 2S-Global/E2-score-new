@@ -14,7 +14,7 @@ const BranchModal = ({ show, onClose }) => {
         <div className="modal-content">
           {/* Modal Header */}
           <div className="modal-header">
-            <h5 className="modal-title">IT skills</h5>
+            <h5 className="modal-title">Add Branch</h5>
             <button
               type="button"
               className="btn-close"

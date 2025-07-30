@@ -34,7 +34,7 @@ const CompanyProfile = () => {
     gstin: "29ABCDE1234F1Z5",
   };
   const tabs = [
-    { key: "profile", label: "My Profile" },
+    { key: "profile", label: "Company Profile" },
     { key: "account", label: "Account Details" },
     { key: "contact", label: "Contact Person Details" },
     { key: "kyc", label: "KYC" },
@@ -157,7 +157,7 @@ const CompanyProfile = () => {
                     {activeTab === "contact" && (
                       <div>
                         <div className="widget-title">
-                          <h4>Contact Information</h4>
+                          <h4>Contact Person Information</h4>
                         </div>
                         <div className="widget-content">
                           <ContactInfoBox setActiveTab={setActiveTab} />
