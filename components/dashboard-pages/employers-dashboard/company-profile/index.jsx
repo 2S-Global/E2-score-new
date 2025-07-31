@@ -183,7 +183,6 @@ const CompanyProfile = () => {
 
         <CopyrightFooter />
       </div>
-      // End page-wrapper
     </>
   );
 };
