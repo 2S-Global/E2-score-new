@@ -178,3 +178,24 @@ img.rounded-circle {
   object-fit: cover;
   border-radius: 50%;
 }
+
+.react-select-container .react-select__control {
+  min-height: 38px; /* Match Bootstrap height */
+  height: 38px;
+  border-radius: 4px;
+  border-color: #ced4da;
+  box-shadow: none;
+}
+
+.react-select-container .react-select__value-container {
+  padding: 0 8px;
+  display: flex;
+  align-items: center; /* Match Bootstrap text vertical alignment */
+}
+
+.react-select-container .react-select__single-value,
+.react-select-container .react-select__placeholder {
+  line-height: 1.5; /* Same as Bootstrap input */
+  font-size: 0.95rem;
+  padding-top: 0; /* Remove extra top space */
+}
