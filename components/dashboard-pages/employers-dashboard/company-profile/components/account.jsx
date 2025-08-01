@@ -10,7 +10,9 @@ const AccountBox = ({ setActiveTab }) => {
     companyemail: "",
     companyphone: "",
   });
-
+  const [touched, setTouched] = useState({});
+  const [validationErrors, setValidationErrors] = useState({});
+  const [formErrors, setFormErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -51,7 +53,7 @@ const AccountBox = ({ setActiveTab }) => {
       setLoading(false);
     }
   };
-  const isDisabled = loading || submitting;
+  const isDisabled = loading || submitting || validationErrors.companyphone;
 
   const handelsubmit = async (e) => {
     e.preventDefault();
@@ -91,6 +93,38 @@ const AccountBox = ({ setActiveTab }) => {
       setLoading(false);
       setSubmitting(false);
     }
+  };
+
+  const handleBlur = (e) => {
+    const { name } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+
+    if (name === "companyphone") {
+      if (formdata.companyphone.length !== 10) {
+        setValidationErrors((prev) => ({
+          ...prev,
+          companyphone: "Phone number must be 10 digits.",
+        }));
+      } else {
+        setValidationErrors((prev) => ({ ...prev, companyphone: "" }));
+      }
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    let updatedValue = value;
+    let errorMsg = "";
+
+    if (name === "companyphone") {
+      updatedValue = value.replace(/\D/g, "").slice(0, 10);
+      if (updatedValue.length !== 10) {
+        errorMsg = "Phone number must be 10 digits.";
+      }
+    }
+
+    setFormData((prev) => ({ ...prev, [name]: updatedValue }));
+    setFormErrors((prev) => ({ ...prev, [name]: errorMsg }));
   };
 
   return (
@@ -150,13 +184,22 @@ const AccountBox = ({ setActiveTab }) => {
             <label>Mobile Number</label>
             <input
               type="text"
-              name="name"
+              name="companyphone"
+              className={`form-control ${
+                touched.companyphone && formErrors.companyphone
+                  ? "is-invalid"
+                  : ""
+              }`}
               placeholder="Enter Mobile Number"
+              onChange={handleChange}
+              onBlur={handleBlur}
               value={formdata.companyphone}
-              onChange={(e) =>
-                setFormData({ ...formdata, companyphone: e.target.value })
-              }
             />
+            {validationErrors.companyphone && (
+              <small className="text-danger">
+                {validationErrors.companyphone}
+              </small>
+            )}
           </div>
           <div className="form-group col-lg-6 col-md-12"></div>
 

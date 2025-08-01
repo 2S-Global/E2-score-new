@@ -122,7 +122,7 @@ const ContactInfoBox = ({ setActiveTab }) => {
     }
   };
 
-  const isDisabled = loading || submitting;
+  const isDisabled = loading || submitting || validationErrors.phone;
 
   return (
     <>
