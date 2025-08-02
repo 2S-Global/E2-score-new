@@ -1,11 +1,13 @@
 /*  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, use } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Sparkles } from "lucide-react";
 import axios from "axios";
 import { Trash2 } from "lucide-react";
-
+import AsyncCreatableSelect from "react-select/async-creatable";
+import debounce from "lodash.debounce";
+import CustomizedProgressBars from "@/components/common/loader";
 const getComparableDateValue = (year, month) => {
   if (!year || !month) return null;
   return parseInt(year) * 100 + parseInt(month); // e.g., 202405
@@ -21,8 +23,10 @@ const EmploymentModal = ({
   setmainError,
 }) => {
   const [error, setError] = useState("");
+  const cache = {}; // local cache to avoid duplicate calls
   const [wrongDate, setWrongDate] = useState(false);
-
+  const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
   const [isGenerated, setIsGenerated] = useState(false); // Track button presses
   const token = localStorage.getItem("candidate_token");
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
@@ -43,6 +47,7 @@ const EmploymentModal = ({
 
   useEffect(() => {
     fetchNoticePeriod();
+    fetchDefultOptions();
   }, []);
 
   const currentYear = new Date().getFullYear();
@@ -62,6 +67,33 @@ const EmploymentModal = ({
     description: item.description || "",
     notice_period: item.notice_period || "",
   });
+  const [defaultOptions, setDefaultOptions] = useState([
+    {
+      value: formData.company_name,
+      label: formData.company_name,
+    },
+  ]);
+
+  const fetchDefultOptions = async () => {
+    setLoading2(true);
+    try {
+      const response = await axios.get(
+        `${apiurl}/api/candidate/employment/random_company?company_name=${formData.company_name}`
+      );
+      if (response.data.success) {
+        const options = response.data.data.map((name) => ({
+          value: name,
+          label: name,
+        }));
+        setDefaultOptions(options);
+      }
+    } catch (error) {
+      console.error("Error fetching default options:", error);
+    } finally {
+      setLoading2(false);
+    }
+  };
+
   const [isFormValid, setIsFormValid] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -352,6 +384,49 @@ const EmploymentModal = ({
       setSuggestions([]);
     }
   };
+
+  // Debounced API call
+  const fetchOptions = async (inputValue) => {
+    if (!inputValue) return [];
+
+    if (cache[inputValue]) return cache[inputValue]; // return from cache
+
+    setLoading(true);
+    try {
+      const res = await axios.get(
+        `${apiurl}/api/candidate/employment/matching_company`,
+        {
+          params: { company_name: inputValue },
+        }
+      );
+
+      const options = res.data.data.map((name) => ({
+        label: name,
+        value: name,
+      }));
+
+      cache[inputValue] = options; // store in cache
+      setLoading(false);
+      return options;
+    } catch (err) {
+      setLoading(false);
+      console.error(err);
+      return [];
+    }
+  };
+
+  // Wrap fetchOptions in debounce so it only runs after typing stops
+  const loadOptions = useCallback(debounce(fetchOptions, 300), []);
+  useEffect(() => {
+    debounce(fetchOptions, 300);
+  }, [apiurl]);
+
+  const handleChange = (selectedOption) => {
+    setFormData({
+      ...formData,
+      company_name: selectedOption ? selectedOption.label : "",
+    });
+  };
   return (
     <>
       <style>
@@ -425,198 +500,150 @@ const EmploymentModal = ({
                   </span>
                 )}
               </div>
-
-              {/* Skills List */}
-
-              <form className="default-form" onSubmit={handleSave}>
-                <div className="mb-3 form-group">
-                  <label className="form-label">
-                    Is this your current employment?
-                    <span style={{ color: "red" }} className="ms-1">
-                      *
-                    </span>
-                  </label>
-
-                  <div className="d-flex align-items-center gap-3">
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="currentlyWorking"
-                        id="currentYes"
-                        value="true"
-                        checked={formData.currentlyWorking === true}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            currentlyWorking: e.target.value === "true",
-                          })
-                        }
-                      />
-
-                      <label
-                        className="form-check-label"
-                        htmlFor="currentlyWorking"
-                      >
-                        Yes
+              {loading2 ? (
+                <CustomizedProgressBars />
+              ) : (
+                <>
+                  <form className="default-form" onSubmit={handleSave}>
+                    <div className="mb-3 form-group">
+                      <label className="form-label">
+                        Is this your current employment?
+                        <span style={{ color: "red" }} className="ms-1">
+                          *
+                        </span>
                       </label>
+
+                      <div className="d-flex align-items-center gap-3">
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name="currentlyWorking"
+                            id="currentYes"
+                            value="true"
+                            checked={formData.currentlyWorking === true}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                currentlyWorking: e.target.value === "true",
+                              })
+                            }
+                          />
+
+                          <label
+                            className="form-check-label"
+                            htmlFor="currentlyWorking"
+                          >
+                            Yes
+                          </label>
+                        </div>
+
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name="currentlyWorking"
+                            id="currentNo"
+                            value="false"
+                            checked={formData.currentlyWorking === false}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                currentlyWorking: e.target.value === "true",
+                              })
+                            }
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor="currentNo"
+                          >
+                            No
+                          </label>
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="currentlyWorking"
-                        id="currentNo"
-                        value="false"
-                        checked={formData.currentlyWorking === false}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            currentlyWorking: e.target.value === "true",
-                          })
-                        }
-                      />
-                      <label className="form-check-label" htmlFor="currentNo">
-                        No
-                      </label>
+                    <div className="mb-3 form-group">
+                      <label className="form-label">Employment Type</label>
+                      <span style={{ color: "red" }} className="ms-1">
+                        *
+                      </span>
+
+                      <div className="d-flex align-items-center gap-3">
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name="employmenttype"
+                            id="currentYes"
+                            value="full-time"
+                            checked={formData.employmenttype === "full-time"}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                employmenttype: e.target.value,
+                              })
+                            }
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor="currentYes"
+                          >
+                            Full Time
+                          </label>
+                        </div>
+
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name="employmenttype"
+                            id="currentNo"
+                            value="part-time"
+                            checked={formData.employmenttype === "part-time"}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                employmenttype: e.target.value,
+                              })
+                            }
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor="currentNo"
+                          >
+                            Part Time
+                          </label>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
 
-                <div className="mb-3 form-group">
-                  <label className="form-label">Employment Type</label>
-                  <span style={{ color: "red" }} className="ms-1">
-                    *
-                  </span>
-
-                  <div className="d-flex align-items-center gap-3">
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="employmenttype"
-                        id="currentYes"
-                        value="full-time"
-                        checked={formData.employmenttype === "full-time"}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            employmenttype: e.target.value,
-                          })
-                        }
-                      />
-                      <label className="form-check-label" htmlFor="currentYes">
-                        Full Time
+                    {/* Company name */}
+                    <div className="mb-3 form-group">
+                      <label className="form-label">
+                        Company Name <span style={{ color: "red" }}>*</span>
                       </label>
+
+                      <AsyncCreatableSelect
+                        cacheOptions
+                        defaultOptions={defaultOptions}
+                        /*    isClearable */
+                        isLoading={loading}
+                        loadOptions={loadOptions}
+                        value={
+                          formData.company_name
+                            ? {
+                                label: formData.company_name,
+                                value: formData.company_name,
+                              }
+                            : null
+                        }
+                        onChange={handleChange}
+                        placeholder="Enter or create a company name"
+                      />
                     </div>
 
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="employmenttype"
-                        id="currentNo"
-                        value="part-time"
-                        checked={formData.employmenttype === "part-time"}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            employmenttype: e.target.value,
-                          })
-                        }
-                      />
-                      <label className="form-check-label" htmlFor="currentNo">
-                        Part Time
-                      </label>
-                    </div>
-                  </div>
-                </div>
-
-                {/* total Experience year and month drop down */}
-                {/* <div className="mb-3 form-group">
-                  <label className="form-label">Total Experience</label>
-
-                  <div className="d-flex gap-3">
-                    <select
-                      className="form-select"
-                      name="experience_yr"
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          experience_yr: e.target.value,
-                        })
-                      }
-                    >
-                      <option value="">Years</option>
-                      {[...Array(50).keys()].map((year) => (
-                        <option key={year} value={year}>
-                          {year} {year === 1 ? "Year" : "Years"}
-                        </option>
-                      ))}
-                    </select>
-
-                    <select
-                      className="form-select"
-                      name="experience_month"
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          experience_month: e.target.value,
-                        })
-                      }
-                    >
-                      <option value="">Months</option>
-                      {[...Array(12).keys()].map((month) => (
-                        <option key={month} value={month}>
-                          {month} {month === 1 ? "Month" : "Months"}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div> */}
-
-                {/* Company name */}
-                <div className="mb-3 form-group position-relative">
-                  <label className="form-label">
-                    Company Name
-                    <span style={{ color: "red" }} className="ms-1">
-                      *
-                    </span>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control custom-textarea"
-                    placeholder="Enter your company name"
-                    value={formData.company_name}
-                    onChange={handleInputChange}
-                    onFocus={() => {
-                      if (formData.company_name) {
-                        setSearchText(formData.company_name);
-                      }
-                    }}
-                  />
-
-                  {showDropdown && suggestions.length > 0 && (
-                    <ul
-                      className="list-group position-absolute w-100"
-                      style={{ zIndex: 1000 }}
-                    >
-                      {suggestions.map((item, index) => (
-                        <li
-                          key={index}
-                          className="list-group-item list-group-item-action"
-                          onClick={() => handleSuggestionClick(item)}
-                          style={{ cursor: "pointer" }}
-                        >
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-
-                {/* <div className="mb-3 form-group">
+                    {/* <div className="mb-3 form-group">
                   <label className="form-label"> Testing</label>
                   <textarea
                     style={{
@@ -634,85 +661,32 @@ const EmploymentModal = ({
                   />
                 </div> */}
 
-                {/* Job Title */}
-                <div className="mb-3 form-group">
-                  <label className="form-label">
-                    Job Title
-                    <span style={{ color: "red" }} className="ms-1">
-                      *
-                    </span>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control custom-textarea"
-                    placeholder="Enter your job title"
-                    value={formData.job_title}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        job_title: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-
-                {/* Joining Date*/}
-                <div className="mb-3 form-group">
-                  <label className="form-label">
-                    Joining Date
-                    <span style={{ color: "red" }} className="ms-1">
-                      *
-                    </span>
-                  </label>
-
-                  <div className="d-flex gap-3">
-                    {/* Years Dropdown (2000 - 2025) */}
-                    <select
-                      className="form-select form-control "
-                      value={formData.joining_year || ""}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          joining_year: e.target.value,
-                          joining_month: "", // reset month on year change
-                        })
-                      }
-                    >
-                      <option value="">Select Year</option>
-                      {Array.from({ length: 30 }, (_, i) => {
-                        const year = currentYear - i;
-                        return (
-                          <option key={year} value={year}>
-                            {year}
-                          </option>
-                        );
-                      })}
-                    </select>
-
-                    {/* Months Dropdown (Jan - Dec) */}
-                    <select
-                      className="form-select form-control"
-                      value={formData.joining_month || ""}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          joining_month: e.target.value,
-                        })
-                      }
-                    >
-                      <option value="">Select Month</option>
-                      {generateMonthOptions(
-                        parseInt(formData.joining_year || currentYear)
-                      )}
-                    </select>
-                  </div>
-                </div>
-                {/* Worked till */}
-                {!formData.currentlyWorking && (
-                  <>
+                    {/* Job Title */}
                     <div className="mb-3 form-group">
                       <label className="form-label">
-                        Leaving Date
+                        Job Title
+                        <span style={{ color: "red" }} className="ms-1">
+                          *
+                        </span>
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control custom-textarea"
+                        placeholder="Enter your job title"
+                        value={formData.job_title}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            job_title: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+
+                    {/* Joining Date*/}
+                    <div className="mb-3 form-group">
+                      <label className="form-label">
+                        Joining Date
                         <span style={{ color: "red" }} className="ms-1">
                           *
                         </span>
@@ -721,13 +695,13 @@ const EmploymentModal = ({
                       <div className="d-flex gap-3">
                         {/* Years Dropdown (2000 - 2025) */}
                         <select
-                          className="form-select"
-                          value={formData.leaving_year || ""}
+                          className="form-select form-control "
+                          value={formData.joining_year || ""}
                           onChange={(e) =>
                             setFormData({
                               ...formData,
-                              leaving_year: e.target.value,
-                              leaving_month: "", // reset month on year change
+                              joining_year: e.target.value,
+                              joining_month: "", // reset month on year change
                             })
                           }
                         >
@@ -741,88 +715,145 @@ const EmploymentModal = ({
                             );
                           })}
                         </select>
+
                         {/* Months Dropdown (Jan - Dec) */}
                         <select
-                          className="form-select"
-                          value={formData.leaving_month || ""}
+                          className="form-select form-control"
+                          value={formData.joining_month || ""}
                           onChange={(e) =>
                             setFormData({
                               ...formData,
-                              leaving_month: e.target.value,
+                              joining_month: e.target.value,
                             })
                           }
                         >
                           <option value="">Select Month</option>
                           {generateMonthOptions(
-                            parseInt(formData.leaving_year || currentYear)
+                            parseInt(formData.joining_year || currentYear)
                           )}
                         </select>
                       </div>
                     </div>
+                    {/* Worked till */}
+                    {!formData.currentlyWorking && (
+                      <>
+                        <div className="mb-3 form-group">
+                          <label className="form-label">
+                            Leaving Date
+                            <span style={{ color: "red" }} className="ms-1">
+                              *
+                            </span>
+                          </label>
 
-                    {error && <div className="text-danger mb-3">{error}</div>}
-                  </>
-                )}
-                {formData.currentlyWorking && (
-                  <>
-                    {/* notice_period */}
+                          <div className="d-flex gap-3">
+                            {/* Years Dropdown (2000 - 2025) */}
+                            <select
+                              className="form-select"
+                              value={formData.leaving_year || ""}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  leaving_year: e.target.value,
+                                  leaving_month: "", // reset month on year change
+                                })
+                              }
+                            >
+                              <option value="">Select Year</option>
+                              {Array.from({ length: 30 }, (_, i) => {
+                                const year = currentYear - i;
+                                return (
+                                  <option key={year} value={year}>
+                                    {year}
+                                  </option>
+                                );
+                              })}
+                            </select>
+                            {/* Months Dropdown (Jan - Dec) */}
+                            <select
+                              className="form-select"
+                              value={formData.leaving_month || ""}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  leaving_month: e.target.value,
+                                })
+                              }
+                            >
+                              <option value="">Select Month</option>
+                              {generateMonthOptions(
+                                parseInt(formData.leaving_year || currentYear)
+                              )}
+                            </select>
+                          </div>
+                        </div>
+
+                        {error && (
+                          <div className="text-danger mb-3">{error}</div>
+                        )}
+                      </>
+                    )}
+                    {formData.currentlyWorking && (
+                      <>
+                        {/* notice_period */}
+                        <div className="mb-3 form-group">
+                          <label className="form-label">Notice Period</label>
+                          {/* select list_notice_period */}
+                          <select
+                            className="form-select"
+                            value={formData.notice_period || ""}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                notice_period: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">Select Notice Period</option>
+                            {list_notice_period.map((item, index) => (
+                              <option key={item.id} value={item.id}>
+                                {item.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </>
+                    )}
+                    {/* Job profile */}
                     <div className="mb-3 form-group">
-                      <label className="form-label">Notice Period</label>
-                      {/* select list_notice_period */}
-                      <select
-                        className="form-select"
-                        value={formData.notice_period || ""}
-                        onChange={(e) =>
+                      <label className="form-label">Job Profile</label>
+                      <textarea
+                        className="form-control mb-2"
+                        placeholder="Type here ..."
+                        rows="2" // default height = 1 row
+                        name="description"
+                        style={{
+                          padding: "10px",
+                          minheight: "2.5em",
+                          height: "auto",
+                          resize: "vertical", // allow only vertical resizing
+                          minHeight: "2.5em", // ensures 1 row minimum height (adjust as needed)
+                        }}
+                        value={formData.description}
+                        onChange={(e) => {
                           setFormData({
                             ...formData,
-                            notice_period: e.target.value,
-                          })
-                        }
+                            description: e.target.value,
+                          });
+                          setIsGenerated(false); // Reset when user types
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="suggestion-btn"
+                        onClick={handleGenerateHeadline}
                       >
-                        <option value="">Select Notice Period</option>
-                        {list_notice_period.map((item, index) => (
-                          <option key={item.id} value={item.id}>
-                            {item.name}
-                          </option>
-                        ))}
-                      </select>
+                        <Sparkles />
+                        {isGenerated ? "Clear" : "Help me write"}
+                      </button>
                     </div>
-                  </>
-                )}
-                {/* Job profile */}
-                <div className="mb-3 form-group">
-                  <label className="form-label">Job Profile</label>
-                  <textarea
-                    className="form-control mb-2"
-                    placeholder="Type here ..."
-                    rows="2" // default height = 1 row
-                    name="description"
-                    style={{
-                      padding: "10px",
-                      minheight: "2.5em",
-                      height: "auto",
-                      resize: "vertical", // allow only vertical resizing
-                      minHeight: "2.5em", // ensures 1 row minimum height (adjust as needed)
-                    }}
-                    value={formData.description}
-                    onChange={(e) => {
-                      setFormData({
-                        ...formData,
-                        description: e.target.value,
-                      });
-                      setIsGenerated(false); // Reset when user types
-                    }}
-                  />
-                  <button
-                    type="button"
-                    className="suggestion-btn"
-                    onClick={handleGenerateHeadline}
-                  >
-                    <Sparkles />
-                    {isGenerated ? "Clear" : "Help me write"}
-                  </button>
-                </div>
-              </form>
+                  </form>
+                </>
+              )}
             </div>
 
             {/* Footer Buttons */}
