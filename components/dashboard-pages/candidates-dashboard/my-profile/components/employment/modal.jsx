@@ -8,6 +8,7 @@ import { Trash2 } from "lucide-react";
 import AsyncCreatableSelect from "react-select/async-creatable";
 import debounce from "lodash.debounce";
 import CustomizedProgressBars from "@/components/common/loader";
+import CompanyNameSelect from "./SelectCompany.jsx"; // Import the new component
 const getComparableDateValue = (year, month) => {
   if (!year || !month) return null;
   return parseInt(year) * 100 + parseInt(month); // e.g., 202405
@@ -619,7 +620,7 @@ const EmploymentModal = ({
                     </div>
 
                     {/* Company name */}
-                    <div className="mb-3 form-group">
+                    {/*  <div className="mb-3 form-group">
                       <label className="form-label">
                         Company Name <span style={{ color: "red" }}>*</span>
                       </label>
@@ -627,7 +628,6 @@ const EmploymentModal = ({
                       <AsyncCreatableSelect
                         cacheOptions
                         defaultOptions={defaultOptions}
-                        /*    isClearable */
                         isLoading={loading}
                         loadOptions={loadOptions}
                         value={
@@ -641,7 +641,14 @@ const EmploymentModal = ({
                         onChange={handleChange}
                         placeholder="Enter or create a company name"
                       />
-                    </div>
+                    </div> */}
+
+                    {/* Company name input with suggestions */}
+                    <CompanyNameSelect
+                      formData={formData}
+                      setFormData={setFormData}
+                      defaultOptions={defaultOptions}
+                    />
 
                     {/* <div className="mb-3 form-group">
                   <label className="form-label"> Testing</label>
