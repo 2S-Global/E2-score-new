@@ -7,8 +7,8 @@ import TopCardBlock from "./components/TopCardBlock";
 import TopCardBlock2 from "./components/TopCardBlock2";
 import ProfileChart from "./components/ProfileChart";
 import Notification from "./components/Notification";
-import PendingApplicants from "./components/Applicants"; //need to change
-import CompleteApplicants from "./components/Applicants"; //need to change
+import PendingApplicants from "./components/PendindingApplicants.jsx"; //need to change
+import CompleteApplicants from "./components/CompleteApplicants.jsx"; //need to change
 import CopyrightFooter from "../../CopyrightFooter";
 import MenuToggler from "../../MenuToggler";
 

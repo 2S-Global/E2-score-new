@@ -44,7 +44,7 @@ const FormContentcom = () => {
       }
       setSuccess("Registration successful!");
       const token = response.data.token;
-      localStorage.setItem("Admin_token", token);
+      localStorage.setItem("employer_token", token);
       router.push("/employers-dashboard/dashboard");
     } catch (err) {
       setError(
