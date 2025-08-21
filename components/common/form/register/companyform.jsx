@@ -3,9 +3,11 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 //new component
 import MessageComponent from "../../ResponseMsg";
-
+import { Search } from "lucide-react";
 const FormContentcom = () => {
   const [formData, setFormData] = useState({
+    cin_id: "",
+    cin: "",
     name: "",
     email: "",
     password: "",
@@ -13,7 +15,9 @@ const FormContentcom = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [errorId, setErrorId] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [message_id, setMessageId] = useState(null);
   const router = useRouter();
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -51,13 +55,91 @@ const FormContentcom = () => {
     }
   };
 
+  const handelcinsubmit = async () => {
+    const regex =
+      /^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$/;
+    if (regex.test(formData.cin)) {
+      try {
+        setLoading(true);
+        setError(null);
+        setErrorId(null);
+        setSuccess(null);
+        setMessageId(null);
+
+        const response = await axios.post(
+          `${apiurl}/api/companyprofile/search_company_by_cin`,
+          {
+            cin: formData.cin,
+          }
+        );
+        if (response.data.success) {
+          setFormData({
+            ...formData,
+            cin_id: response.data.data._id,
+            cin: response.data.data.cinnumber,
+            name: response.data.data.companyname,
+            email: response.data.data.companyemail,
+            phone_number: response.data.data.companyphone,
+            address: response.data.data.companyaddress,
+          });
+
+          setError(null);
+          setErrorId(null);
+          setSuccess(response.data.message);
+          setMessageId(Date.now());
+        } else {
+          setError("No Details Found Please Enter Valid CIN or Enter Manually");
+          setErrorId(Date.now());
+        }
+      } catch (e) {
+        setError("No Details Found Please Enter Valid CIN or Enter Manually");
+        setErrorId(Date.now());
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      setError("Invalid CIN Please Enter Valid CIN or Enter Manually");
+      setErrorId(Date.now());
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       {/* display error */}
-      <MessageComponent error={error} success={success} />
+      <MessageComponent
+        error={error}
+        success={success}
+        errorId={errorId}
+        message_id={message_id}
+      />
+
+      <div className="form-group">
+        <label>Company CIN Number </label>
+        <span className="text-danger ms-2">*</span>
+        <div className="d-flex align-items-stretch gap-2">
+          <input
+            type="text"
+            name="cin"
+            placeholder="Enter company CIN"
+            required
+            value={formData.cin}
+            onChange={handleChange}
+            className="form-control"
+            pattern="^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$"
+          />
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => handelcinsubmit()}
+          >
+            <Search />
+          </button>
+        </div>
+      </div>
 
       <div className="form-group">
         <label>Company Name</label>
+        <span className="text-danger ms-2">*</span>
         <input
           type="text"
           name="name"
@@ -70,6 +152,7 @@ const FormContentcom = () => {
       {/* name */}
       <div className="form-group">
         <label>Official Email Address</label>
+        <span className="text-danger ms-2">*</span>
         <input
           type="email"
           name="email"
@@ -82,21 +165,9 @@ const FormContentcom = () => {
       </div>
       {/* Email */}
 
-      {/*      <div className="form-group">
-  <label>Number of Employees</label>
-  <select name="employees" required>
-    <option value="">Select</option>
-    <option value="less_than_50">Less than 50</option>
-    <option value="50_100">50 - 100</option>
-    <option value="101_500">101 - 500</option>
-    <option value="501_1000">501 - 1000</option>
-    <option value="more_than_1000">More than 1000</option>
-  </select>
-</div> */}
-      {/* Number of Employees */}
-
       <div className="form-group">
         <label>Phone Number</label>
+        <span className="text-danger ms-2">*</span>
         <input
           type="text"
           name="phone_number"
@@ -108,19 +179,9 @@ const FormContentcom = () => {
       </div>
       {/* Phone */}
 
-      {/*     <div className="form-group">
-          <label>Pincode</label>
-          <input type="text" name="pincode" placeholder="Pincode" required />
-        </div> */}
-      {/* Pincode */}
-
-      {/*      <div className="form-group">
-  <label>Address</label>
-  <textarea name="address" placeholder="Enter your address" required></textarea>
-</div> */}
-      {/* Address */}
       <div className="form-group">
         <label>Password</label>
+        <span className="text-danger ms-2">*</span>
         <input
           id="password-field"
           type="password"

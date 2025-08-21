@@ -314,7 +314,7 @@ const FormInfoBox = ({ setActiveTab }) => {
           <div className="d-flex align-items-stretch gap-2">
             <input
               type="text"
-              name="name"
+              name="cin"
               placeholder="Enter company CIN"
               value={formdata.cin}
               onChange={(e) =>
