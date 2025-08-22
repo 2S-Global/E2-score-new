@@ -306,7 +306,6 @@ const Cardedit = ({
                     <div className="mb-3 form-group">
                       <label htmlFor="father_name" className="form-label">
                         <b>Father's Full Name</b>
-                        <span style={{ color: "red" }}>*</span>
                       </label>
                       <input
                         name="father_name"
@@ -314,7 +313,6 @@ const Cardedit = ({
                         className="form-control"
                         value={formData.father_name}
                         onChange={handleChange}
-                        required
                         id="father_name"
                         placeholder="Enter your father's full name"
                       />
