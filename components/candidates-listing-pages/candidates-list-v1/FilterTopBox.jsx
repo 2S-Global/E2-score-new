@@ -83,7 +83,7 @@ const FilterTopBox = () => {
   const experienceFilter = (item) =>
     experiences?.length !== 0
       ? experiences?.includes(
-          item?.experience?.split(" ").join("-").toLocaleLowerCase(),
+          item?.experience?.split(" ").join("-").toLocaleLowerCase()
         )
       : item;
 
@@ -91,7 +91,7 @@ const FilterTopBox = () => {
   const qualificationFilter = (item) =>
     qualifications?.length !== 0
       ? qualifications?.includes(
-          item?.qualification?.split(" ").join("-").toLocaleLowerCase(),
+          item?.qualification?.split(" ").join("-").toLocaleLowerCase()
         )
       : item;
 
@@ -158,7 +158,7 @@ const FilterTopBox = () => {
             {/* End bookmark-btn */}
 
             <Link
-              href={`/candidates-single-v1/${candidate.id}`}
+              href={`/candidates-details/${candidate.id}`}
               className="theme-btn btn-style-three"
             >
               <span className="btn-title">View Profile</span>

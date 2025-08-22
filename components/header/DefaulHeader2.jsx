@@ -6,13 +6,13 @@ import HeaderNavContent from "./HeaderNavContent";
 import Image from "next/image";
 
 const DefaulHeader2 = () => {
-  const [navbar, setNavbar] = useState(false);
+  const [navbar, setNavbar] = useState(true);
 
   const changeBackground = () => {
     if (window.scrollY >= 10) {
       setNavbar(true);
     } else {
-      setNavbar(false);
+      setNavbar(true);
     }
   };
 

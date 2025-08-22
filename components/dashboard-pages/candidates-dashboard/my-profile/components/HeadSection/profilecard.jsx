@@ -38,74 +38,59 @@ const ProfileCard = ({
 
   return (
     <>
-      <div className="p-4">
-        {/* Name & Degree Section */}
-        <div className="">
-          <h4 className="fw-bold mb-1 d-flex align-items-center gap-1">
-            <span style={{ fontSize: "12px" }}>{name}</span>
-            {gender && (
-              <span style={{ fontSize: "12px", fontWeight: "normal" }}>
-                ({gender})
-              </span>
-            )}
-            <i
-              className="la la-pencil-alt "
-              onClick={openModalRH}
-              style={{ cursor: "pointer", fontSize: "16px" }}
-            ></i>
-          </h4>
+      <div className="">
+        <div className="card-body p-4">
+          {/* Name & Degree Section */}
+          <div className="mb-3">
+            <h4 className="fw-bold d-flex align-items-center gap-2 mb-2">
+              <span className="fs-6">{name}</span>
+              {gender && (
+                <span className="fs-6 fw-normal text-muted">({gender})</span>
+              )}
+              <i
+                className="la la-pencil-alt text-primary"
+                onClick={openModalRH}
+                style={{ cursor: "pointer", fontSize: "16px" }}
+              ></i>
+            </h4>
 
-          {/* when degree , father name is not available taking space. fix this issue */}
-
-          <div>
             {degree && (
-              <div style={{ fontSize: "12px", fontWeight: "bold" }}>
-                {degree}
-              </div>
+              <div className="fs-6 fw-semibold text-dark">{degree}</div>
             )}
             {father_name && (
-              <div
-                style={{ fontSize: "12px", fontWeight: "normal" }}
-                className="text-muted"
-              >
-                Father's Name: {father_name}
+              <div className="fs-6 text-muted">
+                <span className="fw-semibold">Father's Name:</span>{" "}
+                {father_name}
               </div>
             )}
           </div>
 
-          {/*  <p className="text-muted">{university}</p> */}
-        </div>
-
-        {/* Info Section */}
-        <div className="row">
-          {/* Left Section */}
-          <div className="col-md-12">
-            <p className="mb-0">
-              <FaMapMarkerAlt className="text-secondary me-2" /> {location}
-            </p>
-            {/*  <p className="mb-0"><FaUser className="text-secondary me-2" /> {gender}</p> */}
-            {dob && (
-              <p className="mb-0">
-                <FaBirthdayCake className="text-secondary me-2" /> {dob}
+          {/* Info Section */}
+          <div className="row">
+            <div className="col-md-12">
+              {location && (
+                <p className="mb-2 d-flex align-items-center text-secondary">
+                  <FaMapMarkerAlt className="me-2" /> {location}
+                </p>
+              )}
+              {dob && (
+                <p className="mb-2 d-flex align-items-center text-secondary">
+                  <FaBirthdayCake className="me-2" /> {dob}
+                </p>
+              )}
+              <p className="mb-2 d-flex align-items-center text-secondary">
+                <FaPhone className="me-2" /> {phone}
+                <FaCheckCircle className="ms-2 text-success" />
               </p>
-            )}
-            <p className="mb-0">
-              <FaPhone className="text-secondary me-2" /> {phone}{" "}
-              <FaCheckCircle className="text-success" />
-            </p>
-            <p className="mb-0">
-              <FaEnvelope className="text-secondary me-2" /> {email}{" "}
-              <FaCheckCircle className="text-success" />
-            </p>
+              <p className="mb-0 d-flex align-items-center text-secondary">
+                <FaEnvelope className="me-2" /> {email}
+                <FaCheckCircle className="ms-2 text-success" />
+              </p>
+            </div>
           </div>
-
-          {/* Right Section */}
-          {/*  <div className="col-md-6">
-            <p className="mb-0"><FaPhone className="text-secondary me-2" /> {phone} <FaCheckCircle className="text-success" /></p>
-            <p className="mb-0"><FaEnvelope className="text-secondary me-2" /> {email} <FaCheckCircle className="text-success" /></p>
-          </div> */}
         </div>
       </div>
+
       {isModalOpen && (
         <Cardedit
           show={isModalOpen}
