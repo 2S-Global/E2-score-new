@@ -77,7 +77,11 @@ const Applicants = () => {
                     <img
                       width={70}
                       height={70}
-                      src={candidate.photo}
+                      src={
+                        candidate.photo
+                          ? candidate.photo
+                          : "/images/resource/no_user.png"
+                      }
                       alt="candidates"
                       className="rounded-circle border border-primary"
                     />
