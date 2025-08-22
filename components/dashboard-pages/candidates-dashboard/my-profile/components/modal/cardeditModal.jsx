@@ -24,6 +24,7 @@ const Cardedit = ({
     country: "",
     currentLocation: "",
     hometown: "",
+    father_name: "",
   });
 
   useEffect(() => {
@@ -82,12 +83,13 @@ const Cardedit = ({
         );
         if (response.status === 200) {
           setFormData({
-            full_name: response.data.name,
-            gender: response.data.gender,
-            dob: response.data.dob,
-            country: response.data.country_id,
-            currentLocation: response.data.currentLocation,
-            hometown: response.data.hometown,
+            full_name: response.data.name || "",
+            gender: response.data.gender || "",
+            dob: response.data.dob ? new Date(response.data.dob) : null,
+            country: response.data.country_id || "",
+            currentLocation: response.data.currentLocation || "",
+            hometown: response.data.hometown || "",
+            father_name: response.data.father_name || "",
           });
 
           if (response.data.country_id == 102) {
@@ -298,6 +300,23 @@ const Cardedit = ({
                         required
                         id="full_name"
                         placeholder="Enter your full name"
+                      />
+                    </div>
+
+                    <div className="mb-3 form-group">
+                      <label htmlFor="father_name" className="form-label">
+                        <b>Father's Full Name</b>
+                        <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <input
+                        name="father_name"
+                        type="text"
+                        className="form-control"
+                        value={formData.father_name}
+                        onChange={handleChange}
+                        required
+                        id="father_name"
+                        placeholder="Enter your father's full name"
                       />
                     </div>
                     {/* Gender Selection */}

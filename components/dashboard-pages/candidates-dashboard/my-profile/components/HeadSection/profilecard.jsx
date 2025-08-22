@@ -15,6 +15,7 @@ const ProfileCard = ({
   name,
   degree,
   location,
+  father_name,
   phone,
   email,
   gender,
@@ -54,7 +55,24 @@ const ProfileCard = ({
             ></i>
           </h4>
 
-          {degree && <h6 className="text-muted">{degree}</h6>}
+          {/* when degree , father name is not available taking space. fix this issue */}
+
+          <div>
+            {degree && (
+              <div style={{ fontSize: "12px", fontWeight: "bold" }}>
+                {degree}
+              </div>
+            )}
+            {father_name && (
+              <div
+                style={{ fontSize: "12px", fontWeight: "normal" }}
+                className="text-muted"
+              >
+                Father's Name: {father_name}
+              </div>
+            )}
+          </div>
+
           {/*  <p className="text-muted">{university}</p> */}
         </div>
 

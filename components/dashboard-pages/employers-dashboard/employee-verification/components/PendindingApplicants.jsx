@@ -19,7 +19,7 @@ const Applicants = () => {
     <>
       <div className="container">
         <div className="row">
-          {candidatesData.slice(17, 23).map((candidate) => (
+          {candidatesData.slice(11, 15).map((candidate) => (
             <div className="col-md-6 mb-3" key={candidate.id}>
               <div className="card shadow-sm border-0 rounded-3 p-3 h-100">
                 <div className="d-flex align-items-center">

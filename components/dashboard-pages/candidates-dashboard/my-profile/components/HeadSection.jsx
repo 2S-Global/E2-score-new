@@ -84,6 +84,7 @@ const HeadSection = () => {
                     <ProfileCard
                       name={user.name}
                       degree={user.degree}
+                      father_name={user.father_name}
                       /* university="University of Engineering and Management, Jaipur" */
                       location={user.currentLocation}
                       phone={user.phone_number}

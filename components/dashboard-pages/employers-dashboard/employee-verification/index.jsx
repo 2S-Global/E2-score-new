@@ -71,12 +71,11 @@ const Index = () => {
 
                   {activeTab === "pending" && (
                     <>
-                      <span className="col-md-12">1</span> <PendingApplicants />
+                      <PendingApplicants />
                     </>
                   )}
                   {activeTab === "complete" && (
                     <>
-                      <span className="col-md-12">2</span>{" "}
                       <CompleteApplicants />
                     </>
                   )}
