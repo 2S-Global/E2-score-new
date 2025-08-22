@@ -101,8 +101,8 @@ const Applicants = () => {
                       {candidate.jobTitle}
                     </p>
                     <p className="mb-2 small text-muted d-flex align-items-center">
-                      <i className="flaticon-map-locator me-1 text-primary"></i>{" "}
-                      {candidate.currentAddress}
+                      <i className="flaticon-envelope me-1 text-primary"></i>{" "}
+                      {candidate.email}
                     </p>
 
                     {/* Buttons */}
