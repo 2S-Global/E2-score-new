@@ -127,22 +127,22 @@ const FormInfoBox = ({ setActiveTab }) => {
 
         const updatedFormData = {
           ...formdata,
-          cin_id: data.cin_id,
-          cin: data.cin,
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          address: data.address,
-          website: data.website,
-          established: data.established,
-          teamsize: data.teamsize,
+          cin_id: data.cin_id || "",
+          cin: data.cin || "",
+          name: data.name || "",
+          email: data.email || "",
+          phone: data.phone || "",
+          address: data.address || "",
+          website: data.website || "",
+          established: data.established || "",
+          teamsize: data.teamsize || "",
           industry_type: data.industry_type
             ?.split(",")
             .map((item) => parseInt(item.trim(), 10)),
-          allowinsearch: data.allowinsearch,
-          about: data.about,
-          logo_preview: data.logo,
-          cover_preview: data.cover,
+          allowinsearch: data.allowinsearch || true,
+          about: data.about || "",
+          logo_preview: data.logo || "",
+          cover_preview: data.cover || "",
         };
 
         setFormdata(updatedFormData);
@@ -479,7 +479,7 @@ const FormInfoBox = ({ setActiveTab }) => {
               className="basic-multi-select"
               classNamePrefix="select"
               value={industries.filter((opt) =>
-                formdata.industry_type.includes(opt.value)
+                formdata.industry_type?.includes(opt.value)
               )}
               onChange={(selectedOptions) =>
                 setFormdata({
