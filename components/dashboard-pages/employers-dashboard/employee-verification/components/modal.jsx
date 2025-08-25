@@ -1,14 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
 import EmployeeInfoCard from "./EmployeeInfoCard";
 import PersonalInfoCard from "./PersonalDetailsCard";
+
+const getComparableDateValue = (year, month) => {
+  if (!year || !month) return null;
+  return parseInt(year) * 100 + parseInt(month); // e.g., 202405
+};
+
 const Modal = ({ show, onClose }) => {
   if (!show) return null;
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [wrongDate, setWrongDate] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [list_notice_period, setList_notice_period] = useState([]);
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1; // getMonth() is 0-indexed
 
   const [user] = useState({
     designation: "Software Engineer",
@@ -16,6 +27,10 @@ const Modal = ({ show, onClose }) => {
     currentlyemployed: false,
     joiningdate: "2020-01-01",
     leavedate: "2021-01-01",
+    joining_year: "",
+    joining_month: "",
+    leaving_year: "",
+    leaving_month: "",
     Verified: false,
     designation_verified: false,
     duration_verified: false,
@@ -56,6 +71,117 @@ const Modal = ({ show, onClose }) => {
     }, 1500);
   };
 
+  const validateForm = () => {
+    if (
+      !formdata.joining_year ||
+      formdata.joining_year.toString().trim() === ""
+    ) {
+      return false;
+    }
+    if (
+      !formdata.joining_month ||
+      formdata.joining_month.toString().trim() === ""
+    ) {
+      return false;
+    }
+    if (!formdata.currentlyemployed) {
+      if (
+        !formdata.leaving_year ||
+        formdata.leaving_year.toString().trim() === ""
+      ) {
+        return false;
+      }
+      if (
+        !formdata.leaving_month ||
+        formdata.leaving_month.toString().trim() === ""
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+  useEffect(() => {
+    setIsFormValid(validateForm());
+  }, [formdata]);
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const generateMonthOptions = (selectedYear) => {
+    const maxMonth = selectedYear === currentYear ? currentMonth : 12;
+    return monthNames.slice(0, maxMonth).map((month, index) => (
+      <option key={index + 1} value={index + 1}>
+        {month}
+      </option>
+    ));
+  };
+
+  useEffect(() => {
+    if (formdata.currentlyemployed) {
+      setError("");
+      setWrongDate(false);
+    } else {
+      const startValue = getComparableDateValue(
+        formdata.joining_year,
+        formdata.joining_month
+      );
+      const endValue = getComparableDateValue(
+        formdata.leaving_year,
+        formdata.leaving_month
+      );
+
+      if (startValue && endValue) {
+        if (startValue > endValue) {
+          setError("End date cannot be before start date.");
+          setWrongDate(true);
+        } else {
+          setError("");
+          setWrongDate(false);
+        }
+      }
+    }
+  }, [
+    formdata.joining_year,
+    formdata.joining_month,
+    formdata.leaving_year,
+    formdata.leaving_month,
+    formdata.currentlyemployed,
+  ]);
+
+  useEffect(() => {
+    if (formdata.currentlyemployed) {
+      setError("");
+    }
+  }, [formdata.currentlyemployed]);
+
+  const fetchNoticePeriod = async () => {
+    try {
+      const response = await axios.get(
+        `${apiurl}/api/candidate/employment/get_notice_period`
+      );
+      if (response.data.success) {
+        setList_notice_period(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching notice period:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNoticePeriod();
+  }, []);
   return (
     <div
       className="modal fade show d-block"
@@ -92,7 +218,7 @@ const Modal = ({ show, onClose }) => {
             {loading ? (
               <CustomizedProgressBars />
             ) : (
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} className="default-form">
                 {/* Profile Summary Card */}
                 <div className="">
                   <PersonalInfoCard user={user} />
@@ -104,7 +230,7 @@ const Modal = ({ show, onClose }) => {
                 {/* Editable Form Fields */}
                 <div className="row g-3">
                   {/* Designation */}
-                  <div className="col-md-6">
+                  <div className="col-md-6 form-group">
                     <label className="form-label">
                       <b>Designation</b>
                     </label>
@@ -124,7 +250,7 @@ const Modal = ({ show, onClose }) => {
                   </div>
 
                   {/* Employment Type */}
-                  <div className="col-md-6">
+                  <div className="col-md-6 form-group">
                     <label className="form-label">
                       <b>Employment Type</b>
                     </label>
@@ -137,33 +263,168 @@ const Modal = ({ show, onClose }) => {
                     />
                   </div>
 
-                  {/* Joining Date */}
-                  <div className="col-md-6">
+                  <div className="mb-3 form-group">
                     <label className="form-label">
-                      <b>Joining Date</b>
+                      Is this person currently employed?
+                      <span style={{ color: "red" }} className="ms-1">
+                        *
+                      </span>
                     </label>
-                    <input
-                      name="joiningdate"
-                      type="date"
-                      className="form-control"
-                      value={formdata.joiningdate}
-                      onChange={handleChange}
-                    />
+
+                    <div className="d-flex align-items-center gap-3">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="currentlyemployed"
+                          id="currentYes"
+                          value="true"
+                          checked={formdata.currentlyemployed === true}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formdata,
+                              currentlyemployed: e.target.value === "true",
+                            })
+                          }
+                        />
+
+                        <label
+                          className="form-check-label"
+                          htmlFor="currentlyemployed"
+                        >
+                          Yes
+                        </label>
+                      </div>
+
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="currentlyemployed"
+                          id="currentNo"
+                          value="false"
+                          checked={formdata.currentlyemployed === false}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formdata,
+                              currentlyemployed: e.target.value === "true",
+                            })
+                          }
+                        />
+                        <label className="form-check-label" htmlFor="currentNo">
+                          No
+                        </label>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Leave Date */}
-                  <div className="col-md-6">
+                  {/* Joining Date*/}
+                  <div className="mb-3 form-group">
                     <label className="form-label">
-                      <b>Leave Date</b>
+                      Joining Date
+                      <span style={{ color: "red" }} className="ms-1">
+                        *
+                      </span>
                     </label>
-                    <input
-                      name="leavedate"
-                      type="date"
-                      className="form-control"
-                      value={formdata.leavedate}
-                      onChange={handleChange}
-                    />
+
+                    <div className="d-flex gap-3">
+                      {/* Years Dropdown (2000 - 2025) */}
+                      <select
+                        className="form-select form-control "
+                        value={formdata.joining_year || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formdata,
+                            joining_year: e.target.value,
+                            joining_month: "", // reset month on year change
+                          })
+                        }
+                      >
+                        <option value="">Select Year</option>
+                        {Array.from({ length: 30 }, (_, i) => {
+                          const year = currentYear - i;
+                          return (
+                            <option key={year} value={year}>
+                              {year}
+                            </option>
+                          );
+                        })}
+                      </select>
+
+                      {/* Months Dropdown (Jan - Dec) */}
+                      <select
+                        className="form-select form-control"
+                        value={formdata.joining_month || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formdata,
+                            joining_month: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="">Select Month</option>
+                        {generateMonthOptions(
+                          parseInt(formdata.joining_year || currentYear)
+                        )}
+                      </select>
+                    </div>
                   </div>
+                  {/* Worked till */}
+                  {!formdata.currentlyWorking && (
+                    <>
+                      <div className="mb-3 form-group">
+                        <label className="form-label">
+                          Leaving Date
+                          <span style={{ color: "red" }} className="ms-1">
+                            *
+                          </span>
+                        </label>
+
+                        <div className="d-flex gap-3">
+                          {/* Years Dropdown (2000 - 2025) */}
+                          <select
+                            className="form-select"
+                            value={formdata.leaving_year || ""}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formdata,
+                                leaving_year: e.target.value,
+                                leaving_month: "", // reset month on year change
+                              })
+                            }
+                          >
+                            <option value="">Select Year</option>
+                            {Array.from({ length: 30 }, (_, i) => {
+                              const year = currentYear - i;
+                              return (
+                                <option key={year} value={year}>
+                                  {year}
+                                </option>
+                              );
+                            })}
+                          </select>
+                          {/* Months Dropdown (Jan - Dec) */}
+                          <select
+                            className="form-select"
+                            value={formdata.leaving_month || ""}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formdata,
+                                leaving_month: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">Select Month</option>
+                            {generateMonthOptions(
+                              parseInt(formdata.leaving_year || currentYear)
+                            )}
+                          </select>
+                        </div>
+                      </div>
+
+                      {error && <div className="text-danger mb-3">{error}</div>}
+                    </>
+                  )}
 
                   {/* Switches */}
                   <div className="col-12 mt-3">
