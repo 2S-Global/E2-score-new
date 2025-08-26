@@ -123,9 +123,9 @@ const Applicants = () => {
                       >
                         <i className="la la-eye me-1"></i> View
                       </button>
-                      <button className="btn btn-sm btn-outline-danger">
+                      {/*   <button className="btn btn-sm btn-outline-danger">
                         <i className="la la-trash me-1"></i> Delete
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                 </div>
