@@ -1,6 +1,6 @@
-import Link from "next/link";
+"use client";
 
-import Image from "next/image";
+import Link from "next/link";
 import Modal from "./modal";
 import { useState, useEffect } from "react";
 import CustomizedProgressBars from "@/components/common/loader";
@@ -13,42 +13,57 @@ const Applicants = () => {
   const [candidatesData, setCandidatesData] = useState([]);
   const [error, setError] = useState(null);
   const [errorId, setErrorId] = useState(null);
-  const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [message_id, setMessageId] = useState(null);
   const [success, setSuccess] = useState(null);
-  const token = localStorage.getItem("employer_token");
-  const openModalRH = () => {
-    setIsModalOpen(true);
-    document.body.style.overflow = "hidden"; // Disable background scrolling
-  };
-  const closeModalRH = () => {
-    setIsModalOpen(false);
-    document.body.style.overflow = "auto"; // Re-enable background scrolling
-  };
+  const [can_id, setCanId] = useState(null);
+  const [employmentId, setEmploymentId] = useState(null);
+  const [token, setToken] = useState(null);
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `${apiurl}/api/companyprofile/get_user_associated_with_company`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.data.success) {
-        setCandidatesData(response.data.data);
-      }
-    } catch (error) {
-    } finally {
-      setLoading(false);
-    }
-  };
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      setToken(localStorage.getItem("employer_token"));
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!token) return;
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `${apiurl}/api/companyprofile/get_user_associated_with_company`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.data.success) {
+          setCandidatesData(response.data.data);
+        }
+      } catch (error) {
+        setError("Failed to fetch candidates");
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchData();
-  }, [token]);
+  }, [token, apiurl]);
+
+  const openModalRH = (id, empId) => {
+    setIsModalOpen(true);
+    setCanId(id);
+    setEmploymentId(empId);
+
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeModalRH = () => {
+    setIsModalOpen(false);
+    document.body.style.overflow = "auto";
+  };
 
   return (
     <>
@@ -58,6 +73,7 @@ const Applicants = () => {
         errorId={errorId}
         message_id={message_id}
       />
+
       {loading && (
         <div
           className="position-fixed top-0 start-0 w-100 vh-100 d-flex justify-content-center align-items-center bg-white bg-opacity-75"
@@ -66,28 +82,22 @@ const Applicants = () => {
           <CustomizedProgressBars />
         </div>
       )}
+
       <div className="container">
         <div className="row">
           {candidatesData.map((candidate) => (
-            <div className="col-md-6 mb-3" key={candidate.userId}>
+            <div className="col-md-6 mb-3" key={candidate.employmentId}>
               <div className="card shadow-sm border-0 rounded-3 p-3 h-100">
                 <div className="d-flex align-items-center">
-                  {/* Avatar */}
                   <div className="me-3">
                     <img
                       width={70}
                       height={70}
-                      src={
-                        candidate.photo
-                          ? candidate.photo
-                          : "/images/resource/no_user.png"
-                      }
+                      src={candidate.photo || "/images/resource/no_user.png"}
                       alt="candidates"
                       className="rounded-circle border border-primary"
                     />
                   </div>
-
-                  {/* Info */}
                   <div className="flex-grow-1">
                     <h6 className="mb-1 fw-semibold">
                       <Link
@@ -104,12 +114,12 @@ const Applicants = () => {
                       <i className="flaticon-envelope me-1 text-primary"></i>{" "}
                       {candidate.email}
                     </p>
-
-                    {/* Buttons */}
                     <div className="d-flex gap-2">
                       <button
                         className="btn btn-sm btn-outline-primary"
-                        onClick={openModalRH}
+                        onClick={() =>
+                          openModalRH(candidate.userId, candidate.employmentId)
+                        }
                       >
                         <i className="la la-eye me-1"></i> View
                       </button>
@@ -125,7 +135,14 @@ const Applicants = () => {
         </div>
       </div>
 
-      <Modal show={isModalOpen} onClose={closeModalRH} />
+      {isModalOpen && (
+        <Modal
+          show={isModalOpen}
+          onClose={closeModalRH}
+          can_id={can_id}
+          emp_id={employmentId}
+        />
+      )}
     </>
   );
 };

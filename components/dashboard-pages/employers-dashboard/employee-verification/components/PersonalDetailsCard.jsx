@@ -31,7 +31,7 @@ const PersonalInfoCard = ({ user }) => {
             <strong>Address:</strong> {user.address || "N/A"}
           </div>
           <div className="col-sm-6">
-            <strong>Pan Number:</strong> {user.Pan || "N/A"}
+            <strong>Pan Number:</strong> {user.pan || "N/A"}
           </div>
         </div>
       </div>

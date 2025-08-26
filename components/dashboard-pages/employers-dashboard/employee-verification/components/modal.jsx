@@ -1,15 +1,17 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
 import EmployeeInfoCard from "./EmployeeInfoCard";
 import PersonalInfoCard from "./PersonalDetailsCard";
+import axios from "axios";
 
 const getComparableDateValue = (year, month) => {
   if (!year || !month) return null;
   return parseInt(year) * 100 + parseInt(month); // e.g., 202405
 };
 
-const Modal = ({ show, onClose }) => {
+const Modal = ({ show, onClose, can_id, emp_id }) => {
   if (!show) return null;
 
   const [loading, setLoading] = useState(false);
@@ -18,15 +20,32 @@ const Modal = ({ show, onClose }) => {
   const [wrongDate, setWrongDate] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
   const [list_notice_period, setList_notice_period] = useState([]);
+  const [token, setToken] = useState(null);
+
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setToken(localStorage.getItem("employer_token"));
+    }
+  }, []);
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1; // getMonth() is 0-indexed
 
-  const [user] = useState({
-    designation: "Software Engineer",
-    employmenttype: "Full-time",
+  const [user, setUser] = useState({
+    name: "",
+    father_name: "",
+    email: "",
+    mobile: "",
+    dob: "",
+    gender: "",
+    address: "",
+    pan: "",
+    designation: "",
+    employmenttype: "",
     currentlyemployed: false,
-    joiningdate: "2020-01-01",
-    leavedate: "2021-01-01",
+    joiningdate: "",
+    leavedate: "",
     joining_year: "",
     joining_month: "",
     leaving_year: "",
@@ -38,12 +57,80 @@ const Modal = ({ show, onClose }) => {
     Serverd_notice_period: false,
     has_noc: false,
     has_due: false,
+    remarks: "",
+    _id: can_id,
+    employmentId: emp_id,
   });
+
+  useEffect(() => {
+    if (!can_id || !emp_id || !token) return;
+    FetchDetails(can_id, emp_id);
+    console.log(can_id, emp_id, token);
+  }, [can_id, emp_id, token]);
+
+  const FetchDetails = async (can_id, emp_id) => {
+    try {
+      const response = await axios.get(
+        `${apiurl}/api/companyprofile/get_employee_details?userId=${can_id}&employmentId=${emp_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        const data = response.data.data;
+        setUser({
+          ...user,
+          name: data.name || "",
+          father_name: data.fatherName || "",
+          email: data.email || "",
+          mobile: data.phone_number || "",
+          dob: data.dob || "",
+          gender: data.gender || "",
+          address: data.permanentAddress || "",
+          pan: data.pan_number || "",
+          designation: data.jobTitle || "",
+          employmenttype: data.employmentType || "",
+          currentlyemployed: false,
+          joiningdate: data.joiningDate || "",
+          leavedate: data.leavingDate || "",
+          joining_year: data.joiningYear || "",
+          joining_month: data.joiningMonth || "",
+          leaving_year: data.leavingYear || "",
+          leaving_month: data.leavingMonth || "",
+          Verified: data.isVerified || false,
+          designation_verified: data.designationVerified || false,
+          duration_verified: data.durationVerified || false,
+          employmenttype_verified: data.jobTypeVerified || false,
+          Serverd_notice_period: data.servedNoticePeriod || false,
+          has_noc: data.hasNOC || false,
+          has_due: data.hasDues || false,
+          remarks: data.remarks || "",
+        });
+      } else {
+        console.error("Failed to fetch details:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Error while fetching account details:", error);
+    }
+  };
 
   const [formdata, setFormData] = useState({
     ...user,
-    remarks: "",
   });
+
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...user,
+        remarks: prev.remarks,
+        _id: can_id,
+        employmentId: emp_id,
+      }));
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, type, checked, value } = e.target;
@@ -59,16 +146,35 @@ const Modal = ({ show, onClose }) => {
       [field]: !prev[field],
     }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     setSuccess(null);
 
-    setTimeout(() => {
+    console.log(formdata);
+    try {
+      const response = await axios.post(
+        `${apiurl}/api/companyprofile/add_employee_verification_details`,
+        formdata,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        setSuccess(response.data.message);
+        FetchDetails(can_id, emp_id);
+
+        setTimeout(() => onClose(), 3000);
+      }
+    } catch (error) {
+      console.error("Error while submitting form:", error);
+      setError("An error occurred while submitting the form.");
+    } finally {
       setLoading(false);
-      setSuccess("Form submitted successfully!");
-    }, 1500);
+    }
   };
 
   const validateForm = () => {
@@ -182,6 +288,17 @@ const Modal = ({ show, onClose }) => {
   useEffect(() => {
     fetchNoticePeriod();
   }, []);
+  useEffect(() => {
+    if (formdata.Verified) {
+      setFormData((prev) => ({
+        ...prev,
+        designation_verified: true,
+        employmenttype_verified: true,
+        duration_verified: true,
+      }));
+    }
+  }, [formdata.Verified]);
+
   return (
     <div
       className="modal fade show d-block"
@@ -228,25 +345,38 @@ const Modal = ({ show, onClose }) => {
                 </div>
 
                 {/* Editable Form Fields */}
+
                 <div className="row g-3">
-                  {/* Designation */}
-                  <div className="col-md-6 form-group">
-                    <label className="form-label">
-                      <b>Designation</b>
+                  <div className="form-check form-switch">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="verifiedSwitch"
+                      checked={formdata.Verified}
+                      onChange={handleToggle("Verified")}
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="verifiedSwitch"
+                    >
+                      All Details Verified
                     </label>
-                    {user.designation_verified ? (
-                      <p className="form-control-plaintext">
-                        {user.designation}
-                      </p>
-                    ) : (
-                      <input
-                        name="designation"
-                        type="text"
-                        className="form-control"
-                        value={formdata.designation}
-                        onChange={handleChange}
-                      />
-                    )}
+                  </div>
+
+                  <div className="form-check form-switch">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="verifiedSwitch"
+                      checked={formdata.employmenttype_verified}
+                      onChange={handleToggle("employmenttype_verified")}
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="verifiedSwitch"
+                    >
+                      Employment Type Verified
+                    </label>
                   </div>
 
                   {/* Employment Type */}
@@ -254,23 +384,56 @@ const Modal = ({ show, onClose }) => {
                     <label className="form-label">
                       <b>Employment Type</b>
                     </label>
-                    <input
-                      name="employmenttype"
-                      type="text"
-                      className="form-control"
-                      value={formdata.employmenttype}
-                      onChange={handleChange}
-                    />
+                    <div className="d-flex align-items-center gap-3">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="employmenttype"
+                          id="currentYes"
+                          value="full-time"
+                          checked={formdata.employmenttype === "full-time"}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formdata,
+                              employmenttype: e.target.value,
+                            })
+                          }
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="currentYes"
+                        >
+                          Full Time
+                        </label>
+                      </div>
+
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="employmenttype"
+                          id="currentNo"
+                          value="part-time"
+                          checked={formdata.employmenttype === "part-time"}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formdata,
+                              employmenttype: e.target.value,
+                            })
+                          }
+                        />
+                        <label className="form-check-label" htmlFor="currentNo">
+                          Part Time
+                        </label>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="mb-3 form-group">
+                  <div className="col-md-6 form-group">
                     <label className="form-label">
-                      Is this person currently employed?
-                      <span style={{ color: "red" }} className="ms-1">
-                        *
-                      </span>
+                      <b> Is this person currently employed?</b>
                     </label>
-
                     <div className="d-flex align-items-center gap-3">
                       <div className="form-check">
                         <input
@@ -318,6 +481,52 @@ const Modal = ({ show, onClose }) => {
                     </div>
                   </div>
 
+                  <div className="col-md-6 form-group">
+                    <div className="form-check form-switch mb-2">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="designationSwitch"
+                        checked={formdata.designation_verified}
+                        onChange={handleToggle("designation_verified")}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="designationSwitch"
+                      >
+                        Designation Verified
+                      </label>
+                    </div>
+
+                    <label className="form-label">
+                      <b>Designation</b>
+                    </label>
+
+                    <input
+                      name="designation"
+                      type="text"
+                      className="form-control"
+                      value={formdata.designation}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="col-12 mt-3">
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="durationSwitch"
+                        checked={formdata.duration_verified}
+                        onChange={handleToggle("duration_verified")}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="durationSwitch"
+                      >
+                        Duration Verified
+                      </label>
+                    </div>
+                  </div>
                   {/* Joining Date*/}
                   <div className="mb-3 form-group">
                     <label className="form-label">
@@ -370,7 +579,7 @@ const Modal = ({ show, onClose }) => {
                     </div>
                   </div>
                   {/* Worked till */}
-                  {!formdata.currentlyWorking && (
+                  {!formdata.currentlyemployed && (
                     <>
                       <div className="mb-3 form-group">
                         <label className="form-label">
@@ -426,74 +635,6 @@ const Modal = ({ show, onClose }) => {
                     </>
                   )}
 
-                  {/* Switches */}
-                  <div className="col-12 mt-3">
-                    <div className="form-check form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="verifiedSwitch"
-                        checked={formdata.Verified}
-                        onChange={handleToggle("Verified")}
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="verifiedSwitch"
-                      >
-                        Verified
-                      </label>
-                    </div>
-
-                    <div className="form-check form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="verifiedSwitch"
-                        checked={formdata.employmenttype_verified}
-                        onChange={handleToggle("employmenttype_verified")}
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="verifiedSwitch"
-                      >
-                        Employment Type Verified
-                      </label>
-                    </div>
-
-                    <div className="form-check form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="designationSwitch"
-                        checked={formdata.designation_verified}
-                        onChange={handleToggle("designation_verified")}
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="designationSwitch"
-                      >
-                        Designation Verified
-                      </label>
-                    </div>
-
-                    <div className="form-check form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="durationSwitch"
-                        checked={formdata.duration_verified}
-                        onChange={handleToggle("duration_verified")}
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="durationSwitch"
-                      >
-                        Duration Verified
-                      </label>
-                    </div>
-                  </div>
-
-                  {/* Checkboxes */}
                   <div className="col-md-4 mt-3">
                     <div className="form-check">
                       <input

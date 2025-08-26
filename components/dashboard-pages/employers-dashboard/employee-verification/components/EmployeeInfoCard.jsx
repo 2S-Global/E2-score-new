@@ -13,7 +13,11 @@ const EmployeeInfoCard = ({ user }) => {
             <strong>Designation:</strong> {user.designation}
           </div>
           <div className="col-sm-6">
-            <strong>Employment Type:</strong> {user.employmenttype}
+            <strong>Employment Type:</strong>{" "}
+            {user.employmenttype
+              ? user.employmenttype.charAt(0).toUpperCase() +
+                user.employmenttype.slice(1)
+              : ""}
           </div>
           <div className="col-sm-6">
             <strong>Joining Date:</strong> {user.joiningdate}
