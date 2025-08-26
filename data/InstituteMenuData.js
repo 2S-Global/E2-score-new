@@ -10,7 +10,7 @@ module.exports = [
     id: 2,
     name: "Institute Profile",
     icon: "la-user-tie",
-    routePath: "#",
+    routePath: "/institute-dashboard/institute-profile",
     active: "",
   },
   {

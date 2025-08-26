@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import CompanyProfile from "@/components/dashboard-pages/employers-dashboard/company-profile";
+import CompanyProfile from "@/components/dashboard-pages/institute-dashboard/company-profile";
 
 //import CompanyProfile from "@/components/dashboard-pages/employers-dashboard/company-profile/demo.jsx";
 

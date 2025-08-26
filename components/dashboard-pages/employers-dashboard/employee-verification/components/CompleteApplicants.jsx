@@ -85,53 +85,68 @@ const CompleteApplicants = () => {
 
       <div className="container">
         <div className="row">
-          {candidatesData.map((candidate) => (
-            <div className="col-md-6 mb-3" key={candidate.employmentId}>
-              <div className="card shadow-sm border-0 rounded-3 p-3 h-100">
-                <div className="d-flex align-items-center">
-                  <div className="me-3">
-                    <img
-                      width={70}
-                      height={70}
-                      src={candidate.photo || "/images/resource/no_user.png"}
-                      alt="candidates"
-                      className="rounded-circle border border-primary"
-                    />
-                  </div>
-                  <div className="flex-grow-1">
-                    <h6 className="mb-1 fw-semibold">
-                      <Link
-                        href={`/candidates-details/${candidate.userId}`}
-                        className="text-decoration-none text-dark"
-                      >
-                        {candidate.name}
-                      </Link>
-                    </h6>
-                    <p className="mb-1 small text-muted">
-                      {candidate.jobTitle}
-                    </p>
-                    <p className="mb-2 small text-muted d-flex align-items-center">
-                      <i className="flaticon-envelope me-1 text-primary"></i>{" "}
-                      {candidate.email}
-                    </p>
-                    <div className="d-flex gap-2">
-                      <button
-                        className="btn btn-sm btn-outline-primary"
-                        onClick={() =>
-                          openModalRH(candidate.userId, candidate.employmentId)
-                        }
-                      >
-                        <i className="la la-eye me-1"></i> View
-                      </button>
-                      {/*   <button className="btn btn-sm btn-outline-danger">
-                        <i className="la la-trash me-1"></i> Delete
-                      </button> */}
+          {candidatesData && candidatesData.length > 0 ? (
+            candidatesData.map((candidate) => (
+              <div className="col-md-6 mb-3" key={candidate.employmentId}>
+                <div className="card shadow-sm border-0 rounded-3 p-3 h-100">
+                  <div className="d-flex align-items-center">
+                    <div className="me-3">
+                      <img
+                        width={70}
+                        height={70}
+                        src={candidate.photo || "/images/resource/no_user.png"}
+                        alt="candidates"
+                        className="rounded-circle border border-primary"
+                      />
+                    </div>
+                    <div className="flex-grow-1">
+                      <h6 className="mb-1 fw-semibold">
+                        <Link
+                          href={`/candidates-details/${candidate.userId}`}
+                          className="text-decoration-none text-dark"
+                        >
+                          {candidate.name}
+                        </Link>
+                      </h6>
+                      <p className="mb-1 small text-muted">
+                        {candidate.jobTitle}
+                      </p>
+                      <p className="mb-2 small text-muted d-flex align-items-center">
+                        <i className="flaticon-envelope me-1 text-primary"></i>{" "}
+                        {candidate.email}
+                      </p>
+                      <div className="d-flex gap-2">
+                        <button
+                          className="btn btn-sm btn-outline-primary"
+                          onClick={() =>
+                            openModalRH(
+                              candidate.userId,
+                              candidate.employmentId
+                            )
+                          }
+                        >
+                          <i className="la la-eye me-1"></i> View
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+            ))
+          ) : (
+            <div className="col-12">
+              <div className="text-center py-5">
+                <img
+                  src="/images/resource/no_user.png"
+                  alt="no data"
+                  width={80}
+                  height={80}
+                  className="mb-3"
+                />
+                <h6 className="fw-semibold">No candidates found</h6>
+              </div>
             </div>
-          ))}
+          )}
         </div>
       </div>
 

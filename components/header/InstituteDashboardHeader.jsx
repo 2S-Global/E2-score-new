@@ -13,13 +13,13 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 
 const DashboardHeader = () => {
-  const [navbar, setNavbar] = useState(false);
+  const [navbar, setNavbar] = useState(true);
   const [userData, setUserData] = useState();
   const changeBackground = () => {
     if (window.scrollY >= 0) {
       setNavbar(true);
     } else {
-      setNavbar(false);
+      setNavbar(true);
     }
   };
 
@@ -126,17 +126,16 @@ const DashboardHeader = () => {
                   </li>
                 ))}
 
-                  <li
-            className={`${
-              isActiveLink("/", usePathname()) ? "active" : ""
-            } mb-1`}
-            key={11}
- 
-          >
-            <Link href="/" onClick={() => localStorage.clear()}>
-              <i className={`la la-sign-out`}></i>Logout
-            </Link>
-          </li>
+                <li
+                  className={`${
+                    isActiveLink("/", usePathname()) ? "active" : ""
+                  } mb-1`}
+                  key={11}
+                >
+                  <Link href="/" onClick={() => localStorage.clear()}>
+                    <i className={`la la-sign-out`}></i>Logout
+                  </Link>
+                </li>
                 {userData && (
                   <>
                     <li>
