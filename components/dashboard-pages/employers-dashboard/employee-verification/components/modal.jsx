@@ -11,7 +11,7 @@ const getComparableDateValue = (year, month) => {
   return parseInt(year) * 100 + parseInt(month); // e.g., 202405
 };
 
-const Modal = ({ show, onClose, can_id, emp_id }) => {
+const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
   if (!show) return null;
 
   const [loading, setLoading] = useState(false);
@@ -345,366 +345,375 @@ const Modal = ({ show, onClose, can_id, emp_id }) => {
                 </div>
 
                 {/* Editable Form Fields */}
-
-                <div className="row g-3">
-                  <div className="form-check form-switch">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="verifiedSwitch"
-                      checked={formdata.Verified}
-                      onChange={handleToggle("Verified")}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="verifiedSwitch"
-                    >
-                      All Details Verified
-                    </label>
-                  </div>
-
-                  <div className="form-check form-switch">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="verifiedSwitch"
-                      checked={formdata.employmenttype_verified}
-                      onChange={handleToggle("employmenttype_verified")}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="verifiedSwitch"
-                    >
-                      Employment Type Verified
-                    </label>
-                  </div>
-
-                  {/* Employment Type */}
-                  <div className="col-md-6 form-group">
-                    <label className="form-label">
-                      <b>Employment Type</b>
-                    </label>
-                    <div className="d-flex align-items-center gap-3">
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="employmenttype"
-                          id="currentYes"
-                          value="full-time"
-                          checked={formdata.employmenttype === "full-time"}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formdata,
-                              employmenttype: e.target.value,
-                            })
-                          }
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="currentYes"
-                        >
-                          Full Time
-                        </label>
-                      </div>
-
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="employmenttype"
-                          id="currentNo"
-                          value="part-time"
-                          checked={formdata.employmenttype === "part-time"}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formdata,
-                              employmenttype: e.target.value,
-                            })
-                          }
-                        />
-                        <label className="form-check-label" htmlFor="currentNo">
-                          Part Time
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-md-6 form-group">
-                    <label className="form-label">
-                      <b> Is this person currently employed?</b>
-                    </label>
-                    <div className="d-flex align-items-center gap-3">
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="currentlyemployed"
-                          id="currentYes"
-                          value="true"
-                          checked={formdata.currentlyemployed === true}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formdata,
-                              currentlyemployed: e.target.value === "true",
-                            })
-                          }
-                        />
-
-                        <label
-                          className="form-check-label"
-                          htmlFor="currentlyemployed"
-                        >
-                          Yes
-                        </label>
-                      </div>
-
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="currentlyemployed"
-                          id="currentNo"
-                          value="false"
-                          checked={formdata.currentlyemployed === false}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formdata,
-                              currentlyemployed: e.target.value === "true",
-                            })
-                          }
-                        />
-                        <label className="form-check-label" htmlFor="currentNo">
-                          No
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-md-6 form-group">
-                    <div className="form-check form-switch mb-2">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="designationSwitch"
-                        checked={formdata.designation_verified}
-                        onChange={handleToggle("designation_verified")}
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="designationSwitch"
-                      >
-                        Designation Verified
-                      </label>
-                    </div>
-
-                    <label className="form-label">
-                      <b>Designation</b>
-                    </label>
-
-                    <input
-                      name="designation"
-                      type="text"
-                      className="form-control"
-                      value={formdata.designation}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="col-12 mt-3">
+                {is_complete ? null : (
+                  <div className="row g-3">
                     <div className="form-check form-switch">
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        id="durationSwitch"
-                        checked={formdata.duration_verified}
-                        onChange={handleToggle("duration_verified")}
+                        id="verifiedSwitch"
+                        checked={formdata.Verified}
+                        onChange={handleToggle("Verified")}
                       />
                       <label
                         className="form-check-label"
-                        htmlFor="durationSwitch"
+                        htmlFor="verifiedSwitch"
                       >
-                        Duration Verified
+                        All Details Verified
                       </label>
                     </div>
-                  </div>
-                  {/* Joining Date*/}
-                  <div className="mb-3 form-group">
-                    <label className="form-label">
-                      Joining Date
-                      <span style={{ color: "red" }} className="ms-1">
-                        *
-                      </span>
-                    </label>
 
-                    <div className="d-flex gap-3">
-                      {/* Years Dropdown (2000 - 2025) */}
-                      <select
-                        className="form-select form-control "
-                        value={formdata.joining_year || ""}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formdata,
-                            joining_year: e.target.value,
-                            joining_month: "", // reset month on year change
-                          })
-                        }
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="verifiedSwitch"
+                        checked={formdata.employmenttype_verified}
+                        onChange={handleToggle("employmenttype_verified")}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="verifiedSwitch"
                       >
-                        <option value="">Select Year</option>
-                        {Array.from({ length: 30 }, (_, i) => {
-                          const year = currentYear - i;
-                          return (
-                            <option key={year} value={year}>
-                              {year}
-                            </option>
-                          );
-                        })}
-                      </select>
-
-                      {/* Months Dropdown (Jan - Dec) */}
-                      <select
-                        className="form-select form-control"
-                        value={formdata.joining_month || ""}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formdata,
-                            joining_month: e.target.value,
-                          })
-                        }
-                      >
-                        <option value="">Select Month</option>
-                        {generateMonthOptions(
-                          parseInt(formdata.joining_year || currentYear)
-                        )}
-                      </select>
+                        Employment Type Verified
+                      </label>
                     </div>
-                  </div>
-                  {/* Worked till */}
-                  {!formdata.currentlyemployed && (
-                    <>
-                      <div className="mb-3 form-group">
-                        <label className="form-label">
-                          Leaving Date
-                          <span style={{ color: "red" }} className="ms-1">
-                            *
-                          </span>
-                        </label>
 
-                        <div className="d-flex gap-3">
-                          {/* Years Dropdown (2000 - 2025) */}
-                          <select
-                            className="form-select"
-                            value={formdata.leaving_year || ""}
+                    {/* Employment Type */}
+                    <div className="col-md-6 form-group">
+                      <label className="form-label">
+                        <b>Employment Type</b>
+                      </label>
+                      <div className="d-flex align-items-center gap-3">
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name="employmenttype"
+                            id="currentYes"
+                            value="full-time"
+                            checked={formdata.employmenttype === "full-time"}
                             onChange={(e) =>
                               setFormData({
                                 ...formdata,
-                                leaving_year: e.target.value,
-                                leaving_month: "", // reset month on year change
+                                employmenttype: e.target.value,
                               })
                             }
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor="currentYes"
                           >
-                            <option value="">Select Year</option>
-                            {Array.from({ length: 30 }, (_, i) => {
-                              const year = currentYear - i;
-                              return (
-                                <option key={year} value={year}>
-                                  {year}
-                                </option>
-                              );
-                            })}
-                          </select>
-                          {/* Months Dropdown (Jan - Dec) */}
-                          <select
-                            className="form-select"
-                            value={formdata.leaving_month || ""}
+                            Full Time
+                          </label>
+                        </div>
+
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name="employmenttype"
+                            id="currentNo"
+                            value="part-time"
+                            checked={formdata.employmenttype === "part-time"}
                             onChange={(e) =>
                               setFormData({
                                 ...formdata,
-                                leaving_month: e.target.value,
+                                employmenttype: e.target.value,
                               })
                             }
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor="currentNo"
                           >
-                            <option value="">Select Month</option>
-                            {generateMonthOptions(
-                              parseInt(formdata.leaving_year || currentYear)
-                            )}
-                          </select>
+                            Part Time
+                          </label>
                         </div>
                       </div>
+                    </div>
 
-                      {error && <div className="text-danger mb-3">{error}</div>}
-                    </>
-                  )}
+                    <div className="col-md-6 form-group">
+                      <label className="form-label">
+                        <b> Is this person currently employed?</b>
+                      </label>
+                      <div className="d-flex align-items-center gap-3">
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name="currentlyemployed"
+                            id="currentYes"
+                            value="true"
+                            checked={formdata.currentlyemployed === true}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formdata,
+                                currentlyemployed: e.target.value === "true",
+                              })
+                            }
+                          />
 
-                  <div className="col-md-4 mt-3">
-                    <div className="form-check">
+                          <label
+                            className="form-check-label"
+                            htmlFor="currentlyemployed"
+                          >
+                            Yes
+                          </label>
+                        </div>
+
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name="currentlyemployed"
+                            id="currentNo"
+                            value="false"
+                            checked={formdata.currentlyemployed === false}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formdata,
+                                currentlyemployed: e.target.value === "true",
+                              })
+                            }
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor="currentNo"
+                          >
+                            No
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col-md-6 form-group">
+                      <div className="form-check form-switch mb-2">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="designationSwitch"
+                          checked={formdata.designation_verified}
+                          onChange={handleToggle("designation_verified")}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="designationSwitch"
+                        >
+                          Designation Verified
+                        </label>
+                      </div>
+
+                      <label className="form-label">
+                        <b>Designation</b>
+                      </label>
+
                       <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="noticePeriod"
-                        name="Serverd_notice_period"
-                        checked={formdata.Serverd_notice_period}
+                        name="designation"
+                        type="text"
+                        className="form-control"
+                        value={formdata.designation}
                         onChange={handleChange}
                       />
-                      <label
-                        className="form-check-label"
-                        htmlFor="noticePeriod"
-                      >
-                        Served Notice Period
-                      </label>
                     </div>
-                  </div>
+                    <div className="col-12 mt-3">
+                      <div className="form-check form-switch">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="durationSwitch"
+                          checked={formdata.duration_verified}
+                          onChange={handleToggle("duration_verified")}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="durationSwitch"
+                        >
+                          Duration Verified
+                        </label>
+                      </div>
+                    </div>
+                    {/* Joining Date*/}
+                    <div className="mb-3 form-group">
+                      <label className="form-label">
+                        Joining Date
+                        <span style={{ color: "red" }} className="ms-1">
+                          *
+                        </span>
+                      </label>
 
-                  <div className="col-md-4 mt-3">
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="hasNoc"
-                        name="has_noc"
-                        checked={formdata.has_noc}
+                      <div className="d-flex gap-3">
+                        {/* Years Dropdown (2000 - 2025) */}
+                        <select
+                          className="form-select form-control "
+                          value={formdata.joining_year || ""}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formdata,
+                              joining_year: e.target.value,
+                              joining_month: "", // reset month on year change
+                            })
+                          }
+                        >
+                          <option value="">Select Year</option>
+                          {Array.from({ length: 30 }, (_, i) => {
+                            const year = currentYear - i;
+                            return (
+                              <option key={year} value={year}>
+                                {year}
+                              </option>
+                            );
+                          })}
+                        </select>
+
+                        {/* Months Dropdown (Jan - Dec) */}
+                        <select
+                          className="form-select form-control"
+                          value={formdata.joining_month || ""}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formdata,
+                              joining_month: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="">Select Month</option>
+                          {generateMonthOptions(
+                            parseInt(formdata.joining_year || currentYear)
+                          )}
+                        </select>
+                      </div>
+                    </div>
+                    {/* Worked till */}
+                    {!formdata.currentlyemployed && (
+                      <>
+                        <div className="mb-3 form-group">
+                          <label className="form-label">
+                            Leaving Date
+                            <span style={{ color: "red" }} className="ms-1">
+                              *
+                            </span>
+                          </label>
+
+                          <div className="d-flex gap-3">
+                            {/* Years Dropdown (2000 - 2025) */}
+                            <select
+                              className="form-select"
+                              value={formdata.leaving_year || ""}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formdata,
+                                  leaving_year: e.target.value,
+                                  leaving_month: "", // reset month on year change
+                                })
+                              }
+                            >
+                              <option value="">Select Year</option>
+                              {Array.from({ length: 30 }, (_, i) => {
+                                const year = currentYear - i;
+                                return (
+                                  <option key={year} value={year}>
+                                    {year}
+                                  </option>
+                                );
+                              })}
+                            </select>
+                            {/* Months Dropdown (Jan - Dec) */}
+                            <select
+                              className="form-select"
+                              value={formdata.leaving_month || ""}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formdata,
+                                  leaving_month: e.target.value,
+                                })
+                              }
+                            >
+                              <option value="">Select Month</option>
+                              {generateMonthOptions(
+                                parseInt(formdata.leaving_year || currentYear)
+                              )}
+                            </select>
+                          </div>
+                        </div>
+
+                        {error && (
+                          <div className="text-danger mb-3">{error}</div>
+                        )}
+                      </>
+                    )}
+
+                    <div className="col-md-4 mt-3">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="noticePeriod"
+                          name="Serverd_notice_period"
+                          checked={formdata.Serverd_notice_period}
+                          onChange={handleChange}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="noticePeriod"
+                        >
+                          Served Notice Period
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="col-md-4 mt-3">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="hasNoc"
+                          name="has_noc"
+                          checked={formdata.has_noc}
+                          onChange={handleChange}
+                        />
+                        <label className="form-check-label" htmlFor="hasNoc">
+                          Has NOC
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="col-md-4 mt-3">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="hasDue"
+                          name="has_due"
+                          checked={formdata.has_due}
+                          onChange={handleChange}
+                        />
+                        <label className="form-check-label" htmlFor="hasDue">
+                          Has Dues
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Remarks */}
+                    <div className="col-12 mt-4">
+                      <label className="form-label">
+                        <b>Remarks</b>
+                      </label>
+                      <textarea
+                        className="form-control"
+                        name="remarks"
+                        rows="4"
+                        style={{
+                          resize: "vertical",
+                          maxHeight: "150px",
+                          overflowY: "auto",
+                        }}
+                        value={formdata.remarks}
                         onChange={handleChange}
-                      />
-                      <label className="form-check-label" htmlFor="hasNoc">
-                        Has NOC
-                      </label>
+                      ></textarea>
                     </div>
                   </div>
-
-                  <div className="col-md-4 mt-3">
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="hasDue"
-                        name="has_due"
-                        checked={formdata.has_due}
-                        onChange={handleChange}
-                      />
-                      <label className="form-check-label" htmlFor="hasDue">
-                        Has Dues
-                      </label>
-                    </div>
-                  </div>
-
-                  {/* Remarks */}
-                  <div className="col-12 mt-4">
-                    <label className="form-label">
-                      <b>Remarks</b>
-                    </label>
-                    <textarea
-                      className="form-control"
-                      name="remarks"
-                      rows="4"
-                      style={{
-                        resize: "vertical",
-                        maxHeight: "150px",
-                        overflowY: "auto",
-                      }}
-                      value={formdata.remarks}
-                      onChange={handleChange}
-                    ></textarea>
-                  </div>
-                </div>
+                )}
 
                 <div className="modal-footer mt-4">
                   <button
@@ -714,9 +723,11 @@ const Modal = ({ show, onClose, can_id, emp_id }) => {
                   >
                     Cancel
                   </button>
-                  <button type="submit" className="btn btn-primary">
-                    Save
-                  </button>
+                  {is_complete ? null : (
+                    <button type="submit" className="btn btn-primary">
+                      Save
+                    </button>
+                  )}
                 </div>
               </form>
             )}

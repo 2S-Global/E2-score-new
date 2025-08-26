@@ -112,13 +112,26 @@ const Employsectionmain = () => {
                             className="truncate emp-desg"
                             title={row.job_title}
                           >
-                            <strong>{row.job_title}</strong>
+                            <strong className="me-2">{row.job_title}</strong>
+                            {row.jobTypeVerified ? (
+                              <>
+                                <BadgeCheck size={20} color="green" />
+                              </>
+                            ) : (
+                              <>
+                                <BadgeAlert size={20} color="orange" />
+                              </>
+                            )}
                           </span>{" "}
-                          <i
-                            className="la la-pencil-alt"
-                            onClick={() => openModalRH(row)}
-                            style={{ cursor: "pointer" }}
-                          ></i>
+                          {row.isVerified ? null : (
+                            <>
+                              <i
+                                className="la la-pencil-alt"
+                                onClick={() => openModalRH(row)}
+                                style={{ cursor: "pointer" }}
+                              ></i>
+                            </>
+                          )}
                         </div>
 
                         {/* Company Name */}
@@ -132,11 +145,11 @@ const Employsectionmain = () => {
                           {/* Show verified/unverified image */}
                           <img
                             src={
-                              row.is_verified
+                              row.isVerified
                                 ? "/images/resource/verified.png"
                                 : "/images/resource/unverified.png"
                             }
-                            alt={row.is_verified ? "Verified" : "Not Verified"}
+                            alt={row.isVerified ? "Verified" : "Not Verified"}
                             style={{ width: "100px", height: "20px" }}
                             className="ms-2"
                           />
