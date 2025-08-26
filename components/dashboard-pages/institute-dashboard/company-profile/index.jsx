@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import MobileMenu from "../../../header/MobileMenu";
-import DashboardHeader from "../../../header/DashboardHeader";
+import MobileMenu from "../../../header/InstituteMobileMenu";
+import DashboardHeader from "../../../header/InstituteDashboardHeader";
 import LoginPopup from "../../../common/form/login/LoginPopup";
-import DashboardEmployerSidebar from "../../../header/DashboardEmployerSidebar";
+import DashboardInstituteSidebar from "../../../header/DashboardInstituteSidebar";
 import BreadCrumb from "../../BreadCrumb";
 import MyProfile from "./components/my-profile";
 import SocialNetworkBox from "./components/SocialNetworkBox";
@@ -33,191 +33,157 @@ const CompanyProfile = () => {
     pincode: "122002",
     gstin: "29ABCDE1234F1Z5",
   };
+  const tabs = [
+    { key: "profile", label: "Institute Profile" },
+    { key: "account", label: "Account Details" },
+    { key: "contact", label: "Contact Person Details" },
+    { key: "kyc", label: "KYC (Work Pending)" },
+    { key: "social", label: "Social Network" },
+    { key: "brance", label: "Branch" },
+  ];
 
   return (
-    <div className="page-wrapper dashboard">
-      <span className="header-span"></span>
-      {/* Header Span for height */}
+    <>
+      <style>{`.uploadButton .uploadButton-button {
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    cursor: pointer;
+    height: 60px;
+    width: 120px;
+    border-radius: 5px;
+    transition: 0.3s;
+    margin: 0;
+    color: #1b2032;
+    font-size: 16px;
+    border: 2px dashed #ced4e1;
+}`}</style>
+      <div className="page-wrapper dashboard">
+        <span className="header-span"></span>
+        {/* Header Span for height */}
 
-      <LoginPopup />
-      <DashboardHeader />
-      <MobileMenu />
-      <DashboardEmployerSidebar />
+        <LoginPopup />
+        <DashboardHeader />
+        <MobileMenu />
+        <DashboardInstituteSidebar />
 
-      {/* Dashboard Section */}
-      <section className="user-dashboard">
-        <div className="dashboard-outer">
-          <BreadCrumb title="Company Profile!" />
-          <MenuToggler />
+        {/* Dashboard Section */}
+        <section className="user-dashboard">
+          <div className="dashboard-outer">
+            <BreadCrumb title="Institute Profile!" />
+            <MenuToggler />
 
-          {/* Tabs Navigation */}
-          <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-            <button
-              style={{
-                padding: "10px 15px",
-                border: "none",
-                background: activeTab === "profile" ? "#007bff" : "#eee",
-                color: activeTab === "profile" ? "white" : "black",
-                cursor: "pointer",
-                transition: "0.3s",
-                fontWeight: "bold",
-              }}
-              onClick={() => setActiveTab("profile")}
-            >
-              My Profile
-            </button>
-            <button
-              style={{
-                padding: "10px 15px",
-                border: "none",
-                background: activeTab === "account" ? "#007bff" : "#eee",
-                color: activeTab === "account" ? "white" : "black",
-                cursor: "pointer",
-                transition: "0.3s",
-                fontWeight: "bold",
-              }}
-              onClick={() => setActiveTab("account")}
-            >
-              Account Details
-            </button>
-            {/* KYC BOX */}
-            <button
-              style={{
-                padding: "10px 15px",
-                border: "none",
-                background: activeTab === "kyc" ? "#007bff" : "#eee",
-                color: activeTab === "kyc" ? "white" : "black",
-                cursor: "pointer",
-                transition: "0.3s",
-                fontWeight: "bold",
-              }}
-              onClick={() => setActiveTab("kyc")}
-            >
-              KYC
-            </button>
-            <button
-              style={{
-                padding: "10px 15px",
-                border: "none",
-                background: activeTab === "social" ? "#007bff" : "#eee",
-                color: activeTab === "social" ? "white" : "black",
-                cursor: "pointer",
-                transition: "0.3s",
-                fontWeight: "bold",
-              }}
-              onClick={() => setActiveTab("social")}
-            >
-              Social Network
-            </button>
+            {/* Tabs Navigation */}
 
-            <button
-              style={{
-                padding: "10px 15px",
-                border: "none",
-                background: activeTab === "brance" ? "#007bff" : "#eee",
-                color: activeTab === "brance" ? "white" : "black",
-                cursor: "pointer",
-                transition: "0.3s",
-                fontWeight: "bold",
-              }}
-              onClick={() => setActiveTab("brance")}
-            >
-              Branch
-            </button>
-
-            {/*      <button
-                            style={{
-                                padding: "10px 15px",
-                                border: "none",
-                                background: activeTab === "contact" ? "#007bff" : "#eee",
-                                color: activeTab === "contact" ? "white" : "black",
-                                cursor: "pointer",
-                                transition: "0.3s",
-                                fontWeight: "bold",
-                            }}
-                            onClick={() => setActiveTab("contact")}
-                        >
-                            Contact Information
-                        </button> */}
-          </div>
-
-          {/* Tab Content */}
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="ls-widget">
-                <div className="tabs-box">
-                  {activeTab === "profile" && (
-                    <div>
-                      <div className="widget-title">
-                        <h4>Company Profile</h4>
-                      </div>
-                      <MyProfile />
-                    </div>
-                  )}
-
-                  {activeTab === "kyc" && (
-                    <div>
-                      <div className="widget-title">
-                        <h4>KYC</h4>
-                      </div>
-                      <div className="widget-content">
-                        <KycBox companyDetails={companyDetails} />
-                      </div>
-                    </div>
-                  )}
-
-                  {activeTab === "social" && (
-                    <div>
-                      <div className="widget-title">
-                        <h4>Social Network</h4>
-                      </div>
-                      <div className="widget-content">
-                        <SocialNetworkBox />
-                      </div>
-                    </div>
-                  )}
-
-                  {activeTab === "account" && (
-                    <div>
-                      <div className="widget-title">
-                        <h4>Account Details</h4>
-                      </div>
-                      <div className="widget-content">
-                        <AccountBox />
-                      </div>
-                    </div>
-                  )}
-
-                  {activeTab === "contact" && (
-                    <div>
-                      <div className="widget-title">
-                        <h4>Contact Information</h4>
-                      </div>
-                      <div className="widget-content">
-                        <ContactInfoBox />
-                      </div>
-                    </div>
-                  )}
-
-                  {activeTab === "brance" && (
-                    <div>
-                      <BranchBox />
-                    </div>
-                  )}
-                </div>
+            <div className="mb-3">
+              <div
+                className="d-flex flex-wrap justify-content-start gap-2"
+                style={{
+                  borderBottom: "2px solid #ddd",
+                  paddingBottom: "10px",
+                }}
+              >
+                {tabs.map(({ key, label }) => (
+                  <button
+                    key={key}
+                    className={`btn ${
+                      activeTab === key ? "btn-primary" : "btn-outline-primary"
+                    }`}
+                    style={{
+                      minWidth: "120px",
+                      fontWeight: "bold",
+                      borderRadius: "20px",
+                    }}
+                    onClick={() => setActiveTab(key)}
+                  >
+                    {label}
+                  </button>
+                ))}
               </div>
-              {/* End ls-widget */}
             </div>
-          </div>
-          {/* End .row */}
-        </div>
-        {/* End dashboard-outer */}
-      </section>
-      {/* End Dashboard Section */}
 
-      <CopyrightFooter />
-    </div>
-    // End page-wrapper
+            {/* Tab Content */}
+            <div className="row">
+              <div className="col-lg-12">
+                <div className="ls-widget">
+                  <div className="tabs-box">
+                    {activeTab === "profile" && (
+                      <div>
+                        <div className="widget-title">
+                          <h4>Institute Profile</h4>
+                        </div>
+                        <MyProfile setActiveTab={setActiveTab} />
+                      </div>
+                    )}
+
+                    {activeTab === "kyc" && (
+                      <div>
+                        <div className="widget-title">
+                          <h4>KYC</h4>
+                        </div>
+                        <div className="widget-content">
+                          <KycBox
+                            companyDetails={companyDetails}
+                            setActiveTab={setActiveTab}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {activeTab === "social" && (
+                      <div>
+                        <div className="widget-title">
+                          <h4>Social Network</h4>
+                        </div>
+                        <div className="widget-content">
+                          <SocialNetworkBox setActiveTab={setActiveTab} />
+                        </div>
+                      </div>
+                    )}
+
+                    {activeTab === "account" && (
+                      <div>
+                        <div className="widget-title">
+                          <h4>Account Details</h4>
+                        </div>
+                        <div className="widget-content">
+                          <AccountBox setActiveTab={setActiveTab} />
+                        </div>
+                      </div>
+                    )}
+
+                    {activeTab === "contact" && (
+                      <div>
+                        <div className="widget-title">
+                          <h4>Contact Person Information</h4>
+                        </div>
+                        <div className="widget-content">
+                          <ContactInfoBox setActiveTab={setActiveTab} />
+                        </div>
+                      </div>
+                    )}
+
+                    {activeTab === "brance" && (
+                      <div>
+                        <BranchBox setActiveTab={setActiveTab} />
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {/* End ls-widget */}
+              </div>
+            </div>
+            {/* End .row */}
+          </div>
+          {/* End dashboard-outer */}
+        </section>
+        {/* End Dashboard Section */}
+
+        <CopyrightFooter />
+      </div>
+    </>
   );
 };
 
