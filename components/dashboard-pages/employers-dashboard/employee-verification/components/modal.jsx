@@ -93,7 +93,7 @@ const Modal = ({ show, onClose, can_id, emp_id }) => {
           pan: data.pan_number || "",
           designation: data.jobTitle || "",
           employmenttype: data.employmentType || "",
-          currentlyemployed: false,
+          currentlyemployed: data.currentEmployment || false,
           joiningdate: data.joiningDate || "",
           leavedate: data.leavingDate || "",
           joining_year: data.joiningYear || "",
