@@ -113,7 +113,7 @@ const Employsectionmain = () => {
                             title={row.job_title}
                           >
                             <strong className="me-2">{row.job_title}</strong>
-                            {row.jobTypeVerified ? (
+                            {row.designationVerified ? (
                               <>
                                 <BadgeCheck size={20} color="green" />
                               </>
