@@ -44,7 +44,7 @@ const CompleteApplicants = () => {
           setCandidatesData(response.data.data);
         }
       } catch (error) {
-        setError("Failed to fetch candidates");
+        // setError("Failed to fetch candidates");
       } finally {
         setLoading(false);
       }
