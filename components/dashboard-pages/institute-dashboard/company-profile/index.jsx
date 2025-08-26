@@ -39,7 +39,7 @@ const CompanyProfile = () => {
     { key: "contact", label: "Contact Person Details" },
     { key: "kyc", label: "KYC (Work Pending)" },
     { key: "social", label: "Social Network" },
-    { key: "brance", label: "Branch" },
+    /*  { key: "brance", label: "Branch" }, */
   ];
 
   return (
@@ -165,11 +165,11 @@ const CompanyProfile = () => {
                       </div>
                     )}
 
-                    {activeTab === "brance" && (
+                    {/* {activeTab === "brance" && (
                       <div>
                         <BranchBox setActiveTab={setActiveTab} />
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </div>
                 {/* End ls-widget */}

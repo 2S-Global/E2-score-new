@@ -152,7 +152,7 @@ const AccountBox = ({ setActiveTab }) => {
         <div className="row">
           {/* <!-- Input --> */}
           <div className="form-group col-lg-6 col-md-12">
-            <label>Company Name</label>
+            <label>Institute Name</label>
             <span className="text-danger ms-1">*</span>
             <input
               type="text"

@@ -73,7 +73,7 @@ const LogoCoverUploader = ({ formdata, setFormdata, Deletecover }) => {
     <>
       {/* Logo Upload */}
       <div className="form-group ">
-        <label>Company Logo</label>
+        <label>Institute Logo</label>
         <span className="text-danger ms-1">*</span>
         <div className="uploading-outer mb-4">
           <div className="uploadButton mb-2 mx-4">
@@ -133,7 +133,7 @@ const LogoCoverUploader = ({ formdata, setFormdata, Deletecover }) => {
 
       {/* Cover Upload */}
       <div className="form-group ">
-        <label>Company Cover Image</label>
+        <label>Institute Cover Image</label>
         <div className="uploading-outer mb-4">
           <div className="uploadButton mb-2 mx-4">
             <input

@@ -83,7 +83,7 @@ const FormInfoBox = ({ setActiveTab }) => {
           }
         );
         if (response.data.success) {
-          setFormdata({
+          /* setFormdata({
             ...formdata,
             cin_id: response.data.data._id,
             cin: response.data.data.cinnumber,
@@ -91,7 +91,7 @@ const FormInfoBox = ({ setActiveTab }) => {
             email: response.data.data.companyemail,
             phone: response.data.data.companyphone,
             address: response.data.data.companyaddress,
-          });
+          }); */
 
           setError(null);
           setErrorId(null);
@@ -145,7 +145,7 @@ const FormInfoBox = ({ setActiveTab }) => {
           cover_preview: data.cover || "",
         };
 
-        setFormdata(updatedFormData);
+        //  setFormdata(updatedFormData);
         setDisableform(false);
       }
     } catch (e) {
@@ -315,7 +315,7 @@ const FormInfoBox = ({ setActiveTab }) => {
             <input
               type="text"
               name="cin"
-              placeholder="Enter company CIN"
+              placeholder="Enter institute CIN"
               value={formdata.cin}
               onChange={(e) =>
                 setFormdata({ ...formdata, cin: e.target.value })
@@ -351,14 +351,14 @@ const FormInfoBox = ({ setActiveTab }) => {
         >
           {/* <!-- Input --> */}
           <div className="form-group col-lg-6 col-md-12">
-            <label>Company name</label>
+            <label>Institute Name</label>
             <span style={{ color: "red" }} className="ms-1">
               *
             </span>
             <input
               type="text"
               name="name"
-              placeholder="Enter company name"
+              placeholder="Enter institute name"
               value={formdata.name}
               onChange={(e) =>
                 setFormdata({ ...formdata, name: e.target.value })
@@ -369,7 +369,7 @@ const FormInfoBox = ({ setActiveTab }) => {
 
           {/* <!-- Input --> */}
           <div className="form-group col-lg-6 col-md-12">
-            <label>Email address</label>
+            <label>Email Address</label>
             <span style={{ color: "red" }} className="ms-1">
               *
             </span>
@@ -467,7 +467,7 @@ const FormInfoBox = ({ setActiveTab }) => {
 
           {/* <!-- Search Select --> */}
           <div className="form-group col-lg-6 col-md-12">
-            <label>Industry Type</label>
+            <label>Courses</label>
             <span style={{ color: "red" }} className="ms-1">
               *
             </span>
@@ -507,7 +507,7 @@ const FormInfoBox = ({ setActiveTab }) => {
 
           {/* <!-- About Company --> */}
           <div className="form-group col-lg-12 col-md-12">
-            <label>About Company</label>
+            <label>About Institute</label>
             <span style={{ color: "red" }} className="ms-1">
               *
             </span>
@@ -531,7 +531,7 @@ const FormInfoBox = ({ setActiveTab }) => {
           </div>
           {/* Company  Address*/}
           <div className="form-group col-lg-12 col-md-12">
-            <label>Company Address</label>
+            <label>Institute Address</label>
             <span style={{ color: "red" }} className="ms-1">
               *
             </span>
