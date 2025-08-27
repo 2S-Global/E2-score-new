@@ -1,6 +1,5 @@
 "use client";
 
-import Select from "react-select";
 import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -10,11 +9,9 @@ import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
 import axios from "axios";
 
-import { Search } from "lucide-react";
+import CourseSelect from "./CourseSelect";
 
 const FormInfoBox = ({ setActiveTab }) => {
-  const [industries, setIndustry] = useState([]);
-  const [disableform, setDisableform] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -25,22 +22,17 @@ const FormInfoBox = ({ setActiveTab }) => {
   const token = localStorage.getItem("Institute_token");
 
   useEffect(() => {
-    fetchindustries();
     FetchCompanyDetails();
   }, [apiurl]);
 
   const [formdata, setFormdata] = useState({
-    cin_id: "",
-    cin: "",
     name: "",
     email: "",
     phone: "",
     address: "",
     website: "",
     established: "",
-    teamsize: "",
-
-    industry_type: [],
+    courses: [],
     allowinsearch: true,
     about: "",
     logo: null,
@@ -48,71 +40,6 @@ const FormInfoBox = ({ setActiveTab }) => {
     logo_preview: null,
     cover_preview: null,
   });
-  const fetchindustries = async () => {
-    try {
-      const response = await axios.get(
-        `${apiurl}/api/sql/dropdown/get_industry `
-      );
-      if (response.data.success) {
-        const formatted = response.data.data.map((item) => ({
-          value: item.id,
-          label: item.job_industry,
-        }));
-        setIndustry(formatted);
-      }
-    } catch (error) {
-      console.error("Error fetching industries:", error);
-    }
-  };
-  const handelcinsubmit = async () => {
-    const regex =
-      /^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$/;
-    if (regex.test(formdata.cin)) {
-      try {
-        setDisableform(true);
-        setLoading(true);
-        setError(null);
-        setErrorId(null);
-        setSuccess(null);
-        setMessageId(null);
-
-        const response = await axios.post(
-          `${apiurl}/api/companyprofile/search_company_by_cin`,
-          {
-            cin: formdata.cin,
-          }
-        );
-        if (response.data.success) {
-          /* setFormdata({
-            ...formdata,
-            cin_id: response.data.data._id,
-            cin: response.data.data.cinnumber,
-            name: response.data.data.companyname,
-            email: response.data.data.companyemail,
-            phone: response.data.data.companyphone,
-            address: response.data.data.companyaddress,
-          }); */
-
-          setError(null);
-          setErrorId(null);
-          setSuccess(response.data.message);
-          setMessageId(Date.now());
-        } else {
-          setError("No Details Found Please Enter Valid CIN or Enter Manually");
-          setErrorId(Date.now());
-        }
-      } catch (e) {
-        setError("No Details Found Please Enter Valid CIN or Enter Manually");
-        setErrorId(Date.now());
-      } finally {
-        setLoading(false);
-        setDisableform(false);
-      }
-    } else {
-      setError("Invalid CIN Please Enter Valid CIN or Enter Manually");
-      setErrorId(Date.now());
-    }
-  };
 
   const FetchCompanyDetails = async () => {
     setLoading(true);
@@ -125,27 +52,6 @@ const FormInfoBox = ({ setActiveTab }) => {
       if (response.data.success) {
         const data = response.data.data;
 
-        const updatedFormData = {
-          ...formdata,
-          cin_id: data.cin_id || "",
-          cin: data.cin || "",
-          name: data.name || "",
-          email: data.email || "",
-          phone: data.phone || "",
-          address: data.address || "",
-          website: data.website || "",
-          established: data.established || "",
-          teamsize: data.teamsize || "",
-          industry_type: data.industry_type
-            ?.split(",")
-            .map((item) => parseInt(item.trim(), 10)),
-          allowinsearch: data.allowinsearch || true,
-          about: data.about || "",
-          logo_preview: data.logo || "",
-          cover_preview: data.cover || "",
-        };
-
-        //  setFormdata(updatedFormData);
         setDisableform(false);
       }
     } catch (e) {
@@ -308,47 +214,7 @@ const FormInfoBox = ({ setActiveTab }) => {
         type="multipart/form-data"
         method="post"
       >
-        <div className="form-group">
-          <label className="mb-1">CIN</label>
-          <span className="text-danger ms-1">*</span>
-          <div className="d-flex align-items-stretch gap-2">
-            <input
-              type="text"
-              name="cin"
-              placeholder="Enter institute CIN"
-              value={formdata.cin}
-              onChange={(e) =>
-                setFormdata({ ...formdata, cin: e.target.value })
-              }
-              required
-              className="form-control"
-              pattern="^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$"
-            />
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={() => handelcinsubmit()}
-            >
-              <Search />
-            </button>
-
-            <button
-              type="button"
-              className="btn btn-warning"
-              onClick={() => setDisableform(false)}
-            >
-              Enter Manually
-            </button>
-          </div>
-        </div>
-
-        <div
-          className="row"
-          style={{
-            pointerEvents: disableform ? "none" : "auto",
-            opacity: disableform ? 0.5 : 1,
-          }}
-        >
+        <div className="row">
           {/* <!-- Input --> */}
           <div className="form-group col-lg-6 col-md-12">
             <label>Institute Name</label>
@@ -445,53 +311,6 @@ const FormInfoBox = ({ setActiveTab }) => {
 
           {/* <!-- Input --> */}
           <div className="form-group col-lg-6 col-md-12">
-            <label>Team Size</label>
-            <span style={{ color: "red" }} className="ms-1">
-              *
-            </span>
-            <select
-              className="chosen-single form-select"
-              required
-              value={formdata.teamsize}
-              onChange={(e) =>
-                setFormdata({ ...formdata, teamsize: e.target.value })
-              }
-            >
-              <option value="less_than_50">Less than 50</option>
-              <option value="50_100">50 - 100</option>
-              <option value="101_500">101 - 500</option>
-              <option value="501_1000">501 - 1000</option>
-              <option value="more_than_1000">More than 1000</option>
-            </select>
-          </div>
-
-          {/* <!-- Search Select --> */}
-          <div className="form-group col-lg-6 col-md-12">
-            <label>Courses</label>
-            <span style={{ color: "red" }} className="ms-1">
-              *
-            </span>
-            <Select
-              isMulti
-              required
-              name="industry"
-              options={industries}
-              className="basic-multi-select"
-              classNamePrefix="select"
-              value={industries.filter((opt) =>
-                formdata.industry_type?.includes(opt.value)
-              )}
-              onChange={(selectedOptions) =>
-                setFormdata({
-                  ...formdata,
-                  industry_type: selectedOptions.map((option) => option.value),
-                })
-              }
-            />
-          </div>
-
-          {/* <!-- Input --> */}
-          <div className="form-group col-lg-6 col-md-12">
             <label>Allow In Search & Listing</label>
             <select
               className="chosen-single form-select"
@@ -504,6 +323,8 @@ const FormInfoBox = ({ setActiveTab }) => {
               <option value={false}>No</option>
             </select>
           </div>
+          {/* <!-- Search Select --> */}
+          <CourseSelect formdata={formdata} setFormdata={setFormdata} />
 
           {/* <!-- About Company --> */}
           <div className="form-group col-lg-12 col-md-12">
