@@ -22,7 +22,7 @@ const FormInfoBox = ({ setActiveTab }) => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [message_id, setMessageId] = useState(null);
   const [success, setSuccess] = useState(null);
-  const token = localStorage.getItem("employer_token");
+  const token = localStorage.getItem("Institute_token");
 
   useEffect(() => {
     fetchindustries();

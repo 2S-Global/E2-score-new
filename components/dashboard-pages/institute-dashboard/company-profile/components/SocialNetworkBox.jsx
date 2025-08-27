@@ -65,7 +65,7 @@ const SocialNetworkBox = ({ setActiveTab }) => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [message_id, setMessageId] = useState(null);
   const [success, setSuccess] = useState(null);
-  const token = localStorage.getItem("employer_token");
+  const token = localStorage.getItem("Institute_token");
 
   useEffect(() => {
     FetchSocialDetails();
@@ -76,7 +76,7 @@ const SocialNetworkBox = ({ setActiveTab }) => {
     /* /api/companyprofile/get_social */
     try {
       const response = await axios.get(
-        `${apiurl}/api/companyprofile/get_social`,
+        `${apiurl}/api/instituteprofile/get_social`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -122,7 +122,7 @@ const SocialNetworkBox = ({ setActiveTab }) => {
     try {
       /* /api/companyprofile/add_or_update_social */
       const response = await axios.post(
-        `${apiurl}/api/companyprofile/add_or_update_social`,
+        `${apiurl}/api/instituteprofile/add_or_update_social`,
         formData,
         {
           headers: {

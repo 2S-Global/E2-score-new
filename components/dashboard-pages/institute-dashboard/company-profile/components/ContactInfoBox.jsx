@@ -19,7 +19,7 @@ const ContactInfoBox = ({ setActiveTab }) => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [message_id, setMessageId] = useState(null);
   const [success, setSuccess] = useState(null);
-  const token = localStorage.getItem("employer_token");
+  const token = localStorage.getItem("Institute_token");
 
   useEffect(() => {
     FetchDetails();
@@ -28,7 +28,7 @@ const ContactInfoBox = ({ setActiveTab }) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${apiurl}/api/companyprofile/get_contact_person`,
+        `${apiurl}/api/instituteprofile/get_contact_person`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -93,7 +93,7 @@ const ContactInfoBox = ({ setActiveTab }) => {
 
     try {
       const response = await axios.post(
-        `${apiurl}/api/companyprofile/add_or_update_contact_person`,
+        `${apiurl}/api/instituteprofile/add_or_update_contact_person`,
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

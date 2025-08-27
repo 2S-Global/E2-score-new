@@ -20,7 +20,7 @@ const AccountBox = ({ setActiveTab }) => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [message_id, setMessageId] = useState(null);
   const [success, setSuccess] = useState(null);
-  const token = localStorage.getItem("employer_token");
+  const token = localStorage.getItem("Institute_token");
 
   useEffect(() => {
     Fetchdetails();
@@ -30,7 +30,7 @@ const AccountBox = ({ setActiveTab }) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${apiurl}/api/companyprofile/get_account_details`,
+        `${apiurl}/api/instituteprofile/get_account_details`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -65,7 +65,7 @@ const AccountBox = ({ setActiveTab }) => {
     setMessageId(null);
     try {
       const response = await axios.put(
-        `${apiurl}/api/companyprofile/update_account_details`,
+        `${apiurl}/api/instituteprofile/update_account_details`,
         formdata,
         {
           headers: {
