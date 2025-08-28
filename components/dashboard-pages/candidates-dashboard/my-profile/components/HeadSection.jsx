@@ -90,7 +90,12 @@ const HeadSection = () => {
                       phone={user.phone_number}
                       email={user.email}
                       gender={user.gender_name}
-                      dob={dayjs(user.dob).format("DD-MM-YYYY")}
+                      /* send dob only if only if it is not null  */
+                      dob={
+                        user.dob
+                          ? dayjs(user.dob).format("DD-MM-YYYY")
+                          : undefined
+                      }
                       setReload={setReload}
                       setError={setError}
                       setSuccess={setSuccess}
