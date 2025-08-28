@@ -1,8 +1,129 @@
-"use clint";
-import { useState } from "react";
+"use client";
 
+import { useState, useEffect } from "react";
+import VerificationForm from "./From";
+import axios from "axios";
+import CustomizedProgressBars from "@/components/common/loader";
+import MessageComponent from "@/components/common/ResponseMsg";
+import ComingSoon from "@/components/common/commingsoon";
+import { se } from "date-fns/locale";
 const KycBox = () => {
-  return <div>KycBox</div>;
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const [name, setName] = useState("");
+  const token = localStorage.getItem("candidate_token");
+  const [error, setError] = useState(null);
+  const [errorId, setErrorId] = useState(null);
+  const [message_id, setMessageId] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [nameloading, setNameLoading] = useState(false);
+
+  const [userdata, setUserdata] = useState({
+    pan: { number: "1", name: "2", verified: true, incart: false },
+    aadhaar: { number: "", name: "", verified: false, incart: true },
+    driving: { number: "", name: "", verified: false, incart: false },
+    epic: { number: "", name: "", verified: false, incart: false },
+    passport: { number: "", name: "", verified: false, incart: false },
+  });
+
+  const [listdocs, setListdocs] = useState([]);
+
+  useEffect(() => {
+    fetchDocs();
+    fetchName();
+  }, []);
+  /* /api/userdata/get_only_student_name */
+
+  const fetchName = async () => {
+    setNameLoading(true);
+    try {
+      const response = await axios.get(
+        `${apiurl}/api/userdata/get_only_student_name`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setName(response.data.name);
+      console.log(response.data.name);
+      setNameLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchDocs = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${apiurl}/api/sql/dropdown/get_verification_list`
+      );
+      if (response.data.success) {
+        setListdocs(response.data.data);
+      }
+      response;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <MessageComponent
+        error={error}
+        success={success}
+        errorId={errorId}
+        message_id={message_id}
+      />
+      {loading && (
+        <div
+          className="position-fixed top-0 start-0 w-100 vh-100 d-flex justify-content-center align-items-center bg-white bg-opacity-75"
+          style={{ zIndex: 1050 }}
+        >
+          <CustomizedProgressBars />
+        </div>
+      )}
+      <div className="ls-widget">
+        <div className="tabs-box">
+          <div className="widget-content">
+            {listdocs.map((doc) => (
+              <div
+                key={doc._id}
+                className="row"
+                style={{ padding: "25px 0", borderBottom: "1px solid #ddd" }}
+              >
+                <h3 className="text-center pb-2">{doc.title}</h3>
+
+                {userdata[doc.verification_name].verified ? (
+                  <>CARD</>
+                ) : (
+                  <>
+                    {userdata[doc.verification_name].incart ? (
+                      <>
+                        Already in cart
+                        <ComingSoon />
+                      </>
+                    ) : (
+                      <>
+                        {nameloading ? (
+                          <></>
+                        ) : (
+                          <VerificationForm Document={doc} name={name} />
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default KycBox;

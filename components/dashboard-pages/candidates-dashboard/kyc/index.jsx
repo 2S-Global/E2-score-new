@@ -6,7 +6,8 @@ import CopyrightFooter from "../../CopyrightFooter";
 import DashboardCandidatesHeader from "../../../header/DashboardCandidatesHeader";
 import MenuToggler from "../../MenuToggler";
 
-import KycBox from "../my-profile/components/KycBox";
+import KycBoxdemo from "../my-profile/components/KycBox";
+import KycBox from "./components/Kycbox";
 
 const KycPage = () => {
   return (

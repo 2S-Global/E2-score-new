@@ -199,3 +199,28 @@ img.rounded-circle {
   font-size: 0.95rem;
   padding-top: 0; /* Remove extra top space */
 }
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.15); /* transparent white */
+  backdrop-filter: blur(12px); /* blur background */
+  -webkit-backdrop-filter: blur(12px); /* Safari support */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* subtle border */
+  border-radius: 1rem; /* smooth rounded edges */
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+  color: white;
+  max-width: 420px;
+}
