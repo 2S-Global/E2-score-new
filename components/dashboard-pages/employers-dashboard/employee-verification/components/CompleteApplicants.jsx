@@ -89,8 +89,8 @@ const CompleteApplicants = () => {
             candidatesData.map((candidate) => (
               <div className="col-md-6 mb-3" key={candidate.employmentId}>
                 <div className="card shadow-sm border-0 rounded-3 p-3 h-100">
-                  <div className="d-flex align-items-center">
-                    <div className="me-3">
+                  <div className="d-flex align-items-center row">
+                    <div className="me-3 col-md-6 mb-2">
                       <img
                         width={70}
                         height={70}
@@ -99,7 +99,7 @@ const CompleteApplicants = () => {
                         className="rounded-circle border border-primary"
                       />
                     </div>
-                    <div className="flex-grow-1">
+                    <div className="flex-grow-1 col-md-6">
                       <h6 className="mb-1 fw-semibold">
                         <Link
                           href={`/candidates-details/${candidate.userId}`}
@@ -111,10 +111,13 @@ const CompleteApplicants = () => {
                       <p className="mb-1 small text-muted">
                         {candidate.jobTitle}
                       </p>
-                      <p className="mb-2 small text-muted d-flex align-items-center">
-                        <i className="flaticon-envelope me-1 text-primary"></i>{" "}
+
+                      {/* ✅ FIX: Bootstrap text-break for long emails */}
+                      <p className="mb-2 small text-muted d-flex align-items-center text-break">
+                        <i className="flaticon-envelope me-1 text-primary"></i>
                         {candidate.email}
                       </p>
+
                       <div className="d-flex gap-2">
                         <button
                           className="btn btn-sm btn-outline-primary"

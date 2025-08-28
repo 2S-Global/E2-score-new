@@ -95,7 +95,7 @@ const CreatableAsyncSelect = ({ formdata, setFormdata }) => {
 
   return (
     <>
-      <div className="form-group col-lg-6 col-md-12">
+      <div className="form-group col-lg-12 col-md-12">
         <label onClick={() => console.log(formdata)}>
           Courses
           <span style={{ color: "red" }} className="ms-1">
