@@ -134,9 +134,9 @@ const SocialNetworkBox = ({ setActiveTab }) => {
         setSuccess(response.data.message);
         setMessageId(Date.now());
 
-        setTimeout(() => {
+        /* setTimeout(() => {
           setActiveTab("brance");
-        }, 2000);
+        }, 2000); */
       } else {
         setError(response.data.message);
         setErrorId(Date.now());

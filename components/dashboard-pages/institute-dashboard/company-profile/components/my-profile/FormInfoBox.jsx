@@ -45,12 +45,30 @@ const FormInfoBox = ({ setActiveTab }) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${apiurl}/api/companyprofile/get_company_details`,
+        `${apiurl}/api/instituteprofile/get_company_details`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (response.data.success) {
         const data = response.data.data;
+
+        const updatedFormData = {
+          ...formdata,
+          name: data.name || "",
+          email: data.email || "",
+          phone: data.phone || "",
+          address: data.address || "",
+          website: data.website || "",
+          established: data.established || "",
+
+          courses: data.courses || [],
+          allowinsearch: data.allowinsearch || true,
+          about: data.about || "",
+          logo_preview: data.logo || "",
+          cover_preview: data.cover || "",
+        };
+
+        setFormdata(updatedFormData);
 
         setDisableform(false);
       }
@@ -68,24 +86,44 @@ const FormInfoBox = ({ setActiveTab }) => {
   }, [formdata.logo_preview]);
 
   const handelsubmit = async (e) => {
-    console.log(formdata);
     e.preventDefault();
+    console.log("FormData before submit:", formdata);
+
     setLoading(true);
     setSubmitting(true);
     setError(null);
     setErrorId(null);
     setSuccess(null);
     setMessageId(null);
+
     try {
       const payload = new FormData();
+
       for (const key in formdata) {
-        if (formdata[key] !== null && formdata[key] !== undefined) {
-          payload.append(key, formdata[key]);
+        const value = formdata[key];
+
+        if (value !== null && value !== undefined) {
+          if (Array.isArray(value)) {
+            // Arrays (like courses) → stringify
+            payload.append(key, JSON.stringify(value));
+          } else if (value instanceof Date) {
+            // Date objects → ISO string
+            payload.append(key, value.toISOString());
+          } else if (value instanceof File || value instanceof Blob) {
+            // Files → append directly
+            payload.append(key, value);
+          } else if (typeof value === "object") {
+            // Any other plain object → stringify
+            payload.append(key, JSON.stringify(value));
+          } else {
+            // Primitives (string, number, boolean) → append directly
+            payload.append(key, value);
+          }
         }
       }
 
       const response = await axios.post(
-        `${apiurl}/api/companyprofile/add_or_update_company`,
+        `${apiurl}/api/instituteprofile/add_or_update_company`,
         payload,
         {
           headers: {
@@ -94,13 +132,14 @@ const FormInfoBox = ({ setActiveTab }) => {
           },
         }
       );
+
       if (response.data.success) {
         setError(null);
         setErrorId(null);
         setSuccess(response.data.message);
         setMessageId(Date.now());
 
-        //wait for 2 seconds then setActiveTab= "account"
+        // wait for 2 seconds then setActiveTab= "account"
         setTimeout(() => {
           setActiveTab("account");
         }, 2000);
@@ -241,7 +280,7 @@ const FormInfoBox = ({ setActiveTab }) => {
             </span>
             <input
               type="email"
-              name="name"
+              name="email"
               placeholder="Enter email address"
               value={formdata.email}
               onChange={(e) =>
@@ -259,7 +298,7 @@ const FormInfoBox = ({ setActiveTab }) => {
             </span>
             <input
               type="text"
-              name="name"
+              name="mobile"
               placeholder="0 123 456 7890"
               value={formdata.phone}
               onChange={(e) =>
@@ -277,7 +316,7 @@ const FormInfoBox = ({ setActiveTab }) => {
             </span>
             <input
               type="url"
-              name="name"
+              name="website"
               placeholder="https://www.example.com"
               value={formdata.website}
               onChange={(e) =>
@@ -334,6 +373,7 @@ const FormInfoBox = ({ setActiveTab }) => {
             </span>
             <textarea
               className="form-control"
+              name="about"
               required
               style={{
                 padding: "10px",
@@ -359,6 +399,7 @@ const FormInfoBox = ({ setActiveTab }) => {
             <textarea
               className="form-control"
               required
+              name="address"
               style={{
                 padding: "10px",
                 minheight: "2.5em",
