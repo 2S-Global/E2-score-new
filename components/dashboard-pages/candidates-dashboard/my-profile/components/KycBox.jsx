@@ -1,5 +1,6 @@
 "use client";
 
+import { add } from "date-fns";
 import { useState } from "react";
 
 const KycBox = () => {
@@ -7,11 +8,11 @@ const KycBox = () => {
   const [verifiedDocs, setVerifiedDocs] = useState({});
   const [loadingDocs, setLoadingDocs] = useState({});
   const [existingDocs, setExistingDocs] = useState({
-    pan: { number: "ABCDE1234F", name: "John Doe", verified: true },
+    pan: { number: "", name: "", verified: false },
     aadhaar: { number: "", name: "", verified: false },
-    driving: { number: "DL123456789", name: "John Doe", verified: true },
+    driving: { number: "", name: "", verified: false },
     epic: { number: "", name: "", verified: false },
-    passport: { number: "P1234567", name: "John Doe", verified: false },
+    passport: { number: "", name: "", verified: false },
   });
 
   const handleFileUpload = (event, docType) => {
@@ -50,34 +51,32 @@ const KycBox = () => {
       id: "pan",
       title: "Pan Card",
       fields: ["Pan Card Number", "Name on Pan Card"],
-      api_link: "https://demo.com/api/pan",
     },
     {
       id: "aadhaar",
       title: "Aadhaar Card",
       fields: ["Aadhaar Number", "Name on Aadhaar"],
-      api_link: "https://demo.com/api/aadhaar",
     },
     {
       id: "driving",
       title: "Driving License",
       fields: ["License Number", "Name on License"],
-      api_link: "https://demo.com/api/dl",
     },
     {
       id: "epic",
       title: "EPIC Card",
       fields: ["EPIC Number", "Name on EPIC"],
-      api_link: "https://demo.com/api/voter",
     },
     {
       id: "passport",
       title: "Passport",
       fields: ["Passport Number", "Name on Passport"],
-      api_link: "https://demo.com/api/passport",
     },
   ];
 
+  const addToVerificationCart = (docType, name, number) => {
+    console.log("test ", docType + " " + name + " " + number);
+  };
   return (
     <div className="ls-widget">
       <div className="tabs-box">
@@ -107,88 +106,44 @@ const KycBox = () => {
                     </p>
                   </div>
                 ) : (
-                  <>
-                    {doc.fields.map((field, index) => (
-                      <div
-                        className="form-group col-lg-4 col-md-12"
-                        key={index}
-                      >
-                        <label htmlFor={`${doc.id}-${index}`}>{field}</label>
-                        <input
-                          type="text"
-                          id={`${doc.id}-${index}`}
-                          name={`${doc.id}-${field.replace(/\s+/g, "")}`}
-                          placeholder={`Enter ${field}`}
-                        />
-                      </div>
-                    ))}
+                  <div className="row">
+                    {doc.fields.map((field, index) => {
+                      const inputId = `${doc.id}-${index}`;
+                      const inputName = `${doc.id}-${field.replace(/\s+/g, "")}`;
 
-                    {/* File Upload & Verify Button */}
-                    <div className="form-group col-lg-4 col-md-12">
-                      <label htmlFor={`upload-${doc.id}`}>
-                        Upload {doc.title}
-                      </label>
-                      <div className="uploadButton d-flex align-items-center">
-                        <input
-                          className="uploadButton-input"
-                          type="file"
-                          name={`${doc.id}-attachment`}
-                          accept="image/*"
-                          id={`upload-${doc.id}`}
-                          required
-                          onChange={(e) => handleFileUpload(e, doc.id)}
-                        />
-                        <label
-                          className="uploadButton-button ripple-effect"
-                          htmlFor={`upload-${doc.id}`}
+                      return (
+                        <div
+                          className="form-group col-lg-6 col-md-6"
+                          key={inputId}
                         >
-                          {uploadedFiles[doc.id] || `Browse ${doc.title}..`}
-                        </label>
-                        <button
-                          type="button"
-                          className={`theme-btn btn-style-two ml-2 ${
-                            verifiedDocs[doc.id] ? "btn-success" : "btn-primary"
-                          }`}
-                          onClick={() => handleVerify(doc.id, doc.api_link)}
-                          disabled={
-                            !uploadedFiles[doc.id] || loadingDocs[doc.id]
-                          }
-                          style={{
-                            marginLeft: "10px",
-                            backgroundColor: verifiedDocs[doc.id]
-                              ? "#28a745"
-                              : "#007bff",
-                            color: "#fff",
-                            border: "none",
-                            padding: "8px 12px",
-                            borderRadius: "5px",
-                            cursor: verifiedDocs[doc.id]
-                              ? "default"
-                              : "pointer",
-                          }}
-                        >
-                          {loadingDocs[doc.id]
-                            ? "Verifying..."
-                            : verifiedDocs[doc.id]
-                              ? "Verified ✅"
-                              : "Verify"}
-                        </button>
-                      </div>
+                          <label htmlFor={inputId}>{field}</label>
+                          <input
+                            type="text"
+                            id={inputId}
+                            name={inputName}
+                            className="form-control"
+                            placeholder={`Enter ${field}`}
+                          />
+                        </div>
+                      );
+                    })}
+
+                    {/* Verify Button */}
+                    <div className="form-group   align-items-center">
+                      <button
+                        type="button"
+                        className="btn btn-primary w-100"
+                        onClick={() =>
+                          addToVerificationCart(doc.id, name, number)
+                        }
+                      >
+                        Add To Verification Cart
+                      </button>
                     </div>
-                  </>
+                  </div>
                 )}
               </div>
             ))}
-
-            {/* Save All Button (Centered) */}
-            <div
-              className="form-group d-flex justify-content-center"
-              style={{ paddingTop: "20px" }}
-            >
-              <button type="submit" className="theme-btn btn-style-one">
-                Save All
-              </button>
-            </div>
           </form>
         </div>
       </div>
