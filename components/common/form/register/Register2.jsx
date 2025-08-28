@@ -4,6 +4,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import LoginWithSocial from "./LoginWithSocial";
 import FormContent2 from "./FormContent";
 import FormContentcom from "./companyform";
+import InstituteFormContent from "./InstituteRegister";
 import Link from "next/link";
 
 const Register2 = () => {
@@ -25,6 +26,11 @@ const Register2 = () => {
                 <i className="la la-briefcase"></i> Employer
               </button>
             </Tab>
+            <Tab className="col-lg-6 col-md-12">
+              <button className="theme-btn btn-style-four">
+                <i className="la la-user"></i> Institute
+              </button>
+            </Tab>
           </TabList>
         </div>
         {/* End .form-group */}
@@ -37,7 +43,11 @@ const Register2 = () => {
         <TabPanel>
           <FormContentcom />
         </TabPanel>
-        {/* End Employer Form */}
+
+        {/* Institute */}
+        <TabPanel>
+          <InstituteFormContent />
+        </TabPanel>
       </Tabs>
       {/* End form-group */}
 
