@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import MobileMenu from "../../../header/MobileMenu";
 import LoginPopup from "../../../common/form/login/LoginPopup";
 import DashboardCandidatesSidebar from "../../../header/DashboardCandidatesSidebar";
@@ -10,6 +11,7 @@ import KycBoxdemo from "../my-profile/components/KycBox";
 import KycBox from "./components/Kycbox";
 
 const KycPage = () => {
+  const [activeTab, setActiveTab] = useState("kyc");
   return (
     <div className="page-wrapper dashboard">
       <span className="header-span"></span>
@@ -34,12 +36,27 @@ const KycPage = () => {
           {/* breadCrumb */}
 
           <MenuToggler />
-          {/* Collapsible sidebar button */}
 
+          {/* Tab buttons */}
+          <div className="mb-3">
+            <button
+              className={`btn ${activeTab === "adhar" ? "btn-primary" : "btn-outline-primary"} me-2`}
+              onClick={() => setActiveTab("adhar")}
+            >
+              Adhar Card
+            </button>
+            <button
+              className={`btn ${activeTab === "kyc" ? "btn-primary" : "btn-outline-primary"} me-2`}
+              onClick={() => setActiveTab("kyc")}
+            >
+              Others
+            </button>
+          </div>
+          {/* Tab content */}
           <div className="row">
             <div className="col-lg-12">
-              {/* <!-- Ls widget --> */}
-              <KycBox />
+              {activeTab === "kyc" && <KycBox />}
+              {activeTab === "adhar" && <div>Adhar card</div>}
             </div>
           </div>
           {/* End .row */}

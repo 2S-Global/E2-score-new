@@ -7,6 +7,12 @@ import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
 import ComingSoon from "@/components/common/commingsoon";
 import { se } from "date-fns/locale";
+
+import PanDetails from "./documents/pancard";
+import DlDetails from "./documents/dlcard";
+import EpicDetails from "./documents/epiccard";
+import PassDetails from "./documents/passportcard";
+
 const KycBox = () => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [name, setName] = useState("");
@@ -19,7 +25,7 @@ const KycBox = () => {
   const [nameloading, setNameLoading] = useState(false);
 
   const [userdata, setUserdata] = useState({
-    pan: { number: "1", name: "2", verified: true, incart: false },
+    pan: { number: "", name: "", verified: false, incart: false },
     aadhaar: { number: "", name: "", verified: false, incart: true },
     driving: { number: "", name: "", verified: false, incart: false },
     epic: { number: "", name: "", verified: false, incart: false },
@@ -98,7 +104,33 @@ const KycBox = () => {
                 <h3 className="text-center pb-2">{doc.title}</h3>
 
                 {userdata[doc.verification_name].verified ? (
-                  <>CARD</>
+                  <>
+                    {/* 
+                    <span>CARD</span> */}
+                    {doc.verification_name === "pan" ? (
+                      <>
+                        <PanDetails />
+                      </>
+                    ) : null}
+                    {doc.verification_name === "aadhaar" ? (
+                      <>Card for aadhaar</>
+                    ) : null}
+                    {doc.verification_name === "driving" ? (
+                      <>
+                        <DlDetails />
+                      </>
+                    ) : null}
+                    {doc.verification_name === "epic" ? (
+                      <>
+                        <EpicDetails />
+                      </>
+                    ) : null}
+                    {doc.verification_name === "passport" ? (
+                      <>
+                        <PassDetails />
+                      </>
+                    ) : null}
+                  </>
                 ) : (
                   <>
                     {userdata[doc.verification_name].incart ? (

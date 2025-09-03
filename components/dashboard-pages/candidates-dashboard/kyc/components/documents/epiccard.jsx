@@ -1,176 +1,114 @@
 import React from "react";
 
-const EpicDetails = ({ user }) => {
-  const epicResult = user?.epic_response?.result || {};
+const EpicDetails = () => {
+  // Static data
+  const epicResult = {
+    epic_number: "WB123456789",
+    user_name_english: "John Doe",
+    user_gender: "Male",
+    user_age: 35,
+    status: "Active",
+    relative_relation: "Father",
+    relative_name_english: "Richard Doe",
+    address: {
+      district_name: "Kolkata",
+      district_code: "KL01",
+      state: "West Bengal",
+      state_code: "WB",
+    },
+    assembly_constituency_name: "Kolkata North",
+    assembly_constituency_number: "AC123",
+    parliamentary_constituency_name: "Kolkata",
+    parliamentary_constituency_number: "PC456",
+    constituency_part_name: "Ward 12",
+    constituency_part_number: "CP12",
+  };
+
   return (
-    <div className="col-md-6 mb-4" id="epic_response">
-      <div className="p-3 shadow-sm rounded bg-light">
-        {" "}
-        {/* Simple box with padding and background */}
-        <div className="d-flex align-items-center mb-3">
-          <h5 className="fw-bold text-dark mb-0 me-2">EPIC</h5>
-          <img
-            src={
-              !user?.epic_response
-                ? "/images/resource/na.png"
-                : user?.epic_response?.response_code == 100
-                  ? "/images/resource/verified.png"
-                  : "/images/resource/unverified.png"
-            }
-            alt={
-              !user?.epic_response
-                ? "N/A"
-                : user?.epic_response?.response_code == 100
-                  ? "Verified"
-                  : "Not Verified"
-            }
-            style={{ width: "100px", height: "20px" }}
-          />
-        </div>
-        <div className="mt-2">
-          {/* Personal Details */}
-          <div className="mb-3">
-            <div className="d-flex align-items-center mb-1">
-              <span className="fw-bold me-2">EPIC ID:</span>
-              <span className="text-break">
-                {epicResult?.epic_number || "N/A"}
-              </span>
-            </div>
-            <div className="d-flex align-items-center mb-1">
-              <span className="fw-bold me-2">Name:</span>
-              <span className="text-break">
-                {epicResult?.user_name_english
-                  ? epicResult.user_name_english
-                      .toLowerCase()
-                      .replace(/\b\w/g, (char) => char.toUpperCase())
-                  : "N/A"}
-              </span>
-            </div>
-            <div className="d-flex align-items-center mb-1">
-              <span className="fw-bold me-2">Gender:</span>
-              <span className="text-break">
-                {epicResult?.user_gender || "N/A"}
-              </span>
-            </div>
-            <div className="d-flex align-items-center mb-1">
-              <span className="fw-bold me-2">Age:</span>
-              <span className="text-break">
-                {epicResult?.user_age || "N/A"}
-              </span>
-            </div>
-            <div className="d-flex align-items-center mb-1">
-              <span className="fw-bold me-2">Status:</span>
-              <span className="text-break">{epicResult?.status || "N/A"}</span>
-            </div>
-            <div className="d-flex align-items-center mb-1">
-              <span className="fw-bold me-2">
-                {epicResult?.relative_relation || "Relative"} Name:
-              </span>
-              <span className="text-break">
-                {epicResult?.relative_name_english || "N/A"}
-              </span>
-            </div>
+    <div className="container my-3">
+      <div className="col-12 mx-auto" style={{ maxWidth: "900px" }}>
+        <div className="p-3 shadow rounded bg-white border">
+          {/* Header */}
+          <div className="d-flex align-items-center justify-content-between mb-2">
+            <h5 className="fw-bold mb-0">EPIC</h5>
+            <img
+              src="/images/resource/verified.png"
+              alt="Verified"
+              style={{ width: "100px", height: "auto" }}
+            />
           </div>
 
-          {/* Location Details */}
-          <div className="mb-3">
-            <h5 className="fw-bold">Location Details</h5>
-            <div className="d-flex align-items-center mb-1">
-              <span className="fw-bold me-2">District:</span>
-              <span className="text-break">
-                {epicResult?.address?.district_name || "N/A"} (
-                {epicResult?.address?.district_code || "N/A"})
-              </span>
+          <div className="row g-2">
+            {/* Personal Info */}
+            <div className="col-md-6">
+              <div className="mb-2">
+                <span className="fw-semibold text-secondary">EPIC ID:</span>{" "}
+                <span className="fw-bold text-primary">
+                  {epicResult.epic_number}
+                </span>
+              </div>
+              <div className="mb-2">
+                <span className="fw-semibold text-secondary">Name:</span>{" "}
+                <span className="fw-bold">{epicResult.user_name_english}</span>
+              </div>
+              <div className="mb-2">
+                <span className="fw-semibold text-secondary">Gender:</span>{" "}
+                {epicResult.user_gender}
+              </div>
+              <div className="mb-2">
+                <span className="fw-semibold text-secondary">Age:</span>{" "}
+                {epicResult.user_age}
+              </div>
+              <div className="mb-2">
+                <span className="fw-semibold text-secondary">Status:</span>{" "}
+                {epicResult.status}
+              </div>
+              <div className="mb-2">
+                <span className="fw-semibold text-secondary">
+                  {epicResult.relative_relation} Name:
+                </span>{" "}
+                {epicResult.relative_name_english}
+              </div>
             </div>
-            <div className="d-flex align-items-center mb-1">
-              <span className="fw-bold me-2">State:</span>
-              <span className="text-break">
-                {epicResult?.address?.state || "N/A"} (
-                {epicResult?.address?.state_code || "N/A"})
-              </span>
-            </div>
-            <div className="d-flex align-items-center mb-1">
-              <span className="fw-bold me-2">Assembly Constituency:</span>
-              <span className="text-break">
-                {epicResult?.assembly_constituency_name || "N/A"} (
-                {epicResult?.assembly_constituency_number || "N/A"})
-              </span>
-            </div>
-            <div className="d-flex align-items-center mb-1">
-              <span className="fw-bold me-2">Parliamentary Constituency:</span>
-              <span className="text-break">
-                {epicResult?.parliamentary_constituency_name || "N/A"} (
-                {epicResult?.parliamentary_constituency_number || "N/A"})
-              </span>
-            </div>
-            <div className="d-flex align-items-center mb-1">
-              <span className="fw-bold me-2">Constituency Part Name:</span>
-              <span className="text-break">
-                {epicResult?.constituency_part_name || "N/A"} (
-                {epicResult?.constituency_part_number || "N/A"})
-              </span>
-            </div>
-          </div>
 
-          {/* Polling Booth Details */}
-          {/*  <div className="mb-2">
-            <h5 className="fw-bold">Polling Booth Details</h5>
-            <div className="d-flex align-items-center mb-1">
-              <span className="fw-bold me-2">Polling Booth:</span>
-              <span className="text-break">
-                {epicResult?.polling_booth?.name || "N/A"} (
-                {epicResult?.polling_booth?.number || "N/A"})
-              </span>
+            {/* Location Info */}
+            <div className="col-md-6">
+              <div className="mb-2">
+                <span className="fw-semibold text-secondary">District:</span>{" "}
+                {epicResult.address.district_name} (
+                {epicResult.address.district_code})
+              </div>
+              <div className="mb-2">
+                <span className="fw-semibold text-secondary">State:</span>{" "}
+                {epicResult.address.state} ({epicResult.address.state_code})
+              </div>
+              <div className="mb-2">
+                <span className="fw-semibold text-secondary">
+                  Assembly Constituency:
+                </span>{" "}
+                {epicResult.assembly_constituency_name} (
+                {epicResult.assembly_constituency_number})
+              </div>
+              <div className="mb-2">
+                <span className="fw-semibold text-secondary">
+                  Parliamentary Constituency:
+                </span>{" "}
+                {epicResult.parliamentary_constituency_name} (
+                {epicResult.parliamentary_constituency_number})
+              </div>
+              <div className="mb-2">
+                <span className="fw-semibold text-secondary">
+                  Constituency Part:
+                </span>{" "}
+                {epicResult.constituency_part_name} (
+                {epicResult.constituency_part_number})
+              </div>
             </div>
-            <div className="d-flex align-items-center mb-1">
-              <span className="fw-bold me-2">Location:</span>
-              <span className="text-break">
-                {epicResult?.polling_booth?.lat_long || "N/A"}
-              </span>
-            </div>
-            <div className="d-flex align-items-center mb-1">
-              <span className="fw-bold me-2">
-                Serial Number Applicable Part:
-              </span>
-              <span className="text-break">
-                {epicResult?.serial_number_applicable_part || "N/A"}
-              </span>
-            </div>
-            <div className="d-flex align-items-center mb-1">
-              <span className="fw-bold me-2">Last Updated:</span>
-              <span className="text-break">
-                {epicResult?.voter_last_updated_date
-                  ? new Date(epicResult.voter_last_updated_date).toLocaleString(
-                      "en-IN",
-                      {
-                        day: "2-digit",
-                        month: "long",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
-                        hour12: true,
-                      }
-                    )
-                  : "N/A"}
-              </span>
-            </div>
-          </div> */}
-
-          <div className="d-flex align-items-center mb-1">
-            {user.epic_image && (
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-primary me-2"
-                onClick={() => window.open(user.epic_image, "_blank")}
-              >
-                View Document
-              </button>
-            )}
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 export default EpicDetails;
