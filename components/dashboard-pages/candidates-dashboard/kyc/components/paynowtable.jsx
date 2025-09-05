@@ -41,7 +41,7 @@ const PaymentDetails = () => {
   const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY;
   const router = useRouter();
   useEffect(() => {
-    const storedToken = localStorage.getItem("Admin_token");
+    const storedToken = localStorage.getItem("candidate_token");
 
     setToken(storedToken);
   }, []);
@@ -52,7 +52,7 @@ const PaymentDetails = () => {
     const fetchPayments = async () => {
       try {
         const response = await axios.get(
-          `${apiurl}/api/usercart/list_user_cart`,
+          `${apiurl}/api/candidate/usercart/list_candidate_cart`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -279,162 +279,176 @@ const PaymentDetails = () => {
         </div>
       ) : (
         <>
-          <div className="container">
-            <table className="table table-bordered">
-              <thead className="table-light">
-                <tr>
-                  <th style={{ textAlign: "center" }}>#</th>
-                  <th style={{ textAlign: "center" }}>Name</th>
-                  <th style={{ textAlign: "center" }}>Mobile Number</th>
-                  <th style={{ textAlign: "center" }}>Pay For</th>
-                  <th style={{ textAlign: "center" }}>Amount</th>
-                  <th style={{ textAlign: "center" }}>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {payments.length > 0 ? (
-                  payments.map((payment, index) => (
-                    <tr key={payment.id}>
-                      <td style={{ textAlign: "center" }}>{index + 1}</td>
-                      <td style={{ textAlign: "center" }}>{payment.name}</td>
-                      <td style={{ textAlign: "center" }}>
-                        {payment.mobile || "N/A"}
-                      </td>
-                      <td style={{ textAlign: "center" }}>
-                        {payment.payFor || "N/A"}
-                      </td>
-                      <td style={{ textAlign: "center" }}>
-                        {payment.amount} INR
-                      </td>
-                      <td style={{ textAlign: "center" }}>
-                        <Trash2
-                          size={16}
-                          className="text-danger"
-                          onClick={() => handleDelete(payment.id)}
-                        />
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="6" style={{ textAlign: "center" }}>
-                      No data available
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-            {payments.length > 0 ? (
-              <>
-                <div className="p-3 bg-light rounded">
-                  <p className="d-flex justify-content-between mb-1">
-                    <span>Sub-Total :</span>{" "}
-                    <span>{subTotal?.toFixed(2)} INR</span>
-                  </p>
-                  <p className="d-flex justify-content-between mb-1">
-                    <span>Discount ({discountPercentage}%) :</span>{" "}
-                    <span>- {discount?.toFixed(2)} INR</span>
-                  </p>
+          <div className="ls-widget">
+            <div className="tabs-box">
+              <div
+                className="widget-content"
+                style={{ padding: "25px 0", borderBottom: "1px solid #ddd" }}
+              >
+                <div className="container">
+                  <table className="table table-bordered">
+                    <thead className="table-light">
+                      <tr>
+                        <th style={{ textAlign: "center" }}>#</th>
+                        {/*  <th style={{ textAlign: "center" }}>Name</th>
+                        <th style={{ textAlign: "center" }}>Mobile Number</th> */}
+                        <th style={{ textAlign: "center" }}>Pay For</th>
+                        <th style={{ textAlign: "center" }}>Amount</th>
+                        <th style={{ textAlign: "center" }}>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {payments.length > 0 ? (
+                        payments.map((payment, index) => (
+                          <tr key={payment.id}>
+                            <td style={{ textAlign: "center" }}>{index + 1}</td>
+                            {/* <td style={{ textAlign: "center" }}>
+                              {payment.name}
+                            </td>
+                            <td style={{ textAlign: "center" }}>
+                              {payment.mobile || "N/A"}
+                            </td> */}
+                            <td style={{ textAlign: "center" }}>
+                              {payment.payFor || "N/A"}
+                            </td>
+                            <td style={{ textAlign: "center" }}>
+                              {payment.amount} INR
+                            </td>
+                            <td style={{ textAlign: "center" }}>
+                              <Trash2
+                                size={16}
+                                className="text-danger"
+                                onClick={() => handleDelete(payment.id)}
+                              />
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="6" style={{ textAlign: "center" }}>
+                            Your cart is empty.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                  {payments.length > 0 ? (
+                    <>
+                      <div className="p-3 bg-light rounded">
+                        <p className="d-flex justify-content-between mb-1">
+                          <span>Sub-Total :</span>{" "}
+                          <span>{subTotal?.toFixed(2)} INR</span>
+                        </p>
+                        <p className="d-flex justify-content-between mb-1">
+                          <span>Discount ({discountPercentage}%) :</span>{" "}
+                          <span>- {discount?.toFixed(2)} INR</span>
+                        </p>
 
-                  <p className="d-flex justify-content-between mb-1">
-                    <span>SGST ({sgstPercentage}%) :</span>{" "}
-                    <span>{sgst?.toFixed(2)} INR</span>
-                  </p>
-                  <p className="d-flex justify-content-between mb-1">
-                    <span>CGST ({cgstPercentage}%) :</span>{" "}
-                    <span>{cgst?.toFixed(2)} INR</span>
-                  </p>
-                  <p className="d-flex justify-content-between fw-bold fs-5">
-                    <span>Total :</span> <span>{total?.toFixed(2)} INR</span>
-                  </p>
-                </div>
+                        <p className="d-flex justify-content-between mb-1">
+                          <span>SGST ({sgstPercentage}%) :</span>{" "}
+                          <span>{sgst?.toFixed(2)} INR</span>
+                        </p>
+                        <p className="d-flex justify-content-between mb-1">
+                          <span>CGST ({cgstPercentage}%) :</span>{" "}
+                          <span>{cgst?.toFixed(2)} INR</span>
+                        </p>
+                        <p className="d-flex justify-content-between fw-bold fs-5">
+                          <span>Total :</span>{" "}
+                          <span>{total?.toFixed(2)} INR</span>
+                        </p>
+                      </div>
 
-                <div className="mt-3">
-                  {role == "2" && total > 0 && (
-                    <div className="d-flex justify-content-end align-items-center gap-2">
-                      <label htmlFor="paymentmethod" className="mb-0">
-                        Payment Method:
-                      </label>
-                      <select
-                        className="form-select w-auto"
-                        id="paymentmethod"
-                        value={paymentmethod}
-                        onChange={(e) => setPaymentmethod(e.target.value)}
-                        required
-                      >
-                        <option value="">Select Payment Method</option>
-                        <option value="online">Online</option>
-                        <option value="Wallet">
-                          Wallet (Balance: ₹{walletBalance.toFixed(2)})
-                        </option>
-                      </select>
-                    </div>
-                  )}
-
-                  <div className="d-flex justify-content-end gap-2 mt-3">
-                    {total === 0 ? (
-                      <>
-                        <div className="d-flex align-items-stretch gap-3 mt-3">
-                          <div className="alert alert-light d-flex align-items-center flex-grow-1 border rounded shadow-sm mb-0 px-4 py-0">
-                            <span
-                              className="text-secondary py-3"
-                              style={{ fontSize: "15px" }}
+                      <div className="mt-3">
+                        {role == "2" && total > 0 && (
+                          <div className="d-flex justify-content-end align-items-center gap-2">
+                            <label htmlFor="paymentmethod" className="mb-0">
+                              Payment Method:
+                            </label>
+                            <select
+                              className="form-select w-auto"
+                              id="paymentmethod"
+                              value={paymentmethod}
+                              onChange={(e) => setPaymentmethod(e.target.value)}
+                              required
                             >
-                              <strong>
-                                You're on our completely free plan
-                              </strong>{" "}
-                              — no payment is needed. Please continue to
-                              complete the verification.
-                            </span>
+                              <option value="">Select Payment Method</option>
+                              <option value="online">Online</option>
+                              <option value="Wallet">
+                                Wallet (Balance: ₹{walletBalance.toFixed(2)})
+                              </option>
+                            </select>
                           </div>
-                          <button
-                            className="btn btn-primary px-4"
-                            style={{ height: "100%" }}
-                            onClick={() => handlefree(total, paymentIdsString)}
-                          >
-                            Continue
-                          </button>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        {paymentmethod === "Wallet" && (
-                          <>
-                            {total > walletBalance ? (
-                              <>
-                                <span className="text-danger">
-                                  Insufficient wallet balance. Please add funds
-                                  to your wallet.
-                                </span>
-                              </>
-                            ) : (
-                              <button
-                                className="btn btn-primary px-4"
-                                disabled={payments.length === 0}
-                                onClick={() =>
-                                  handlePaywallet(total, paymentIdsString)
-                                }
-                              >
-                                Pay with Wallet ({total?.toFixed(2)} INR)
-                              </button>
-                            )}
-                          </>
                         )}
 
-                        {paymentmethod === "online" && (
-                          <RazorpayPayment
-                            amount={total}
-                            razorpayKey={razorpayKey}
-                            onSuccess={handlePaymentSuccess}
-                            paymentIds={paymentIdsString}
-                          />
-                        )}
-                      </>
-                    )}
-                  </div>
+                        <div className="d-flex justify-content-end gap-2 mt-3">
+                          {total === 0 ? (
+                            <>
+                              <div className="d-flex align-items-stretch gap-3 mt-3">
+                                <div className="alert alert-light d-flex align-items-center flex-grow-1 border rounded shadow-sm mb-0 px-4 py-0">
+                                  <span
+                                    className="text-secondary py-3"
+                                    style={{ fontSize: "15px" }}
+                                  >
+                                    <strong>
+                                      You're on our completely free plan
+                                    </strong>{" "}
+                                    — no payment is needed. Please continue to
+                                    complete the verification.
+                                  </span>
+                                </div>
+                                <button
+                                  className="btn btn-primary px-4"
+                                  style={{ height: "100%" }}
+                                  onClick={() =>
+                                    handlefree(total, paymentIdsString)
+                                  }
+                                >
+                                  Continue
+                                </button>
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              {paymentmethod === "Wallet" && (
+                                <>
+                                  {total > walletBalance ? (
+                                    <>
+                                      <span className="text-danger">
+                                        Insufficient wallet balance. Please add
+                                        funds to your wallet.
+                                      </span>
+                                    </>
+                                  ) : (
+                                    <button
+                                      className="btn btn-primary px-4"
+                                      disabled={payments.length === 0}
+                                      onClick={() =>
+                                        handlePaywallet(total, paymentIdsString)
+                                      }
+                                    >
+                                      Pay with Wallet ({total?.toFixed(2)} INR)
+                                    </button>
+                                  )}
+                                </>
+                              )}
+
+                              {paymentmethod === "online" && (
+                                <RazorpayPayment
+                                  amount={total}
+                                  razorpayKey={razorpayKey}
+                                  onSuccess={handlePaymentSuccess}
+                                  paymentIds={paymentIdsString}
+                                />
+                              )}
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  ) : null}
                 </div>
-              </>
-            ) : null}
+              </div>
+            </div>
           </div>
         </>
       )}

@@ -27,7 +27,7 @@ const KycBox = () => {
   const [userdata, setUserdata] = useState({
     pan: { number: "", name: "", verified: false, incart: false },
     aadhaar: { number: "", name: "", verified: false, incart: true },
-    driving: { number: "", name: "", verified: false, incart: false },
+    driving: { number: "", name: "", verified: false, incart: true },
     epic: { number: "", name: "", verified: false, incart: false },
     passport: { number: "", name: "", verified: false, incart: false },
   });
@@ -98,12 +98,12 @@ const KycBox = () => {
             {listdocs.map((doc) => (
               <div
                 key={doc._id}
-                className="row"
+                className=""
                 style={{ padding: "25px 0", borderBottom: "1px solid #ddd" }}
               >
                 <h3 className="text-center pb-2">{doc.title}</h3>
 
-                {userdata[doc.verification_name].verified ? (
+                {userdata[doc?.verification_name]?.verified ? (
                   <>
                     {/* 
                     <span>CARD</span> */}
@@ -133,10 +133,22 @@ const KycBox = () => {
                   </>
                 ) : (
                   <>
-                    {userdata[doc.verification_name].incart ? (
+                    {userdata[doc?.verification_name]?.incart ? (
                       <>
-                        Already in cart
-                        <ComingSoon />
+                        {" "}
+                        <span
+                          style={{
+                            display: "inline-block",
+                            backgroundColor: "#e6f4ff",
+                            color: "#0073e6",
+                            padding: "4px 10px",
+                            borderRadius: "12px",
+                            textAlign: "center",
+                            marginTop: "6px",
+                          }}
+                        >
+                          Already in Cart
+                        </span>
                       </>
                     ) : (
                       <>
