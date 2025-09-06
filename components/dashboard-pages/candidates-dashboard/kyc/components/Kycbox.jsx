@@ -42,6 +42,7 @@ const KycBox = () => {
 
   const fetchName = async () => {
     setNameLoading(true);
+    setLoading(true);
     try {
       const response = await axios.get(
         `${apiurl}/api/userdata/get_only_student_name`,
@@ -54,6 +55,7 @@ const KycBox = () => {
       setName(response.data.name);
       console.log(response.data.name);
       setNameLoading(false);
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
