@@ -32,14 +32,7 @@ const KycBox = () => {
     passport: { verified: false, incart: false },
   });
 
-  const [listdocs, setListdocs] = useState([
-    {
-      _id: 1,
-      verification_name: "pan",
-      title: "Pan Card",
-      fields: ["Pan Card Number", "Name on Pan Card"],
-    },
-  ]);
+  const [listdocs, setListdocs] = useState([]);
 
   useEffect(() => {
     fetchDocs();
