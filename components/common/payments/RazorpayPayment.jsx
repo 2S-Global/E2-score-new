@@ -25,7 +25,7 @@ const RazorpayPayment = ({ amount, razorpayKey, onSuccess, paymentIds }) => {
     document.body.appendChild(script);
   }, []);
 
-  const handlePayment = async() => {
+  const handlePayment = async () => {
     if (!isRazorpayLoaded) {
       console.error("Razorpay SDK is not loaded yet!");
       return;
@@ -34,40 +34,39 @@ const RazorpayPayment = ({ amount, razorpayKey, onSuccess, paymentIds }) => {
       // Use axios to create the order on the backend
       // const response = await axios.post(`${apiurl}/api/payment/create-order`, { amount });
       const response = await axios.post(`${apiurl}/api/payment/create-order`, {
-  amount: parseFloat(amount), // Ensure it's a number
-});
-const amountInPaise = Math.round(parseFloat(amount) * 100);
+        amount: parseFloat(amount), // Ensure it's a number
+      });
+      const amountInPaise = Math.round(parseFloat(amount) * 100);
 
-      
       const orderId = response.data.order.id;
-    
-    // console.log(orderId);
-    const options = {
-      key: razorpayKey,
-      amount: amountInPaise,
-      currency: "INR",
-      name: "Quikchek",
-      description: "Payment for Verification",
-      order_id: orderId, 
-      handler: function (response) {
-        // alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
-        console.log(response);
-        if (onSuccess) onSuccess(response, pay, pids);
-      },
-      prefill: {
-        name: "User Name",
-        email: "user@example.com",
-        contact: "9999999999",
-      },
-      theme: {
-        color: "#3399cc",
-      },
-    };
 
-    const rzp = new window.Razorpay(options);
-    rzp.open();
-      } catch (error) {
-      console.error('Error during order creation:', error);
+      // console.log(orderId);
+      const options = {
+        key: razorpayKey,
+        amount: amountInPaise,
+        currency: "INR",
+        name: "Quikchek",
+        description: "Payment for Verification",
+        order_id: orderId,
+        handler: function (response) {
+          // alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
+          console.log(response);
+          if (onSuccess) onSuccess(response, pay, pids);
+        },
+        prefill: {
+          name: "User Name",
+          email: "user@example.com",
+          contact: "9999999999",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error("Error during order creation:", error);
     }
   };
 
