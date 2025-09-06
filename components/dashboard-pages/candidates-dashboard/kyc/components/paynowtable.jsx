@@ -18,10 +18,11 @@ const PaymentDetails = () => {
   const [success, setSuccess] = useState(null);
   const [errorId, setErrorId] = useState(null);
   const [message_id, setMessage_id] = useState(null);
-  const [token, setToken] = useState(null);
+
   const [paymentmethod, setPaymentmethod] = useState("online");
   const role = localStorage.getItem("Role");
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const token = localStorage.getItem("candidate_token");
 
   /* Billing part */
   const [subTotal, setSubTotal] = useState(0);
@@ -33,71 +34,59 @@ const PaymentDetails = () => {
   const [cgst, setCgst] = useState(0);
   const [cgstPercentage, setCgstPercentage] = useState(0);
 
-  const [walletBalance, setWalletBalance] = useState(0);
-  const [fund_status, setFundStatus] = useState("");
   const [overall_billing, setOverallBilling] = useState({});
 
   //razor pay
   const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY;
   const router = useRouter();
-  useEffect(() => {
-    const storedToken = localStorage.getItem("candidate_token");
-
-    setToken(storedToken);
-  }, []);
 
   useEffect(() => {
     if (!token) return;
 
-    const fetchPayments = async () => {
-      try {
-        const response = await axios.get(
-          `${apiurl}/api/candidate/usercart/list_candidate_cart`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response.data.success) {
-          setPayments(response.data.data);
-          setOverallBilling(response.data.overall_billing);
-          setSubTotal(parseFloat(response.data.overall_billing.subtotal) || 0);
-          setGst(parseFloat(response.data.overall_billing.gst) || 0);
-          setTotal(parseFloat(response.data.overall_billing.total) || 0);
-          setDiscount(parseFloat(response.data.overall_billing.discount) || 0);
-          setDiscountPercentage(
-            parseFloat(response.data.overall_billing.discount_percent) || 0
-          );
-          setSgst(parseFloat(response.data.overall_billing.sgst) || 0);
-          setSgstPercentage(
-            parseFloat(response.data.overall_billing.sgst_percent) || 0
-          );
-          setCgst(parseFloat(response.data.overall_billing.cgst) || 0);
-          setCgstPercentage(
-            parseFloat(response.data.overall_billing.cgst_percent) || 0
-          );
-
-          setWalletBalance(
-            parseFloat(response.data.overall_billing.wallet_amount) || 0
-          );
-          setFundStatus(response.data.overall_billing.fund_status);
-        } else {
-          setError("Failed to fetch data.");
-          setErrorId(Date.now());
-        }
-      } catch (err) {
-        console.error("Error fetching data:", err); // Debugging
-        setError("Error fetching data. Please try again.");
-        setErrorId(Date.now());
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchPayments();
   }, [token]);
+  const fetchPayments = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${apiurl}/api/candidate/usercart/list_candidate_cart`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        setPayments(response.data.data);
+        setOverallBilling(response.data.overall_billing);
+        setSubTotal(parseFloat(response.data.overall_billing.subtotal) || 0);
+        setGst(parseFloat(response.data.overall_billing.gst) || 0);
+        setTotal(parseFloat(response.data.overall_billing.total) || 0);
+        setDiscount(parseFloat(response.data.overall_billing.discount) || 0);
+        setDiscountPercentage(
+          parseFloat(response.data.overall_billing.discount_percent) || 0
+        );
+        setSgst(parseFloat(response.data.overall_billing.sgst) || 0);
+        setSgstPercentage(
+          parseFloat(response.data.overall_billing.sgst_percent) || 0
+        );
+        setCgst(parseFloat(response.data.overall_billing.cgst) || 0);
+        setCgstPercentage(
+          parseFloat(response.data.overall_billing.cgst_percent) || 0
+        );
+      } else {
+        setError("Failed to fetch data.");
+        setErrorId(Date.now());
+      }
+    } catch (err) {
+      console.error("Error fetching data:", err); // Debugging
+      setError("Error fetching data. Please try again.");
+      setErrorId(Date.now());
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleDelete = async (id) => {
     if (!token) return;
@@ -105,7 +94,7 @@ const PaymentDetails = () => {
     console.log("Deleting payment with ID:", id);
     try {
       const Dlt_response = await axios.post(
-        `${apiurl}/api/usercart/deleteUser`,
+        `${apiurl}/api/candidate/usercart/delete_candidate_cart`,
         { id },
         {
           headers: {
@@ -116,32 +105,8 @@ const PaymentDetails = () => {
 
       console.log("Delete response:", Dlt_response.data);
       if (Dlt_response.data.success) {
-        setPayments(Dlt_response.data.data);
-        setOverallBilling(Dlt_response.data.overall_billing);
-        setSubTotal(
-          parseFloat(Dlt_response.data.overall_billing.subtotal) || 0
-        );
-        setGst(parseFloat(Dlt_response.data.overall_billing.gst) || 0);
-        setTotal(parseFloat(Dlt_response.data.overall_billing.total) || 0);
-        setDiscount(
-          parseFloat(Dlt_response.data.overall_billing.discount) || 0
-        );
-        setDiscountPercentage(
-          parseFloat(Dlt_response.data.overall_billing.discount_percent) || 0
-        );
-        setSgst(parseFloat(Dlt_response.data.overall_billing.sgst) || 0);
-        setSgstPercentage(
-          parseFloat(Dlt_response.data.overall_billing.sgst_percent) || 0
-        );
-        setCgst(parseFloat(Dlt_response.data.overall_billing.cgst) || 0);
-        setCgstPercentage(
-          parseFloat(Dlt_response.data.overall_billing.cgst_percent) || 0
-        );
+        fetchPayments();
 
-        setWalletBalance(
-          parseFloat(Dlt_response.data.overall_billing.wallet_amount) || 0
-        );
-        setFundStatus(Dlt_response.data.overall_billing.fund_status);
         setSuccess(Dlt_response.data.message);
         setMessage_id(Date.now());
       }
@@ -181,78 +146,11 @@ const PaymentDetails = () => {
         setMessage_id(Date.now());
         setPayments([]);
         setLoading(false);
-
+        /* 
         // Redirect to the download center after a 5-second delay
         setTimeout(() => {
           router.push("/download-center");
-        }, 5000);
-      }
-    } catch (err) {
-      setError("Error processing payment. Please try again.");
-      setErrorId(Date.now());
-    }
-  };
-
-  const handlePaywallet = async (total, paymentIdsString) => {
-    try {
-      const paymentResponse = await axios.post(
-        `${apiurl}/api/verify/paynow`,
-        {
-          amount: total,
-          paymentIds: paymentIdsString,
-          payment_method: paymentmethod,
-          overall_billing: overall_billing,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      /* if code 200 */
-      if (paymentResponse.status === 200) {
-        setSuccess(paymentResponse.data.message);
-        setMessage_id(Date.now());
-        router.push("/download-center");
-      }
-    } catch (err) {
-      setError("Error processing payment. Please try again.");
-      setErrorId(Date.now());
-    }
-  };
-
-  const handlefree = async (pay, pids) => {
-    setLoading(true);
-    try {
-      const paymentResponse = await axios.post(
-        `${apiurl}/api/verify/paynowFree`,
-        {
-          amount: pay,
-          paymentIds: pids,
-          payment_method: "Free",
-          overall_billing: overall_billing,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      /* if code 200 */
-      if (paymentResponse.status === 200) {
-        setSuccess(
-          "Your payment has been successfully processed. An invoice will be sent to your registered email shortly."
-        );
-        setMessage_id(Date.now());
-        setPayments([]);
-        setLoading(false);
-
-        // Redirect to the download center after a 5-second delay
-        setTimeout(() => {
-          router.push("/download-center");
-        }, 5000);
+        }, 5000); */
       }
     } catch (err) {
       setError("Error processing payment. Please try again.");
@@ -359,89 +257,15 @@ const PaymentDetails = () => {
                       </div>
 
                       <div className="mt-3">
-                        {role == "2" && total > 0 && (
-                          <div className="d-flex justify-content-end align-items-center gap-2">
-                            <label htmlFor="paymentmethod" className="mb-0">
-                              Payment Method:
-                            </label>
-                            <select
-                              className="form-select w-auto"
-                              id="paymentmethod"
-                              value={paymentmethod}
-                              onChange={(e) => setPaymentmethod(e.target.value)}
-                              required
-                            >
-                              <option value="">Select Payment Method</option>
-                              <option value="online">Online</option>
-                              <option value="Wallet">
-                                Wallet (Balance: ₹{walletBalance.toFixed(2)})
-                              </option>
-                            </select>
-                          </div>
-                        )}
-
                         <div className="d-flex justify-content-end gap-2 mt-3">
-                          {total === 0 ? (
-                            <>
-                              <div className="d-flex align-items-stretch gap-3 mt-3">
-                                <div className="alert alert-light d-flex align-items-center flex-grow-1 border rounded shadow-sm mb-0 px-4 py-0">
-                                  <span
-                                    className="text-secondary py-3"
-                                    style={{ fontSize: "15px" }}
-                                  >
-                                    <strong>
-                                      You're on our completely free plan
-                                    </strong>{" "}
-                                    — no payment is needed. Please continue to
-                                    complete the verification.
-                                  </span>
-                                </div>
-                                <button
-                                  className="btn btn-primary px-4"
-                                  style={{ height: "100%" }}
-                                  onClick={() =>
-                                    handlefree(total, paymentIdsString)
-                                  }
-                                >
-                                  Continue
-                                </button>
-                              </div>
-                            </>
-                          ) : (
-                            <>
-                              {paymentmethod === "Wallet" && (
-                                <>
-                                  {total > walletBalance ? (
-                                    <>
-                                      <span className="text-danger">
-                                        Insufficient wallet balance. Please add
-                                        funds to your wallet.
-                                      </span>
-                                    </>
-                                  ) : (
-                                    <button
-                                      className="btn btn-primary px-4"
-                                      disabled={payments.length === 0}
-                                      onClick={() =>
-                                        handlePaywallet(total, paymentIdsString)
-                                      }
-                                    >
-                                      Pay with Wallet ({total?.toFixed(2)} INR)
-                                    </button>
-                                  )}
-                                </>
-                              )}
-
-                              {paymentmethod === "online" && (
-                                <RazorpayPayment
-                                  amount={total}
-                                  razorpayKey={razorpayKey}
-                                  onSuccess={handlePaymentSuccess}
-                                  paymentIds={paymentIdsString}
-                                />
-                              )}
-                            </>
-                          )}
+                          <>
+                            <RazorpayPayment
+                              amount={total}
+                              razorpayKey={razorpayKey}
+                              onSuccess={handlePaymentSuccess}
+                              paymentIds={paymentIdsString}
+                            />
+                          </>
                         </div>
                       </div>
                     </>

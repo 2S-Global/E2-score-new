@@ -25,14 +25,21 @@ const KycBox = () => {
   const [nameloading, setNameLoading] = useState(false);
 
   const [userdata, setUserdata] = useState({
-    pan: { number: "", name: "", verified: false, incart: false },
-    aadhaar: { number: "", name: "", verified: false, incart: true },
-    driving: { number: "", name: "", verified: false, incart: true },
-    epic: { number: "", name: "", verified: false, incart: false },
-    passport: { number: "", name: "", verified: false, incart: false },
+    pan: { verified: false, incart: false },
+    aadhaar: { verified: false, incart: true },
+    driving: { verified: false, incart: true },
+    epic: { verified: false, incart: false },
+    passport: { verified: false, incart: false },
   });
 
-  const [listdocs, setListdocs] = useState([]);
+  const [listdocs, setListdocs] = useState([
+    {
+      _id: 1,
+      verification_name: "pan",
+      title: "Pan Card",
+      fields: ["Pan Card Number", "Name on Pan Card"],
+    },
+  ]);
 
   useEffect(() => {
     fetchDocs();
@@ -68,7 +75,6 @@ const KycBox = () => {
       if (response.data.success) {
         setListdocs(response.data.data);
       }
-      response;
     } catch (error) {
       console.error(error);
     } finally {
