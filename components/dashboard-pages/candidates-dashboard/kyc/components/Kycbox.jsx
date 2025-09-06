@@ -21,8 +21,8 @@ const KycBox = () => {
   const [errorId, setErrorId] = useState(null);
   const [message_id, setMessageId] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [nameloading, setNameLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [nameloading, setNameLoading] = useState(true);
 
   const [userdata, setUserdata] = useState({
     pan: { verified: false, incart: false },
@@ -35,14 +35,23 @@ const KycBox = () => {
   const [listdocs, setListdocs] = useState([]);
 
   useEffect(() => {
-    fetchDocs();
-    fetchName();
+    const fetchData = async () => {
+      try {
+        await fetchName(); // wait until name is complete
+        await fetchDocs(); // then run fetchDocs
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchData();
   }, []);
+
   /* /api/userdata/get_only_student_name */
 
   const fetchName = async () => {
     setNameLoading(true);
-    setLoading(true);
+
     try {
       const response = await axios.get(
         `${apiurl}/api/userdata/get_only_student_name`,
@@ -55,7 +64,6 @@ const KycBox = () => {
       setName(response.data.name);
       console.log(response.data.name);
       setNameLoading(false);
-      setLoading(false);
     } catch (error) {
       console.error(error);
     }
