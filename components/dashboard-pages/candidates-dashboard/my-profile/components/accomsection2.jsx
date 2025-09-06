@@ -1,5 +1,6 @@
 "use client";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { queueRequest } from "../helper/queueHelper";
+/* import "bootstrap/dist/css/bootstrap.min.css"; */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -95,13 +96,23 @@ const AcomSection = () => {
   const fetchonlineProfilelist = async () => {
     try {
       const token = localStorage.getItem("candidate_token");
-      const response = await axios.get(
+      /*  const response = await axios.get(
         `${apiurl}/api/candidate/accomplishments/get_online_profile`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
+      ); */
+      const response = await queueRequest(() =>
+        axios.get(
+          `${apiurl}/api/candidate/accomplishments/get_online_profile`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
       );
       if (response.status == 200) {
         setOnlineProfilelist(response.data.data);
@@ -114,14 +125,22 @@ const AcomSection = () => {
   const fetchWorksamplelist = async () => {
     try {
       const token = localStorage.getItem("candidate_token");
-      const response = await axios.get(
+      /*   const response = await axios.get(
         `${apiurl}/api/candidate/accomplishments/get_work_samples`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
+      ); */
+      const response = await queueRequest(() =>
+        axios.get(`${apiurl}/api/candidate/accomplishments/get_work_samples`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
       );
+
       if (response.status == 200) {
         setWorksamplelist(response.data.data);
       }
@@ -133,14 +152,25 @@ const AcomSection = () => {
   const fetchResearchlist = async () => {
     try {
       const token = localStorage.getItem("candidate_token");
-      const response = await axios.get(
+      /* const response = await axios.get(
         `${apiurl}/api/candidate/accomplishments/get_research_publication`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
+      ); */
+      const response = await queueRequest(() =>
+        axios.get(
+          `${apiurl}/api/candidate/accomplishments/get_research_publication`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
       );
+
       if (response.status == 200) {
         setResearchlist(response.data.data);
       }
@@ -152,13 +182,20 @@ const AcomSection = () => {
   const fetchPresentationlist = async () => {
     try {
       const token = localStorage.getItem("candidate_token");
-      const response = await axios.get(
+      /* const response = await axios.get(
         `${apiurl}/api/candidate/accomplishments/get_presentaion`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
+      ); */
+      const response = await queueRequest(() =>
+        axios.get(`${apiurl}/api/candidate/accomplishments/get_presentaion`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
       );
       if (response.status == 200) {
         setPresentationlist(response.data.data);
@@ -171,13 +208,20 @@ const AcomSection = () => {
   const fetchPatentlist = async () => {
     try {
       const token = localStorage.getItem("candidate_token");
-      const response = await axios.get(
+      /* const response = await axios.get(
         `${apiurl}/api/candidate/accomplishments/list_patent`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
+      ); */
+      const response = await queueRequest(() =>
+        axios.get(`${apiurl}/api/candidate/accomplishments/list_patent`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
       );
       if (response.status == 200) {
         setPatentlist(response.data.data);
@@ -190,13 +234,20 @@ const AcomSection = () => {
   const fetchCertificatelist = async () => {
     try {
       const token = localStorage.getItem("candidate_token");
-      const response = await axios.get(
+      /* const response = await axios.get(
         `${apiurl}/api/candidate/accomplishments/list_certificate`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
+      ); */
+      const response = await queueRequest(() =>
+        axios.get(`${apiurl}/api/candidate/accomplishments/list_certificate`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
       );
       if (response.status == 200) {
         setCertificatelist(response.data.data);

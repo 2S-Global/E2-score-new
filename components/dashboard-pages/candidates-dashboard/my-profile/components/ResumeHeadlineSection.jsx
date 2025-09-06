@@ -1,4 +1,5 @@
 "use client";
+import { queueRequest } from "../helper/queueHelper";
 import React, { useState, useEffect } from "react";
 import ResumeHeadline from "./modal/resumeheadline"; // Import the modal component
 import axios from "axios";
@@ -27,13 +28,12 @@ const ResumeHeadlineSection = () => {
       try {
         setSectionloading(true);
         const token = localStorage.getItem("candidate_token");
-        const response = await axios.get(
-          `${apiurl}/api/userdata/resume_headline`,
-          {
+        const response = await queueRequest(() =>
+          axios.get(`${apiurl}/api/userdata/resume_headline`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          })
         );
         //set only if response code is 200
 

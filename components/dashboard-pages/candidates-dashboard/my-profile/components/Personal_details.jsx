@@ -1,4 +1,5 @@
 "use client";
+import { queueRequest } from "../helper/queueHelper";
 import React, { useState, useEffect } from "react";
 import PersonalModal from "./modal/PersonalModal2";
 import axios from "axios";
@@ -46,13 +47,23 @@ const PersonalSection = () => {
       try {
         setSectionloading(true);
         const token = localStorage.getItem("candidate_token");
-        const response = await axios.get(
+        /* const response = await axios.get(
           `${apiurl}/api/candidate/personal/get_personal_details_with_name`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
+        ); */
+        const response = await queueRequest(() =>
+          axios.get(
+            `${apiurl}/api/candidate/personal/get_personal_details_with_name`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
         );
         if (response.status == 200) {
           const maindata = response.data.data;

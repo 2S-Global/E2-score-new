@@ -1,4 +1,5 @@
 "use client";
+import { queueRequest } from "../helper/queueHelper";
 import React, { useState, useEffect } from "react";
 import ItskillModal from "./modal/ItskillModal";
 import axios from "axios";
@@ -37,13 +38,20 @@ const ItkeySection = () => {
         return;
       }
 
-      const response = await axios.get(
+      /* const response = await axios.get(
         `${apiurl}/api/candidate/itskill/itskill`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
+      ); */
+      const response = await queueRequest(() =>
+        axios.get(`${apiurl}/api/candidate/itskill/itskill`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
       );
 
       if (response.data.success) {

@@ -229,7 +229,7 @@ const EducationModal = ({
       }
 
       setSuccess("Education data saved successfully");
-      setReload(!reload);
+      setReload(true);
       onClose();
     } catch (error) {
       console.error("Error saving education data:", error);
@@ -263,7 +263,7 @@ const EducationModal = ({
       if (response.status !== 200) {
         throw new Error("Failed to delete education record");
       }
-      setReload(!reload);
+      setReload(true);
       onClose();
     } catch (error) {
       console.error("Error deleting education record:", error);

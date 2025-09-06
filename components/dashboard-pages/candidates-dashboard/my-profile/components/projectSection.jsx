@@ -1,4 +1,5 @@
 "use client";
+import { queueRequest } from "../helper/queueHelper";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ProjectModal from "./modal/projectModal";
@@ -33,13 +34,20 @@ const ProjectSection = () => {
     const token = localStorage.getItem("candidate_token");
 
     try {
-      const response = await axios.get(
+      /*  const response = await axios.get(
         `${apiurl}/api/candidate/project/get_project_details`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
+      ); */
+      const response = await queueRequest(() =>
+        axios.get(`${apiurl}/api/candidate/project/get_project_details`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
       );
       if (response.data.success) {
         setList(response.data.data);

@@ -1,4 +1,5 @@
 "use client";
+import { queueRequest } from "../helper/queueHelper";
 import React, { useState, useEffect } from "react";
 import EducationModal from "./modal/EducationModal"; // Import the modal component
 import ClgDisplay from "./academicbox_component/clgdisplay";
@@ -17,58 +18,77 @@ const Academysection = () => {
 
   const [userdata, setUserdata] = useState([]);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const token = localStorage.getItem("candidate_token");
   const [selectedLevel, setSelectedLevel] = useState("");
   const [edit_id, setEdit_id] = useState("");
 
   const [sectionloading, setSectionloading] = useState(false);
 
   useEffect(() => {
-    const fetchuserdata = async () => {
-      try {
-        setSectionloading(true);
-        const token = localStorage.getItem("candidate_token");
-        const response = await axios.get(
-          `${apiurl}/api/userdata/get_user_education`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (response.status == 200) {
-          setUserdata(response.data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching skills:", error);
-      } finally {
-        setSectionloading(false);
-      }
-    };
-    fetchuserdata();
+    if (reload) {
+      fetchuserdata();
+      fetchLevels();
+      setReload(false);
+    }
   }, [reload]);
 
-  useEffect(() => {
-    const token = localStorage.getItem("candidate_token");
-    const fetchLevels = async () => {
-      try {
-        const response = await axios.get(
-          `${apiurl}/api/sql/dropdown/education_level`,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+  const fetchuserdata = async () => {
+    try {
+      setSectionloading(true);
 
-        setListlevel(response.data.data);
-      } catch (error) {
-        //  console.error("Error fetching levels:", error);
-      } finally {
+      /*   const response = await axios.get(
+        `${apiurl}/api/userdata/get_user_education`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ); */
+      const response = await queueRequest(() =>
+        axios.get(`${apiurl}/api/userdata/get_user_education`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      );
+      if (response.status == 200) {
+        setUserdata(response.data.data);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching skills:", error);
+    } finally {
+      setSectionloading(false);
+    }
+  };
+  const fetchLevels = async () => {
+    try {
+      /*   const response = await axios.get(
+        `${apiurl}/api/sql/dropdown/education_level`,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ); */
+      const response = await queueRequest(() =>
+        axios.get(`${apiurl}/api/sql/dropdown/education_level`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      );
 
+      setListlevel(response.data.data);
+    } catch (error) {
+      //  console.error("Error fetching levels:", error);
+    } finally {
+    }
+  };
+
+  useEffect(() => {
     fetchLevels();
+    fetchuserdata();
   }, []);
 
   useEffect(() => {

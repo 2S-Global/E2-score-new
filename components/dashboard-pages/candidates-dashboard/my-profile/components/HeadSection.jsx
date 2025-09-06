@@ -1,4 +1,5 @@
 "use client";
+import { queueRequest } from "../helper/queueHelper";
 import dayjs from "dayjs";
 import React from "react";
 import CircularProgress from "./HeadSection/profilepic";
@@ -28,11 +29,13 @@ const HeadSection = () => {
         setReload(false);
         setSectionloading(true);
         const token = localStorage.getItem("candidate_token");
-        const response = await axios.get(`${apiurl}/api/userdata/userdata`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await queueRequest(() =>
+          axios.get(`${apiurl}/api/userdata/userdata`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+        );
         if (response.data?.profilePicture) {
           setProfile_pic(response.data.profilePicture);
         }

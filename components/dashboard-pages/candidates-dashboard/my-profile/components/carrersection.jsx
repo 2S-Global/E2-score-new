@@ -1,4 +1,6 @@
 "use client";
+
+import { queueRequest } from "../helper/queueHelper";
 import React, { useState, useEffect } from "react";
 import CareerModal from "./modal/CareerModal";
 import axios from "axios";
@@ -57,13 +59,20 @@ const CareerSection = () => {
   const fetchuserdata = async () => {
     try {
       const token = localStorage.getItem("candidate_token");
-      const response = await axios.get(
+      /*  const response = await axios.get(
         `${apiurl}/api/useraction/get_career_profile`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
+      ); */
+      const response = await queueRequest(() =>
+        axios.get(`${apiurl}/api/useraction/get_career_profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
       );
       if (response.data.success) {
         setUserdata(response.data.data);

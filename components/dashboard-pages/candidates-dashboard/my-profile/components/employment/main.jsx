@@ -1,4 +1,6 @@
 "use client";
+
+import { queueRequest } from "../../helper/queueHelper";
 import React, { useState, useEffect } from "react";
 import EmploymentModal from "./modal.jsx"; // Import the modal component
 import axios from "axios";
@@ -53,13 +55,20 @@ const Employsectionmain = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("candidate_token");
-      const response = await axios.get(
+      /*  const response = await axios.get(
         `${apiurl}/api/candidate/employment/get_employment`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
+      ); */
+      const response = await queueRequest(() =>
+        axios.get(`${apiurl}/api/candidate/employment/get_employment`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
       );
       if (response.data.success) {
         setUserdata(response.data.data);

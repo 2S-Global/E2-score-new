@@ -1,4 +1,5 @@
 "use client";
+import { queueRequest } from "../helper/queueHelper";
 import React, { use, useEffect, useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -28,13 +29,20 @@ const ProfilesumerySection = () => {
       try {
         setSectionloading(true);
         const token = localStorage.getItem("candidate_token");
-        const response = await axios.get(
+        /*   const response = await axios.get(
           `${apiurl}/api/userdata/profile_summary`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
+        ); */
+        const response = await queueRequest(() =>
+          axios.get(`${apiurl}/api/userdata/profile_summary`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
         );
         //set only if response code is 200
         setProfilesummary(response.data.profileSummary);

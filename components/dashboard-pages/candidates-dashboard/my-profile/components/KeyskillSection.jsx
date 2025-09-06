@@ -1,4 +1,5 @@
 "use client";
+import { queueRequest } from "../helper/queueHelper";
 import React, { useState, useEffect } from "react";
 import KeySkillsModal from "./modal/keyskillsModal"; // Import the modal component
 import axios from "axios";
@@ -13,13 +14,20 @@ const Keyskillsection = () => {
     const fetchKeySkill = async () => {
       try {
         const token = localStorage.getItem("candidate_token");
-        const response = await axios.get(
+        /*  const response = await axios.get(
           `${apiurl}/api/userdata/candidateskills`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
+        ); */
+        const response = await queueRequest(() =>
+          axios.get(`${apiurl}/api/userdata/candidateskills`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
         );
         if (response.status == 200) {
           setKeySkill(response.data);
