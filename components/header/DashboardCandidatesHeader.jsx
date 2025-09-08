@@ -6,10 +6,13 @@ import { useEffect, useState } from "react";
 import candidatesMenuData from "../../data/candidatesMenuData";
 import HeaderNavContent from "./HeaderNavContent";
 import { isActiveLink } from "../../utils/linkActiveChecker";
-
+import axios from "axios";
 import { usePathname } from "next/navigation";
 const DashboardCandidatesHeader = () => {
   const [navbar, setNavbar] = useState(true);
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const token = localStorage.getItem("candidate_token");
+  const [image, setImage] = useState("/images/resource/no_user.png");
 
   const changeBackground = () => {
     if (window.scrollY >= 0) {
@@ -21,6 +24,28 @@ const DashboardCandidatesHeader = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", changeBackground);
+  }, []);
+
+  const fetchimage = async () => {
+    try {
+      const response = await axios.get(
+        `${apiurl}/api/userdata/get_candidate_img`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        setImage(response.data.data.profilePicture);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchimage();
   }, []);
 
   return (
@@ -74,10 +99,10 @@ const DashboardCandidatesHeader = () => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <Image
+                <img
                   alt="avatar"
                   className="thumb"
-                  src="/images/resource/candidate-1.png"
+                  src={image}
                   width={50}
                   height={50}
                 />
