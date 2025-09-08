@@ -3,6 +3,7 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
+import CustomizedProgressBars from "@/components/common/loader";
 
 import { Trash2 } from "lucide-react";
 
@@ -123,7 +124,7 @@ const PaymentDetails = ({ setActiveTab }) => {
 
     try {
       const paymentResponse = await axios.post(
-        `${apiurl}/api/verify/paynow`,
+        `${apiurl}/api/candidate/usercart/paynow_candidate_cart`,
         {
           razorpay_response: response,
           amount: pay,
@@ -173,9 +174,16 @@ const PaymentDetails = ({ setActiveTab }) => {
         message_id={message_id}
       />
       {loading ? (
-        <div className="d-flex justify-content-center align-items-center vh-100">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
+        <div className="ls-widget">
+          <div className="tabs-box">
+            <div
+              className="widget-content"
+              style={{ padding: "25px 0", borderBottom: "1px solid #ddd" }}
+            >
+              <div className="container">
+                <CustomizedProgressBars />
+              </div>
+            </div>
           </div>
         </div>
       ) : (
