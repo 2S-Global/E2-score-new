@@ -132,10 +132,10 @@ const AadhaarForm = ({
         <form
           className="default-form"
           onSubmit={handleSubmit}
-          style={{
+          /*   style={{
             pointerEvents: formsubmitted ? "none" : "auto",
             opacity: formsubmitted ? 0.5 : 1,
-          }}
+          }} */
         >
           <div className="row">
             {/* Aadhaar Number */}

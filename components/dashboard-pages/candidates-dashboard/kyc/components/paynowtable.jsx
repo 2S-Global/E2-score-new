@@ -9,7 +9,7 @@ import { Trash2 } from "lucide-react";
 import Razorpay from "razorpay";
 import RazorpayPayment from "@/components/common/payments/RazorpayPayment";
 
-const PaymentDetails = () => {
+const PaymentDetails = ({ setActiveTab }) => {
   const [payments, setPayments] = useState([]);
 
   const [total, setTotal] = useState(0);
@@ -155,6 +155,9 @@ const PaymentDetails = () => {
     } catch (err) {
       setError("Error processing payment. Please try again.");
       setErrorId(Date.now());
+    } finally {
+      setLoading(false);
+      setActiveTab("kyc");
     }
   };
 

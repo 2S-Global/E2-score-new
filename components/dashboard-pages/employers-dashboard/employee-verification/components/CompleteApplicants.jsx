@@ -9,7 +9,7 @@ import axios from "axios";
 
 const CompleteApplicants = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [candidatesData, setCandidatesData] = useState([]);
   const [error, setError] = useState(null);
   const [errorId, setErrorId] = useState(null);

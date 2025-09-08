@@ -62,7 +62,7 @@ const KycBox = () => {
         }
       );
       setName(response.data.name);
-      console.log(response.data.name);
+      //   console.log(response.data.name);
       setNameLoading(false);
     } catch (error) {
       console.error(error);
@@ -121,9 +121,9 @@ const KycBox = () => {
                         <PanDetails />
                       </>
                     ) : null}
-                    {doc.verification_name === "aadhaar" ? (
+                    {/*    {doc.verification_name === "aadhaar" ? (
                       <>Card for aadhaar</>
-                    ) : null}
+                    ) : null} */}
                     {doc.verification_name === "driving" ? (
                       <>
                         <DlDetails />

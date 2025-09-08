@@ -5,6 +5,7 @@ import MessageComponent from "@/components/common/ResponseMsg";
 import EmployeeInfoCard from "./EmployeeInfoCard";
 import PersonalInfoCard from "./PersonalDetailsCard";
 import axios from "axios";
+import { se } from "date-fns/locale/se";
 
 const getComparableDateValue = (year, month) => {
   if (!year || !month) return null;
@@ -14,7 +15,7 @@ const getComparableDateValue = (year, month) => {
 const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
   if (!show) return null;
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [wrongDate, setWrongDate] = useState(false);
@@ -69,6 +70,7 @@ const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
   }, [can_id, emp_id, token]);
 
   const FetchDetails = async (can_id, emp_id) => {
+    setLoading(true);
     try {
       const response = await axios.get(
         `${apiurl}/api/companyprofile/get_employee_details?userId=${can_id}&employmentId=${emp_id}`,
@@ -114,6 +116,8 @@ const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
       }
     } catch (error) {
       console.error("Error while fetching account details:", error);
+    } finally {
+      setLoading(false);
     }
   };
 

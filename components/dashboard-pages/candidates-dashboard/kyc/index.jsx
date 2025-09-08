@@ -66,7 +66,9 @@ const KycPage = () => {
             <div className="col-lg-12">
               {activeTab === "kyc" && <KycBox />}
               {activeTab === "adhar" && <AadharOtp />}
-              {activeTab === "cart" && <PaymentDetails />}
+              {activeTab === "cart" && (
+                <PaymentDetails setActiveTab={setActiveTab} />
+              )}
             </div>
           </div>
           {/* End .row */}
