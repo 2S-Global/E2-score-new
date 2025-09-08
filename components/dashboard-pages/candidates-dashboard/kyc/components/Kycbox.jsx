@@ -25,11 +25,10 @@ const KycBox = () => {
   const [nameloading, setNameLoading] = useState(true);
 
   const [userdata, setUserdata] = useState({
-    pan: { verified: false, incart: false },
-    aadhaar: { verified: false, incart: true },
-    driving: { verified: false, incart: true },
-    epic: { verified: false, incart: false },
-    passport: { verified: false, incart: false },
+    pan: { verified: false, incart: false, inprocess: false },
+    driving_license: { verified: false, incart: false, inprocess: false },
+    epic: { verified: false, incart: false, inprocess: false },
+    passport: { verified: false, incart: false, inprocess: false },
   });
 
   const [listdocs, setListdocs] = useState([]);
@@ -114,61 +113,47 @@ const KycBox = () => {
 
                 {userdata[doc?.verification_name]?.verified ? (
                   <>
-                    {/* 
-                    <span>CARD</span> */}
-                    {doc.verification_name === "pan" ? (
-                      <>
-                        <PanDetails />
-                      </>
-                    ) : null}
-                    {/*    {doc.verification_name === "aadhaar" ? (
-                      <>Card for aadhaar</>
-                    ) : null} */}
-                    {doc.verification_name === "driving" ? (
-                      <>
-                        <DlDetails />
-                      </>
-                    ) : null}
-                    {doc.verification_name === "epic" ? (
-                      <>
-                        <EpicDetails />
-                      </>
-                    ) : null}
-                    {doc.verification_name === "passport" ? (
-                      <>
-                        <PassDetails />
-                      </>
-                    ) : null}
-                  </>
-                ) : (
-                  <>
-                    {userdata[doc?.verification_name]?.incart ? (
-                      <>
-                        {" "}
-                        <span
-                          style={{
-                            display: "inline-block",
-                            backgroundColor: "#e6f4ff",
-                            color: "#0073e6",
-                            padding: "4px 10px",
-                            borderRadius: "12px",
-                            textAlign: "center",
-                            marginTop: "6px",
-                          }}
-                        >
-                          Already in Cart
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        {nameloading ? (
-                          <></>
-                        ) : (
-                          <VerificationForm Document={doc} name={name} />
-                        )}
-                      </>
+                    {doc.verification_name === "pan" && <PanDetails />}
+                    {doc.verification_name === "driving_license" && (
+                      <DlDetails />
                     )}
+                    {doc.verification_name === "epic" && <EpicDetails />}
+                    {doc.verification_name === "passport" && <PassDetails />}
                   </>
+                ) : userdata[doc?.verification_name]?.inprocess ? (
+                  <span
+                    style={{
+                      display: "block",
+                      backgroundColor: "#e6f4ff",
+                      color: "#0073e6",
+                      padding: "4px 10px",
+                      borderRadius: "12px",
+                      margin: "6px auto", // centers horizontally
+                      textAlign: "center",
+                      width: "fit-content",
+                    }}
+                  >
+                    In Process
+                  </span>
+                ) : userdata[doc?.verification_name]?.incart ? (
+                  <span
+                    style={{
+                      display: "block",
+                      backgroundColor: "#e6f4ff",
+                      color: "#0073e6",
+                      padding: "4px 10px",
+                      borderRadius: "12px",
+                      margin: "6px auto", // centers horizontally
+                      textAlign: "center",
+                      width: "fit-content",
+                    }}
+                  >
+                    Already in Cart
+                  </span>
+                ) : (
+                  !nameloading && (
+                    <VerificationForm Document={doc} name={name} />
+                  )
                 )}
               </div>
             ))}
