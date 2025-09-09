@@ -6,8 +6,7 @@ import {
 } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import Profilepic from "../modal/ChangeProfilepic";
-import { Pencil } from "lucide-react";
-
+import { Camera } from "lucide-react";
 const CircularProgress = ({
   progress,
   imageSrc,
@@ -16,8 +15,8 @@ const CircularProgress = ({
   setSuccess,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const openModalRH = () => setIsModalOpen(true);
+  const closeModalRH = () => setIsModalOpen(false);
 
   const getStrokeColor = () => {
     if (progress < 50) return "#EF4444"; // Red
@@ -37,8 +36,8 @@ const CircularProgress = ({
               strokeLinecap: "round",
             })}
           >
-            {/* Profile Picture Container */}
             <div
+              onClick={openModalRH}
               className="position-relative mx-auto"
               style={{
                 width: "80%",
@@ -48,7 +47,6 @@ const CircularProgress = ({
                 cursor: "pointer",
                 boxShadow: "0 0 5px rgba(0,0,0,0.2)",
               }}
-              onClick={openModal}
             >
               <img
                 src={imageSrc || "/images/resource/no_user.png"}
@@ -56,38 +54,21 @@ const CircularProgress = ({
                 className="w-100 h-100"
                 style={{ objectFit: "cover" }}
               />
-            </div>
-            <div
-              className="position-absolute"
-              style={{
-                bottom: 0,
-                right: 0,
-                transform: "translate(50%, 50%)", // move half outside the circle
-                backgroundColor: "white",
-                borderRadius: "50%",
-                padding: "6px",
-                boxShadow: "0 0 5px rgba(0,0,0,0.3)",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                transition: "transform 0.2s",
-              }}
-              onClick={openModal}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.transform =
-                  "translate(50%, 50%) scale(1.2)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform =
-                  "translate(50%, 50%) scale(1)")
-              }
-            >
-              <Pencil size={8} color="blue" />
+              <div
+                className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-white fw-bold"
+                style={{
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                  opacity: 0,
+                  transition: "opacity 0.3s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = "0")}
+              >
+                Replace
+              </div>
             </div>
           </CircularProgressbarWithChildren>
 
-          {/* Progress Text */}
           <div
             className="text-center fw-semibold mt-2"
             style={{
@@ -104,7 +85,7 @@ const CircularProgress = ({
       {isModalOpen && (
         <Profilepic
           show={isModalOpen}
-          onClose={closeModal}
+          onClose={closeModalRH}
           imageSrc={imageSrc}
           setReload={setReload}
           setError_main={setError}

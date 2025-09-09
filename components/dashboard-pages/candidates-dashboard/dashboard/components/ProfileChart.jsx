@@ -20,7 +20,7 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend,
+  Legend
 );
 
 export const options = {
@@ -60,7 +60,7 @@ export const data = {
       data: labels.map(() => faker.datatype.number({ min: 100, max: 400 })),
       borderColor: "#1967d2",
       backgroundColor: "#1967d2",
-      data: [196, 132, 215, 362, 210, 252],
+      data: [0, 0, 0, 0, 0, 0],
       fill: false,
     },
   ],
@@ -68,7 +68,9 @@ export const data = {
 
 const ProfileChart = () => {
   return (
-    <div className="tabs-box">
+    <div className="tabs-box ">
+      {/* Overlay */}
+
       <div className="widget-title">
         <h4>Your Profile Views</h4>
         <div className="chosen-outer">
@@ -87,7 +89,7 @@ const ProfileChart = () => {
       <div className="widget-content">
         <Line options={options} data={data} />
       </div>
-      {/* End  profile chart */}
+      {/* End profile chart */}
     </div>
   );
 };

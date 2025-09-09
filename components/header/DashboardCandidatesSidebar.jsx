@@ -53,7 +53,7 @@ const DashboardCandidatesSidebar = () => {
     active: "",
   }, */}
 
-          <li
+          {/*  <li
             className={`${
               isActiveLink("/", usePathname()) ? "active" : ""
             } mb-1`}
@@ -63,7 +63,7 @@ const DashboardCandidatesSidebar = () => {
             <Link href="/" onClick={() => localStorage.clear()}>
               <i className={`la la-sign-out`}></i>Logout
             </Link>
-          </li>
+          </li> */}
         </ul>
         {/* End navigation */}
 

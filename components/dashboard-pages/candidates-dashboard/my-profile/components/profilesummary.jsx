@@ -96,7 +96,9 @@ const ProfilesumerySection = () => {
             <>
               {" "}
               <div className="widget-content">
-                <p>{profilesummary?.trim() || "Add Your Resume Headline"}</p>
+                <p style={{ textAlign: "justify" }}>
+                  {profilesummary?.trim() || "Add Your Resume Headline"}
+                </p>
               </div>{" "}
             </>
           )}

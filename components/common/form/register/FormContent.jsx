@@ -3,6 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 //new component
 import MessageComponent from "../../ResponseMsg";
+import AutoDetectPhoneInput from "../phonenumber";
 const FormContent = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -39,9 +40,13 @@ const FormContent = () => {
         throw new Error(response.data.message || "An error occurred");
       }
       setSuccess("Registration successful!");
-      const token = response.data.token;
-      localStorage.setItem("candidate_token", token);
-      router.push("/candidates-dashboard/dashboard");
+      //const token = response.data.token;
+      //localStorage.setItem("candidate_token", token);
+      const timer = setTimeout(() => {
+        router.push("/");
+      }, 2000); // 2000ms = 2 sec
+
+      return () => clearTimeout(timer);
     } catch (err) {
       setError(
         err.response?.data?.message || "Registration failed. Try again."
@@ -50,6 +55,11 @@ const FormContent = () => {
       setLoading(false);
     }
   };
+
+  const setPhone = (phone) => {
+    setFormData({ ...formData, phone_number: phone });
+  };
+  const [disablesubmit, setDisableSubmit] = useState(false);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -79,7 +89,7 @@ const FormContent = () => {
           onChange={handleChange}
         />
       </div>
-      <div className="form-group">
+      {/* <div className="form-group">
         <label>Phone Number</label>
         <input
           type="text"
@@ -89,7 +99,13 @@ const FormContent = () => {
           onChange={handleChange}
           required
         />
-      </div>
+      </div> */}
+
+      <AutoDetectPhoneInput
+        phone={formData.phone_number}
+        setPhone={setPhone}
+        setDisableSubmit={setDisableSubmit} // 👈 pass it down
+      />
       {/* Phone */}
 
       <div className="form-group">
@@ -112,7 +128,7 @@ const FormContent = () => {
         <button
           className="theme-btn btn-style-one"
           type="submit"
-          disabled={loading}
+          disabled={loading || disablesubmit} // 👈 still disables click
         >
           {loading ? "Registering..." : "Register"}
         </button>

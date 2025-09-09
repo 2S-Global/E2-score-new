@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CustomizedProgressBars from "@/components/common/loader";
-import DatePicker from "react-datepicker";
+import DatePicker2 from "react-datepicker";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { TextField } from "@mui/material";
 import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 const Cardedit = ({
@@ -341,12 +345,12 @@ const Cardedit = ({
                     </div>
 
                     {/* Date of Birth Section */}
-                    <div className="mb-3 form-group">
-                      <label className="form-label d-block">
+                    {/*  <div className="mb-3 form-group mt-1"> */}
+                    {/*  <label className="form-label d-block">
                         <b>Date of Birth</b>
                         <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <DatePicker
+                      </label> */}
+                    {/* <DatePicker2
                         selected={formData.dob ? new Date(formData.dob) : null}
                         onChange={handleDateChange}
                         dateFormat="dd/MM/yyyy"
@@ -359,8 +363,39 @@ const Cardedit = ({
                         placeholderText="dd/mm/yyyy"
                         width="100%"
                         withPortal
-                      />
-                    </div>
+                      /> */}
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <div className="mb-3 form-group">
+                        <label htmlFor="dob" className="form-label">
+                          <b>
+                            Date of Birth{" "}
+                            <span style={{ color: "red" }}>*</span>
+                          </b>
+                        </label>
+                        <DatePicker
+                          value={formData.dob ? new Date(formData.dob) : null}
+                          onChange={handleDateChange}
+                          maxDate={eighteenYearsAgo}
+                          format="dd/MM/yyyy"
+                          slotProps={{
+                            textField: {
+                              id: "dob",
+                              required: true,
+                              placeholder: "dd/mm/yyyy",
+                              className: "form-control",
+                              style: {
+                                backgroundColor: "#f0f5f7",
+                                border: "1px solid #f0f5f7",
+                                boxSizing: "border-box",
+                                borderRadius: "8px",
+                                transition: "all 300ms ease",
+                              },
+                            },
+                          }}
+                        />
+                      </div>
+                    </LocalizationProvider>
+                    {/*  </div> */}
 
                     {/* ckeckbox */}
                     <div className="mb-3 form-group">

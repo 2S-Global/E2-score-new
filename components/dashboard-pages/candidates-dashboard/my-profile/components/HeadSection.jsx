@@ -85,6 +85,8 @@ const HeadSection = () => {
                   {/* Center Section - Profile Card */}
                   <div className="col-lg-4  d-flex justify-content-center align-items-center p-2">
                     <ProfileCard
+                      isIndianNumber={user.isIndianNumber || false}
+                      numberVerified={user.numberVerified || false}
                       name={user.name}
                       degree={user.degree}
                       father_name={user.father_name}

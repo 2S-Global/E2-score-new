@@ -90,7 +90,14 @@ const Index = () => {
             </div>
             {/* End .col */}
 
-            <div className="col-xl-5 col-lg-12">
+            <div className="col-xl-5 col-lg-12 position-relative mb-2">
+              <div
+                className="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 
+               d-flex justify-content-center align-items-center text-white fw-bold fs-4"
+                style={{ zIndex: 1050 }}
+              >
+                Activating Soon
+              </div>
               {/* <!-- Notification Widget --> */}
               <div className="notification-widget ls-widget">
                 <div className="widget-title">
@@ -103,7 +110,7 @@ const Index = () => {
             </div>
             {/* End .col */}
 
-            <div className="col-lg-12">
+            <div className="col-lg-12 ">
               {/* <!-- applicants Widget --> */}
               <div className="applicants-widget ls-widget">
                 <div className="widget-title">
@@ -120,7 +127,7 @@ const Index = () => {
             </div>
             {/* End .col */}
           </div>
-          {/*      </ComingSoon> */}
+          {/* </ComingSoon> */}
           {/* End .row profile and notificatins */}
         </div>
         {/* End dashboard-outer */}

@@ -73,7 +73,9 @@ const ResumeHeadlineSection = () => {
             <>
               {" "}
               <div className="widget-content">
-                <p>{resumeHeadline?.trim() || "Add Your Resume Headline"}</p>
+                <p style={{ textAlign: "justify" }}>
+                  {resumeHeadline?.trim() || "Add Your Resume Headline"}
+                </p>
               </div>{" "}
             </>
           )}

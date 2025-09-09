@@ -215,6 +215,10 @@ const PersonalModal = ({
         ) {
           return false;
         }
+        const lang = formData.languages[i];
+        if (!(lang.read || lang.write || lang.speak)) {
+          return false;
+        }
       }
     }
     return true;
@@ -318,7 +322,7 @@ const PersonalModal = ({
                 This information helps employers know you better.
               </p>
 
-              <button
+              {/*  <button
                 className="btn btn-primary"
                 onClick={() =>
                   console.log(
@@ -332,7 +336,7 @@ const PersonalModal = ({
                 }
               >
                 TEST
-              </button>
+              </button> */}
               {loading ? (
                 <CustomizedProgressBars />
               ) : (

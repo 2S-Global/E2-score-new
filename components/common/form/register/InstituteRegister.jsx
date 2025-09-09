@@ -3,6 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 //new component
 import MessageComponent from "../../ResponseMsg";
+import AutoDetectPhoneInput from "../phonenumber";
 const InstituteFormContent = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -39,9 +40,13 @@ const InstituteFormContent = () => {
         throw new Error(response.data.message || "An error occurred");
       }
       setSuccess("Registration successful!");
-      const token = response.data.token;
-      localStorage.setItem("Institute_token", token);
-      router.push("/institute-dashboard/dashboard");
+      //const token = response.data.token;
+      //localStorage.setItem("Institute_token", token);
+      const timer = setTimeout(() => {
+        router.push("/");
+      }, 2000); // 2000ms = 2 sec
+
+      return () => clearTimeout(timer);
     } catch (err) {
       setError(
         err.response?.data?.message || "Registration failed. Try again."
@@ -50,7 +55,11 @@ const InstituteFormContent = () => {
       setLoading(false);
     }
   };
+  const setPhone = (phone) => {
+    setFormData({ ...formData, phone_number: phone });
+  };
 
+  const [disablesubmit, setDisableSubmit] = useState(false);
   return (
     <form onSubmit={handleSubmit}>
       {/* display error */}
@@ -79,17 +88,12 @@ const InstituteFormContent = () => {
           onChange={handleChange}
         />
       </div>
-      <div className="form-group">
-        <label>Phone Number</label>
-        <input
-          type="text"
-          name="phone_number"
-          placeholder="Phone Number"
-          value={formData.phone_number}
-          onChange={handleChange}
-          required
-        />
-      </div>
+      <AutoDetectPhoneInput
+        phone={formData.phone_number}
+        setPhone={setPhone}
+        setDisableSubmit={setDisableSubmit} // 👈 pass it down
+      />
+
       {/* Phone */}
 
       <div className="form-group">
@@ -112,7 +116,7 @@ const InstituteFormContent = () => {
         <button
           className="theme-btn btn-style-one"
           type="submit"
-          disabled={loading}
+          disabled={loading || disablesubmit} // 👈 still disables click
         >
           {loading ? "Registering..." : "Register"}
         </button>

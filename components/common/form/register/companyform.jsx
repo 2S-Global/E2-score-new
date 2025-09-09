@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 //new component
 import MessageComponent from "../../ResponseMsg";
 import { Search } from "lucide-react";
+import AutoDetectPhoneInput from "../phonenumber";
 const FormContentcom = () => {
   const [formData, setFormData] = useState({
     cin_id: "",
@@ -43,9 +44,13 @@ const FormContentcom = () => {
         throw new Error(response.data.message || "An error occurred");
       }
       setSuccess("Registration successful!");
-      const token = response.data.token;
-      localStorage.setItem("employer_token", token);
-      router.push("/employers-dashboard/dashboard");
+      //const token = response.data.token;
+      //  localStorage.setItem("employer_token", token);
+      const timer = setTimeout(() => {
+        router.push("/");
+      }, 2000); // 2000ms = 2 sec
+
+      return () => clearTimeout(timer);
     } catch (err) {
       setError(
         err.response?.data?.message || "Registration failed. Try again."
@@ -102,7 +107,11 @@ const FormContentcom = () => {
       setErrorId(Date.now());
     }
   };
+  const setPhone = (phone) => {
+    setFormData({ ...formData, phone_number: phone });
+  };
 
+  const [disablesubmit, setDisableSubmit] = useState(false);
   return (
     <form onSubmit={handleSubmit}>
       {/* display error */}
@@ -165,18 +174,11 @@ const FormContentcom = () => {
       </div>
       {/* Email */}
 
-      <div className="form-group">
-        <label>Phone Number</label>
-        <span className="text-danger ms-2">*</span>
-        <input
-          type="text"
-          name="phone_number"
-          placeholder="Phone Number"
-          value={formData.phone_number}
-          onChange={handleChange}
-          required
-        />
-      </div>
+      <AutoDetectPhoneInput
+        phone={formData.phone_number}
+        setPhone={setPhone}
+        setDisableSubmit={setDisableSubmit} // 👈 pass it down
+      />
       {/* Phone */}
 
       <div className="form-group">
@@ -198,7 +200,7 @@ const FormContentcom = () => {
         <button
           className="theme-btn btn-style-one"
           type="submit"
-          disabled={loading}
+          disabled={loading || disablesubmit} // 👈 still disables click
         >
           {loading ? "Registering..." : "Register"}
         </button>

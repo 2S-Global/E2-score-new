@@ -110,20 +110,73 @@ const DashboardCandidatesHeader = () => {
               </a>
 
               <ul className="dropdown-menu">
-                {candidatesMenuData.map((item) => (
-                  <li
-                    className={`${
-                      isActiveLink(item.routePath, usePathname())
-                        ? "active"
-                        : ""
-                    } mb-1`}
-                    key={item.id}
-                  >
-                    <Link href={item.routePath}>
-                      <i className={`la ${item.icon}`}></i> {item.name}
-                    </Link>
-                  </li>
-                ))}
+                <li
+                  className={`${
+                    isActiveLink(
+                      "/candidates-dashboard/dashboard",
+                      usePathname()
+                    )
+                      ? "active"
+                      : ""
+                  } mb-1`}
+                  key={0}
+                >
+                  <Link href="/candidates-dashboard/dashboard">
+                    <i
+                      className="la la-home
+                    "
+                      aria-hidden="true"
+                    ></i>
+                    Dashboard
+                  </Link>
+                </li>{" "}
+                <li
+                  className={`${
+                    isActiveLink(
+                      "/candidates-dashboard/my-profile",
+                      usePathname()
+                    )
+                      ? "active"
+                      : ""
+                  } mb-1`}
+                  key={1}
+                >
+                  <Link href="/candidates-dashboard/my-profile">
+                    <i
+                      className="la la-user
+                    "
+                      aria-hidden="true"
+                    ></i>
+                    My Profile
+                  </Link>
+                </li>{" "}
+                <li
+                  className={`${
+                    isActiveLink(
+                      "/candidates-dashboard/change-password",
+                      usePathname()
+                    )
+                      ? "active"
+                      : ""
+                  } mb-1`}
+                  key={2}
+                >
+                  <Link href="/candidates-dashboard/change-password">
+                    <i className="la la-key" aria-hidden="true"></i>
+                    Change Password
+                  </Link>
+                </li>
+                <li
+                  className={`${
+                    isActiveLink("/", usePathname()) ? "active" : ""
+                  } mb-1`}
+                  key={3}
+                >
+                  <Link href="/" onClick={() => localStorage.clear()}>
+                    <i className="la la-sign-out" aria-hidden="true"></i>
+                    Logout
+                  </Link>
+                </li>
               </ul>
             </div>
             {/* End dropdown */}

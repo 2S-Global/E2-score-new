@@ -163,11 +163,19 @@ const KeySkillsModal = ({
                   </p>
 
                   {/* Selected Skills */}
-                  <div className="mb-3">
+                  <div
+                    className="mb-3"
+                    style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}
+                  >
                     {skills.map((skill, index) => (
                       <span
                         key={index}
-                        className="badge bg-secondary me-2 p-2 mt-2 "
+                        /*  className="me-2 p-2 mt-2 " */
+                        style={{
+                          padding: "8px 8px",
+                          border: "1px solid #ccc",
+                          borderRadius: "10px",
+                        }}
                       >
                         {skill.charAt(0).toUpperCase() + skill.slice(1)}{" "}
                         <button

@@ -7,6 +7,7 @@ import {
   FaBirthdayCake,
   FaCheckCircle,
 } from "react-icons/fa";
+import { FaRegCircleXmark } from "react-icons/fa6";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import Cardedit from "../modal/cardeditModal";
@@ -23,6 +24,8 @@ const ProfileCard = ({
   setReload,
   setError,
   setSuccess,
+  isIndianNumber,
+  numberVerified,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -80,7 +83,18 @@ const ProfileCard = ({
               )}
               <p className="mb-2 d-flex align-items-center text-secondary">
                 <FaPhone className="me-2" /> {phone}
-                <FaCheckCircle className="ms-2 text-success" />
+                {numberVerified && (
+                  <FaCheckCircle className="ms-2 text-success" />
+                )}
+                {!numberVerified && (
+                  <>
+                    {isIndianNumber ? (
+                      <FaRegCircleXmark className="ms-2 text-danger" />
+                    ) : (
+                      <FaRegCircleXmark className="ms-2 text-danger" />
+                    )}
+                  </>
+                )}
               </p>
               <p className="mb-0 d-flex align-items-center text-secondary">
                 <FaEnvelope className="me-2" /> {email}

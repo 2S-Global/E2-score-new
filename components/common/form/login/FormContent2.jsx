@@ -18,9 +18,7 @@ const FormContent2 = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
-const [token, setToken] = useState(null);
-
-
+  const [token, setToken] = useState(null);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -53,7 +51,7 @@ const [token, setToken] = useState(null);
         router.push("/candidates-dashboard/dashboard");
       } else if (role == "2") {
         localStorage.setItem("employer_token", token);
-        router.push("/employers-dashboard/dashboard");  
+        router.push("/employers-dashboard/dashboard");
       } else if (role == "3") {
         localStorage.setItem("Institute_token", token);
         router.push("/institute-dashboard/dashboard");
@@ -130,7 +128,10 @@ const [token, setToken] = useState(null);
 
       <div className="bottom-box">
         <div className="text">
-          Don&apos;t have an account? <Link href="/register">Signup</Link>
+          Don&apos;t have an account?{" "}
+          <Link href="/register" style={{ color: "blue" }}>
+            Signup
+          </Link>
         </div>
 
         <div className="divider">

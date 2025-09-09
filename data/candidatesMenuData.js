@@ -6,13 +6,13 @@ module.exports = [
     routePath: "/candidates-dashboard/dashboard",
     active: "active",
   },
-  {
+  /*   {
     id: 2,
     name: "My Profile",
     icon: "la-user-tie",
     routePath: "/candidates-dashboard/my-profile",
     active: "",
-  },
+  }, */
   {
     id: 3,
     name: "My Resume",
@@ -63,13 +63,13 @@ module.exports = [
     routePath: "/candidates-dashboard/messages",
     active: "",
   },
-  {
+  /*  {
     id: 10,
     name: "Change Password",
     icon: "la-lock",
     routePath: "/candidates-dashboard/change-password",
     active: "",
-  },
+  }, */
   /* 
   do not use id 11 anywhere other than logout
   {
