@@ -3,7 +3,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Select from "react-select";
 import LanguageProficiency from "../academicbox_component/language";
 import axios from "axios";
-import DatePicker from "react-datepicker";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+//import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CustomizedProgressBars from "@/components/common/loader";
 import Disability from "./disability";
@@ -252,6 +255,15 @@ const PersonalInfoForm = ({
     formData.work_permit_other_countries.includes(country.value)
   );
 
+  useEffect(() => {
+    if (!formData.have_usa_visa) {
+      setFormData({
+        ...formData,
+        usa_visa_type: "",
+      });
+    }
+  }, [formData.have_usa_visa]);
+
   return (
     <>
       {loading ? (
@@ -330,7 +342,37 @@ const PersonalInfoForm = ({
                   </div>
 
                   {/* Date of Birth Selection */}
-                  <div className="mb-3 col-md-4 form-group" ref={dob} id="dob">
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <div className="mb-3 form-group" ref={dob} id="dob">
+                      <label htmlFor="dob" className="form-label">
+                        <b>
+                          Date of Birth <span style={{ color: "red" }}>*</span>
+                        </b>
+                      </label>
+                      <DatePicker
+                        value={formData.dob ? new Date(formData.dob) : null}
+                        onChange={handleDateChange}
+                        maxDate={eighteenYearsAgo}
+                        format="dd/MM/yyyy"
+                        slotProps={{
+                          textField: {
+                            id: "dob",
+                            required: true,
+                            placeholder: "dd/mm/yyyy",
+                            className: "form-control",
+                            style: {
+                              backgroundColor: "#f0f5f7",
+                              border: "1px solid #f0f5f7",
+                              boxSizing: "border-box",
+                              borderRadius: "8px",
+                              transition: "all 300ms ease",
+                            },
+                          },
+                        }}
+                      />
+                    </div>
+                  </LocalizationProvider>
+                  {/*   <div className="mb-3 col-md-4 form-group" ref={dob} id="dob">
                     <label className="form-label d-block">
                       <b>Date of Birth</b>
                       <span style={{ color: "red" }}>*</span>
@@ -349,7 +391,7 @@ const PersonalInfoForm = ({
                       width="100%"
                       withPortal
                     />
-                  </div>
+                  </div> */}
                 </div>
                 <div className="mb-3 form-group" ref={category} id="category">
                   <label className="form-label">
