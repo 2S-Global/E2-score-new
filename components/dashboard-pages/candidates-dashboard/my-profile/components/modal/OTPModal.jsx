@@ -131,6 +131,33 @@ const OTPModel = ({
       setLoading(false);
     }
   };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => setError(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => setSuccess(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
+
+  const maskPhone = (num) => {
+    if (!num) return num;
+    // Remove spaces just for processing
+    const cleanNum = num.replace(/\s/g, "");
+    if (cleanNum.length < 10) return num;
+
+    // Keep first 6 characters (+91 84), mask 5 digits, keep last 2 digits
+    return (
+      cleanNum.substring(0, 6) +
+      "*****" +
+      cleanNum.substring(cleanNum.length - 2)
+    );
+  };
 
   return (
     <div
@@ -151,56 +178,93 @@ const OTPModel = ({
 
           <form onSubmit={handleSubmit}>
             <div className="modal-body">
-              {loading && <CustomizedProgressBars />}
-              {error && <div className="alert alert-danger">{error}</div>}
-              {success && <div className="alert alert-success">{success}</div>}
-
-              {!showOTPField && (
-                <div className="mb-3 d-flex align-items-center">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={phone}
-                    readOnly
-                    style={{ width: "75%" }}
-                  />
-                  <button
-                    type="button"
-                    className="btn btn-success ms-2 "
-                    onClick={handleVerifyNumber}
-                  >
-                    Send OTP
-                  </button>
-                </div>
-              )}
-
-              {showOTPField && (
+              {loading ? (
+                <CustomizedProgressBars />
+              ) : (
                 <>
-                  <div className="mb-3">
-                    <label htmlFor="otp" className="form-label">
-                      <b>OTP</b> <span style={{ color: "red" }}>*</span>
-                    </label>
-                    <input
-                      name="otp"
-                      type="number"
-                      className="form-control"
-                      value={formData.otp}
-                      onChange={handleChange}
-                      placeholder="Enter OTP"
-                      required
-                    />
-                  </div>
+                  {/* Alerts */}
+                  {error && (
+                    <div
+                      className="alert alert-danger alert-dismissible fade show"
+                      role="alert"
+                    >
+                      {error}
+                      <button
+                        type="button"
+                        className="btn-close"
+                        onClick={() => setError(null)}
+                      ></button>
+                    </div>
+                  )}
 
-                  <button
-                    type="button"
-                    className={`btn mt-2 ${resendTimer > 0 ? "btn-secondary" : "btn-success"}`}
-                    onClick={handleResend}
-                    disabled={resendTimer > 0}
-                  >
-                    {resendTimer > 0
-                      ? `Resend OTP in ${resendTimer}s`
-                      : "Resend OTP"}
-                  </button>
+                  {success && (
+                    <div
+                      className="alert alert-success alert-dismissible fade show"
+                      role="alert"
+                    >
+                      {success}
+                      <button
+                        type="button"
+                        className="btn-close"
+                        onClick={() => setSuccess(null)}
+                      ></button>
+                    </div>
+                  )}
+
+                  {!showOTPField && (
+                    <div className="mb-3 d-flex align-items-center">
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={maskPhone(phone)}
+                        readOnly
+                        style={{ width: "75%" }}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-success ms-2 "
+                        onClick={handleVerifyNumber}
+                      >
+                        Send OTP
+                      </button>
+                    </div>
+                  )}
+
+                  {showOTPField && (
+                    <>
+                      <div className="mb-3">
+                        <label htmlFor="otp" className="form-label">
+                          <b>OTP</b> <span style={{ color: "red" }}>*</span>
+                        </label>
+                        <input
+                          name="otp"
+                          type="number"
+                          className="form-control"
+                          value={formData.otp}
+                          onChange={handleChange}
+                          placeholder="Enter OTP"
+                          required
+                        />
+                      </div>
+
+                      {showOTPField && (
+                        <button type="submit" className="btn btn-primary mt-2">
+                          Verify
+                        </button>
+                      )}
+
+                      <button
+                        type="button"
+                        className={`btn mt-2 ms-2 ${resendTimer > 0 ? "btn-secondary" : "btn-success"}`}
+                        onClick={handleResend}
+                        disabled={resendTimer > 0}
+                      >
+                        {resendTimer > 0
+                          ? `Resend OTP in ${resendTimer}s`
+                          : "Resend OTP"}
+                      </button>
+                    </>
+                  )}
                 </>
               )}
             </div>
@@ -213,11 +277,6 @@ const OTPModel = ({
               >
                 Cancel
               </button>
-              {showOTPField && (
-                <button type="submit" className="btn btn-primary">
-                  Verify
-                </button>
-              )}
             </div>
           </form>
         </div>

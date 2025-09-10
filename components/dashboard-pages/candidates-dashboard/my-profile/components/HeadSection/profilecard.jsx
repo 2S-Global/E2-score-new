@@ -100,6 +100,7 @@ const ProfileCard = ({
                 )}
                 {!numberVerified && (
                   <>
+                    <FaRegCircleXmark className="ms-2 text-danger" />
                     {isIndianNumber ? (
                       <button
                         className="btn btn-primary ms-2"
@@ -110,7 +111,7 @@ const ProfileCard = ({
                         }}
                         onClick={openModalRHotp}
                       >
-                        Verify
+                        Verify Now
                       </button>
                     ) : (
                       <FaRegCircleXmark className="ms-2 text-danger" />
