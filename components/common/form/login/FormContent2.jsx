@@ -8,6 +8,7 @@ import React, { useState } from "react";
 
 //new component
 import MessageComponent from "../../ResponseMsg";
+import { se } from "date-fns/locale/se";
 const FormContent2 = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -16,7 +17,9 @@ const FormContent2 = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [errorId, setErrorId] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [message_id, setMessageId] = useState(null);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [token, setToken] = useState(null);
 
@@ -38,7 +41,8 @@ const FormContent2 = () => {
       if (!response.data.success) {
         throw new Error(response.data.message || "An error occurred");
       }
-      setSuccess("Log In successful!");
+      setSuccess(response.data.message || "Log In successful!");
+      setMessageId(Date.now());
       const token = response.data.token;
       const role = response.data.role;
 
@@ -57,9 +61,8 @@ const FormContent2 = () => {
         router.push("/institute-dashboard/dashboard");
       }
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Registration failed. Try again."
-      );
+      setError(err.response?.data?.message || "Login failed. Try again.");
+      setErrorId(Date.now());
     } finally {
       setLoading(false);
     }
@@ -68,7 +71,12 @@ const FormContent2 = () => {
   return (
     <div className="form-inner">
       <h3>Login to GEISIL</h3>
-      <MessageComponent error={error} success={success} />
+      <MessageComponent
+        error={error}
+        success={success}
+        message_id={message_id}
+        errorId={errorId}
+      />
       {/* <!--Login Form--> */}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
