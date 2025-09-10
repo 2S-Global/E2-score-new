@@ -11,7 +11,7 @@ import { FaRegCircleXmark } from "react-icons/fa6";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import Cardedit from "../modal/cardeditModal";
-
+import OTPModel from "../modal/OTPModal";
 const ProfileCard = ({
   name,
   degree,
@@ -29,13 +29,25 @@ const ProfileCard = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [isModalOpenotp, setIsModalOpenotp] = useState(false);
+
   const openModalRH = () => {
     setIsModalOpen(true);
     document.body.style.overflow = "hidden"; // Disable background scrolling
   };
 
+  const openModalRHotp = () => {
+    setIsModalOpenotp(true);
+    document.body.style.overflow = "hidden"; // Disable background scrolling
+  };
+
   const closeModalRH = () => {
     setIsModalOpen(false);
+    document.body.style.overflow = "auto"; // Re-enable background scrolling
+  };
+
+  const closeModalRHotp = () => {
+    setIsModalOpenotp(false);
     document.body.style.overflow = "auto"; // Re-enable background scrolling
   };
 
@@ -89,15 +101,29 @@ const ProfileCard = ({
                 {!numberVerified && (
                   <>
                     {isIndianNumber ? (
-                      <FaRegCircleXmark className="ms-2 text-danger" />
+                      <button
+                        className="btn btn-primary ms-2"
+                        style={{
+                          fontSize: "10px",
+                          padding: "2px 6px",
+                          lineHeight: 1,
+                        }}
+                        onClick={openModalRHotp}
+                      >
+                        Verify
+                      </button>
                     ) : (
                       <FaRegCircleXmark className="ms-2 text-danger" />
                     )}
                   </>
                 )}
               </p>
-              <p className="mb-0 d-flex align-items-center text-secondary">
-                <FaEnvelope className="me-2" /> {email}
+              <p
+                className="mb-0 d-flex align-items-center text-secondary"
+                title={email}
+              >
+                <FaEnvelope className="me-2" />{" "}
+                {email?.length > 15 ? email.substring(0, 15) + "..." : email}
                 <FaCheckCircle className="ms-2 text-success" />
               </p>
             </div>
@@ -109,6 +135,17 @@ const ProfileCard = ({
         <Cardedit
           show={isModalOpen}
           onClose={closeModalRH}
+          setReload={setReload}
+          setError_main={setError}
+          setSuccess_main={setSuccess}
+        />
+      )}
+
+      {isModalOpenotp && (
+        <OTPModel
+          phone={phone}
+          show={isModalOpenotp}
+          onClose={closeModalRHotp}
           setReload={setReload}
           setError_main={setError}
           setSuccess_main={setSuccess}
