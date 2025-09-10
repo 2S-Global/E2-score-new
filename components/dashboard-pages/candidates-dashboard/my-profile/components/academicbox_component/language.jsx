@@ -67,7 +67,7 @@ const LanguageProficiency = ({ formData, setFormData, apiurl }) => {
     const proficiency = languageproficiencyOptions.find(
       (item) => item.id === value
     );
-    console.log("Proficiency:", proficiency);
+    //console.log("Proficiency:", proficiency);
 
     const updatedLanguages = [...languages];
     updatedLanguages[index][field] = value;

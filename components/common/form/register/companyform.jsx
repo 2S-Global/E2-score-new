@@ -33,6 +33,9 @@ const FormContentcom = () => {
     setError(null);
     setSuccess(null);
 
+    setErrorId(null);
+    setMessageId(null);
+
     try {
       const response = await axios.post(
         `${apiurl}/api/auth/company-register`,
@@ -43,14 +46,11 @@ const FormContentcom = () => {
       if (!response.data.success) {
         throw new Error(response.data.message || "An error occurred");
       }
-      setSuccess("Registration successful!");
-      //const token = response.data.token;
-      //  localStorage.setItem("employer_token", token);
-      const timer = setTimeout(() => {
+      setSuccess(response.data.message || "Registration successful!");
+      setMessageId(Date.now());
+      setTimeout(() => {
         router.push("/");
-      }, 2000); // 2000ms = 2 sec
-
-      return () => clearTimeout(timer);
+      }, 3000);
     } catch (err) {
       setError(
         err.response?.data?.message || "Registration failed. Try again."

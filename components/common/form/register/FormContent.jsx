@@ -13,7 +13,9 @@ const FormContent = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [errorId, setErrorId] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [message_id, setMessageId] = useState(null);
   const router = useRouter();
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   // Handle input changes
@@ -27,30 +29,31 @@ const FormContent = () => {
     setError(null);
     setSuccess(null);
 
-    console.log(formData);
+    setErrorId(null);
+    setMessageId(null);
+
+    //console.log(formData);
 
     try {
       const response = await axios.post(
         `${apiurl}/api/auth/register`,
         formData
       );
-      console.log("Response:", response);
+
       //check if response is successful
       if (!response.data.success) {
         throw new Error(response.data.message || "An error occurred");
       }
-      setSuccess("Registration successful!");
-      //const token = response.data.token;
-      //localStorage.setItem("candidate_token", token);
-      const timer = setTimeout(() => {
+      setSuccess(response.data.message || "Registration successful!");
+      setMessageId(Date.now());
+      setTimeout(() => {
         router.push("/");
-      }, 2000); // 2000ms = 2 sec
-
-      return () => clearTimeout(timer);
+      }, 3000);
     } catch (err) {
       setError(
         err.response?.data?.message || "Registration failed. Try again."
       );
+      setErrorId(Date.now());
     } finally {
       setLoading(false);
     }
@@ -64,7 +67,12 @@ const FormContent = () => {
   return (
     <form onSubmit={handleSubmit}>
       {/* display error */}
-      <MessageComponent error={error} success={success} />
+      <MessageComponent
+        error={error}
+        success={success}
+        errorId={errorId}
+        message_id={message_id}
+      />
 
       <div className="form-group">
         <label>Full Name</label>
@@ -104,7 +112,7 @@ const FormContent = () => {
       <AutoDetectPhoneInput
         phone={formData.phone_number}
         setPhone={setPhone}
-        setDisableSubmit={setDisableSubmit} // 👈 pass it down
+        setDisableSubmit={setDisableSubmit}
       />
       {/* Phone */}
 
@@ -128,7 +136,7 @@ const FormContent = () => {
         <button
           className="theme-btn btn-style-one"
           type="submit"
-          disabled={loading || disablesubmit} // 👈 still disables click
+          disabled={loading || disablesubmit}
         >
           {loading ? "Registering..." : "Register"}
         </button>
