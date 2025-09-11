@@ -27,6 +27,7 @@ import PersonalSection from "./components/Personal_details";
 import HeadSection from "./components/HeadSection";
 import KYCSection from "./components/KycSection";
 import QuickActionSidebar from "./components/quickaction";
+import AadharSection from "./components/addhar/aadharsection";
 
 const index = () => {
   const [showPart1, setShowPart1] = useState(true);
@@ -125,7 +126,7 @@ const index = () => {
                         <KYCSection />
                       </div>
                       <div id="aadhar-section">
-                        <KYCSection />
+                        <AadharSection />
                       </div>
                       <div id="resume-headline">
                         <ResumeHeadlineSection />
