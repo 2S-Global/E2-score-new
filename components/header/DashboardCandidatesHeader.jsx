@@ -81,8 +81,10 @@ const DashboardCandidatesHeader = () => {
 
           <div className="outer-box">
             <button className="menu-btn">
-              <span className="count">1</span>
-              <span className="icon la la-heart-o"></span>
+              {/* <span className="count"></span> */}
+              <Link href="/candidates-dashboard/cart">
+                <span className="icon la la-shopping-cart"></span>
+              </Link>
             </button>
             {/* wishlisted menu */}
 
