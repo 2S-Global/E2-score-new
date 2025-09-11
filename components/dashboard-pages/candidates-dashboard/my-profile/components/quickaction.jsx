@@ -20,6 +20,11 @@ const QuickActionSidebar = ({
       onClick: () => setShowPart1(true),
     },
     {
+      label: "Aadhar",
+      targetId: "aadhar-section",
+      onClick: () => setShowPart1(true),
+    },
+    {
       label: "Resume Headline",
       targetId: "resume-headline",
       onClick: () => setShowPart1(true),

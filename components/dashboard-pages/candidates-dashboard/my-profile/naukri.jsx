@@ -124,6 +124,9 @@ const index = () => {
                       <div id="kyc-section">
                         <KYCSection />
                       </div>
+                      <div id="aadhar-section">
+                        <KYCSection />
+                      </div>
                       <div id="resume-headline">
                         <ResumeHeadlineSection />
                       </div>
