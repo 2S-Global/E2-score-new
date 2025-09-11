@@ -64,7 +64,8 @@ const ItskillModal = ({
   );
 
   const handleSearchChange = (e, setSearch, setFiltered, list, key = "") => {
-    const value = e.target.value.trim(); // normalise input
+    const value = e.target.value.replace(/\s+/g, " ");
+
     setSearch(value);
 
     // Show everything while the box is empty
