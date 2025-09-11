@@ -45,7 +45,7 @@ const QuickActionSidebar = ({
       onClick: () => setShowPart2(true),
     },
     {
-      label: "Education",
+      label: "Academics",
       targetId: "academy",
       onClick: () => setShowPart3(true),
     },

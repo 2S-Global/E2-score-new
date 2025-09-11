@@ -63,7 +63,7 @@ const ProfileCard = ({
                 <span className="fs-6 fw-normal text-muted">({gender})</span>
               )}
               <i
-                className="la la-pencil-alt text-primary"
+                className="la la-pencil-alt "
                 onClick={openModalRH}
                 style={{ cursor: "pointer", fontSize: "16px" }}
               ></i>

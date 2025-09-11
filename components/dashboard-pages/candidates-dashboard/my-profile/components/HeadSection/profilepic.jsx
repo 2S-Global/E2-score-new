@@ -63,10 +63,10 @@ const CircularProgress = ({
                 bottom: 0,
                 right: 0,
                 transform: "translate(50%, 50%)", // move half outside the circle
-                backgroundColor: "white",
+                /*   backgroundColor: "white", */
                 borderRadius: "50%",
-                padding: "6px",
-                boxShadow: "0 0 5px rgba(0,0,0,0.3)",
+                /* padding: "6px",
+                boxShadow: "0 0 5px rgba(0,0,0,0.3)", */
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
@@ -83,7 +83,7 @@ const CircularProgress = ({
                   "translate(50%, 50%) scale(1)")
               }
             >
-              <Pencil size={8} color="blue" />
+              <Pencil size={8} /* color="blue"  */ />
             </div>
           </CircularProgressbarWithChildren>
 

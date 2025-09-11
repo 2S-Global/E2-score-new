@@ -210,7 +210,10 @@ const Employsectionmain = () => {
                         )}
 
                         {/* Job Description with Read More Toggle */}
-                        <div className="item prefill emp-desc typ-14Medium">
+                        <div
+                          className="item prefill emp-desc typ-14Medium"
+                          style={{ textAlign: "justify" }}
+                        >
                           <div>
                             {expanded[index] ? (
                               <>
