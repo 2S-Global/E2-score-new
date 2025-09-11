@@ -173,11 +173,11 @@ const AadharOtp = () => {
             setRenderBill(true);
           }
         } else {
-          setError("Failed to fetch data.");
+          //   setError("Failed to fetch data.");
         }
       } catch (err) {
         console.error("Error fetching data:", err);
-        setError("Error fetching data. Please try again.");
+        //  setError("Error fetching data. Please try again.");
       } finally {
         setLoading(false);
       }
