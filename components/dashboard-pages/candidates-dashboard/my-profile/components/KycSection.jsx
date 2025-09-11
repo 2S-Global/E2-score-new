@@ -12,9 +12,15 @@ const KYCSection = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [reload, setReload] = useState(false);
-  const [sectionloading, setSectionloading] = useState(true);
+  const [sectionloading, setSectionloading] = useState(false);
 
   useEffect(() => {}, [reload]);
+
+  const openModalRH = () => {
+    console.log("Opening Modal...");
+    //  setIsModalOpen(true);
+    //document.body.style.overflow = "hidden"; // Disable background scrolling
+  };
 
   return (
     <>
@@ -25,14 +31,25 @@ const KYCSection = () => {
         setSuccess={setSuccess}
       />
       <div className="ls-widget">
-        <div className="tabs-box" onClick={() => setSectionloading(false)}>
+        <div className="tabs-box">
+          <div className="widget-title">
+            <h4>KYC</h4>
+            {/* Open modal using an onClick function */}
+            <i
+              className="la la-pencil-alt"
+              onClick={openModalRH}
+              style={{ cursor: "pointer" }}
+            ></i>
+          </div>
           {sectionloading ? (
             <CustomizedProgressBars />
           ) : (
             <>
               <div className="widget-content">
-                <div className="row">Here is your KYC details</div>
-              </div>
+                <p style={{ textAlign: "justify" }}>
+                  {"Add Your KYC Documents and get verified"}
+                </p>
+              </div>{" "}
             </>
           )}
         </div>
