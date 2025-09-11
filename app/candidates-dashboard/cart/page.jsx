@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import KycPage from "@/components/dashboard-pages/candidates-dashboard/kyc";
+import KycPage from "@/components/dashboard-pages/candidates-dashboard/cart";
 
 const index = () => {
   return (
