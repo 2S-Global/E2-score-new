@@ -410,9 +410,7 @@ const CareerModal = ({
 
                 {/* Current job role */}
                 <div className="my-2 form-group" ref={job_role_section}>
-                  <label className="form-label">
-                    Job role ({formData.job_role || "not selected"})
-                  </label>
+                  <label className="form-label">Job role</label>
                   <span style={{ color: "red" }}>*</span>
                   <select
                     className="form-select form-control"

@@ -9,7 +9,16 @@ const getComparableDateValue = (year, month) => {
   if (!year || !month) return null;
   return parseInt(year) * 100 + parseInt(month); // e.g., 202405
 };
+//for text editor
+import dynamic from "next/dynamic";
+import { EditorState, ContentState } from "draft-js";
+import "draft-js/dist/Draft.css";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
+const Editor = dynamic(
+  () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
+  { ssr: false }
+);
 const WorksampleModal = ({
   show,
   onClose,
@@ -40,6 +49,26 @@ const WorksampleModal = ({
     durationToMonth: item.durationTo?.month_id || "",
     currentlyWorking: item.currentlyWorking || false,
   });
+
+  const [editorState, setEditorState] = useState(() => {
+    if (item.description) {
+      return EditorState.createWithContent(
+        ContentState.createFromText(item.description)
+      );
+    }
+    return EditorState.createEmpty();
+  });
+
+  useEffect(() => {
+    setEditorState(() => {
+      if (formData.description) {
+        return EditorState.createWithContent(
+          ContentState.createFromText(formData.description)
+        );
+      }
+      return EditorState.createEmpty();
+    });
+  }, [formData.description]);
 
   // Validation logic
   useEffect(() => {
@@ -502,26 +531,26 @@ const WorksampleModal = ({
                   <label className="form-label">
                     <b>Description</b>
                   </label>
-                  <textarea
-                    className="form-control"
-                    placeholder="Type here ..."
-                    rows="2" // default height = 1 row
-                    name="description"
-                    style={{
-                      padding: "10px",
-                      minheight: "2.5em",
-                      height: "auto",
-                      resize: "vertical", // allow only vertical resizing
-                      minHeight: "2.5em", // ensures 1 row minimum height (adjust as needed)
-                    }}
-                    value={formData.description}
-                    onChange={(e) => {
+                  <Editor
+                    editorState={editorState}
+                    onEditorStateChange={(state) => {
+                      setEditorState(state);
                       setFormData({
                         ...formData,
-                        description: e.target.value,
+                        description: state.getCurrentContent().getPlainText(), // plain text
                       });
-                      setIsGenerated(false); // Reset when user types
+                      setIsGenerated(false);
                     }}
+                    placeholder="Type here ..."
+                    /* toolbar={{
+                          options: ["inline", "list", "link"], // keep it minimal
+                          inline: { options: ["bold", "italic", "underline"] },
+                          list: { options: ["unordered", "ordered"] },
+                          link: { options: ["link"] },
+                        }} */
+                    wrapperClassName="border rounded mb-2"
+                    editorClassName="form-control px-2"
+                    toolbarClassName="border-bottom"
                   />
                   <button
                     type="button"

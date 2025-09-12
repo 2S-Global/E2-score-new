@@ -4,6 +4,16 @@ import { Sparkles } from "lucide-react";
 import axios from "axios";
 import CustomizedProgressBars from "@/components/common/loader";
 import { Trash2 } from "lucide-react";
+import dynamic from "next/dynamic";
+import { EditorState, ContentState } from "draft-js";
+import "draft-js/dist/Draft.css";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
+const Editor = dynamic(
+  () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
+  { ssr: false }
+);
+
 const ProfileModal = ({
   setReload,
   show,
@@ -20,6 +30,26 @@ const ProfileModal = ({
     url: item.url || "",
     description: item.description || "",
   });
+
+  const [editorState, setEditorState] = useState(() => {
+    if (item.description) {
+      return EditorState.createWithContent(
+        ContentState.createFromText(item.description)
+      );
+    }
+    return EditorState.createEmpty();
+  });
+
+  useEffect(() => {
+    setEditorState(() => {
+      if (formData.description) {
+        return EditorState.createWithContent(
+          ContentState.createFromText(formData.description)
+        );
+      }
+      return EditorState.createEmpty();
+    });
+  }, [formData.description]);
 
   const [isGenerated, setIsGenerated] = useState(false); // Track button presses
   const token = localStorage.getItem("candidate_token");
@@ -366,7 +396,7 @@ const ProfileModal = ({
                       <label className="form-label">
                         <b>Description</b>
                       </label>
-                      <textarea
+                      {/*  <textarea
                         className="form-control custom-textarea"
                         placeholder="Type here ..."
                         rows="2"
@@ -385,7 +415,30 @@ const ProfileModal = ({
                           });
                           setIsGenerated(false); // Reset when user types
                         }}
-                      ></textarea>
+                      ></textarea> */}
+                      <Editor
+                        editorState={editorState}
+                        onEditorStateChange={(state) => {
+                          setEditorState(state);
+                          setFormData({
+                            ...formData,
+                            description: state
+                              .getCurrentContent()
+                              .getPlainText(), // plain text
+                          });
+                          setIsGenerated(false);
+                        }}
+                        placeholder="Type here ..."
+                        /* toolbar={{
+                          options: ["inline", "list", "link"], // keep it minimal
+                          inline: { options: ["bold", "italic", "underline"] },
+                          list: { options: ["unordered", "ordered"] },
+                          link: { options: ["link"] },
+                        }} */
+                        wrapperClassName="border rounded mb-2"
+                        editorClassName="form-control px-2"
+                        toolbarClassName="border-bottom"
+                      />
                       <button
                         type="button"
                         className="suggestion-btn"

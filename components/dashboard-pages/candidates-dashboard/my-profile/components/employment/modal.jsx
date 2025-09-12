@@ -1,4 +1,8 @@
 /*  */
+import dynamic from "next/dynamic";
+import { EditorState, ContentState } from "draft-js";
+import "draft-js/dist/Draft.css";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 import React, { useState, useEffect, useCallback, use } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -13,7 +17,10 @@ const getComparableDateValue = (year, month) => {
   if (!year || !month) return null;
   return parseInt(year) * 100 + parseInt(month); // e.g., 202405
 };
-
+const Editor = dynamic(
+  () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
+  { ssr: false }
+);
 let debounceTimeout;
 const EmploymentModal = ({
   show,
@@ -33,6 +40,7 @@ const EmploymentModal = ({
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [list_notice_period, setList_notice_period] = useState([]);
   const [testdata, setTestdata] = useState([]);
+
   const fetchNoticePeriod = async () => {
     try {
       const response = await axios.get(
@@ -68,6 +76,26 @@ const EmploymentModal = ({
     description: item.description || "",
     notice_period: item.notice_period || "",
   });
+  const [editorState, setEditorState] = useState(() => {
+    if (item.description) {
+      return EditorState.createWithContent(
+        ContentState.createFromText(item.description)
+      );
+    }
+    return EditorState.createEmpty();
+  });
+
+  useEffect(() => {
+    setEditorState(() => {
+      if (formData.description) {
+        return EditorState.createWithContent(
+          ContentState.createFromText(formData.description)
+        );
+      }
+      return EditorState.createEmpty();
+    });
+  }, [formData.description]);
+
   const [defaultOptions, setDefaultOptions] = useState([
     {
       value: formData.company_name,
@@ -828,27 +856,30 @@ const EmploymentModal = ({
                     {/* Job profile */}
                     <div className="mb-3 form-group">
                       <label className="form-label">Job Profile</label>
-                      <textarea
-                        className="form-control mb-2"
-                        placeholder="Type here ..."
-                        rows="2" // default height = 1 row
-                        name="description"
-                        style={{
-                          padding: "10px",
-                          minheight: "2.5em",
-                          height: "auto",
-                          resize: "vertical", // allow only vertical resizing
-                          minHeight: "2.5em", // ensures 1 row minimum height (adjust as needed)
-                        }}
-                        value={formData.description}
-                        onChange={(e) => {
+                      <Editor
+                        editorState={editorState}
+                        onEditorStateChange={(state) => {
+                          setEditorState(state);
                           setFormData({
                             ...formData,
-                            description: e.target.value,
+                            description: state
+                              .getCurrentContent()
+                              .getPlainText(), // plain text
                           });
-                          setIsGenerated(false); // Reset when user types
+                          setIsGenerated(false);
                         }}
+                        placeholder="Type here ..."
+                        /* toolbar={{
+                          options: ["inline", "list", "link"], // keep it minimal
+                          inline: { options: ["bold", "italic", "underline"] },
+                          list: { options: ["unordered", "ordered"] },
+                          link: { options: ["link"] },
+                        }} */
+                        wrapperClassName="border rounded mb-2"
+                        editorClassName="form-control px-2"
+                        toolbarClassName="border-bottom"
                       />
+
                       <button
                         type="button"
                         className="suggestion-btn"
