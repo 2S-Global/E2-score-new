@@ -21,8 +21,8 @@ const ProfileMain = ({ setReload, list = [], setError, setSuccess }) => {
   };
   return (
     <>
-      <div className="">
-        <h5>
+      <div className="pt-4">
+        <h5 className="">
           Online Profile
           <span
             onClick={() => openModal()}

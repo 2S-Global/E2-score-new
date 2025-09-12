@@ -21,6 +21,12 @@ import ProjectSection from "./components/projectSection";
 import ProfilesumerySection from "./components/profilesummary";
 import AcomSection from "./components/accomsection2";
 import AcomSectiondemo from "./components/accomsection";
+import AccomOnlineProfile from "./components/accom-online-profile";
+import AccomWorkProfile from "./components/accom-work-profile";
+import AccomWhitePaper from "./components/accom-white-paper";
+import AccomPresentation from "./components/accom-online-presentation";
+import AccomPatent from "./components/accom-online-patent";
+import AccomCertification from "./components/accom-online-certification";
 import Carrersection from "./components/carrersection";
 import PersonalSection from "./components/Personal_details";
 
@@ -33,6 +39,7 @@ const index = () => {
   const [showPart3, setShowPart3] = useState(false);
   const [showPart4, setShowPart4] = useState(false);
   const [showPart5, setShowPart5] = useState(false);
+  const [showPart6, setShowPart6] = useState(false);
 
   useEffect(() => {
     const timers = [];
@@ -40,6 +47,7 @@ const index = () => {
     timers.push(setTimeout(() => setShowPart1(true), 300000)); // Show after 300ms
     timers.push(setTimeout(() => setShowPart2(true), 9000000)); // After 900ms
     timers.push(setTimeout(() => setShowPart5(true), 15000000));
+    timers.push(setTimeout(() => setShowPart5(true), 16000000));
     timers.push(setTimeout(() => setShowPart4(true), 200000));
     timers.push(setTimeout(() => setShowPart3(true), 10000000));
 
@@ -97,6 +105,7 @@ const index = () => {
               setShowPart3={setShowPart3}
               setShowPart4={setShowPart4}
               setShowPart5={setShowPart5}
+              setShowPart6={setShowPart6}
             />
           </div>
 
@@ -150,8 +159,27 @@ const index = () => {
 
                   {showPart4 && (
                     <div id="part4" ref={part4Ref}>
-                      <div id="acom">
+                      {/* <div id="acom">
                         <AcomSection />
+                      </div> */}
+                      <h5>Accomplishments</h5>
+                      <div id="acom-online-profile">
+                        <AccomOnlineProfile />
+                      </div>
+                      <div id="acom-work-profile">
+                        <AccomWorkProfile />
+                      </div>
+                      <div id="acom-white-paper">
+                        <AccomWhitePaper />
+                      </div>
+                      <div id="acom-presentation">
+                        <AccomPresentation />
+                      </div>
+                      <div id="acom-patent">
+                        <AccomPatent />
+                      </div>
+                      <div id="acom-certification">
+                        <AccomCertification />
                       </div>
                       <div id="career">
                         <Carrersection />

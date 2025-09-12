@@ -21,7 +21,7 @@ const ResearchMain = ({ setReload, list = [], setError, setSuccess }) => {
   };
   return (
     <>
-      <div className="">
+      <div className="pt-4">
         <h5>
           White Paper / Research Publication / Journal Entry
           <span

@@ -7,6 +7,7 @@ const QuickActionSidebar = ({
   setShowPart3,
   setShowPart4,
   setShowPart5,
+  setShowPart6,
 }) => {
   const sections = [
     {
@@ -39,10 +40,40 @@ const QuickActionSidebar = ({
       targetId: "academy",
       onClick: () => setShowPart3(true),
     },
+    // {
+    //   label: "Accomplishments",
+    //   targetId: "acom",
+    //   onClick: () => setShowPart4(true),
+    // },
     {
-      label: "Accomplishments",
-      targetId: "acom",
-      onClick: () => setShowPart4(true),
+      label: "Online Profile",
+      targetId: "acom-online-profile",
+      onClick: () => setShowPart6(true),
+    },
+    {
+      label: "Work Profile",
+      targetId: "acom-work-profile",
+      onClick: () => setShowPart6(true),
+    },
+    {
+      label: "White Paper",
+      targetId: "acom-white-paper",
+      onClick: () => setShowPart6(true),
+    },
+    {
+      label: "Presentation",
+      targetId: "acom-presentation",
+      onClick: () => setShowPart6(true),
+    },
+    {
+      label: "Patent",
+      targetId: "acom-patent",
+      onClick: () => setShowPart6(true),
+    },
+    {
+      label: "Certification",
+      targetId: "acom-certification",
+      onClick: () => setShowPart6(true),
     },
     {
       label: "Career Profile",
