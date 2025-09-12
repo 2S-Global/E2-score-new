@@ -45,10 +45,10 @@ const CircularProgress = ({
                 aspectRatio: 1,
                 borderRadius: "50%",
                 overflow: "hidden",
-                cursor: "pointer",
+                /*    cursor: "pointer", */
                 boxShadow: "0 0 5px rgba(0,0,0,0.2)",
               }}
-              onClick={openModal}
+              /*  onClick={openModal} */
             >
               <img
                 src={imageSrc || "/images/resource/no_user.png"}
