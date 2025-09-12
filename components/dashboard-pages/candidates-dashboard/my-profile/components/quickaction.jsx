@@ -16,6 +16,16 @@ const QuickActionSidebar = ({
       onClick: () => setShowPart1(true),
     },
     {
+      label: "KYC",
+      targetId: "kyc-section",
+      onClick: () => setShowPart1(true),
+    },
+    {
+      label: "Aadhar",
+      targetId: "aadhar-section",
+      onClick: () => setShowPart1(true),
+    },
+    {
       label: "Resume Headline",
       targetId: "resume-headline",
       onClick: () => setShowPart1(true),
@@ -36,7 +46,7 @@ const QuickActionSidebar = ({
       onClick: () => setShowPart2(true),
     },
     {
-      label: "Education",
+      label: "Academics",
       targetId: "academy",
       onClick: () => setShowPart3(true),
     },

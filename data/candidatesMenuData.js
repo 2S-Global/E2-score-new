@@ -20,13 +20,13 @@ module.exports = [
     routePath: "/candidates-dashboard/my-resume",
     active: "",
   },
-  {
+  /*  {
     id: 8,
     name: "KYC Manager",
     icon: "la-box",
     routePath: "/candidates-dashboard/kyc",
     active: "",
-  },
+  }, */
   {
     id: 4,
     name: "Applied Jobs",

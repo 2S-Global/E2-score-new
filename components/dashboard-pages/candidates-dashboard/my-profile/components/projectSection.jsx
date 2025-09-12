@@ -147,7 +147,9 @@ const ProjectSection = () => {
                         </span>
                         <br />
 
-                        <span>{item.description}</span>
+                        <p style={{ textAlign: "justify" }}>
+                          {item.description}
+                        </p>
                       </div>
                     ))}
                   </>

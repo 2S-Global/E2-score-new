@@ -206,7 +206,7 @@ const KeySkillsModal = ({
                   </div>
 
                   {/* Suggested Skills */}
-                  <div className="mt-3">
+                  {/*   <div className="mt-3">
                     <p style={{ color: "black" }}>
                       Or select from suggested skills:
                     </p>
@@ -219,7 +219,7 @@ const KeySkillsModal = ({
                         {skill.charAt(0).toUpperCase() + skill.slice(1)}
                       </button>
                     ))}
-                  </div>
+                  </div> */}
                 </>
               )}
             </div>

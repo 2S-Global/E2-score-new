@@ -63,7 +63,7 @@ const ProfileCard = ({
                 <span className="fs-6 fw-normal text-muted">({gender})</span>
               )}
               <i
-                className="la la-pencil-alt text-primary"
+                className="la la-pencil-alt "
                 onClick={openModalRH}
                 style={{ cursor: "pointer", fontSize: "16px" }}
               ></i>
@@ -93,8 +93,13 @@ const ProfileCard = ({
                   <FaBirthdayCake className="me-2" /> {dob}
                 </p>
               )}
-              <p className="mb-2 d-flex align-items-center text-secondary">
-                <FaPhone className="me-2" /> {phone}
+              <p
+                className="mb-2 d-flex align-items-center text-secondary"
+                title={phone}
+              >
+                <FaPhone className="me-2" />
+                {/*  {phone} */}
+                {phone?.length > 10 ? phone.substring(0, 10) + "..." : phone}
                 {numberVerified && (
                   <FaCheckCircle className="ms-2 text-success" />
                 )}

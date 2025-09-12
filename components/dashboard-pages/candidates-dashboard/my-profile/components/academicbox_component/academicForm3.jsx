@@ -306,7 +306,16 @@ const EducationForm = ({
 
     // Handle marks: only allow 0-100 numeric
     if (name === "marks" || name === "eng_marks" || name === "math_marks") {
-      const numericValue = value.replace(/[^0-9]/g, "");
+      // Allow digits and at most one decimal point
+      let numericValue = value.replace(/[^0-9.]/g, "");
+
+      // Prevent multiple decimal points
+      const parts = numericValue.split(".");
+      if (parts.length > 2) {
+        numericValue = parts[0] + "." + parts.slice(1).join("");
+      }
+
+      // Check if empty or <= 100
       if (numericValue === "" || Number(numericValue) <= 100) {
         setFormData((prev) => ({ ...prev, [name]: numericValue }));
       }
