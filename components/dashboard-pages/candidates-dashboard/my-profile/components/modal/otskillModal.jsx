@@ -24,7 +24,7 @@ const OTskillModal = ({
   const [allskills, setAllskills] = useState([]);
   const [filteredSkills, setFilteredSkills] = useState(allskills);
 
-  const [forcedisable, setForcedisable] = useState(true);
+  // const [forcedisable, setForcedisable] = useState(true);
 
   useEffect(() => {
     fetchskills();
@@ -34,7 +34,7 @@ const OTskillModal = ({
     setLoading(true);
     try {
       const response = await axios.get(
-        `${apiurl}/api/sql/dropdown/get_tech_skills`,
+        `${apiurl}/api/sql/dropdown/get_non_tech_skills`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -399,11 +399,11 @@ const OTskillModal = ({
                   Please fill all required fields
                 </div>
               )}
-              {forcedisable && isFormValid && (
+              {/* {forcedisable && isFormValid && (
                 <div className="custom-tooltip">
                   This form is Forced Disabled
                 </div>
-              )}
+              )} */}
               <button
                 className="btn btn-primary"
                 onClick={handleSave}
