@@ -34,7 +34,7 @@ const OTskillModal = ({
     setLoading(true);
     try {
       const response = await axios.get(
-        `${apiurl}/api/sql/dropdown/get_non_tech_skills`,
+        `${apiurl}/api/sql/dropdown/get_tech_skills`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -407,7 +407,7 @@ const OTskillModal = ({
               <button
                 className="btn btn-primary"
                 onClick={handleSave}
-                disabled={!isFormValid || saving || forcedisable}
+                disabled={!isFormValid || saving}
               >
                 {item._id ? (
                   <>{saving ? "Updating..." : "Update"}</>
