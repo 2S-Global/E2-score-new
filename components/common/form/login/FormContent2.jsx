@@ -4,7 +4,7 @@ import LoginWithSocial from "./LoginWithSocial";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 //new component
 import MessageComponent from "../../ResponseMsg";
@@ -27,6 +27,18 @@ const FormContent2 = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("candidate_token")) {
+      router.push("/candidates-dashboard/dashboard");
+    } else if (localStorage.getItem("Super_token")) {
+      router.push("/admin/dashboard");
+    } else if (localStorage.getItem("employer_token")) {
+      router.push("/employers-dashboard/dashboard");
+    } else if (localStorage.getItem("Institute_token")) {
+      router.push("/institute-dashboard/dashboard");
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
