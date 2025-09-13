@@ -133,7 +133,7 @@ const OTskillModal = ({
       let response = null;
       if (_id) {
         response = await axios.put(
-          `${apiurl}/api/candidate/itskill/edititskill`,
+          `${apiurl}/api/candidate/itskill/editotherskill`,
           {
             _id,
             skillSearch,
@@ -150,7 +150,7 @@ const OTskillModal = ({
         );
       } else {
         response = await axios.post(
-          `${apiurl}/api/candidate/itskill/additskill`,
+          `${apiurl}/api/candidate/itskill/addotherskill`,
           {
             skillSearch,
             version,
@@ -195,15 +195,16 @@ const OTskillModal = ({
     }
     try {
       setSaving(true);
-      const response = await axios.delete(
-        `${apiurl}/api/candidate/itskill/deleteitskill`,
+      const response = await axios.post(
+        `${apiurl}/api/candidate/itskill/deleteotherskill`,
+        { _id: item._id }, // <-- body data
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          data: {
-            _id: item._id,
-          },
+          // data: {
+          //   _id: item._id,
+          // },
         }
       );
 
@@ -253,9 +254,7 @@ const OTskillModal = ({
                 className="mb-3"
               >
                 <span>
-                  Mention skills like programming languages (Java, Python),
-                  software (Microsoft Word, Excel), and more to show your
-                  technical expertise.
+                  Mention skills like communication, teamwork, problem-solving, leadership, and other personal strengths to highlight your overall abilities.
                 </span>
                 {item._id && (
                   <span style={{ color: "red", cursor: "pointer" }}>
@@ -269,7 +268,7 @@ const OTskillModal = ({
                   {/* Software version */}
                   <div className="form-group">
                     <SearchableInput
-                      label="Skill / software name"
+                      label="Skill Name"
                       value={skillSearch}
                       onChange={(e) =>
                         handleSearchChange(
@@ -287,8 +286,8 @@ const OTskillModal = ({
                   </div>
                 </div>
 
-                <div className="col-md-6 mb-2">
-                  {/* Software version */}
+                {/* Software version */}
+                {/* <div className="col-md-6 mb-2">
                   <div className="form-group">
                     <label>Software version</label>
                     <input
@@ -299,12 +298,14 @@ const OTskillModal = ({
                       onChange={(e) => setVersion(e.target.value)}
                     />
                   </div>
-                </div>
-                <div className="col-md-6  mb-2">
-                  {/* Last used */}
+                </div> */}
+
+                {/* Last used */}
+                {/* dropdown year 2025 to 1940 */}
+
+                {/* <div className="col-md-6  mb-2">
                   <div className="form-group">
                     <label>Last used</label>
-                    {/* dropdown year 2025 to 1940 */}
                     <select
                       className="form-control"
                       value={lastUsed}
@@ -318,7 +319,7 @@ const OTskillModal = ({
                         ))}
                     </select>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               <div className="row form-group">

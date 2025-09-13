@@ -12,7 +12,7 @@ const OtherskillSection = () => {
   const [userdata, setUserdata] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [loading, setLoading] = useState(false); //make it true when ready
+  const [loading, setLoading] = useState(true); //make it true when ready
   const [reload, setReload] = useState(false);
 
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
@@ -47,7 +47,7 @@ const OtherskillSection = () => {
         }
       ); */
       const response = await queueRequest(() =>
-        axios.get(`${apiurl}/api/candidate/itskill/itskill`, {
+        axios.get(`${apiurl}/api/candidate/itskill/getotherskill`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -68,12 +68,12 @@ const OtherskillSection = () => {
   };
 
   useEffect(() => {
-    //fetchSkills();
+    fetchSkills();
   }, [apiurl]);
 
   useEffect(() => {
     if (reload) {
-      //  fetchSkills();
+       fetchSkills();
       setReload(false);
     }
   }, [reload]);
@@ -116,8 +116,8 @@ const OtherskillSection = () => {
                       <thead>
                         <tr className="border-bottom">
                           <th>Skill</th>
-                          <th>Version</th>
-                          <th>Last Used</th>
+                          {/* <th>Version</th> */}
+                          {/* <th>Last Used</th> */}
                           <th>Experience</th>
                           <th></th>
                         </tr>
@@ -126,8 +126,8 @@ const OtherskillSection = () => {
                         {userdata.map((skill, index) => (
                           <tr key={index}>
                             <td>{skill.skillSearch || "N/A"}</td>
-                            <td>{skill.version || "N/A"}</td>
-                            <td>{skill.lastUsed || "N/A"}</td>
+                            {/* <td>{skill.version || "N/A"}</td> */}
+                            {/* <td>{skill.lastUsed || "N/A"}</td> */}
                             <td>
                               {skill.experienceyear || "0"} yr{" "}
                               {skill.experiencemonth || "0"} mo
