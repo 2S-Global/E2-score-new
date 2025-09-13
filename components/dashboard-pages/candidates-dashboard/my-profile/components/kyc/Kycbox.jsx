@@ -15,14 +15,12 @@ import PassDetails from "./documents/passportcard";
 
 const KycBox = () => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
-  const [name, setName] = useState("");
   const token = localStorage.getItem("candidate_token");
   const [error, setError] = useState(null);
   const [errorId, setErrorId] = useState(null);
   const [message_id, setMessageId] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [nameloading, setNameLoading] = useState(true);
 
   const [userdata, setUserdata] = useState({
     pan: { verified: false, incart: false, inprocess: false },
@@ -34,39 +32,8 @@ const KycBox = () => {
   const [listdocs, setListdocs] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await fetchName(); // wait until name is complete
-        await fetchDocs(); // then run fetchDocs
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchData();
+    fetchDocs();
   }, []);
-
-  /* /api/userdata/get_only_student_name */
-
-  const fetchName = async () => {
-    setNameLoading(true);
-
-    try {
-      const response = await axios.get(
-        `${apiurl}/api/userdata/get_only_student_name`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setName(response.data.name);
-      //   console.log(response.data.name);
-      setNameLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const fetchDocs = async () => {
     setLoading(true);
@@ -113,12 +80,12 @@ const KycBox = () => {
 
                 {userdata[doc?.verification_name]?.verified ? (
                   <>
-                    {doc.verification_name === "pan" && <PanDetails />}
+                    {/*  {doc.verification_name === "pan" && <PanDetails />}
                     {doc.verification_name === "driving_license" && (
                       <DlDetails />
                     )}
                     {doc.verification_name === "epic" && <EpicDetails />}
-                    {doc.verification_name === "passport" && <PassDetails />}
+                    {doc.verification_name === "passport" && <PassDetails />} */}
                   </>
                 ) : userdata[doc?.verification_name]?.inprocess ? (
                   <span
@@ -151,9 +118,7 @@ const KycBox = () => {
                     Already in Cart
                   </span>
                 ) : (
-                  !nameloading && (
-                    <VerificationForm Document={doc} name={name} />
-                  )
+                  <VerificationForm Document={doc} />
                 )}
               </div>
             ))}

@@ -106,7 +106,10 @@ const PatentMain = ({ setReload, list = [], setError, setSuccess }) => {
               )}
 
               <br />
-              <span>{item.description}</span>
+              <span
+                style={{ textAlign: "justify" }}
+                dangerouslySetInnerHTML={{ __html: item.description }}
+              ></span>
             </div>
           ))}
       </div>

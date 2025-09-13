@@ -25,8 +25,8 @@ const KeySkillsModal = ({
     axios
       .get(`${apiurl}/api/sql/dropdown/Random_Skill`)
       .then((response) => {
-        setAllskills(response.data.data || []);
-        setSuggestedSkills((response.data.data || []).slice(0, 5));
+        //  setAllskills(response.data.data || []);
+        //  setSuggestedSkills((response.data.data || []).slice(0, 5));
       })
       .catch((error) => {
         console.error("Error fetching random skills:", error);
@@ -41,7 +41,7 @@ const KeySkillsModal = ({
     const delayDebounceFn = setTimeout(() => {
       const trimmed = newSkill.trim();
 
-      if (trimmed.length > 0) {
+      if (trimmed.length > 2) {
         axios
           .get(
             `${apiurl}/api/sql/dropdown/matching_Skill?skill_name=${trimmed}`
@@ -53,15 +53,7 @@ const KeySkillsModal = ({
             console.error("Error fetching matching skills:", error);
           });
       } else {
-        // Reload random skills if input is empty
-        axios
-          .get(`${apiurl}/api/sql/dropdown/Random_Skill`)
-          .then((response) => {
-            setAllskills(response.data.data || []);
-          })
-          .catch((error) => {
-            console.error("Error restoring random skills:", error);
-          });
+        setAllskills([]);
       }
     }, 300);
 
@@ -172,14 +164,15 @@ const KeySkillsModal = ({
                         key={index}
                         /*  className="me-2 p-2 mt-2 " */
                         style={{
-                          padding: "8px 8px",
+                          padding: "4px 4px",
                           border: "1px solid #ccc",
-                          borderRadius: "10px",
+                          borderRadius: "5px",
                         }}
                       >
                         {skill.charAt(0).toUpperCase() + skill.slice(1)}{" "}
                         <button
-                          className="btn btn-sm btn-light ms-2"
+                          className="btn btn-sm btn-light ms-1 "
+                          style={{ color: "red" }}
                           onClick={() => handleRemoveSkill(skill)}
                         >
                           ×

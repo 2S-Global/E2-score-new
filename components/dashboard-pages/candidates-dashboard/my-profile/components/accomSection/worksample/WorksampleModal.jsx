@@ -14,6 +14,9 @@ import dynamic from "next/dynamic";
 import { EditorState, ContentState } from "draft-js";
 import "draft-js/dist/Draft.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import draftToHtml from "draftjs-to-html";
+import { convertToRaw } from "draft-js";
+import htmlToDraft from "html-to-draftjs";
 
 const Editor = dynamic(
   () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
@@ -52,23 +55,18 @@ const WorksampleModal = ({
 
   const [editorState, setEditorState] = useState(() => {
     if (item.description) {
-      return EditorState.createWithContent(
-        ContentState.createFromText(item.description)
-      );
+      const blocksFromHtml = htmlToDraft(item.description);
+      if (blocksFromHtml) {
+        const { contentBlocks, entityMap } = blocksFromHtml;
+        const contentState = ContentState.createFromBlockArray(
+          contentBlocks,
+          entityMap
+        );
+        return EditorState.createWithContent(contentState);
+      }
     }
     return EditorState.createEmpty();
   });
-
-  useEffect(() => {
-    setEditorState(() => {
-      if (formData.description) {
-        return EditorState.createWithContent(
-          ContentState.createFromText(formData.description)
-        );
-      }
-      return EditorState.createEmpty();
-    });
-  }, [formData.description]);
 
   // Validation logic
   useEffect(() => {
@@ -170,20 +168,31 @@ const WorksampleModal = ({
 
   const handleGenerateHeadline = () => {
     if (isGenerated) {
+      // clear description
       setFormData({
         ...formData,
         description: "",
       });
+      setEditorState(EditorState.createEmpty());
       setIsGenerated(false);
     } else {
+      const generatedText =
+        "Developed and deployed a scalable web application using React.js and Node.js, ensuring high performance and seamless user experience. Designed and implemented RESTful APIs, optimized database queries, and integrated third-party services for enhanced functionality. Focused on system architecture, security, and responsive UI/UX to deliver a robust and efficient solution.";
+
+      // update formData and editorState in sync
       setFormData({
         ...formData,
-        description:
-          "Developed and deployed a scalable web application using React.js and Node.js, ensuring high performance and seamless user experience. Designed and implemented RESTful APIs, optimized database queries, and integrated third-party services for enhanced functionality. Focused on system architecture, security, and responsive UI/UX to deliver a robust and efficient solution.",
+        description: generatedText,
       });
+      setEditorState(
+        EditorState.createWithContent(
+          ContentState.createFromText(generatedText)
+        )
+      );
       setIsGenerated(true);
     }
   };
+
   const [loading, setLoading] = useState(false);
   const handleSave = async () => {
     if (!token) {
@@ -535,19 +544,33 @@ const WorksampleModal = ({
                     editorState={editorState}
                     onEditorStateChange={(state) => {
                       setEditorState(state);
+                      const rawContentState = convertToRaw(
+                        state.getCurrentContent()
+                      );
+                      const html = draftToHtml(rawContentState);
+
                       setFormData({
                         ...formData,
-                        description: state.getCurrentContent().getPlainText(), // plain text
+                        description: html, // Save HTML instead of plain text
                       });
                       setIsGenerated(false);
                     }}
                     placeholder="Type here ..."
-                    /* toolbar={{
-                          options: ["inline", "list", "link"], // keep it minimal
-                          inline: { options: ["bold", "italic", "underline"] },
-                          list: { options: ["unordered", "ordered"] },
-                          link: { options: ["link"] },
-                        }} */
+                    toolbar={{
+                      options: ["inline"],
+                      inline: {
+                        options: [
+                          "bold",
+                          "italic",
+                          "underline",
+                          "strikethrough",
+                          "superscript",
+                          "subscript",
+                        ],
+                      },
+                      /* list: { options: ["unordered", "ordered"] }, */
+                      /*  link: { options: ["link"] }, */
+                    }}
                     wrapperClassName="border rounded mb-2"
                     editorClassName="form-control px-2"
                     toolbarClassName="border-bottom"

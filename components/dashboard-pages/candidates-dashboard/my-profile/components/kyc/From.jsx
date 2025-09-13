@@ -4,7 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 
 import MessageComponent from "@/components/common/ResponseMsg";
-const VerificationForm = ({ Document, name }) => {
+const VerificationForm = ({ Document }) => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const token = localStorage.getItem("candidate_token");
   const [error, setError] = useState(null);
@@ -13,7 +13,6 @@ const VerificationForm = ({ Document, name }) => {
   const [success, setSuccess] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    name: name || "",
     number: "",
     fieldname: Document.verification_name,
     field_id: Document._id,
@@ -26,7 +25,7 @@ const VerificationForm = ({ Document, name }) => {
     }));
   };
   const addToVerificationCart = async (formData) => {
-    console.log("test ", formData);
+    //  console.log("test ", formData);
     setSubmitting(true);
     setError(null);
     setErrorId(null);

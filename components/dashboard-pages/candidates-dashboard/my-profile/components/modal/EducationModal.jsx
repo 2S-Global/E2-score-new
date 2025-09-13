@@ -133,16 +133,10 @@ const EducationModal = ({
         requiredFields.push("eng_marks");
         requiredFields.push("math_marks");
       }
-      if (!edit_id) {
-        requiredFields.push("transcript");
-        requiredFields.push("certificate");
-      }
 
       const isAnyFieldEmpty = requiredFields.some((field) => {
         const value = formData[field];
-        if (field === "transcript" || field === "certificate") {
-          return !value;
-        }
+
         return !value || value.toString().trim() === "";
       });
 
@@ -160,10 +154,7 @@ const EducationModal = ({
         "grading_system",
         "marks",
       ];
-      if (!edit_id) {
-        requiredFields.push("transcript");
-        requiredFields.push("certificate");
-      }
+
       const isAnyFieldEmpty = requiredFields.some((field) => {
         const value = formData[field];
         if (field === "transcript" || field === "certificate") {

@@ -278,10 +278,7 @@ const DegreeForm = ({
         ) : null}
 
         <div className="form-group col-lg-6">
-          <label>
-            Transcript
-            <span style={{ color: "red" }}>*</span>
-          </label>
+          <label>Transcript</label>
           <UploadButton
             label="Upload"
             id="transcript"
@@ -294,10 +291,7 @@ const DegreeForm = ({
           />
         </div>
         <div className="form-group col-lg-6">
-          <label>
-            Certificate
-            <span style={{ color: "red" }}>*</span>
-          </label>
+          <label>Certificate</label>
           <UploadButton
             label="Upload"
             id="certificate"

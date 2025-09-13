@@ -74,7 +74,10 @@ const PresentationMain = ({ setReload, list = [], setError, setSuccess }) => {
                 {item.url}
               </a>
 
-              <span>{item.description}</span>
+              <span
+                style={{ textAlign: "justify" }}
+                dangerouslySetInnerHTML={{ __html: item.description }}
+              ></span>
             </div>
           ))}
       </div>

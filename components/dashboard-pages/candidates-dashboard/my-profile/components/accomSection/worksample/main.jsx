@@ -80,7 +80,10 @@ const Workmain = ({ setReload, list = [], setError, setSuccess }) => {
               </span>
               <br />
 
-              <span>{item.description}</span>
+              <span
+                style={{ textAlign: "justify" }}
+                dangerouslySetInnerHTML={{ __html: item.description }}
+              ></span>
             </div>
           ))}
       </div>

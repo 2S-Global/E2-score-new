@@ -214,10 +214,36 @@ const Employsectionmain = () => {
                           className="item prefill emp-desc typ-14Medium"
                           style={{ textAlign: "justify" }}
                         >
-                          <div>
-                            {expanded[index] ? (
-                              <>
-                                {row.description}{" "}
+                          {expanded[index] ? (
+                            <>
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: row.description,
+                                }}
+                              />
+                              <a
+                                href="#"
+                                className="morelink"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  toggleExpand(index);
+                                }}
+                              >
+                                Read Less
+                              </a>
+                            </>
+                          ) : (
+                            <>
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html:
+                                    row.description.length > 100
+                                      ? row.description.substring(0, 100) +
+                                        "..."
+                                      : row.description,
+                                }}
+                              />
+                              {row.description.length > 100 && (
                                 <a
                                   href="#"
                                   className="morelink"
@@ -226,31 +252,11 @@ const Employsectionmain = () => {
                                     toggleExpand(index);
                                   }}
                                 >
-                                  Read Less
+                                  Read More
                                 </a>
-                              </>
-                            ) : (
-                              <>
-                                {row.description.length > 100 ? (
-                                  <>
-                                    {row.description.substring(0, 100)}...
-                                    <a
-                                      href="#"
-                                      className="morelink"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        toggleExpand(index);
-                                      }}
-                                    >
-                                      Read More
-                                    </a>
-                                  </>
-                                ) : (
-                                  row.description
-                                )}
-                              </>
-                            )}
-                          </div>
+                              )}
+                            </>
+                          )}
                         </div>
                       </div>
                     ))}
