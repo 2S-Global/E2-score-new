@@ -20,10 +20,24 @@ const KycModal = ({
   const [isFormValid, setIsFormValid] = useState(false);
   const [saving, setSaving] = useState(false);
 
+  const [formData, setFormData] = useState({
+    pan_number: "",
+    pan_name: "",
+    epic_number: "",
+    epic_name: "",
+    passport_name: "",
+    passport_number: "",
+    dob_for_passport: "",
+    dl_number: "",
+    dl_name: "",
+    dl_dob: "",
+    aadhar_number: "",
+  });
+
   return (
     <>
       <div
-        className="modal fade show d-block "
+        className="modal fade show d-block modal-xl "
         tabIndex="-1"
         style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
       >
@@ -38,65 +52,71 @@ const KycModal = ({
                 onClick={onClose}
               ></button>
             </div>
-
-            {/* Modal Body */}
-            <div className="modal-body">
-              <KycBox />
-            </div>
-
-            {/* Modal Footer */}
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={onClose}
-              >
-                Cancel
-              </button>
-              <style jsx>{`
-                .tooltip-wrapper {
-                  position: relative;
-                  display: inline-block;
-                }
-
-                .tooltip-wrapper .custom-tooltip {
-                  visibility: hidden;
-                  background-color: white;
-                  color: red;
-                  font-weight: bold;
-                  text-align: center;
-                  border: 1px solid red;
-                  border-radius: 4px;
-                  padding: 5px 10px;
-                  position: absolute;
-                  bottom: 100%;
-                  left: 0;
-                  margin-bottom: 6px;
-                  z-index: 1;
-                  white-space: nowrap;
-                }
-
-                .tooltip-wrapper:hover .custom-tooltip {
-                  visibility: visible;
-                }
-              `}</style>
-
-              <div className="tooltip-wrapper">
-                {!isFormValid && (
-                  <div className="custom-tooltip">
-                    Please fill all required fields
-                  </div>
-                )}
-
-                <button
-                  className="btn btn-primary"
-                  // onClick={handleSave}
-                  disabled={!isFormValid || saving}
-                >
-                  <>{saving ? "Saving..." : "Save"}</>
-                </button>
+            <form className="default-form">
+              {/* Modal Body */}
+              <div className="modal-body">
+                <KycBox
+                  formData={formData}
+                  setFormData={setFormData}
+                  focusSection={focusSection}
+                />
               </div>
-            </div>
+
+              {/* Modal Footer */}
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={onClose}
+                >
+                  Cancel
+                </button>
+                <style jsx>{`
+                  .tooltip-wrapper {
+                    position: relative;
+                    display: inline-block;
+                  }
+
+                  .tooltip-wrapper .custom-tooltip {
+                    visibility: hidden;
+                    background-color: white;
+                    color: red;
+                    font-weight: bold;
+                    text-align: center;
+                    border: 1px solid red;
+                    border-radius: 4px;
+                    padding: 5px 10px;
+                    position: absolute;
+                    bottom: 100%;
+                    left: 0;
+                    margin-bottom: 6px;
+                    z-index: 1;
+                    white-space: nowrap;
+                  }
+
+                  .tooltip-wrapper:hover .custom-tooltip {
+                    visibility: visible;
+                  }
+                `}</style>
+
+                <div className="tooltip-wrapper">
+                  {!isFormValid && (
+                    <div className="custom-tooltip">
+                      Please fill all required fields
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    // onClick={handleSave}
+                    disabled={!isFormValid || saving}
+                  >
+                    <>{saving ? "Saving..." : "Save"}</>
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>

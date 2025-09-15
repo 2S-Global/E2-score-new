@@ -48,7 +48,7 @@ const KYCSection = () => {
             {/* Open modal using an onClick function */}
             <i
               className="la la-pencil-alt"
-              onClick={() => openModalRH("ALL")}
+              onClick={() => openModalRH("all")}
               style={{ cursor: "pointer" }}
             ></i>
           </div>
@@ -100,7 +100,7 @@ const KYCSection = () => {
                       <span
                         className="text-primary fw-bold"
                         style={{ cursor: "pointer", fontSize: "16px" }}
-                        onClick={() => openModalRH("dl")}
+                        onClick={() => openModalRH("passport")}
                       >
                         Add Passport Info
                       </span>
@@ -112,7 +112,7 @@ const KYCSection = () => {
                       <span
                         className="text-primary fw-bold"
                         style={{ cursor: "pointer", fontSize: "16px" }}
-                        onClick={() => openModalRH("dl")}
+                        onClick={() => openModalRH("aadhar")}
                       >
                         Add Aadhar Card With OTP Info
                       </span>
