@@ -47,7 +47,19 @@ const KeySkillsModal = ({
             `${apiurl}/api/sql/dropdown/matching_Skill?skill_name=${trimmed}`
           )
           .then((response) => {
-            setAllskills(response.data.data || []);
+            setAllskills(
+              (response.data.data || []).map((skill) => {
+                const name = skill || "";
+                // Capitalize each word (UC First for multi-word strings)
+                return name
+                  .split(" ")
+                  .map(
+                    (word) =>
+                      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+                  )
+                  .join(" ");
+              })
+            );
           })
           .catch((error) => {
             console.error("Error fetching matching skills:", error);
