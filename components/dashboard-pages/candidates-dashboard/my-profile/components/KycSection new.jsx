@@ -44,7 +44,7 @@ const KYCSection = () => {
       <div className="ls-widget">
         <div className="tabs-box">
           <div className="widget-title">
-            <h4>KYC NEW</h4>
+            <h4>KYC {/* NEW */}</h4>
             {/* Open modal using an onClick function */}
             <i
               className="la la-pencil-alt"
