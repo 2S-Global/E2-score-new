@@ -31,7 +31,7 @@ import Carrersection from "./components/carrersection";
 import PersonalSection from "./components/Personal_details";
 
 import HeadSection from "./components/HeadSection";
-import KYCSection from "./components/KycSection";
+import KYCSection from "./components/KycSection new";
 import QuickActionSidebar from "./components/quickaction";
 import AadharSection from "./components/addhar/aadharsection";
 
@@ -134,9 +134,9 @@ const index = () => {
                       <div id="kyc-section">
                         <KYCSection />
                       </div>
-                      <div id="aadhar-section">
+                      {/*   <div id="aadhar-section">
                         <AadharSection />
-                      </div>
+                      </div> */}
                       <div id="resume-headline">
                         <ResumeHeadlineSection />
                       </div>
