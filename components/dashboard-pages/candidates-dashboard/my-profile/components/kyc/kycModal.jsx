@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 
 import KycBox from "./Kycboxnew";
+import { set } from "date-fns/set";
 
 const KycModal = ({
   show,
@@ -33,6 +34,73 @@ const KycModal = ({
     dl_dob: "",
     aadhar_number: "",
   });
+
+  const [formerrors, setFormErrors] = useState("");
+
+  const validationConfig = [
+    {
+      fields: ["pan_number", "pan_name"],
+      message: "Please fill both the PAN number and name.",
+    },
+    {
+      fields: ["epic_number", "epic_name"],
+      message: "Please fill both the EPIC number and name.",
+    },
+    {
+      fields: ["passport_number", "passport_name", "dob_for_passport"],
+      message: "Please fill Passport number, name, and DOB.",
+    },
+    {
+      fields: ["dl_number", "dl_name", "dl_dob"],
+      message: "Please fill Driving License number, name, and DOB.",
+    },
+    {
+      fields: ["aadhar_number"],
+      message: "Please fill a valid Aadhar number.",
+    },
+  ];
+
+  const ValidateForm = () => {
+    setFormErrors("");
+    setIsFormValid(false); // default: invalid
+
+    let hasAnyGroupFilled = false;
+
+    for (const { fields, message } of validationConfig) {
+      // Check if at least one field in this group is filled
+      const isAnyFilled = fields.some(
+        (field) => formData[field]?.toString().trim() !== ""
+      );
+
+      if (isAnyFilled) {
+        hasAnyGroupFilled = true; // ✅ at least one group has data
+
+        // If some are filled, ensure all are filled
+        const isAllFilled = fields.every(
+          (field) => formData[field]?.toString().trim() !== ""
+        );
+
+        if (!isAllFilled) {
+          setFormErrors(message);
+          setIsFormValid(false);
+          return;
+        }
+      }
+    }
+
+    if (!hasAnyGroupFilled) {
+      setFormErrors("Please fill at least one document.");
+      setIsFormValid(false);
+      return;
+    }
+
+    // ✅ Passed all checks
+    setIsFormValid(true);
+  };
+
+  useEffect(() => {
+    ValidateForm();
+  }, [formData]);
 
   return (
     <>
@@ -101,9 +169,7 @@ const KycModal = ({
 
                 <div className="tooltip-wrapper">
                   {!isFormValid && (
-                    <div className="custom-tooltip">
-                      Please fill all required fields
-                    </div>
+                    <div className="custom-tooltip">{formerrors}</div>
                   )}
 
                   <button
