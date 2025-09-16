@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Sparkles } from "lucide-react"; // AI suggestion icon
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 
 import KycBox from "./Kycboxnew";
 import { set } from "date-fns/set";
+import { da } from "@faker-js/faker";
 
 const KycModal = ({
   show,
@@ -14,25 +15,29 @@ const KycModal = ({
   setMessageId,
   setErrorId,
   setReload,
-  setSectionloading,
   focusSection,
+  data,
 }) => {
   if (!show) return null;
   const [isFormValid, setIsFormValid] = useState(false);
   const [saving, setSaving] = useState(false);
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const token = localStorage.getItem("candidate_token");
+  /* 
+  console.log("data", data); */
 
   const [formData, setFormData] = useState({
-    pan_number: "",
-    pan_name: "",
-    epic_number: "",
-    epic_name: "",
-    passport_name: "",
-    passport_number: "",
-    dob_for_passport: "",
-    dl_number: "",
-    dl_name: "",
-    dl_dob: "",
-    aadhar_number: "",
+    pan_number: data?.pan_number || "",
+    pan_name: data?.pan_name || "",
+    epic_number: data?.epic_number || "",
+    epic_name: data?.epic_name || "",
+    passport_name: data?.passport_name || "",
+    passport_number: data?.passport_number || "",
+    passport_dob: data?.passport_dob || "",
+    dl_number: data?.dl_number || "",
+    dl_name: data?.dl_name || "",
+    dl_dob: data?.dl_dob || "",
+    aadhar_number: data?.aadhar_number || "",
   });
 
   const [formerrors, setFormErrors] = useState("");
@@ -47,7 +52,7 @@ const KycModal = ({
       message: "Please fill both the EPIC number and name.",
     },
     {
-      fields: ["passport_number", "passport_name", "dob_for_passport"],
+      fields: ["passport_number", "passport_name", "passport_dob"],
       message: "Please fill Passport number, name, and DOB.",
     },
     {
@@ -102,6 +107,40 @@ const KycModal = ({
     ValidateForm();
   }, [formData]);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    setError(null);
+    setSuccess(null);
+    setMessageId(null);
+    setErrorId(null);
+
+    try {
+      const response = await axios.post(
+        `${apiurl}/api/candidatekyc/kyc`,
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (response.data.success) {
+        setSuccess(response.data.message || "KYC updated successfully.");
+        setMessageId(Date.now());
+        setReload(true);
+        onClose();
+      }
+
+      if (!response.data.success) {
+        setError(response.data.message || "Failed to update KYC.");
+        setErrorId(Date.now());
+      }
+    } catch (error) {
+      console.error(error);
+      setError("Failed to update KYC. Try again later.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <>
       <div
@@ -120,7 +159,7 @@ const KycModal = ({
                 onClick={onClose}
               ></button>
             </div>
-            <form className="default-form">
+            <form className="default-form" onSubmit={handleSubmit}>
               {/* Modal Body */}
               <div className="modal-body">
                 <KycBox

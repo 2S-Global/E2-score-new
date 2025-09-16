@@ -195,7 +195,6 @@ const KycBox = ({ formData, setFormData, focusSection }) => {
                       passport_number: e.target.value,
                     });
                   }}
-                  pattern="^[A-PR-WYa-pr-wy][1-9][0-9]{6}$"
                   title="Please enter a valid Passport File Number"
                   placeholder="Enter Passport File Number"
                 />
@@ -219,12 +218,12 @@ const KycBox = ({ formData, setFormData, focusSection }) => {
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
                     value={
-                      formData.dob_for_passport
-                        ? new Date(formData.dob_for_passport)
+                      formData.passport_dob
+                        ? new Date(formData.passport_dob)
                         : null
                     }
                     onChange={(newValue) => {
-                      setFormData({ ...formData, dob_for_passport: newValue });
+                      setFormData({ ...formData, passport_dob: newValue });
                     }}
                     format="dd/MM/yyyy"
                     maxDate={eighteenYearsAgo}
@@ -257,7 +256,7 @@ const KycBox = ({ formData, setFormData, focusSection }) => {
                   onChange={(e) => {
                     setFormData({ ...formData, aadhar_number: e.target.value });
                   }}
-                  pattern="^[2-9]{1}[0-9]{3}\\s[0-9]{4}\\s[0-9]{4}$"
+                  pattern="^\d{12}$"
                   title="Please enter a valid Aadhar Number"
                   placeholder="Enter Aadhar Number"
                 />

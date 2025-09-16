@@ -1,26 +1,61 @@
 "use client";
 import { queueRequest } from "../helper/queueHelper";
 
-import React from "react";
-
+import React, { use } from "react";
+import { FaCheckCircle } from "react-icons/fa";
+import { FaRegCircleXmark } from "react-icons/fa6";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
 
 import KycModal from "./kyc/kycModal";
+
+import PaymentModal from "./kyc/paymentModal";
 const KYCSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const token = localStorage.getItem("candidate_token");
   const [focusSection, setFocusSection] = useState(null);
   const [error, setError] = useState(null);
   const [errorId, setErrorId] = useState(null);
   const [success, setSuccess] = useState(null);
   const [message_id, setMessageId] = useState(null);
   const [reload, setReload] = useState(false);
-  const [sectionloading, setSectionloading] = useState(false);
+  const [sectionloading, setSectionloading] = useState(true);
 
-  useEffect(() => {}, [reload]);
+  const [userdata, setUserdata] = useState(null);
+
+  useEffect(() => {
+    if (reload) {
+      FetchData();
+      setReload(false);
+    }
+  }, [reload]);
+
+  useEffect(() => {
+    FetchData();
+  }, [token]);
+
+  const FetchData = async () => {
+    setSectionloading(true);
+    try {
+      const response = await queueRequest(() =>
+        axios.get(`${apiurl}/api/candidatekyc/kyc`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      );
+      if (response.data.success) {
+        setUserdata(response.data.kyc);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSectionloading(false);
+    }
+  };
 
   const openModalRH = (type) => {
     setFocusSection(type);
@@ -59,63 +94,296 @@ const KYCSection = () => {
               <div className="widget-content">
                 <div className="row">
                   <div className="col-md-6 mb-4">
+                    {" "}
                     <strong>Pan Card</strong>
+                    {userdata?.pan_number && (
+                      <>
+                        {userdata?.pan_verified ? (
+                          <FaCheckCircle className="ms-2 text-success" />
+                        ) : (
+                          <>
+                            {" "}
+                            <FaRegCircleXmark className="ms-2 text-danger" />{" "}
+                            <button
+                              className="btn btn-primary ms-2"
+                              style={{
+                                fontSize: "10px",
+                                padding: "2px 6px",
+                                lineHeight: 1,
+                              }}
+                              /* onClick={openModalRHotp} */
+                            >
+                              {" "}
+                              Verify Now{" "}
+                            </button>{" "}
+                          </>
+                        )}
+                      </>
+                    )}
                     <div>
-                      <span
-                        className="text-primary fw-bold"
-                        style={{ cursor: "pointer", fontSize: "16px" }}
-                        onClick={() => openModalRH("pan")}
-                      >
-                        Add PAN info
-                      </span>
-                    </div>
+                      <div className="mt-2">
+                        {userdata?.pan_number ? (
+                          <div
+                            className="text-secondary"
+                            style={{ lineHeight: 1.5 }}
+                          >
+                            <div>
+                              <span className="fw-semibold">Name:</span>{" "}
+                              {userdata?.pan_name}
+                            </div>
+                            <div>
+                              <span className="fw-semibold">PAN Number:</span>{" "}
+                              {userdata?.pan_number}
+                            </div>
+                          </div>
+                        ) : (
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "1rem" }}
+                            onClick={() => openModalRH("pan")}
+                          >
+                            Add PAN info
+                          </span>
+                        )}
+                      </div>
+                    </div>{" "}
                   </div>
+
                   <div className="col-md-6 mb-4">
                     <strong>Driving License</strong>
+                    {userdata?.dl_number && (
+                      <>
+                        {userdata?.dl_verified ? (
+                          <FaCheckCircle className="ms-2 text-success" />
+                        ) : (
+                          <>
+                            {" "}
+                            <FaRegCircleXmark className="ms-2 text-danger" />{" "}
+                            <button
+                              className="btn btn-primary ms-2"
+                              style={{
+                                fontSize: "10px",
+                                padding: "2px 6px",
+                                lineHeight: 1,
+                              }}
+                              /* onClick={openModalRHotp} */
+                            >
+                              {" "}
+                              Verify Now{" "}
+                            </button>{" "}
+                          </>
+                        )}
+                      </>
+                    )}
+
                     <div>
-                      <span
-                        className="text-primary fw-bold"
-                        style={{ cursor: "pointer", fontSize: "16px" }}
-                        onClick={() => openModalRH("dl")}
-                      >
-                        Add Driving License Info
-                      </span>
+                      <div className="mt-2">
+                        {userdata?.dl_number ? (
+                          <div
+                            className="text-secondary"
+                            style={{ lineHeight: 1.5 }}
+                          >
+                            <div>
+                              <span className="fw-semibold">Name:</span>{" "}
+                              {userdata?.dl_name}
+                            </div>
+                            <div>
+                              <span className="fw-semibold">DL Number:</span>{" "}
+                              {userdata?.dl_number}
+                            </div>
+                            <div>
+                              <span className="fw-semibold">DOB:</span>{" "}
+                              {userdata?.dl_dob && (
+                                <span>
+                                  {new Date(userdata.dl_dob).toLocaleDateString(
+                                    "en-GB"
+                                  )}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        ) : (
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "1rem" }}
+                            onClick={() => openModalRH("dl")}
+                          >
+                            Add Driving License Info
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="col-md-6 mb-4">
                     <strong>EPIC Card</strong>
+                    {userdata?.epic_number && (
+                      <>
+                        {userdata?.epic_verified ? (
+                          <FaCheckCircle className="ms-2 text-success" />
+                        ) : (
+                          <>
+                            {" "}
+                            <FaRegCircleXmark className="ms-2 text-danger" />{" "}
+                            <button
+                              className="btn btn-primary ms-2"
+                              style={{
+                                fontSize: "10px",
+                                padding: "2px 6px",
+                                lineHeight: 1,
+                              }}
+                              /* onClick={openModalRHotp} */
+                            >
+                              {" "}
+                              Verify Now{" "}
+                            </button>{" "}
+                          </>
+                        )}
+                      </>
+                    )}
                     <div>
-                      <span
-                        className="text-primary fw-bold"
-                        style={{ cursor: "pointer", fontSize: "16px" }}
-                        onClick={() => openModalRH("epic")}
-                      >
-                        Add EPIC Details
-                      </span>
+                      <div className="mt-2">
+                        {userdata?.epic_number ? (
+                          <div
+                            className="text-secondary"
+                            style={{ lineHeight: 1.5 }}
+                          >
+                            <div>
+                              <span className="fw-semibold">Name:</span>{" "}
+                              {userdata?.epic_name}
+                            </div>
+                            <div>
+                              <span className="fw-semibold">EPIC Number:</span>{" "}
+                              {userdata?.epic_number}
+                            </div>
+                          </div>
+                        ) : (
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "1rem" }}
+                            onClick={() => openModalRH("epic")}
+                          >
+                            Add EPIC Details
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="col-md-6 mb-4">
                     <strong>Passport </strong>
+                    {userdata?.passport_number && (
+                      <>
+                        {userdata?.passport_verified ? (
+                          <FaCheckCircle className="ms-2 text-success" />
+                        ) : (
+                          <>
+                            {" "}
+                            <FaRegCircleXmark className="ms-2 text-danger" />{" "}
+                            <button
+                              className="btn btn-primary ms-2"
+                              style={{
+                                fontSize: "10px",
+                                padding: "2px 6px",
+                                lineHeight: 1,
+                              }}
+                              /* onClick={openModalRHotp} */
+                            >
+                              {" "}
+                              Verify Now{" "}
+                            </button>{" "}
+                          </>
+                        )}
+                      </>
+                    )}
                     <div>
-                      <span
-                        className="text-primary fw-bold"
-                        style={{ cursor: "pointer", fontSize: "16px" }}
-                        onClick={() => openModalRH("passport")}
-                      >
-                        Add Passport Info
-                      </span>
+                      <div className="mt-2">
+                        {userdata?.passport_number ? (
+                          <div
+                            className="text-secondary"
+                            style={{ lineHeight: 1.5 }}
+                          >
+                            <div>
+                              <span className="fw-semibold">Name:</span>{" "}
+                              {userdata?.passport_name}
+                            </div>
+                            <div>
+                              <span className="fw-semibold">
+                                Passport File Number:
+                              </span>{" "}
+                              {userdata?.passport_number}
+                            </div>
+                            <div>
+                              <span className="fw-semibold">DOB:</span>{" "}
+                              {userdata?.passport_dob && (
+                                <span>
+                                  {new Date(
+                                    userdata.passport_dob
+                                  ).toLocaleDateString("en-GB")}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        ) : (
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "1rem" }}
+                            onClick={() => openModalRH("passport")}
+                          >
+                            Add Passport Info
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="col-md-6 mb-4">
                     <strong>Aadhar Card With OTP</strong>
+                    {userdata?.aadhar_number && (
+                      <>
+                        {userdata?.aadhar_verified ? (
+                          <FaCheckCircle className="ms-2 text-success" />
+                        ) : (
+                          <>
+                            {" "}
+                            <FaRegCircleXmark className="ms-2 text-danger" />{" "}
+                            <button
+                              className="btn btn-primary ms-2"
+                              style={{
+                                fontSize: "10px",
+                                padding: "2px 6px",
+                                lineHeight: 1,
+                              }}
+                              /* onClick={openModalRHotp} */
+                            >
+                              {" "}
+                              Verify Now{" "}
+                            </button>{" "}
+                          </>
+                        )}
+                      </>
+                    )}
                     <div>
-                      <span
-                        className="text-primary fw-bold"
-                        style={{ cursor: "pointer", fontSize: "16px" }}
-                        onClick={() => openModalRH("aadhar")}
-                      >
-                        Add Aadhar Card With OTP Info
-                      </span>
+                      <div className="mt-2">
+                        {userdata?.aadhar_number ? (
+                          <div
+                            className="text-secondary"
+                            style={{ lineHeight: 1.5 }}
+                          >
+                            <div>
+                              <span className="fw-semibold">
+                                Aadhar Number:
+                              </span>{" "}
+                              {userdata?.aadhar_number}
+                            </div>
+                          </div>
+                        ) : (
+                          <span
+                            className="text-primary fw-bold"
+                            style={{ cursor: "pointer", fontSize: "1rem" }}
+                            onClick={() => openModalRH("aadhar")}
+                          >
+                            Add Aadhar Card With OTP Info
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -124,18 +392,32 @@ const KYCSection = () => {
           )}
         </div>
       </div>
-
-      <KycModal
-        show={isModalOpen}
-        onClose={closeModalRH}
-        setError={setError}
-        setSuccess={setSuccess}
-        setMessageId={setMessageId}
-        setErrorId={setErrorId}
-        setReload={setReload}
-        setSectionloading={setSectionloading}
-        focusSection={focusSection}
-      />
+      {isModalOpen && (
+        <>
+          {/* <PaymentModal
+            show={isModalOpen}
+            onClose={closeModalRH}
+            setError={setError}
+            setSuccess={setSuccess}
+            setMessageId={setMessageId}
+            setErrorId={setErrorId}
+            setReload={setReload}
+            focusSection={focusSection}
+            data={userdata}
+          /> */}
+          <KycModal
+            show={isModalOpen}
+            onClose={closeModalRH}
+            setError={setError}
+            setSuccess={setSuccess}
+            setMessageId={setMessageId}
+            setErrorId={setErrorId}
+            setReload={setReload}
+            focusSection={focusSection}
+            data={userdata}
+          />
+        </>
+      )}
     </>
   );
 };
