@@ -11,7 +11,8 @@ import MessageComponent from "@/components/common/ResponseMsg";
 
 import KycModal from "./kyc/kycModal";
 
-import PaymentModal from "./kyc/paymentModal";
+import RazorpayPayment from "./kyc/Razorpay";
+
 const KYCSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
@@ -68,6 +69,44 @@ const KYCSection = () => {
     document.body.style.overflow = "auto"; // Re-enable background scrolling
   };
 
+  const handelpaymentsuccess = async (response) => {
+    setSectionloading(true);
+    try {
+      const res = await axios.post(
+        `${apiurl}/api/candidatekyc/verify-order`,
+        {
+          razorpay_payment_id: response.razorpay_payment_id,
+          razorpay_order_id: response.razorpay_order_id,
+          razorpay_signature: response.razorpay_signature,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.data.success) {
+        setError(null);
+        setErrorId(null);
+        setSuccess(res.data.verificationResult?.message || res.data.message);
+        setMessageId(Date.now());
+        setReload(true);
+
+        console.log("✅ Verified Order:", res.data.order);
+      } else {
+        setError(res.data.message);
+        setErrorId(Date.now());
+      }
+    } catch (error) {
+      console.error("❌ Verification API Error:", error);
+      setError("Failed to update KYC. Try again later.");
+      setErrorId(Date.now());
+    } finally {
+      setSectionloading(false);
+    }
+  };
+
   return (
     <>
       <MessageComponent
@@ -104,18 +143,10 @@ const KYCSection = () => {
                           <>
                             {" "}
                             <FaRegCircleXmark className="ms-2 text-danger" />{" "}
-                            <button
-                              className="btn btn-primary ms-2"
-                              style={{
-                                fontSize: "10px",
-                                padding: "2px 6px",
-                                lineHeight: 1,
-                              }}
-                              /* onClick={openModalRHotp} */
-                            >
-                              {" "}
-                              Verify Now{" "}
-                            </button>{" "}
+                            <RazorpayPayment
+                              onSuccess={handelpaymentsuccess}
+                              documentType="pan"
+                            />
                           </>
                         )}
                       </>
@@ -159,18 +190,10 @@ const KYCSection = () => {
                           <>
                             {" "}
                             <FaRegCircleXmark className="ms-2 text-danger" />{" "}
-                            <button
-                              className="btn btn-primary ms-2"
-                              style={{
-                                fontSize: "10px",
-                                padding: "2px 6px",
-                                lineHeight: 1,
-                              }}
-                              /* onClick={openModalRHotp} */
-                            >
-                              {" "}
-                              Verify Now{" "}
-                            </button>{" "}
+                            <RazorpayPayment
+                              onSuccess={handelpaymentsuccess}
+                              documentType="dl"
+                            />
                           </>
                         )}
                       </>
@@ -224,18 +247,10 @@ const KYCSection = () => {
                           <>
                             {" "}
                             <FaRegCircleXmark className="ms-2 text-danger" />{" "}
-                            <button
-                              className="btn btn-primary ms-2"
-                              style={{
-                                fontSize: "10px",
-                                padding: "2px 6px",
-                                lineHeight: 1,
-                              }}
-                              /* onClick={openModalRHotp} */
-                            >
-                              {" "}
-                              Verify Now{" "}
-                            </button>{" "}
+                            <RazorpayPayment
+                              onSuccess={handelpaymentsuccess}
+                              documentType="epic"
+                            />
                           </>
                         )}
                       </>
@@ -278,18 +293,20 @@ const KYCSection = () => {
                           <>
                             {" "}
                             <FaRegCircleXmark className="ms-2 text-danger" />{" "}
-                            <button
+                            {/*  <button
                               className="btn btn-primary ms-2"
                               style={{
                                 fontSize: "10px",
                                 padding: "2px 6px",
                                 lineHeight: 1,
                               }}
-                              /* onClick={openModalRHotp} */
                             >
-                              {" "}
-                              Verify Now{" "}
-                            </button>{" "}
+                              Verify Now
+                            </button> */}
+                            <RazorpayPayment
+                              onSuccess={handelpaymentsuccess}
+                              documentType="passport"
+                            />
                           </>
                         )}
                       </>
