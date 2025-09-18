@@ -38,6 +38,7 @@ const KycModal = ({
     dl_name: data?.dl_name || "",
     dl_dob: data?.dl_dob || "",
     aadhar_number: data?.aadhar_number || "",
+    aadhar_name: data?.aadhar_name || "",
   });
 
   const [formerrors, setFormErrors] = useState("");
@@ -60,8 +61,8 @@ const KycModal = ({
       message: "Please fill Driving License number, name, and DOB.",
     },
     {
-      fields: ["aadhar_number"],
-      message: "Please fill a valid Aadhar number.",
+      fields: ["aadhar_number", "aadhar_name"],
+      message: "Please fill a valid Aadhar number and name.",
     },
   ];
 

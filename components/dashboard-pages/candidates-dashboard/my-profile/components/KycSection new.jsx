@@ -13,6 +13,8 @@ import KycModal from "./kyc/kycModal";
 
 import RazorpayPayment from "./kyc/Razorpay";
 
+import AadharCardInfo from "./kyc/AadharCardInfo";
+
 const KYCSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
@@ -351,58 +353,18 @@ const KYCSection = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-md-6 mb-4">
-                    <strong>Aadhar Card With OTP</strong>
-                    {userdata?.aadhar_number && (
-                      <>
-                        {userdata?.aadhar_verified ? (
-                          <FaCheckCircle className="ms-2 text-success" />
-                        ) : (
-                          <>
-                            {" "}
-                            <FaRegCircleXmark className="ms-2 text-danger" />{" "}
-                            <button
-                              className="btn btn-primary ms-2"
-                              style={{
-                                fontSize: "10px",
-                                padding: "2px 6px",
-                                lineHeight: 1,
-                              }}
-                              /* onClick={openModalRHotp} */
-                            >
-                              {" "}
-                              Verify Now{" "}
-                            </button>{" "}
-                          </>
-                        )}
-                      </>
-                    )}
-                    <div>
-                      <div className="mt-2">
-                        {userdata?.aadhar_number ? (
-                          <div
-                            className="text-secondary"
-                            style={{ lineHeight: 1.5 }}
-                          >
-                            <div>
-                              <span className="fw-semibold">
-                                Aadhar Number:
-                              </span>{" "}
-                              {userdata?.aadhar_number}
-                            </div>
-                          </div>
-                        ) : (
-                          <span
-                            className="text-primary fw-bold"
-                            style={{ cursor: "pointer", fontSize: "1rem" }}
-                            onClick={() => openModalRH("aadhar")}
-                          >
-                            Add Aadhar Card With OTP Info
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                  {userdata && (
+                    <AadharCardInfo
+                      userdata={userdata}
+                      openModalRH={openModalRH}
+                      setSectionloading={setSectionloading}
+                      setError={setError}
+                      setErrorId={setErrorId}
+                      setSuccess={setSuccess}
+                      setMessageId={setMessageId}
+                      setReload={setReload}
+                    />
+                  )}
                 </div>
               </div>{" "}
             </>

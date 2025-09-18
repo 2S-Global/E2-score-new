@@ -261,6 +261,18 @@ const KycBox = ({ formData, setFormData, focusSection }) => {
                   placeholder="Enter Aadhar Number"
                 />
               </div>
+              <div className="form-group col-md-6">
+                <label className="form-label">Name as per Aadhar</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={formData.aadhar_name}
+                  onChange={(e) => {
+                    setFormData({ ...formData, aadhar_name: e.target.value });
+                  }}
+                  placeholder="Enter Name as per Aadhar "
+                />
+              </div>
             </div>
           </div>
         </div>
