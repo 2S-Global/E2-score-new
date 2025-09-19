@@ -1,7 +1,8 @@
 "use client";
 
 import Select from "react-select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const PostBoxForm = () => {
   const [showBy, setShowBy] = useState("fixed"); // Track dropdown selection
@@ -9,6 +10,26 @@ const PostBoxForm = () => {
   const [jobLocationType, setJobLocationType] = useState(""); // Remote or On-site
   const [advertiseCity, setAdvertiseCity] = useState("No"); // Yes or No
   const [salaryStructure, setSalaryStructure] = useState("");
+
+  //main
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const token = localStorage.getItem("employer_token");
+  if (!token) {
+    console.log("No token");
+  }
+
+  // API list
+  const [specialization, setSpecialization] = useState([]);
+  const [jobType, setJobType] = useState([]);
+  const [benefits, setBenefits] = useState([]);
+  const [careerLevel, setCareerLevel] = useState([]);
+  const [experienceLevel, setExperienceLevel] = useState([]);
+  const [gender, setGender] = useState([]);
+  const [industry, setIndustry] = useState([]);
+  const [qualification, setQualification] = useState([]);
+  const [country, setCountry] = useState([]);
+  const [city, setCity] = useState([]);
+  const [branch, setBranch] = useState([]);
 
   // helper flags
   const selectedValues = selectedJobTypes.map((j) => j.value);
@@ -19,6 +40,187 @@ const PostBoxForm = () => {
     ["Internship", "Contractual / Temporary", "Freelance"].includes(v)
   );
 
+  useEffect(() => {
+    const fetchSpecialization = async () => {
+      // setLoading(true);
+      try {
+        const response = await fetch(`${apiurl}/api/jobposting/all_job_specializations`);
+        const data = await response.json();
+        setSpecialization(data.data.map((item) => ({ label: item.name, value: item._id })));
+      } catch (error) {
+        console.error("Error fetching genders:", error);
+      } finally {
+        // setLoading(false);
+      }
+    };
+
+
+    const fetchJobType = async () => {
+      // setLoading(true);
+      try {
+        const response = await fetch(
+          `${apiurl}/api/jobposting/all_job_types`
+        );
+        const data = await response.json();
+        setJobType(data.data.map((item) => ({ label: item.name, value: item.name })));
+      } catch (error) {
+        console.error("Error fetching more info list:", error);
+      } finally {
+        // setLoading(false);
+      }
+    };
+
+    const fetchBenefits = async () => {
+      // setLoading(true);
+      try {
+        const response = await fetch(
+          `${apiurl}/api/jobposting/all_job_benefits`
+        );
+        const data = await response.json();
+        setBenefits(data.data.map((item) => ({ label: item.name, value: item._id })));
+      } catch (error) {
+        console.error("Error fetching marriage status list:", error);
+      } finally {
+        // setLoading(false);
+      }
+    };
+
+    const fetchCareerLevels = async () => {
+      // setLoading(true);
+      try {
+        const response = await fetch(
+          `${apiurl}/api/jobposting/all_job_career_levels`
+        );
+        const data = await response.json();
+        console.log("Career Levels Data by mee :) :", data);
+        // setCategories(data.data);
+        setCareerLevel(data.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      } finally {
+        // setLoading(false);
+      }
+    };
+
+    const fetchExperienceLevel = async () => {
+      // setLoading(true);
+      try {
+        const response = await fetch(`${apiurl}/api/jobposting/all_job_experience_levels`);
+        const data = await response.json();
+        setExperienceLevel(data.data);
+      } catch (error) {
+        console.error("Error fetching USA visa list:", error);
+      } finally {
+        // setLoading(false);
+      }
+    };
+
+    const fetchGender = async () => {
+      //  setLoading(true);
+      try {
+        const response = await fetch(`${apiurl}/api/sql/dropdown/All_gender`);
+        const data = await response.json();
+        setGender(
+          data.data.map((item) => ({
+            label: item.name,
+            value: item.id,
+          }))
+        );
+      } catch (error) {
+        console.error("Error fetching countries:", error);
+      } finally {
+        //  setLoading(false);
+      }
+    };
+
+    const fetchIndustry = async () => {
+      //  setLoading(true);
+      try {
+        const response = await fetch(`${apiurl}/api/sql/dropdown/get_industry`);
+        const data = await response.json();
+        setIndustry(data.data);
+      } catch (error) {
+        console.error("Error fetching countries:", error);
+      } finally {
+        //  setLoading(false);
+      }
+    };
+
+    const fetchQualification = async () => {
+      //  setLoading(true);
+      try {
+        const response = await fetch(`${apiurl}/api/jobposting/all_job_qualifications`);
+        const data = await response.json();
+        setQualification(data.data.map((item) => ({ label: item.name, value: item._id })));
+      } catch (error) {
+        console.error("Error fetching countries:", error);
+      } finally {
+        //  setLoading(false);
+      }
+    };
+
+    const fetchCountry = async () => {
+      //  setLoading(true);
+      try {
+        const response = await fetch(`${apiurl}/api/sql/dropdown/All_contry`);
+        const data = await response.json();
+        setCountry(data.data);
+      } catch (error) {
+        console.error("Error fetching countries:", error);
+      } finally {
+        //  setLoading(false);
+      }
+    };
+
+    const fetchCity = async () => {
+      //  setLoading(true);
+      try {
+        const response = await fetch(`${apiurl}/api/sql/dropdown/get_india_cities`);
+        const data = await response.json();
+        setCity(data.data);
+      } catch (error) {
+        console.error("Error fetching countries:", error);
+      } finally {
+        //  setLoading(false);
+      }
+    };
+
+    const fetchBranches = async () => {
+      //  setLoading(true);
+      try {
+        const response = await axios.get(
+          `${apiurl}/api/jobposting/all_company_branches`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("Branches Data by mee should only data :) :", response.data.data);
+        if (response.status === 200) {
+          console.log("All Company Branches fetched successfully");
+          setBranch(response.data.data);
+        }
+        // setCity(data.data);
+      } catch (error) {
+        console.error("Error fetching countries:", error);
+      } finally {
+        //  setLoading(false);
+      }
+    };
+
+    fetchSpecialization();
+    fetchJobType();
+    fetchBenefits();
+    fetchCareerLevels();
+    fetchExperienceLevel();
+    fetchGender();
+    fetchIndustry();
+    fetchQualification();
+    fetchCountry();
+    fetchCity();
+    fetchBranches();
+  }, [apiurl]);
 
   // Map dropdown values → label names
   const labelMap = {
@@ -28,43 +230,6 @@ const PostBoxForm = () => {
     maximum: "No more than",
     minimum: "No less than",
   };
-
-  const specialisms = [
-    { value: "Banking", label: "Banking" },
-    { value: "Digital & Creative", label: "Digital & Creative" },
-    { value: "Retail", label: "Retail" },
-    { value: "Human Resources", label: "Human Resources" },
-    { value: "Managemnet", label: "Managemnet" },
-    { value: "Accounting & Finance", label: "Accounting & Finance" },
-    { value: "Digital", label: "Digital" },
-    { value: "Creative Art", label: "Creative Art" },
-  ];
-
-  const companyBenefits = [
-    { value: "Health insurance", label: "Health insurance" },
-    { value: "Provident Fund", label: "Provident Fund" },
-    { value: "Cell phone reimbursement", label: "Cell phone reimbursement" },
-    { value: "Paid sick time", label: "Paid sick time" },
-    { value: "Work from home", label: "Work from home" },
-    { value: "Paid time off", label: "Paid time off" },
-    { value: "Food provided", label: "Food provided" },
-    { value: "Life insurance", label: "Life insurance" },
-    { value: "Internet reimbursement", label: "Internet reimbursement" },
-    { value: "Commuter assistance", label: "Commuter assistance" },
-    { value: "Leave encashment", label: "Leave encashment" },
-    { value: "Flexible schedule", label: "Flexible schedule" },
-  ];
-
-  const jobTypes = [
-    { value: "Full-time", label: "Full-time" },
-    { value: "Permanent", label: "Permanent" },
-    { value: "Fresher", label: "Fresher" },
-    { value: "Part-time", label: "Part-time" },
-    { value: "Internship", label: "Internship" },
-    { value: "Contractual / Temporary", label: "Contractual / Temporary" },
-    { value: "Freelance", label: "Freelance" },
-    { value: "Volunteer", label: "Volunteer" },
-  ];
 
   const contractLength = [
     { value: "month(s)", label: "month(s)" },
@@ -93,52 +258,31 @@ const PostBoxForm = () => {
           <input type="text" name="name" placeholder="" />
         </div>
 
-        {/* <!-- Username (Input) Pre Existing Code --> */}
-        {/* <div className="form-group col-lg-6 col-md-12">
-          <label>Username</label>
-          <input type="text" name="name" placeholder="" />
-        </div> */}
-
         {/* <!-- Search Select --> */}
         <div className="form-group col-lg-6 col-md-12">
           <label>Specialization </label>
           <Select
-            defaultValue={[specialisms[2]]}
             isMulti
-            name="colors"
-            options={specialisms}
+            name="specialization"
+            options={specialization}
             className="basic-multi-select"
             classNamePrefix="select"
+            onChange={(selectedOptions) => {
+              console.log("Selected Specializations:", selectedOptions);
+            }}
           />
         </div>
 
         <div className="form-group col-lg-6 col-md-12">
           <label>Job Type</label>
-          {/* should uncomment this select */}
-          {/* <Select
-            defaultValue={[jobTypes[2]]}
+          <Select
             isMulti
-            name="jobTypes"
-            options={jobTypes}
+            name="jobType"
+            options={jobType}
             className="basic-multi-select"
             classNamePrefix="select"
             value={selectedJobTypes}
             onChange={setSelectedJobTypes}
-          /> */}
-
-          {/* below this select is for my testing purpose */}
-          <Select
-            defaultValue={[jobTypes[2]]}
-            isMulti
-            name="jobTypes"
-            options={jobTypes}
-            className="basic-multi-select"
-            classNamePrefix="select"
-            value={selectedJobTypes}
-            onChange={(e) => {
-              console.log("User picked by Chandra-Sarkar:", e);
-              setSelectedJobTypes(e);
-            }}
           />
         </div>
 
@@ -288,20 +432,6 @@ const PostBoxForm = () => {
           </div>
         </div>
 
-        {/* <!-- Input Pre Existing Code --> */}
-        {/* <div className="form-group col-lg-6 col-md-12">
-          <label>Offered Salary</label>
-          <select className="chosen-single form-select">
-            <option>Select</option>
-            <option>$1500</option>
-            <option>$2000</option>
-            <option>$2500</option>
-            <option>$3500</option>
-            <option>$4500</option>
-            <option>$5000</option>
-          </select>
-        </div> */}
-
         {/* Salary Part Added By Chandra  starts from here */}
 
         <div className="form-group col-lg-12 col-md-12">
@@ -379,10 +509,9 @@ const PostBoxForm = () => {
         <div className="form-group col-lg-6 col-md-12">
           <label>Benefits </label>
           <Select
-            defaultValue={[companyBenefits[2]]}
             isMulti
-            name="colors"
-            options={companyBenefits}
+            name="benefits"
+            options={benefits}
             className="basic-multi-select"
             classNamePrefix="select"
           />
@@ -392,44 +521,40 @@ const PostBoxForm = () => {
         <div className="form-group col-lg-6 col-md-12">
           <label>Career Level</label>
           <select className="chosen-single form-select">
-            <option>Select</option>
-            <option>Internship</option>
-            <option>Entry Level</option>
-            <option>Associate</option>
-            <option>Mid-Senior Level</option>
-            <option>Manager / Supervisor</option>
-            <option>Senior Manager</option>
-            <option>Director</option>
-            <option>Vice President</option>
-            <option>Executive (CXO / CEO / CTO / CFO, etc.)</option>
+            <option value="">Select</option>
+            {careerLevel.map((level) => (
+              <option key={level._id} value={level._id}>
+                {level.name}
+              </option>
+            ))}
           </select>
         </div>
 
         <div className="form-group col-lg-4 col-md-12">
           <label>Experience Level</label>
           <select className="chosen-single form-select">
-            <option>0 - 1 Year</option>
-            <option>1 - 2 Years</option>
-            <option>2 - 3 Years</option>
-            <option>3 - 5 Years</option>
-            <option>5 - 7 Years</option>
-            <option>7 - 10 Years</option>
-            <option>10 - 15 Years</option>
-            <option>15+ Years</option>
-            <option>Fresher (No experience)</option>
+            <option value="">Select</option>
+            {experienceLevel.map((level) => (
+              <option key={level._id} value={level._id}>
+                {level.name}
+              </option>
+            ))}
           </select>
         </div>
 
         <div className="form-group col-lg-4 col-md-12">
           <label>Gender</label>
-          <select className="chosen-single form-select">
-            <option>Select</option>
-            <option>Male</option>
-            <option>Female</option>
-            <option>All</option>
-            <option>Other</option>
-          </select>
+          <Select
+            isMulti
+            name="gender"
+            options={gender}
+            className="basic-multi-select"
+            classNamePrefix="select"
+            value={selectedJobTypes}
+            onChange={setSelectedJobTypes}
+          />
         </div>
+
 
         <div className="form-group col-lg-4 col-md-12">
           <label>Graduation Requirement</label>
@@ -444,32 +569,26 @@ const PostBoxForm = () => {
         <div className="form-group col-lg-6 col-md-12">
           <label>Industry</label>
           <select className="chosen-single form-select">
-            <option>Select</option>
-            <option>Banking</option>
-            <option>Digital & Creative</option>
-            <option>Retail</option>
-            <option>Human Resources</option>
-            <option>Management</option>
+            <option value="">Select</option>
+            {industry.map((level) => (
+              <option key={level.id} value={level.id}>
+                {level.job_industry}
+              </option>
+            ))}
           </select>
         </div>
 
         <div className="form-group col-lg-6 col-md-12">
           <label>Qualification</label>
-          <select className="chosen-single form-select">
-            <option value="">Select Qualification</option>
-            <option value="below-10">Below 10th</option>
-            <option value="10th">10th Pass</option>
-            <option value="12th">12th Pass</option>
-            <option value="diploma">Diploma</option>
-            <option value="certificate">Certificate Course</option>
-            <option value="iti">ITI</option>
-            <option value="undergraduate">Undergraduate</option>
-            <option value="graduate">Graduate (Bachelor’s Degree)</option>
-            <option value="postgraduate">Postgraduate (Master’s Degree)</option>
-            <option value="doctorate">Doctorate / PhD</option>
-            <option value="professional">Other Professional Qualification</option>
-            <option value="not-required">Not Required</option>
-          </select>
+          <Select
+            isMulti
+            name="qualification"
+            options={qualification}
+            className="basic-multi-select"
+            classNamePrefix="select"
+            value={selectedJobTypes}
+            onChange={setSelectedJobTypes}
+          />
         </div>
 
         {/* Job Location- Remote or On-site */}
@@ -493,11 +612,12 @@ const PostBoxForm = () => {
             <div className="form-group col-lg-6 col-md-12">
               <label>Country</label>
               <select className="chosen-single form-select">
-                <option>Australia</option>
-                <option>Pakistan</option>
-                <option>Chaina</option>
-                <option>Japan</option>
-                <option>India</option>
+                <option value="">Select</option>
+                {country.map((level) => (
+                  <option key={level.id} value={level.id}>
+                    {level.name}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -505,11 +625,12 @@ const PostBoxForm = () => {
             <div className="form-group col-lg-6 col-md-12">
               <label>City</label>
               <select className="chosen-single form-select">
-                <option>Melbourne</option>
-                <option>Pakistan</option>
-                <option>Chaina</option>
-                <option>Japan</option>
-                <option>India</option>
+                <option value="">Select</option>
+                {city.map((level) => (
+                  <option key={level.id} value={level.id}>
+                    {level.city_name}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -517,10 +638,12 @@ const PostBoxForm = () => {
             <div className="form-group col-lg-6 col-md-12">
               <label>Branch</label>
               <select className="chosen-single form-select">
-                <option>Select</option>
-                <option>Kolkata Branch</option>
-                <option>Mumbai Branch</option>
-                <option>Delhi Branch</option>
+                <option value="">Select</option>
+                {branch.map((level) => (
+                  <option key={level._id} value={level._id}>
+                    {level.name}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -582,23 +705,6 @@ const PostBoxForm = () => {
             <input type="text" name="name" placeholder="" />
           </div>
         )}
-
-
-        {/* 
-        <div className="form-group col-lg-3 col-md-12">
-          <label>Latitude</label>
-          <input type="text" name="name" placeholder="Melbourne" />
-        </div>
-
-       
-        <div className="form-group col-lg-3 col-md-12">
-          <label>Longitude</label>
-          <input type="text" name="name" placeholder="Melbourne" />
-        </div>
-
-        <div className="form-group col-lg-12 col-md-12">
-          <button className="theme-btn btn-style-three">Search Location</button>
-        </div> */}
 
         {/* <!-- Input --> */}
         <div className="form-group col-lg-12 col-md-12 text-right">
