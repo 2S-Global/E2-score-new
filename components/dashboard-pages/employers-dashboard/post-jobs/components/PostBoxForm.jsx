@@ -3,6 +3,9 @@
 import Select from "react-select";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const PostBoxForm = () => {
   const [showBy, setShowBy] = useState("fixed"); // Track dropdown selection
@@ -30,6 +33,65 @@ const PostBoxForm = () => {
   const [country, setCountry] = useState([]);
   const [city, setCity] = useState([]);
   const [branch, setBranch] = useState([]);
+
+  //  Code added by Chandra Sarkar on 22th september 2025  -- starts from here
+  const [formData, setFormData] = useState({
+    jobTitle: "",
+    jobDescription: "",
+    getApplicationUpdateEmail: "",
+    specialization: [],
+    jobType: [],
+    positionAvailable: "",
+    jobExpiryDate: "",
+    salary: {},
+    careerLevel: "",
+    experienceLevel: "",
+    gender: [],
+    industry: "",
+    qualification: [],
+    jobLocationType: "",
+    country: "",
+    city: "",
+    branch: "",
+    address: "",
+    advertiseCity: "",
+  });
+
+  const handleChange = (e) => {
+    // console.log("Console By Chandra Sarkar: ", e.target.value);
+    const { name, value } = e.target;
+
+    /*
+    if (name === "full_name") {
+      const onlyLetters = /^[A-Za-z\s]*$/; // Allow letters and spaces only
+
+      if (!onlyLetters.test(value)) {
+        return; // Don't update state if invalid character
+      }
+    }
+
+    if (name === "phone") {
+      const onlyNumbers = /^[0-9]*$/; // Only numbers allowed
+
+      // If value contains any non-numeric characters, prevent update
+      if (!onlyNumbers.test(value)) {
+        return; // Don't update state if invalid character
+      }
+
+      // Check for exact 10 characters
+      if (value.length > 10) {
+        return; // Prevent more than 10 characters
+      }
+    }
+
+    */
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  //  Code added by Chandra Sarkar on 22th september 2025  -- till the end
 
   // helper flags
   const selectedValues = selectedJobTypes.map((j) => j.value);
@@ -222,6 +284,13 @@ const PostBoxForm = () => {
     fetchBranches();
   }, [apiurl]);
 
+  const today = new Date();
+  const eighteenYearsAgo = new Date(
+    today.getFullYear() - 18,
+    today.getMonth(),
+    today.getDate()
+  );
+
   // Map dropdown values → label names
   const labelMap = {
     fixed: "Fixed at",
@@ -237,39 +306,67 @@ const PostBoxForm = () => {
     { value: "day(s)", label: "day(s)" },
   ];
 
+  const handleSubmit = (e) => {
+    e.preventDefault(); // prevent page reload
+    console.log("Form Data Submitted:", formData);
+  };
+
+  const handleDateChange = (date) => {
+    if (date) {
+      setFormData({ ...formData, dob: date }); // Store raw Date object
+    }
+  };
+
+
+  // Should comment this field
+  // <input
+  //   name="full_name"
+  //   type="text"
+  //   className="form-control"
+  //   value={formData.full_name}
+  //   onChange={handleChange}
+  //   required
+  //   id="full_name"
+  //   placeholder="Enter your full name"
+  // />
+
   return (
-    <form className="default-form">
+    <form className="default-form" onSubmit={handleSubmit}>
       <div className="row">
         {/* <!-- Input --> */}
         <div className="form-group col-lg-12 col-md-12 mt-2">
-          <label>Job Title</label>
-          <input type="text" name="name" placeholder="Title" />
+          <label htmlFor="jobTitle">Job Title</label>
+          <input type="text" name="jobTitle" value={formData.jobTitle} onChange={handleChange} required id="jobTitle" placeholder="Title" />
         </div>
 
         {/* <!-- About Company --> */}
         <div className="form-group col-lg-12 col-md-12">
-          <label>Job Description</label>
-          <textarea placeholder="Spent several years working on sheep on Wall Street. Had moderate success investing in Yugo's on Wall Street. Managed a small team buying and selling Pogo sticks for farmers. Spent several years licensing licorice in West Palm Beach, FL. Developed several new methods for working it banjos in the aftermarket. Spent a weekend importing banjos in West Palm Beach, FL.In this position, the Software Engineer collaborates with Evention's Development team to continuously enhance our current software solutions as well as create new solutions to eliminate the back-office operations and management challenges present"></textarea>
+          <label htmlFor="jobDescription">Job Description</label>
+          <textarea placeholder="Spent several years working on sheep on Wall Street. Had moderate success investing in Yugo's on Wall Street. Managed a small team buying and selling Pogo sticks for farmers. Spent several years licensing licorice in West Palm Beach, FL. Developed several new methods for working it banjos in the aftermarket. Spent a weekend importing banjos in West Palm Beach, FL.In this position, the Software Engineer collaborates with Evention's Development team to continuously enhance our current software solutions as well as create new solutions to eliminate the back-office operations and management challenges present" name="jobDescription" value={formData.jobDescription} onChange={handleChange} required id="jobDescription"></textarea>
         </div>
 
         {/* <!-- Input --> */}
         <div className="form-group col-lg-6 col-md-12">
-          <label>Get application updates</label>
-          <input type="text" name="name" placeholder="" />
+          <label htmlFor="getApplicationUpdateEmail">Get application updates</label>
+          <input type="text" name="getApplicationUpdateEmail" id="getApplicationUpdateEmail" value={formData.getApplicationUpdateEmail} onChange={handleChange} required placeholder="" />
         </div>
 
         {/* <!-- Search Select --> */}
         <div className="form-group col-lg-6 col-md-12">
-          <label>Specialization </label>
+          <label >Specialization </label>
           <Select
             isMulti
             name="specialization"
             options={specialization}
             className="basic-multi-select"
             classNamePrefix="select"
-            onChange={(selectedOptions) => {
-              console.log("Selected Specializations:", selectedOptions);
-            }}
+            value={formData.specialization}
+            onChange={(selectedOptions) =>
+              setFormData((prev) => ({
+                ...prev,
+                specialization: selectedOptions || [],
+              }))
+            }
           />
         </div>
 
@@ -281,14 +378,19 @@ const PostBoxForm = () => {
             options={jobType}
             className="basic-multi-select"
             classNamePrefix="select"
-            value={selectedJobTypes}
-            onChange={setSelectedJobTypes}
+            value={formData.jobType}
+            onChange={(selectedOptions) =>
+              setFormData((prev) => ({
+                ...prev,
+                jobType: selectedOptions || [],
+              }))
+            }
           />
         </div>
 
         <div className="form-group col-lg-6 col-md-12">
-          <label>Number of Positions Available</label>
-          <input type="number" name="positions" placeholder="" className="form-control" />
+          <label htmlFor="positionAvaiable">Number of Positions Available</label>
+          <input type="number" name="positionAvailable" id="positionAvaiable" value={formData.positionAvailable} onChange={handleChange} required placeholder="" className="form-control" />
         </div>
 
 
@@ -382,7 +484,7 @@ const PostBoxForm = () => {
 
         {/* <!-- Input --> */}
         <div className="form-group col-lg-12 col-md-12">
-          <label>Job Expiry Date</label>
+          <label>Job Expiry Date123</label>
           <div className="d-flex gap-3">
             {/* Day Dropdown */}
             <select className="form-select" name="expiryDay">
@@ -431,6 +533,44 @@ const PostBoxForm = () => {
             </select>
           </div>
         </div>
+        
+
+        {/* Date Picker added by me --Chandra Sarkar -- starts from here */}
+
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <div className="mb-3 form-group">
+            <label htmlFor="dob" className="form-label">
+              <b>
+                Job Expiry Date{" "}
+                <span style={{ color: "red" }}>*</span>
+              </b>
+            </label>
+            <DatePicker
+              value={formData.dob ? new Date(formData.dob) : null}
+              onChange={handleDateChange}
+              minDate={new Date()}
+              maxDate={new Date(today.getFullYear() + 1, today.getMonth(), today.getDate())}
+              format="dd/MM/yyyy"
+              slotProps={{
+                textField: {
+                  id: "dob",
+                  required: true,
+                  placeholder: "dd/mm/yyyy",
+                  className: "form-control",
+                  style: {
+                    backgroundColor: "#f0f5f7",
+                    border: "1px solid #f0f5f7",
+                    boxSizing: "border-box",
+                    borderRadius: "8px",
+                    transition: "all 300ms ease",
+                  },
+                },
+              }}
+            />
+          </div>
+        </LocalizationProvider>
+
+        {/* Date Picker added by me --Chandra Sarkar -- ended here */}
 
         {/* Salary Part Added By Chandra  starts from here */}
 
@@ -530,7 +670,7 @@ const PostBoxForm = () => {
           </select>
         </div>
 
-        <div className="form-group col-lg-4 col-md-12">
+        <div className="form-group col-lg-6 col-md-12">
           <label>Experience Level</label>
           <select className="chosen-single form-select">
             <option value="">Select</option>
@@ -542,7 +682,7 @@ const PostBoxForm = () => {
           </select>
         </div>
 
-        <div className="form-group col-lg-4 col-md-12">
+        <div className="form-group col-lg-6 col-md-12">
           <label>Gender</label>
           <Select
             isMulti
@@ -556,7 +696,7 @@ const PostBoxForm = () => {
         </div>
 
 
-        <div className="form-group col-lg-4 col-md-12">
+        {/* <div className="form-group col-lg-4 col-md-12">
           <label>Graduation Requirement</label>
           <select className="chosen-single form-select">
             <option value="">Select Requirement</option>
@@ -564,7 +704,7 @@ const PostBoxForm = () => {
             <option value="non-graduates">Non-Graduates Only</option>
             <option value="both">Both (No Restriction)</option>
           </select>
-        </div>
+        </div> */}
 
         <div className="form-group col-lg-6 col-md-12">
           <label>Industry</label>
