@@ -124,7 +124,15 @@ const PostBoxForm = () => {
   //   ["Internship", "Contractual / Temporary", "Freelance"].includes(v)
   // );
 
-  const selectedValues = (formData.jobType || []).map((j) => j.value);
+  // const selectedValues = (formData.jobType || []).map((j) => j.label);
+
+  const selectedValues = (formData.jobType || [])
+    .map((id) => {
+      const option = jobType.find((opt) => opt.value === id);
+      return option ? option.label : null;
+    })
+    .filter(Boolean); // remove nulls if any
+
 
   const isPartTime = selectedValues.includes("Part-time");
 
@@ -154,7 +162,7 @@ const PostBoxForm = () => {
           `${apiurl}/api/jobposting/all_job_types`
         );
         const data = await response.json();
-        setJobType(data.data.map((item) => ({ label: item.name, value: item.name })));
+        setJobType(data.data.map((item) => ({ label: item.name, value: item._id })));
       } catch (error) {
         console.error("Error fetching more info list:", error);
       } finally {
@@ -336,9 +344,58 @@ const PostBoxForm = () => {
     { value: "day(s)", label: "day(s)" },
   ];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault(); // prevent page reload
+    console.log("Next Button is Submitted Successfully !");
     console.log("Form Data Submitted:", formData);
+
+    // setError(null);
+    // setSuccess(null);
+    // if (!formData.full_name.trim() || !formData.gender || !formData.dob) {
+    //   setError("Please fill in all required fields.");
+    //   return;
+    // }
+
+    // setLoading(true);
+
+    if (!token) {
+      setError("Authorization token is missing. Please log in.");
+      return;
+    }
+    try {
+      const response = await axios.post(
+        `${apiurl}/api/jobposting/add_job_posting_details`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+
+      if (response.data.success) {
+        console.log("✅ Job posting data is saved successfully:", response.data.data);
+      } else {
+        throw new Error(response.data.message || "An error occurred");
+      }
+
+      // console.log("Upload successful:", response.data);
+      if (!response.data.success) {
+        throw new Error(response.data.message || "An error occurred");
+      }
+      // setSuccess("Details updated successfully!");
+      // setSuccess_main("Details updated successfully!");
+      // setReload(true);
+      // setTimeout(() => onClose(), 1500); // Close modal after success
+    } catch (error) {
+      console.error("Upload failed:", error);
+      // setError("Failed to update Details. Please try again.");
+      // setError_main("Failed to update Details. Please try again.");
+    } finally {
+      // setLoading(false);
+    }
   };
 
   return (
@@ -380,11 +437,22 @@ const PostBoxForm = () => {
             options={specialization}
             className="basic-multi-select"
             classNamePrefix="select"
-            value={formData.specialization}
+            // value={formData.specialization}
+            // onChange={(selectedOptions) =>
+            //   setFormData((prev) => ({
+            //     ...prev,
+            //     specialization: selectedOptions || [],
+            //   }))
+            // }
+            value={specialization.filter(option =>
+              formData.specialization.includes(option.value)
+            )} // ensure proper value binding
             onChange={(selectedOptions) =>
               setFormData((prev) => ({
                 ...prev,
-                specialization: selectedOptions || [],
+                specialization: selectedOptions
+                  ? selectedOptions.map((opt) => opt.value)
+                  : [],
               }))
             }
           />
@@ -401,14 +469,25 @@ const PostBoxForm = () => {
             options={jobType}
             className="basic-multi-select"
             classNamePrefix="select"
-            value={formData.jobType}
-            onChange={(selectedOptions) => {
-              console.log("Job Type By Chandra Sarkar ! ", selectedOptions);
+            // value={formData.jobType}
+            // onChange={(selectedOptions) => {
+            //   console.log("Job Type By Chandra Sarkar ! ", selectedOptions);
+            //   setFormData((prev) => ({
+            //     ...prev,
+            //     jobType: selectedOptions || [],
+            //   }))
+            // }
+            // }
+            value={jobType.filter(option =>
+              formData.jobType.includes(option.value)
+            )} // ensure proper value binding
+            onChange={(selectedOptions) =>
               setFormData((prev) => ({
                 ...prev,
-                jobType: selectedOptions || [],
+                jobType: selectedOptions
+                  ? selectedOptions.map((opt) => opt.value)
+                  : [],
               }))
-            }
             }
           />
         </div>
@@ -803,11 +882,22 @@ const PostBoxForm = () => {
             options={benefits}
             className="basic-multi-select"
             classNamePrefix="select"
-            value={formData.benefits}
+            // value={formData.benefits}
+            // onChange={(selectedOptions) =>
+            //   setFormData((prev) => ({
+            //     ...prev,
+            //     benefits: selectedOptions || [],
+            //   }))
+            // }
+            value={benefits.filter(option =>
+              formData.benefits.includes(option.value)
+            )} // ensure proper value binding
             onChange={(selectedOptions) =>
               setFormData((prev) => ({
                 ...prev,
-                benefits: selectedOptions || [],
+                benefits: selectedOptions
+                  ? selectedOptions.map((opt) => opt.value)
+                  : [],
               }))
             }
           />
@@ -856,13 +946,24 @@ const PostBoxForm = () => {
             options={gender}
             className="basic-multi-select"
             classNamePrefix="select"
-            value={formData.gender}
-            onChange={(selectedOptions) => {
+            // value={formData.gender}
+            // onChange={(selectedOptions) => {
+            //   setFormData((prev) => ({
+            //     ...prev,
+            //     gender: selectedOptions || [],
+            //   }))
+            // }
+            // }
+            value={gender.filter(option =>
+              formData.gender.includes(option.value)
+            )} // ensure proper value binding
+            onChange={(selectedOptions) =>
               setFormData((prev) => ({
                 ...prev,
-                gender: selectedOptions || [],
+                gender: selectedOptions
+                  ? selectedOptions.map((opt) => opt.value)
+                  : [],
               }))
-            }
             }
           />
         </div>
@@ -889,11 +990,22 @@ const PostBoxForm = () => {
             options={qualification}
             className="basic-multi-select"
             classNamePrefix="select"
-            value={formData.qualification}
+            // value={formData.qualification}
+            // onChange={(selectedOptions) =>
+            //   setFormData((prev) => ({
+            //     ...prev,
+            //     qualification: selectedOptions || [],
+            //   }))
+            // }
+            value={qualification.filter(option =>
+              formData.qualification.includes(option.value)
+            )} // ensure proper value binding
             onChange={(selectedOptions) =>
               setFormData((prev) => ({
                 ...prev,
-                qualification: selectedOptions || [],
+                qualification: selectedOptions
+                  ? selectedOptions.map((opt) => opt.value)
+                  : [],
               }))
             }
           />
@@ -1077,7 +1189,7 @@ const PostBoxForm = () => {
               <b>Where do you want to advertise this job?{" "}</b>
               <span style={{ color: "red" }}>*</span>
             </label>
-            <input type="text" name="name" placeholder="" />
+            <input type="text" name="advertiseCityName" value={formData.advertiseCityName} onChange={handleChange} placeholder="" />
           </div>
         )}
 
