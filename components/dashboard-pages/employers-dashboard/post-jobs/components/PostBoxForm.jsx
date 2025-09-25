@@ -1000,7 +1000,7 @@ const PostBoxForm = () => {
               </label>
               <input
                 type="text"
-                name="name"
+                name="address"
                 placeholder="329 Queensberry Street, North Melbourne VIC 3051, Australia."
                 value={formData.address}
                 onChange={(e) => {
