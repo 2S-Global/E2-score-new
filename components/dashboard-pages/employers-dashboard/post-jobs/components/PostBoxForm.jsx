@@ -41,6 +41,12 @@ const PostBoxForm = () => {
     getApplicationUpdateEmail: "",
     specialization: [],
     jobType: [],
+    showBy: "fixed",
+    expectedHours: "",
+    fromHours: "",
+    toHours: "",
+    contractLength: "",
+    contractPeriod: "",
     positionAvailable: "",
     jobExpiryDate: null,
     salary: {
@@ -110,7 +116,15 @@ const PostBoxForm = () => {
   //  Code added by Chandra Sarkar on 22th september 2025  -- till the end
 
   // helper flags
-  const selectedValues = selectedJobTypes.map((j) => j.value);
+  // const selectedValues = selectedJobTypes.map((j) => j.value);
+
+  // const isPartTime = selectedValues.includes("Part-time");
+
+  // const isInternLike = selectedValues.some((v) =>
+  //   ["Internship", "Contractual / Temporary", "Freelance"].includes(v)
+  // );
+
+  const selectedValues = (formData.jobType || []).map((j) => j.value);
 
   const isPartTime = selectedValues.includes("Part-time");
 
@@ -332,19 +346,28 @@ const PostBoxForm = () => {
       <div className="row">
         {/* <!-- Input --> */}
         <div className="form-group col-lg-12 col-md-12 mt-2">
-          <label htmlFor="jobTitle">Job Title</label>
+          <label htmlFor="jobTitle">
+            <b>Job Title{" "}</b>
+            <span style={{ color: "red" }}>*</span>
+          </label>
           <input type="text" name="jobTitle" value={formData.jobTitle} onChange={handleChange} required id="jobTitle" placeholder="Title" />
         </div>
 
         {/* <!-- About Company --> */}
         <div className="form-group col-lg-12 col-md-12">
-          <label htmlFor="jobDescription">Job Description</label>
+          <label htmlFor="jobDescription">
+            <b>Job Description{" "}</b>
+            <span style={{ color: "red" }}>*</span>
+          </label>
           <textarea placeholder="Spent several years working on sheep on Wall Street. Had moderate success investing in Yugo's on Wall Street. Managed a small team buying and selling Pogo sticks for farmers. Spent several years licensing licorice in West Palm Beach, FL. Developed several new methods for working it banjos in the aftermarket. Spent a weekend importing banjos in West Palm Beach, FL.In this position, the Software Engineer collaborates with Evention's Development team to continuously enhance our current software solutions as well as create new solutions to eliminate the back-office operations and management challenges present" name="jobDescription" value={formData.jobDescription} onChange={handleChange} required id="jobDescription"></textarea>
         </div>
 
         {/* <!-- Input --> */}
         <div className="form-group col-lg-6 col-md-12">
-          <label htmlFor="getApplicationUpdateEmail">Get application updates</label>
+          <label htmlFor="getApplicationUpdateEmail">
+            <b>Get application updates{" "}</b>
+            <span style={{ color: "red" }}>*</span>
+          </label>
           <input type="text" name="getApplicationUpdateEmail" id="getApplicationUpdateEmail" value={formData.getApplicationUpdateEmail} onChange={handleChange} required placeholder="" />
         </div>
 
@@ -368,7 +391,10 @@ const PostBoxForm = () => {
         </div>
 
         <div className="form-group col-lg-6 col-md-12">
-          <label>Job Type</label>
+          <label>
+            <b>Job Type{" "}</b>
+            <span style={{ color: "red" }}>*</span>
+          </label>
           <Select
             isMulti
             name="jobType"
@@ -376,17 +402,22 @@ const PostBoxForm = () => {
             className="basic-multi-select"
             classNamePrefix="select"
             value={formData.jobType}
-            onChange={(selectedOptions) =>
+            onChange={(selectedOptions) => {
+              console.log("Job Type By Chandra Sarkar ! ", selectedOptions);
               setFormData((prev) => ({
                 ...prev,
                 jobType: selectedOptions || [],
               }))
             }
+            }
           />
         </div>
 
         <div className="form-group col-lg-6 col-md-12">
-          <label htmlFor="positionAvaiable">Number of Positions Available</label>
+          <label htmlFor="positionAvaiable">
+            <b>Number of Positions Available{" "}</b>
+            <span style={{ color: "red" }}>*</span>
+          </label>
           <input type="number" name="positionAvailable" id="positionAvaiable" value={formData.positionAvailable} onChange={handleChange} required placeholder="" className="form-control" />
         </div>
 
@@ -401,7 +432,17 @@ const PostBoxForm = () => {
               {/* Show pay by Dropdown */}
               <div className="flex-fill">
                 <label className="form-label small">Show by</label>
-                <select className="form-select" value={showBy} onChange={(e) => setShowBy(e.target.value)}>
+                <select className="form-select" value={formData.showBy || ""} onChange={(e) => {
+                  console.log("Show by value selected -- Chandra Sarkar : ", e.target.value);
+                  setFormData((prev) => ({
+                    ...prev,
+                    showBy: e.target.value,
+                    expectedHours: "",
+                    fromHours: "",
+                    toHours: "",
+                  }))
+                }
+                }>
                   <option value="">Select</option>
                   <option value="fixed">Fixed hours</option>
                   <option value="range">Range</option>
@@ -412,37 +453,66 @@ const PostBoxForm = () => {
 
               {/* Single input for Fixed/Maximum/Minimum */}
               {/* Minimum Salary Textfield*/}
-              {showBy && showBy !== "range" && (
+              {formData.showBy && formData.showBy !== "range" && (
                 <div className="flex-fill">
-                  <label className="form-label small">{labelMap[showBy]}</label>
+                  <label className="form-label small">{labelMap[formData.showBy]}</label>
                   <input
                     type="text"
-                    name={showBy}
+                    name="expectedHours"
                     className="form-control"
                     placeholder="Enter hours"
+                    value={formData.expectedHours ?? ""}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setFormData((prev) => ({
+                        ...prev,
+                        expectedHours: val,
+                        fromHours: "",
+                        toHours: "",
+                      }));
+                    }
+                    }
                   />
                 </div>
               )}
 
               {/* Two inputs for Range */}
-              {showBy === "range" && (
+              {formData.showBy === "range" && (
                 <>
                   <div className="flex-fill">
                     <label className="form-label small">From</label>
                     <input
-                      type="number"
+                      type="text"
                       name="fromHours"
                       className="form-control"
                       placeholder="e.g. 4"
+                      value={formData.fromHours ?? ""}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setFormData((prev) => ({
+                          ...prev,
+                          fromHours: val,
+                          expectedHours: "",
+                        }));
+                      }}
                     />
                   </div>
                   <div className="flex-fill">
                     <label className="form-label small">To</label>
                     <input
-                      type="number"
+                      type="text"
                       name="toHours"
                       className="form-control"
                       placeholder="e.g. 8"
+                      value={formData.toHours ?? ""}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setFormData((prev) => ({
+                          ...prev,
+                          toHours: val,
+                          expectedHours: "",
+                        }));
+                      }}
                     />
                   </div>
                 </>
@@ -460,17 +530,34 @@ const PostBoxForm = () => {
               {/* Show pay by Dropdown */}
               <div className="flex-fill">
                 <label className="form-label small">Length</label>
-                <input type="number" name="name" placeholder="" />
+                <input type="number" name="contractLength" placeholder="" value={formData.contractLength ?? ""}
+                  onChange={(e) => {
+                    console.log("Contract Length selected value -- Chandra Sarkar : ", e.target.value);
+                    setFormData((prev) => ({
+                      ...prev,
+                      contractLength: e.target.value,
+                    }))
+                  }
+                  } />
               </div>
 
               {/* Single input for Fixed/Maximum/Minimum */}
               {/* Minimum Salary Textfield*/}
               <div className="flex-fill">
                 <label className="form-label small">Period</label>
-                <select className="form-select" name="expiryDay">
-                  <option value="">month(s)</option>
-                  <option value="">week(s)</option>
-                  <option value="">day(s)</option>
+                <select className="form-select" name="contractPeriod" value={formData.contractPeriod ?? ""}
+                  onChange={(e) => {
+                    console.log("Contract Period selected value -- Chandra Sarkar : ", e.target.value);
+                    setFormData((prev) => ({
+                      ...prev,
+                      contractPeriod: e.target.value,
+                    }))
+                  }
+                  }>
+                  <option value="" disabled>Select period</option>
+                  <option value="month">month(s)</option>
+                  <option value="week">week(s)</option>
+                  <option value="day">day(s)</option>
                 </select>
               </div>
 
@@ -479,11 +566,11 @@ const PostBoxForm = () => {
         )}
 
 
-        {/* <!-- Input --> */}
+        {/* <!-- Job Expiry Date Previous Format --> */}
+        {/*
         <div className="form-group col-lg-12 col-md-12">
           <label>Job Expiry Date123</label>
           <div className="d-flex gap-3">
-            {/* Day Dropdown */}
             <select className="form-select" name="expiryDay">
               <option value="">Day</option>
               {[...Array(31).keys()].map((day) => (
@@ -493,7 +580,6 @@ const PostBoxForm = () => {
               ))}
             </select>
 
-            {/* Month Dropdown */}
             <select className="form-select" name="expiryMonth">
               <option value="">Month</option>
               {[
@@ -516,11 +602,10 @@ const PostBoxForm = () => {
               ))}
             </select>
 
-            {/* Year Dropdown */}
             <select className="form-select" name="expiryYear">
               <option value="">Year</option>
               {[...Array(10).keys()].map((i) => {
-                const year = new Date().getFullYear() + i; // Current year + 10 years ahead
+                const year = new Date().getFullYear() + i;
                 return (
                   <option key={year} value={year}>
                     {year}
@@ -529,7 +614,7 @@ const PostBoxForm = () => {
               })}
             </select>
           </div>
-        </div>
+        </div>  */}
 
 
         {/* Date Picker added by me --Chandra Sarkar -- starts from here */}
@@ -816,7 +901,10 @@ const PostBoxForm = () => {
 
         {/* Job Location- Remote or On-site */}
         <div className="form-group col-lg-6 col-md-12">
-          <label>Which option best describes this job's location? </label>
+          <label>
+            <b>Which option best describes this job's location?{" "}</b>
+            <span style={{ color: "red" }}>*</span>
+          </label>
           <select className="chosen-single form-select" value={formData.jobLocationType} onChange={(e) => {
             setFormData((prev) => ({
               ...prev,
@@ -834,7 +922,10 @@ const PostBoxForm = () => {
         {formData.jobLocationType === "on-site" && (
           <>
             <div className="form-group col-lg-6 col-md-12">
-              <label>Country</label>
+              <label>
+                <b>Country{" "}</b>
+                <span style={{ color: "red" }}>*</span>
+              </label>
               <select className="chosen-single form-select" value={formData.country}
                 onChange={(e) => {
                   console.log("Country selected value -- Chandra Sarkar : ", e.target.value);
@@ -855,7 +946,10 @@ const PostBoxForm = () => {
 
             {/* <!-- Input --> */}
             <div className="form-group col-lg-6 col-md-12">
-              <label>City</label>
+              <label>
+                <b>City{" "}</b>
+                <span style={{ color: "red" }}>*</span>
+              </label>
               <select className="chosen-single form-select" value={formData.city}
                 onChange={(e) => {
                   console.log("City selected value -- Chandra Sarkar : ", e.target.value);
@@ -876,7 +970,10 @@ const PostBoxForm = () => {
 
             {/* brance dropdown */}
             <div className="form-group col-lg-6 col-md-12">
-              <label>Branch</label>
+              <label>
+                <b>Branch{" "}</b>
+                <span style={{ color: "red" }}>*</span>
+              </label>
               <select className="chosen-single form-select" value={formData.branch}
                 onChange={(e) => {
                   console.log("Branch selected value -- Chandra Sarkar : ", e.target.value);
@@ -897,7 +994,10 @@ const PostBoxForm = () => {
 
             {/* <!-- Input --> */}
             <div className="form-group col-lg-12 col-md-12">
-              <label>Complete Address</label>
+              <label>
+                <b>Complete Address{" "}</b>
+                <span style={{ color: "red" }}>*</span>
+              </label>
               <input
                 type="text"
                 name="name"
@@ -921,7 +1021,8 @@ const PostBoxForm = () => {
         {formData.jobLocationType === "remote" && (
           <div className="form-group col-lg-12 col-md-12">
             <label className="form-label">
-              Do you want to advertise your job in a specific city?
+              <b>Do you want to advertise your job in a specific city?{" "}</b>
+              <span style={{ color: "red" }}>*</span>
             </label>
             <div className="d-flex gap-3">
 
@@ -933,7 +1034,6 @@ const PostBoxForm = () => {
                   value="No"
                   checked={formData.advertiseCity === "No"}
                   onChange={(e) => {
-                    console.log("Advertise City for No Option -- Chandra Sarkar : ", e.target);
                     setFormData((prev) => ({
                       ...prev,
                       advertiseCity: e.target.value,
@@ -959,7 +1059,7 @@ const PostBoxForm = () => {
                       ...prev,
                       advertiseCity: e.target.value,
                     }))
-                    }
+                  }
                   }
                   className="form-check-input me-2"
                 />
@@ -973,7 +1073,10 @@ const PostBoxForm = () => {
         {/* Show when Remote + Yes */}
         {formData.jobLocationType === "remote" && formData.advertiseCity === "Yes" && (
           <div className="form-group col-lg-6 col-md-12">
-            <label>Where do you want to advertise this job? </label>
+            <label>
+              <b>Where do you want to advertise this job?{" "}</b>
+              <span style={{ color: "red" }}>*</span>
+            </label>
             <input type="text" name="name" placeholder="" />
           </div>
         )}
