@@ -1,5 +1,5 @@
 "use client";
-
+import { useRouter } from "next/navigation";
 import Select from "react-select";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -20,6 +20,8 @@ const PostBoxForm = () => {
   if (!token) {
     console.log("No token");
   }
+
+   const router = useRouter();
 
   // API list
   const [specialization, setSpecialization] = useState([]);
@@ -377,6 +379,16 @@ const PostBoxForm = () => {
 
       if (response.data.success) {
         console.log("✅ Job posting data is saved successfully:", response.data.data);
+
+        // ✅ Redirect to review page with returned jobId
+        const jobId = response.data.jobId; // API returns saved job object
+        const status = response.data.data.status; // draft
+
+        // router.push(`/employers-dashboard/post-jobs/review-jobs/${jobId}?status=${status}`);
+        router.push(`/employers-dashboard/post-jobs/review-jobs/${jobId}`);
+        // router.push(`/employers-dashboard/post-jobs/review-jobs`);
+        // OR if you want to pass as query: /review-job?jobId=...&status=...
+
       } else {
         throw new Error(response.data.message || "An error occurred");
       }
