@@ -1,85 +1,74 @@
 "use client";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
-import CopyrightFooter from "../../CopyrightFooter";
+import { useParams } from "next/navigation";
 import axios from "axios";
+import CopyrightFooter from "../../CopyrightFooter";
+import { FaEdit } from "react-icons/fa";
 
-const index = () => {
+const Index = () => {
+    const router = useRouter();
     const params = useParams();
     const jobId = params.jobId;
-    console.log("Here is my Job Id present : ", jobId);
 
     const apiurl = process.env.NEXT_PUBLIC_API_URL;
     const token = localStorage.getItem("employer_token");
-    if (!token) {
-        console.log("No token");
-    }
 
     const [data, setData] = useState({});
     const [error, setError] = useState(null);
 
-    console.log("after assigining dob details in data variables using setData :", data);
-
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // setLoading(true);
-                // setError(null);
-                console.log("Component mounted successfully in review job page !");
-                const response = await axios.get(
-                    `${apiurl}/api/jobposting/get_job_posting_details`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                        params: {
-                            jobId: jobId,
-                            status: "draft",
-                        },
-                    }
-                );
-                console.log("Fetched job posting data ggkl:", response.data);
-                if (response.data.success && response.status === 200 && response.data) {
+                const response = await axios.get(`${apiurl}/api/jobposting/get_job_posting_details`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    params: {
+                        jobId: jobId,
+                        status: "draft",
+                    },
+                });
+
+                if (response.data.success && response.status === 200) {
                     setData(response.data.data);
-                } else {
-                    console.warn("No valid response data found:", response);
                 }
-                // setData(response.data.data);
             } catch (err) {
-                console.log("I am in catch block ! ");
-                console.error("Error fetching job posting data:", err);
                 setError(err.response?.data?.message || err.message);
-            } finally {
-                // setLoading(false);
-                console.log("I am in finally block ! ");
             }
         };
 
         fetchData();
-    }, []); // Empty dependency array → runs once on mount
-
+    }, []);
 
     return (
         <>
             <div className="review-container">
                 <h1 className="review-title">Review</h1>
-                <div className="job-details">
-                    <h2>Job details</h2>
 
-                    <div className="detail-row">
-                        <div className="detail-label">Job title</div>
-                        <div className="detail-value">
-                            {data?.jobTitle || "N/A"}   {/* 👈 render dynamic job title */}
-                            <span className="edit-icon">&#9998;</span>
+                <div className="job-details">
+                    <h2 className="underline">Job Details</h2>
+
+                    {data?.jobTitle && (
+                        <div className="detail-row">
+                            <div className="detail-label">Job title</div>
+                            <div className="detail-value">
+                                {data?.jobTitle || "N/A"}
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs/edit/${jobId}`)}
+                                >&#9998;</span>
+                            </div>
                         </div>
-                    </div>
+                    )}
 
                     {data?.companyName && (
                         <div className="detail-row">
                             <div className="detail-label">Company for this job</div>
                             <div className="detail-value">
                                 {data.companyName}
-                                <span className="edit-icon">&#9998;</span>
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                >&#9998;</span>
                             </div>
                         </div>
                     )}
@@ -89,7 +78,9 @@ const index = () => {
                             <div className="detail-label">Number of openings</div>
                             <div className="detail-value">
                                 {data.positionAvailable}
-                                <span className="edit-icon">&#9998;</span>
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                >&#9998;</span>
                             </div>
                         </div>
                     )}
@@ -98,194 +89,307 @@ const index = () => {
                         <div className="detail-row">
                             <div className="detail-label">Country</div>
                             <div className="detail-value">
-                                {/* {data.country.name} */}
                                 {typeof data.country === "object" ? data.country.name : data.country}
-                                <span className="edit-icon">&#9998;</span>
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                >&#9998;</span>
+                            </div>
+                        </div>
+                    )}
+
+                    {data?.city && (
+                        <div className="detail-row">
+                            <div className="detail-label">City</div>
+                            <div className="detail-value">
+                                {data.city}
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                >&#9998;</span>
+                            </div>
+                        </div>
+                    )}
+
+                    {data?.branch && (
+                        <div className="detail-row">
+                            <div className="detail-label">Branch</div>
+                            <div className="detail-value">
+                                {data.branch.name}
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                >&#9998;</span>
+                            </div>
+                        </div>
+                    )}
+
+                    {data?.address && (
+                        <div className="detail-row">
+                            <div className="detail-label">Complete Address</div>
+                            <div className="detail-value">
+                                {data.address}
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                >&#9998;</span>
+                            </div>
+                        </div>
+                    )}
+
+                    {data?.jobType && (
+                        <div className="detail-row">
+                            <div className="detail-label">Job Type</div>
+                            <div className="detail-value">
+                                {data.jobType.map(item => item.label).join(", ")}
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                >&#9998;</span>
+                            </div>
+                        </div>
+                    )}
+
+                    {data?.expectedHours && (
+                        <div className="detail-row">
+                            <div className="detail-label">Expected hours per week</div>
+                            <div className="detail-value">
+                                {data.expectedHours}
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                >&#9998;</span>
+                            </div>
+                        </div>
+                    )}
+
+                    {data?.contractLength && (
+                        <div className="detail-row">
+                            <div className="detail-label">Contract length</div>
+                            <div className="detail-value">
+                                {data.contractLength}
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                >&#9998;</span>
+                            </div>
+                        </div>
+                    )}
+
+                    {data?.salary && (
+                        <div className="detail-row">
+                            <div className="detail-label">Pay</div>
+                            <div className="detail-value">
+                                {data.salary?.structure === "range" && (
+                                    <>
+                                        {data.salary.currency}
+                                        {data.salary.min.toLocaleString("en-IN", { maximumFractionDigits: 2 })} -{" "}
+                                        {data.salary.currency}
+                                        {data.salary.max.toLocaleString("en-IN", { maximumFractionDigits: 2 })}{" "}
+                                        {data.salary.rate}
+                                    </>
+                                )}
+
+                                {data.salary?.structure === "starting amount" && (
+                                    <>
+                                        From {data.salary.currency}
+                                        {data.salary.amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })}{" "}
+                                        {data.salary.rate}
+                                    </>
+                                )}
+
+                                {data.salary?.structure === "maximum amount" && (
+                                    <>
+                                        Up to {data.salary.currency}
+                                        {data.salary.amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })}{" "}
+                                        {data.salary.rate}
+                                    </>
+                                )}
+
+                                {data.salary?.structure === "exact amount" && (
+                                    <>
+                                        {data.salary.currency}
+                                        {data.salary.amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })}{" "}
+                                        {data.salary.rate}
+                                    </>
+                                )}
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                >&#9998;</span>
+                            </div>
+                        </div>
+                    )}
+
+                    {data?.benefits && (
+                        <div className="detail-row">
+                            <div className="detail-label">Benefits</div>
+                            <div className="detail-value">
+                                {data.benefits.map((item) => item.name).join(", ")}
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                >&#9998;</span>
+                            </div>
+                        </div>
+                    )}
+
+                    {data?.jobDescription && (
+                        <div className="detail-row">
+                            <div className="detail-label">Job description</div>
+                            <div className="detail-value">
+                                {data.jobDescription}
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                >&#9998;</span>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+
+                <hr className="divider" />
+
+                <div className="job-details">
+                    <h2 className="underline">Settings</h2>
+
+                    {data?.getApplicationUpdateEmail && (
+                        <div className="detail-row">
+                            <div className="detail-label">Application method</div>
+                            <div className="detail-value">
+                                Email
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                >&#9998;</span>
                             </div>
                         </div>
                     )}
 
                     <div className="detail-row">
-                        <div className="detail-label">City</div>
-                        <div className="detail-value">
-                            Kolkata
-                            <span className="edit-icon">&#9998;</span>
-                        </div>
-                    </div>
-
-                    <div className="detail-row">
-                        <div className="detail-label">Branch</div>
-                        <div className="detail-value">
-                            2S Global Technologies Limited Kolkata
-                            <span className="edit-icon">&#9998;</span>
-                        </div>
-                    </div>
-
-                    <div className="detail-row">
-                        <div className="detail-label">Complete Address</div>
-                        <div className="detail-value">
-                            108, Webel IT Park (Phase-II),DH Block, Action Area 1D, New Town,Kolkata-700160
-                            <span className="edit-icon">&#9998;</span>
-                        </div>
-                    </div>
-
-                    <div className="detail-row">
-                        <div className="detail-label">Job Type</div>
-                        <div className="detail-value">
-                            Full-time, Part-time, Internship, Fresher, Contract
-                            <span className="edit-icon">&#9998;</span>
-                        </div>
-                    </div>
-
-                    <div className="detail-row">
-                        <div className="detail-label">Expected hours per week</div>
-                        <div className="detail-value">
-                            9
-                            <span className="edit-icon">&#9998;</span>
-                        </div>
-                    </div>
-
-                    <div className="detail-row">
-                        <div className="detail-label">Contract length</div>
-                        <div className="detail-value">
-                            6 months
-                            <span className="edit-icon">&#9998;</span>
-                        </div>
-                    </div>
-
-                    <div className="detail-row">
-                        <div className="detail-label">Pay</div>
-                        <div className="detail-value">
-                            ₹1,82,850.13 - ₹11,13,106.08 per year
-                            <span className="edit-icon">&#9998;</span>
-                        </div>
-                    </div>
-
-                    <div className="detail-row">
-                        <div className="detail-label">Benefits</div>
-                        <div className="detail-value">
-                            Health insurance, Provident Fund
-                            <span className="edit-icon">&#9998;</span>
-                        </div>
-                    </div>
-
-                    <div className="detail-row">
-                        <div className="detail-label">Job description</div>
-                        <div className="detail-value">
-                            We want highly motivated and skilled developer
-                            <span className="edit-icon">&#9998;</span>
-                        </div>
-                    </div>
-
-                    <hr className="divider" />
-
-                    <h2>Settings</h2>
-
-                    <div className="detail-row">
-                        <div className="detail-label">Application method</div>
-                        <div className="detail-value">
-                            Email
-                            <span className="edit-icon">&#9998;</span>
-                        </div>
-                    </div>
-                    <div className="detail-row">
                         <div className="detail-label">Require resume</div>
                         <div className="detail-value">
                             Yes
-                            <span className="edit-icon">&#9998;</span>
-                        </div>
-                    </div>
-                    <div className="detail-row">
-                        <div className="detail-label">Application updates</div>
-                        <div className="detail-value">
-                            chandra@2sglobal.us
-                            <span className="edit-icon">&#9998;</span>
-                        </div>
-                    </div>
-                    <div className="detail-row">
-                        <div className="detail-label">Hiring timeline</div>
-                        <div className="detail-value">
-                            2 to 4 weeks
-                            <span className="edit-icon">&#9998;</span>
+                            <span className="edit-icon"
+                                onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                            >&#9998;</span>
                         </div>
                     </div>
 
-                    <hr className="divider" />
+                    {data?.getApplicationUpdateEmail && (
+                        <div className="detail-row">
+                            <div className="detail-label">Application updates</div>
+                            <div className="detail-value">
+                                {data.getApplicationUpdateEmail}
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                >&#9998;</span>
+                            </div>
+                        </div>
+                    )}
 
-                    <h2>Account</h2>
+                    {data?.jobExpiryDate && (
+                        <div className="detail-row">
+                            <div className="detail-label">Job Expiry Date</div>
+                            <div className="detail-value">
+                                {new Date(data.jobExpiryDate).toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "long",
+                                    year: "numeric",
+                                })}
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                >&#9998;</span>
+                            </div>
+                        </div>
+                    )}
+                </div>
 
-                    <div className="detail-row">
+                <hr className="divider" />
+
+                <div className="job-details">
+                    <h2 className="underline">Account</h2>
+
+                    {/* <div className="detail-row">
                         <div className="detail-label">Contact</div>
                         <div className="detail-value">
                             Chandra Sarkar
-                            <span className="edit-icon">&#9998;</span>
+                            <FaEdit className="edit-icon" />
                         </div>
-                    </div>
-                    <div className="detail-row">
-                        <div className="detail-label">Phone number</div>
-                        <div className="detail-value">
-                            8001357669
-                            <span className="edit-icon">&#9998;</span>
+                    </div> */}
+
+                    {data?.phoneNumber && (
+                        <div className="detail-row">
+                            <div className="detail-label">Phone number</div>
+                            <div className="detail-value">
+                                {data.phoneNumber}
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                >&#9998;</span>
+                            </div>
                         </div>
-                    </div>
-                    <div className="detail-row">
-                        <div className="detail-label">Your company name</div>
-                        <div className="detail-value">
-                            2S Global Technologies Limited
-                            <span className="edit-icon">&#9998;</span>
+                    )}
+
+                    {data?.companyName && (
+                        <div className="detail-row">
+                            <div className="detail-label">Your company name</div>
+                            <div className="detail-value">
+                                {data.companyName}
+                                <span className="edit-icon"
+                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                >&#9998;</span>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
+
                 <div className="button-container">
-                    <div>
-                        <button className="btn back-btn">← Back</button>
-                    </div>
+                    <button className="btn back-btn">← Back</button>
                     <div className="right-buttons">
-                        <button className="btn preview-btn">
-                            Preview <span className="arrow">›</span>
-                        </button>
-                        <button className="btn confirm-btn">
-                            Confirm <span className="eye">👁</span>
-                        </button>
+                        <button className="btn preview-btn">Preview</button>
+                        <button className="btn confirm-btn">Confirm</button>
                     </div>
                 </div>
             </div>
 
             <CopyrightFooter />
 
-            {/* CSS inside same file */}
+            {/* STYLES */}
             <style jsx>{`
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
         body {
-          background: #fff;
-          font-family: 'Segoe UI', Arial, sans-serif;
+          font-family: 'Poppins', sans-serif;
+          background-color: #f4f6f8;
           margin: 0;
           padding: 0;
         }
 
         .review-container {
-          max-width: 650px;
-          margin: 60px auto 0 auto;
-          padding: 40px 30px 0 30px;
+          max-width: 700px;
+          margin: 60px auto;
+          padding: 40px 30px;
+          background-color: #fff;
+          border: 1px solid #e0e0e0;
+          border-radius: 12px;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
         }
 
         .review-title {
-          font-size: 3em;
+          font-size: 2.5em;
           font-weight: 700;
           margin-bottom: 40px;
           color: #222;
         }
 
+        .job-details {
+          background-color: #f9f9f9;
+          padding: 24px;
+          border-radius: 10px;
+          margin-bottom: 40px;
+        }
+
         .job-details h2 {
-          font-size: 1.2em;
+          font-size: 1.4em;
           font-weight: 600;
-          margin-bottom: 24px;
+          margin-bottom: 20px;
           color: #363636;
         }
 
         .detail-row {
           display: flex;
           align-items: center;
-          margin-bottom: 28px;
+          margin-bottom: 20px;
         }
 
         .detail-label {
@@ -296,11 +400,19 @@ const index = () => {
         }
 
         .detail-value {
-          font-size: 1em;
-          color: #525252;
           display: flex;
           align-items: center;
-          margin-left: 32px;
+          font-size: 1em;
+          color: #525252;
+          gap: 10px;
+        }
+
+        .edit-icon12 {
+          color: #176be6;
+          cursor: pointer;
+          display: inline-block;
+          pointer-events: auto;
+          transition: color 0.2s ease;
         }
 
         .edit-icon {
@@ -309,29 +421,34 @@ const index = () => {
           cursor: pointer;
           font-size: 1.1em;
         }
-        .divider {
-            border: none;
-            border-top: 1px solid #6d6969ff;
-            margin: 30px 0;
+
+        .edit-icon:hover {
+          color: #004bb5;
         }
+
+        .divider {
+          border-top: 2px dashed #c1c1c1;
+          margin: 40px 0;
+        }
+
         .button-container {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-top: 55px;
-          margin-bottom: 32px;
+          margin-top: 40px;
         }
+
         .right-buttons {
           display: flex;
           gap: 12px;
         }
 
         .btn {
-          font-family: "Segoe UI", Arial, sans-serif;
-          font-size: 16px;
+          font-family: "Poppins", sans-serif;
+          font-size: 15px;
           font-weight: 500;
-          padding: 10px 20px;
-          border-radius: 6px;
+          padding: 10px 24px;
+          border-radius: 50px;
           border: 1px solid transparent;
           cursor: pointer;
           transition: all 0.2s ease;
@@ -342,9 +459,9 @@ const index = () => {
           border: 1px solid #ccc;
           color: #176be6;
         }
+
         .back-btn:hover {
-          border-color: #176be6;
-          background: #f7f9ff;
+          background: #f2f7ff;
         }
 
         .preview-btn {
@@ -352,30 +469,28 @@ const index = () => {
           border: 1px solid #ccc;
           color: #176be6;
         }
+
         .preview-btn:hover {
-          border-color: #176be6;
-          background: #f7f9ff;
+          background: #f2f7ff;
         }
 
         .confirm-btn {
           background: #176be6;
           color: #fff;
         }
+
         .confirm-btn:hover {
           background: #0f4fb3;
         }
-
-        .arrow {
-          margin-left: 6px;
+        .underline {
+          text-decoration: underline;
         }
-
-        .eye {
-          margin-left: 6px;
-          font-size: 0.9em;
+        .pointer {
+          cursor: pointer;
         }
       `}</style>
         </>
     );
 };
 
-export default index;
+export default Index;
