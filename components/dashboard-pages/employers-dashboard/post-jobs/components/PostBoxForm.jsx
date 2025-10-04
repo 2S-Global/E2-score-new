@@ -6,13 +6,23 @@ import axios from "axios";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import { useParams } from "react-router-dom"; // or next/navigation if Next.js
+import { useParams } from "next/navigation";
 
 const PostBoxForm = () => {
+  // const { id } = useParams();
+  // console.log("Here is my dang dang id:  ", id);
+  const params = useParams();
+  const id = params.jobId;
+  console.log("Here is my dang dang id:  ", id);
+
   const [showBy, setShowBy] = useState("fixed"); // Track dropdown selection
   const [selectedJobTypes, setSelectedJobTypes] = useState([]);
   const [jobLocationType, setJobLocationType] = useState(""); // Remote or On-site
   const [advertiseCity, setAdvertiseCity] = useState("No"); // Yes or No
   const [salaryStructure, setSalaryStructure] = useState("");
+
+  const [loading, setLoading] = useState(true);
 
   //main
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
@@ -21,7 +31,7 @@ const PostBoxForm = () => {
     console.log("No token");
   }
 
-   const router = useRouter();
+  const router = useRouter();
 
   // API list
   const [specialization, setSpecialization] = useState([]);
@@ -73,6 +83,92 @@ const PostBoxForm = () => {
     advertiseCity: "",
     advertiseCityName: "",
   });
+
+  useEffect(() => {
+    if (id) {
+      const fetchData = async () => {
+
+        console.log("My dang dang useEffect is running successfully !");
+        try {
+
+          const response = await axios.get(`${apiurl}/api/jobposting/get_job_posting_details`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            params: {
+              jobId: id,
+              status: "draft",
+            },
+          });
+
+          if (response.data.success && response.status === 200) {
+            // setFormData(response.data.data);
+            const job = response.data.data; // your "data" object from response
+
+
+            setFormData({
+              jobTitle: job.jobTitle || "",
+              jobDescription: job.jobDescription || "",
+              getApplicationUpdateEmail: job.getApplicationUpdateEmail || "",
+
+              specialization: job.specialization?.map((s) => s._id) || [],
+              jobType: job.jobType?.map((t) => t._id) || [],
+              showBy: job.showBy || "fixed",
+
+              expectedHours: job.expectedHours || "",
+              fromHours: job.fromHours || "",
+              toHours: job.toHours || "",
+
+              contractLength: job.contractLength || "",
+              contractPeriod: job.contractPeriod || "",
+              positionAvailable: job.positionAvailable || "",
+
+              jobExpiryDate: job.jobExpiryDate
+                ? new Date(job.jobExpiryDate).toISOString().split("T")[0]
+                : null,
+
+              salary: {
+                structure: job.salary?.structure || "range",
+                currency: job.salary?.currency || "₹",
+                min: job.salary?.min || null,
+                max: job.salary?.max || null,
+                amount: job.salary?.amount || null,
+                rate: job.salary?.rate || "per year",
+              },
+
+              benefits: job.benefits?.map((b) => b._id) || [],
+
+              careerLevel: job.careerLevel?._id || "",
+              experienceLevel: job.experienceLevel?._id || "",
+              gender: job.gender?.map((g) => g._id) || [],
+
+              industry: job.industry || "",
+              qualification: job.qualification?.map((q) => q._id) || [],
+
+              jobLocationType: job.jobLocationType || "",
+              country: job.country?._id || "",
+              city: job.city?._id || "",
+              branch: job.branch?._id || "",
+              address: job.address || "",
+
+              advertiseCity: job.advertiseCity || "",
+              advertiseCityName: job.advertiseCityName || "",
+            });
+
+
+
+          }
+
+
+
+        } catch (error) {
+          console.error("Error fetching data", error);
+        }
+      };
+
+      fetchData();
+    }
+  }, [id]);
 
   const handleChange = (e) => {
     // console.log("Console By Chandra Sarkar: ", e.target.value);
@@ -365,16 +461,35 @@ const PostBoxForm = () => {
       return;
     }
     try {
-      const response = await axios.post(
-        `${apiurl}/api/jobposting/add_job_posting_details`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
+      let response;
+      if (id) {
+
+        response = await axios.post(
+          `${apiurl}/api/jobposting/edit_job_posting_details`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+            params: {
+              jobId: id,
+              status: "draft",
+            },
           },
-        }
-      );
+        );
+      } else {
+        response = await axios.post(
+          `${apiurl}/api/jobposting/add_job_posting_details`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
 
 
       if (response.data.success) {

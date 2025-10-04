@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import CopyrightFooter from "../../CopyrightFooter";
 import { FaEdit } from "react-icons/fa";
+import CustomizedProgressBars from "@/components/common/loader";
 
 const Index = () => {
     const router = useRouter();
@@ -16,9 +17,11 @@ const Index = () => {
 
     const [data, setData] = useState({});
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true); // start loader
             try {
                 const response = await axios.get(`${apiurl}/api/jobposting/get_job_posting_details`, {
                     headers: {
@@ -35,272 +38,319 @@ const Index = () => {
                 }
             } catch (err) {
                 setError(err.response?.data?.message || err.message);
+            } finally {
+                setLoading(false); // stop loader
             }
         };
 
         fetchData();
     }, []);
 
+    // Add this function inside your component
+    const handleConfirm = async () => {
+        setLoading(true);
+        try {
+            console.log("Handle Confirm is running successfully and token from review-jobs !", token)
+            const response = await axios.post(
+                `${apiurl}/api/jobposting/confirm_job_posting_details`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    params: {
+                        jobId: jobId,
+                        status: "draft",
+                    },
+                }
+            );
+
+            if (response.data.success) {
+                // Redirect to another page on success
+                router.push("/employers-dashboard/manage-jobs"); // Replace with your target page
+            } else {
+                alert(response.data.message || "Something went wrong!");
+            }
+        } catch (err) {
+            alert(err.response?.data?.message || err.message);
+        } finally {
+                setLoading(false); // stop loader
+            }
+    };
+
+
     return (
         <>
-            <div className="review-container">
-                <h1 className="review-title">Review</h1>
+            {loading ? (
+                <CustomizedProgressBars />
+            ) : (
+                <div className="review-container">
+                    <h1 className="review-title">Review</h1>
 
-                <div className="job-details">
-                    <h2 className="underline">Job Details</h2>
+                    <div className="job-details">
+                        <h2 className="underline">Job Details</h2>
 
-                    {data?.jobTitle && (
-                        <div className="detail-row">
-                            <div className="detail-label">Job title</div>
-                            <div className="detail-value">
-                                {data?.jobTitle || "N/A"}
-                                <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs/edit/${jobId}`)}
-                                >&#9998;</span>
+                        {data?.jobTitle && (
+                            <div className="detail-row">
+                                <div className="detail-label">Job title</div>
+                                <div className="detail-value">
+                                    {data?.jobTitle || "N/A"}
+                                    <span className="edit-icon"
+                                        // onClick={() => router.push(`/employers-dashboard/post-jobs/edit/${jobId}`)}
+                                        onClick={async () => {
+                                            setLoading(true); // show loader
+                                            // simulate a small delay for navigation, or do async operations if needed
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                            // No need to set editLoading(false) because page will navigate
+                                        }}
+                                    >
+                                        {/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {data?.companyName && (
-                        <div className="detail-row">
-                            <div className="detail-label">Company for this job</div>
-                            <div className="detail-value">
-                                {data.companyName}
-                                <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                >&#9998;</span>
+                        {data?.companyName && (
+                            <div className="detail-row">
+                                <div className="detail-label">Company for this job</div>
+                                <div className="detail-value">
+                                    {data.companyName}
+                                    <span className="edit-icon"
+                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                    >&#9998;</span>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {data?.positionAvailable && (
-                        <div className="detail-row">
-                            <div className="detail-label">Number of openings</div>
-                            <div className="detail-value">
-                                {data.positionAvailable}
-                                <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                >&#9998;</span>
+                        {data?.positionAvailable && (
+                            <div className="detail-row">
+                                <div className="detail-label">Number of openings</div>
+                                <div className="detail-value">
+                                    {data.positionAvailable}
+                                    <span className="edit-icon"
+                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                    >&#9998;</span>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {data?.country && (
-                        <div className="detail-row">
-                            <div className="detail-label">Country</div>
-                            <div className="detail-value">
-                                {typeof data.country === "object" ? data.country.name : data.country}
-                                <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                >&#9998;</span>
+                        {data?.country && (
+                            <div className="detail-row">
+                                <div className="detail-label">Country</div>
+                                <div className="detail-value">
+                                    {typeof data.country === "object" ? data.country.name : data.country}
+                                    <span className="edit-icon"
+                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                    >&#9998;</span>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {data?.city && (
-                        <div className="detail-row">
-                            <div className="detail-label">City</div>
-                            <div className="detail-value">
-                                {data.city}
-                                <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                >&#9998;</span>
+                        {data?.city && (
+                            <div className="detail-row">
+                                <div className="detail-label">City</div>
+                                <div className="detail-value">
+                                    {data.city.city_name}
+                                    <span className="edit-icon"
+                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                    >&#9998;</span>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {data?.branch && (
-                        <div className="detail-row">
-                            <div className="detail-label">Branch</div>
-                            <div className="detail-value">
-                                {data.branch.name}
-                                <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                >&#9998;</span>
+                        {data?.branch && (
+                            <div className="detail-row">
+                                <div className="detail-label">Branch</div>
+                                <div className="detail-value">
+                                    {data.branch.name}
+                                    <span className="edit-icon"
+                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                    >&#9998;</span>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {data?.address && (
-                        <div className="detail-row">
-                            <div className="detail-label">Complete Address</div>
-                            <div className="detail-value">
-                                {data.address}
-                                <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                >&#9998;</span>
+                        {data?.address && (
+                            <div className="detail-row">
+                                <div className="detail-label">Complete Address</div>
+                                <div className="detail-value">
+                                    {data.address}
+                                    <span className="edit-icon"
+                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                    >&#9998;</span>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {data?.jobType && (
-                        <div className="detail-row">
-                            <div className="detail-label">Job Type</div>
-                            <div className="detail-value">
-                                {data.jobType.map(item => item.label).join(", ")}
-                                <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                >&#9998;</span>
+                        {data?.jobType && (
+                            <div className="detail-row">
+                                <div className="detail-label">Job Type</div>
+                                <div className="detail-value">
+                                    {data.jobType.map(item => item.label).join(", ")}
+                                    <span className="edit-icon"
+                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                    >&#9998;</span>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {data?.expectedHours && (
-                        <div className="detail-row">
-                            <div className="detail-label">Expected hours per week</div>
-                            <div className="detail-value">
-                                {data.expectedHours}
-                                <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                >&#9998;</span>
+                        {data?.expectedHours && (
+                            <div className="detail-row">
+                                <div className="detail-label">Expected hours per week</div>
+                                <div className="detail-value">
+                                    {data.expectedHours}
+                                    <span className="edit-icon"
+                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                    >&#9998;</span>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {data?.contractLength && (
-                        <div className="detail-row">
-                            <div className="detail-label">Contract length</div>
-                            <div className="detail-value">
-                                {data.contractLength}
-                                <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                >&#9998;</span>
+                        {data?.contractLength && (
+                            <div className="detail-row">
+                                <div className="detail-label">Contract length</div>
+                                <div className="detail-value">
+                                    {data.contractLength}
+                                    <span className="edit-icon"
+                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                    >&#9998;</span>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {data?.salary && (
-                        <div className="detail-row">
-                            <div className="detail-label">Pay</div>
-                            <div className="detail-value">
-                                {data.salary?.structure === "range" && (
-                                    <>
-                                        {data.salary.currency}
-                                        {data.salary.min.toLocaleString("en-IN", { maximumFractionDigits: 2 })} -{" "}
-                                        {data.salary.currency}
-                                        {data.salary.max.toLocaleString("en-IN", { maximumFractionDigits: 2 })}{" "}
-                                        {data.salary.rate}
-                                    </>
-                                )}
+                        {data?.salary && (
+                            <div className="detail-row">
+                                <div className="detail-label">Pay</div>
+                                <div className="detail-value">
+                                    {data.salary?.structure === "range" && (
+                                        <>
+                                            {data.salary.currency}
+                                            {data.salary.min.toLocaleString("en-IN", { maximumFractionDigits: 2 })} -{" "}
+                                            {data.salary.currency}
+                                            {data.salary.max.toLocaleString("en-IN", { maximumFractionDigits: 2 })}{" "}
+                                            {data.salary.rate}
+                                        </>
+                                    )}
 
-                                {data.salary?.structure === "starting amount" && (
-                                    <>
-                                        From {data.salary.currency}
-                                        {data.salary.amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })}{" "}
-                                        {data.salary.rate}
-                                    </>
-                                )}
+                                    {data.salary?.structure === "starting amount" && (
+                                        <>
+                                            From {data.salary.currency}
+                                            {data.salary.amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })}{" "}
+                                            {data.salary.rate}
+                                        </>
+                                    )}
 
-                                {data.salary?.structure === "maximum amount" && (
-                                    <>
-                                        Up to {data.salary.currency}
-                                        {data.salary.amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })}{" "}
-                                        {data.salary.rate}
-                                    </>
-                                )}
+                                    {data.salary?.structure === "maximum amount" && (
+                                        <>
+                                            Up to {data.salary.currency}
+                                            {data.salary.amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })}{" "}
+                                            {data.salary.rate}
+                                        </>
+                                    )}
 
-                                {data.salary?.structure === "exact amount" && (
-                                    <>
-                                        {data.salary.currency}
-                                        {data.salary.amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })}{" "}
-                                        {data.salary.rate}
-                                    </>
-                                )}
-                                <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                >&#9998;</span>
+                                    {data.salary?.structure === "exact amount" && (
+                                        <>
+                                            {data.salary.currency}
+                                            {data.salary.amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })}{" "}
+                                            {data.salary.rate}
+                                        </>
+                                    )}
+                                    <span className="edit-icon"
+                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                    >&#9998;</span>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {data?.benefits && (
-                        <div className="detail-row">
-                            <div className="detail-label">Benefits</div>
-                            <div className="detail-value">
-                                {data.benefits.map((item) => item.name).join(", ")}
-                                <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                >&#9998;</span>
+                        {data?.benefits && (
+                            <div className="detail-row">
+                                <div className="detail-label">Benefits</div>
+                                <div className="detail-value">
+                                    {data.benefits.map((item) => item.name).join(", ")}
+                                    <span className="edit-icon"
+                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                    >&#9998;</span>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {data?.jobDescription && (
-                        <div className="detail-row">
-                            <div className="detail-label">Job description</div>
-                            <div className="detail-value">
-                                {data.jobDescription}
-                                <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                >&#9998;</span>
+                        {data?.jobDescription && (
+                            <div className="detail-row">
+                                <div className="detail-label">Job description</div>
+                                <div className="detail-value">
+                                    {data.jobDescription}
+                                    <span className="edit-icon"
+                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                    >&#9998;</span>
+                                </div>
                             </div>
-                        </div>
-                    )}
-                </div>
-
-
-                <hr className="divider" />
-
-                <div className="job-details">
-                    <h2 className="underline">Settings</h2>
-
-                    {data?.getApplicationUpdateEmail && (
-                        <div className="detail-row">
-                            <div className="detail-label">Application method</div>
-                            <div className="detail-value">
-                                Email
-                                <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                >&#9998;</span>
-                            </div>
-                        </div>
-                    )}
-
-                    <div className="detail-row">
-                        <div className="detail-label">Require resume</div>
-                        <div className="detail-value">
-                            Yes
-                            <span className="edit-icon"
-                                onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                            >&#9998;</span>
-                        </div>
+                        )}
                     </div>
 
-                    {data?.getApplicationUpdateEmail && (
+
+                    <hr className="divider" />
+
+                    <div className="job-details">
+                        <h2 className="underline">Settings</h2>
+
+                        {data?.getApplicationUpdateEmail && (
+                            <div className="detail-row">
+                                <div className="detail-label">Application method</div>
+                                <div className="detail-value">
+                                    Email
+                                    <span className="edit-icon"
+                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                    >&#9998;</span>
+                                </div>
+                            </div>
+                        )}
+
                         <div className="detail-row">
-                            <div className="detail-label">Application updates</div>
+                            <div className="detail-label">Require resume</div>
                             <div className="detail-value">
-                                {data.getApplicationUpdateEmail}
+                                Yes
                                 <span className="edit-icon"
                                     onClick={() => router.push(`/employers-dashboard/post-jobs`)}
                                 >&#9998;</span>
                             </div>
                         </div>
-                    )}
 
-                    {data?.jobExpiryDate && (
-                        <div className="detail-row">
-                            <div className="detail-label">Job Expiry Date</div>
-                            <div className="detail-value">
-                                {new Date(data.jobExpiryDate).toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "long",
-                                    year: "numeric",
-                                })}
-                                <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                >&#9998;</span>
+                        {data?.getApplicationUpdateEmail && (
+                            <div className="detail-row">
+                                <div className="detail-label">Application updates</div>
+                                <div className="detail-value">
+                                    {data.getApplicationUpdateEmail}
+                                    <span className="edit-icon"
+                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                    >&#9998;</span>
+                                </div>
                             </div>
-                        </div>
-                    )}
-                </div>
+                        )}
 
-                <hr className="divider" />
+                        {data?.jobExpiryDate && (
+                            <div className="detail-row">
+                                <div className="detail-label">Job Expiry Date</div>
+                                <div className="detail-value">
+                                    {new Date(data.jobExpiryDate).toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "long",
+                                        year: "numeric",
+                                    })}
+                                    <span className="edit-icon"
+                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                    >&#9998;</span>
+                                </div>
+                            </div>
+                        )}
+                    </div>
 
-                <div className="job-details">
-                    <h2 className="underline">Account</h2>
+                    <hr className="divider" />
 
-                    {/* <div className="detail-row">
+                    <div className="job-details">
+                        <h2 className="underline">Account</h2>
+
+                        {/* <div className="detail-row">
                         <div className="detail-label">Contact</div>
                         <div className="detail-value">
                             Chandra Sarkar
@@ -308,39 +358,40 @@ const Index = () => {
                         </div>
                     </div> */}
 
-                    {data?.phoneNumber && (
-                        <div className="detail-row">
-                            <div className="detail-label">Phone number</div>
-                            <div className="detail-value">
-                                {data.phoneNumber}
-                                <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                >&#9998;</span>
+                        {data?.phoneNumber && (
+                            <div className="detail-row">
+                                <div className="detail-label">Phone number</div>
+                                <div className="detail-value">
+                                    {data.phoneNumber}
+                                    <span className="edit-icon"
+                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                    >&#9998;</span>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {data?.companyName && (
-                        <div className="detail-row">
-                            <div className="detail-label">Your company name</div>
-                            <div className="detail-value">
-                                {data.companyName}
-                                <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                >&#9998;</span>
+                        {data?.companyName && (
+                            <div className="detail-row">
+                                <div className="detail-label">Your company name</div>
+                                <div className="detail-value">
+                                    {data.companyName}
+                                    <span className="edit-icon"
+                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
+                                    >&#9998;</span>
+                                </div>
                             </div>
-                        </div>
-                    )}
-                </div>
+                        )}
+                    </div>
 
-                <div className="button-container">
-                    <button className="btn back-btn">← Back</button>
-                    <div className="right-buttons">
-                        <button className="btn preview-btn">Preview</button>
-                        <button className="btn confirm-btn">Confirm</button>
+                    <div className="button-container">
+                        <button className="btn back-btn">← Back</button>
+                        <div className="right-buttons">
+                            <button className="btn preview-btn">Preview</button>
+                            <button className="btn confirm-btn" onClick={handleConfirm}>Confirm</button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             <CopyrightFooter />
 
