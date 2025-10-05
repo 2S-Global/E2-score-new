@@ -74,8 +74,8 @@ const Index = () => {
         } catch (err) {
             alert(err.response?.data?.message || err.message);
         } finally {
-                setLoading(false); // stop loader
-            }
+            setLoading(false); // stop loader
+        }
     };
 
 
@@ -96,12 +96,9 @@ const Index = () => {
                                 <div className="detail-value">
                                     {data?.jobTitle || "N/A"}
                                     <span className="edit-icon"
-                                        // onClick={() => router.push(`/employers-dashboard/post-jobs/edit/${jobId}`)}
                                         onClick={async () => {
-                                            setLoading(true); // show loader
-                                            // simulate a small delay for navigation, or do async operations if needed
-                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
-                                            // No need to set editLoading(false) because page will navigate
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=jobTitle`);
                                         }}
                                     >
                                         {/* &#9998; */}
@@ -117,8 +114,13 @@ const Index = () => {
                                 <div className="detail-value">
                                     {data.companyName}
                                     <span className="edit-icon"
-                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                    >&#9998;</span>
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=jobDescription`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -129,8 +131,13 @@ const Index = () => {
                                 <div className="detail-value">
                                     {data.positionAvailable}
                                     <span className="edit-icon"
-                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                    >&#9998;</span>
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=numberOfPositionAvaiable`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -141,8 +148,13 @@ const Index = () => {
                                 <div className="detail-value">
                                     {typeof data.country === "object" ? data.country.name : data.country}
                                     <span className="edit-icon"
-                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                    >&#9998;</span>
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -153,8 +165,13 @@ const Index = () => {
                                 <div className="detail-value">
                                     {data.city.city_name}
                                     <span className="edit-icon"
-                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                    >&#9998;</span>
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -165,8 +182,13 @@ const Index = () => {
                                 <div className="detail-value">
                                     {data.branch.name}
                                     <span className="edit-icon"
-                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                    >&#9998;</span>
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -177,8 +199,13 @@ const Index = () => {
                                 <div className="detail-value">
                                     {data.address}
                                     <span className="edit-icon"
-                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                    >&#9998;</span>
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -189,8 +216,13 @@ const Index = () => {
                                 <div className="detail-value">
                                     {data.jobType.map(item => item.label).join(", ")}
                                     <span className="edit-icon"
-                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                    >&#9998;</span>
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=jobType`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -201,8 +233,13 @@ const Index = () => {
                                 <div className="detail-value">
                                     {data.expectedHours}
                                     <span className="edit-icon"
-                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                    >&#9998;</span>
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -213,8 +250,13 @@ const Index = () => {
                                 <div className="detail-value">
                                     {data.contractLength}
                                     <span className="edit-icon"
-                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                    >&#9998;</span>
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -257,8 +299,13 @@ const Index = () => {
                                         </>
                                     )}
                                     <span className="edit-icon"
-                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                    >&#9998;</span>
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=salaryBlock`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -269,8 +316,13 @@ const Index = () => {
                                 <div className="detail-value">
                                     {data.benefits.map((item) => item.name).join(", ")}
                                     <span className="edit-icon"
-                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                    >&#9998;</span>
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=benefitsBlock`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -281,8 +333,13 @@ const Index = () => {
                                 <div className="detail-value">
                                     {data.jobDescription}
                                     <span className="edit-icon"
-                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                    >&#9998;</span>
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=jobDescriptionBlock`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -300,8 +357,13 @@ const Index = () => {
                                 <div className="detail-value">
                                     Email
                                     <span className="edit-icon"
-                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                    >&#9998;</span>
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=mailBlock`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -311,8 +373,13 @@ const Index = () => {
                             <div className="detail-value">
                                 Yes
                                 <span className="edit-icon"
-                                    onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                >&#9998;</span>
+                                    onClick={async () => {
+                                        setLoading(true);
+                                        router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                    }}
+                                >{/* &#9998; */}
+                                    {loading ? <CustomizedProgressBars /> : "✎"}
+                                </span>
                             </div>
                         </div>
 
@@ -322,8 +389,13 @@ const Index = () => {
                                 <div className="detail-value">
                                     {data.getApplicationUpdateEmail}
                                     <span className="edit-icon"
-                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                    >&#9998;</span>
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -338,8 +410,13 @@ const Index = () => {
                                         year: "numeric",
                                     })}
                                     <span className="edit-icon"
-                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                    >&#9998;</span>
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -364,8 +441,13 @@ const Index = () => {
                                 <div className="detail-value">
                                     {data.phoneNumber}
                                     <span className="edit-icon"
-                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                    >&#9998;</span>
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -376,8 +458,13 @@ const Index = () => {
                                 <div className="detail-value">
                                     {data.companyName}
                                     <span className="edit-icon"
-                                        onClick={() => router.push(`/employers-dashboard/post-jobs`)}
-                                    >&#9998;</span>
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
                                 </div>
                             </div>
                         )}

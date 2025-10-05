@@ -7,14 +7,20 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 // import { useParams } from "react-router-dom"; // or next/navigation if Next.js
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 const PostBoxForm = () => {
   // const { id } = useParams();
   // console.log("Here is my dang dang id:  ", id);
-  const params = useParams();
-  const id = params.jobId;
-  console.log("Here is my dang dang id:  ", id);
+  const params = useParams();  // for dynamic route parts like [jobId]
+  const searchParams = useSearchParams(); // for query params like ?type=jobTitle
+  const id = params.jobId;   // from route /edit/[jobId]
+  const type = searchParams.get("type");        // from query string ?type=jobTitle
+
+
+  console.log("Job ID:", id);
+  console.log("Type:", type);
+  // console.log("Here is my dang dang id:  ", id);
 
   const [showBy, setShowBy] = useState("fixed"); // Track dropdown selection
   const [selectedJobTypes, setSelectedJobTypes] = useState([]);
@@ -83,6 +89,29 @@ const PostBoxForm = () => {
     advertiseCity: "",
     advertiseCityName: "",
   });
+
+  useEffect(() => {
+      if (type) {
+        const element = document.getElementById(type);
+  
+        if (element) {
+          // Scroll into view
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
+  
+          if (type != "all") {
+            // Add highlight class
+            element.classList.add("highlight");
+          }
+          // Remove after 3s
+          const timeout = setTimeout(() => {
+            element.classList.remove("highlight");
+          }, 3000);
+  
+          // Cleanup if effect re-runs
+          return () => clearTimeout(timeout);
+        }
+      }
+    }, [type]);
 
   useEffect(() => {
     if (id) {
@@ -529,7 +558,7 @@ const PostBoxForm = () => {
     <form className="default-form" onSubmit={handleSubmit}>
       <div className="row">
         {/* <!-- Input --> */}
-        <div className="form-group col-lg-12 col-md-12 mt-2">
+        <div className="form-group col-lg-12 col-md-12 mt-2" id="jobTitle">
           <label htmlFor="jobTitle">
             <b>Job Title{" "}</b>
             <span style={{ color: "red" }}>*</span>
@@ -538,7 +567,7 @@ const PostBoxForm = () => {
         </div>
 
         {/* <!-- About Company --> */}
-        <div className="form-group col-lg-12 col-md-12">
+        <div className="form-group col-lg-12 col-md-12" id="jobDescriptionBlock">
           <label htmlFor="jobDescription">
             <b>Job Description{" "}</b>
             <span style={{ color: "red" }}>*</span>
@@ -547,7 +576,7 @@ const PostBoxForm = () => {
         </div>
 
         {/* <!-- Input --> */}
-        <div className="form-group col-lg-6 col-md-12">
+        <div className="form-group col-lg-6 col-md-12" id="mailBlock">
           <label htmlFor="getApplicationUpdateEmail">
             <b>Get application updates{" "}</b>
             <span style={{ color: "red" }}>*</span>
@@ -585,7 +614,7 @@ const PostBoxForm = () => {
           />
         </div>
 
-        <div className="form-group col-lg-6 col-md-12">
+        <div className="form-group col-lg-6 col-md-12" id="jobType">
           <label>
             <b>Job Type{" "}</b>
             <span style={{ color: "red" }}>*</span>
@@ -619,7 +648,7 @@ const PostBoxForm = () => {
           />
         </div>
 
-        <div className="form-group col-lg-6 col-md-12">
+        <div className="form-group col-lg-6 col-md-12" id="numberOfPositionAvaiable">
           <label htmlFor="positionAvaiable">
             <b>Number of Positions Available{" "}</b>
             <span style={{ color: "red" }}>*</span>
@@ -862,7 +891,7 @@ const PostBoxForm = () => {
 
         {/* Salary Part Added By Chandra  starts from here */}
 
-        <div className="form-group col-lg-12 col-md-12">
+        <div className="form-group col-lg-12 col-md-12" id="salaryBlock">
           <label>Salary</label>
           <div className="d-flex gap-3">
             {/* Show pay by Dropdown */}
@@ -1001,7 +1030,7 @@ const PostBoxForm = () => {
 
         {/* Benefits Added By Chandra starts from here */}
         {/* <!-- Search Select --> */}
-        <div className="form-group col-lg-6 col-md-12">
+        <div className="form-group col-lg-6 col-md-12" id="benefitsBlock">
           <label>Benefits </label>
           <Select
             isMulti
