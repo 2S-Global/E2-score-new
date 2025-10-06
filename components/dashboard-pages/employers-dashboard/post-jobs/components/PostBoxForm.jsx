@@ -606,7 +606,7 @@ const PostBoxForm = () => {
               <b>Get application updates{" "}</b>
               <span style={{ color: "red" }}>*</span>
             </label>
-            <input type="text" name="getApplicationUpdateEmail" id="getApplicationUpdateEmail" value={formData.getApplicationUpdateEmail} onChange={handleChange} required placeholder="" />
+            <input type="text" name="getApplicationUpdateEmail" id="getApplicationUpdateEmail" value={formData.getApplicationUpdateEmail} onChange={handleChange} required placeholder="testing@gmail.com" />
           </div>
 
           {/* <!-- Search Select --> */}
