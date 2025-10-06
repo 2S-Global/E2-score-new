@@ -415,7 +415,8 @@ const Index = () => {
                         )}
 
                         {/* Industry Level block */}
-                        {data?.industry && (
+                        
+                        {/* {data?.industry && (
                             <div className="detail-row">
                                 <div className="detail-label">Industry</div>
                                 <div className="detail-value">
@@ -425,12 +426,12 @@ const Index = () => {
                                             setLoading(true);
                                             router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=industryBlock`);
                                         }}
-                                    >{/* &#9998; */}
+                                    >
                                         {loading ? <CustomizedProgressBars /> : "✎"}
                                     </span>
                                 </div>
                             </div>
-                        )}
+                        )}  */}
 
                         {/* Qualification Block */}
 
