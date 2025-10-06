@@ -98,7 +98,7 @@ const Index = () => {
                                     <span className="edit-icon"
                                         onClick={async () => {
                                             setLoading(true);
-                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=jobTitle`);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=jobTitleBlock`);
                                         }}
                                     >
                                         {/* &#9998; */}
@@ -119,7 +119,7 @@ const Index = () => {
                                             router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=jobDescription`);
                                         }}
                                     >{/* &#9998; */}
-                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                        {/* {loading ? <CustomizedProgressBars /> : "✎"} */}
                                     </span>
                                 </div>
                             </div>
@@ -150,7 +150,7 @@ const Index = () => {
                                     <span className="edit-icon"
                                         onClick={async () => {
                                             setLoading(true);
-                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=countryBlock`);
                                         }}
                                     >{/* &#9998; */}
                                         {loading ? <CustomizedProgressBars /> : "✎"}
@@ -167,7 +167,7 @@ const Index = () => {
                                     <span className="edit-icon"
                                         onClick={async () => {
                                             setLoading(true);
-                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=cityBlock`);
                                         }}
                                     >{/* &#9998; */}
                                         {loading ? <CustomizedProgressBars /> : "✎"}
@@ -184,7 +184,7 @@ const Index = () => {
                                     <span className="edit-icon"
                                         onClick={async () => {
                                             setLoading(true);
-                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=branchBlock`);
                                         }}
                                     >{/* &#9998; */}
                                         {loading ? <CustomizedProgressBars /> : "✎"}
@@ -201,7 +201,7 @@ const Index = () => {
                                     <span className="edit-icon"
                                         onClick={async () => {
                                             setLoading(true);
-                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=completeAddressBlock`);
                                         }}
                                     >{/* &#9998; */}
                                         {loading ? <CustomizedProgressBars /> : "✎"}
@@ -227,6 +227,24 @@ const Index = () => {
                             </div>
                         )}
 
+                        {/* Specilization Blocks */}
+                        {data?.specialization && data.specialization.length > 0 && (
+                            <div className="detail-row">
+                                <div className="detail-label">Specialization</div>
+                                <div className="detail-value">
+                                    {data.specialization.map(item => item.name).join(", ")}
+                                    <span className="edit-icon"
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=specializationBlock`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+
                         {data?.expectedHours && (
                             <div className="detail-row">
                                 <div className="detail-label">Expected hours per week</div>
@@ -235,7 +253,7 @@ const Index = () => {
                                     <span className="edit-icon"
                                         onClick={async () => {
                                             setLoading(true);
-                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=expectedHoursBlock`);
                                         }}
                                     >{/* &#9998; */}
                                         {loading ? <CustomizedProgressBars /> : "✎"}
@@ -248,7 +266,20 @@ const Index = () => {
                             <div className="detail-row">
                                 <div className="detail-label">Contract length</div>
                                 <div className="detail-value">
-                                    {data.contractLength}
+                                    {data.contractLength}{" "}
+                                    {data.contractPeriod === "month"
+                                        ? data.contractLength > 1
+                                            ? "months"
+                                            : "month"
+                                        : data.contractPeriod === "week"
+                                            ? data.contractLength > 1
+                                                ? "weeks"
+                                                : "week"
+                                            : data.contractPeriod === "day"
+                                                ? data.contractLength > 1
+                                                    ? "days"
+                                                    : "day"
+                                                : ""}
                                     <span className="edit-icon"
                                         onClick={async () => {
                                             setLoading(true);
@@ -327,6 +358,99 @@ const Index = () => {
                             </div>
                         )}
 
+                        {/* Career Level block */}
+
+                        {data?.careerLevel && (
+                            <div className="detail-row">
+                                <div className="detail-label">Career Level</div>
+                                <div className="detail-value">
+                                    {data.careerLevel.name}
+                                    <span className="edit-icon"
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=careerLevelBlock`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Experience Level block */}
+                        {data?.experienceLevel && (
+                            <div className="detail-row">
+                                <div className="detail-label">Experience Level</div>
+                                <div className="detail-value">
+                                    {data.experienceLevel.name}
+                                    <span className="edit-icon"
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=experienceLevelBlock`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Gender Block */}
+
+                        {data?.gender && (
+                            <div className="detail-row">
+                                <div className="detail-label">Gender</div>
+                                <div className="detail-value">
+                                    {data.gender.map((item) => item.name).join(", ")}
+                                    <span className="edit-icon"
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=genderBlock`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Industry Level block */}
+                        {data?.industry && (
+                            <div className="detail-row">
+                                <div className="detail-label">Industry</div>
+                                <div className="detail-value">
+                                    {data.industry}
+                                    <span className="edit-icon"
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=industryBlock`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Qualification Block */}
+
+                        {data?.qualification && (
+                            <div className="detail-row">
+                                <div className="detail-label">Qualification</div>
+                                <div className="detail-value">
+                                    {data.qualification.map((item) => item.name).join(", ")}
+                                    <span className="edit-icon"
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=qualificationBlock`);
+                                        }}
+                                    >{/* &#9998; */}
+                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+
                         {data?.jobDescription && (
                             <div className="detail-row">
                                 <div className="detail-label">Job description</div>
@@ -359,7 +483,7 @@ const Index = () => {
                                     <span className="edit-icon"
                                         onClick={async () => {
                                             setLoading(true);
-                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=mailBlock`);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=mailBlock123`);
                                         }}
                                     >{/* &#9998; */}
                                         {loading ? <CustomizedProgressBars /> : "✎"}
@@ -391,7 +515,7 @@ const Index = () => {
                                     <span className="edit-icon"
                                         onClick={async () => {
                                             setLoading(true);
-                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=mailBlock`);
                                         }}
                                     >{/* &#9998; */}
                                         {loading ? <CustomizedProgressBars /> : "✎"}
@@ -412,7 +536,7 @@ const Index = () => {
                                     <span className="edit-icon"
                                         onClick={async () => {
                                             setLoading(true);
-                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=jobExpiryDateBlock`);
                                         }}
                                     >{/* &#9998; */}
                                         {loading ? <CustomizedProgressBars /> : "✎"}
@@ -446,7 +570,7 @@ const Index = () => {
                                             router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
                                         }}
                                     >{/* &#9998; */}
-                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                        {/* {loading ? <CustomizedProgressBars /> : "✎"} */}
                                     </span>
                                 </div>
                             </div>
@@ -463,7 +587,7 @@ const Index = () => {
                                             router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
                                         }}
                                     >{/* &#9998; */}
-                                        {loading ? <CustomizedProgressBars /> : "✎"}
+                                        {/* {loading ? <CustomizedProgressBars /> : "✎"} */}
                                     </span>
                                 </div>
                             </div>
