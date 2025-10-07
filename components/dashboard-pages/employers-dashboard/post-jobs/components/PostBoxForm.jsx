@@ -8,6 +8,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 // import { useParams } from "react-router-dom"; // or next/navigation if Next.js
 import { useParams, useSearchParams } from "next/navigation";
+import { validateDocuments } from "./validatePostJobDocuments";
+import MessageComponent from "@/components/common/ResponseMsg";
 
 const PostBoxForm = () => {
   // const { id } = useParams();
@@ -51,6 +53,11 @@ const PostBoxForm = () => {
   const [country, setCountry] = useState([]);
   const [city, setCity] = useState([]);
   const [branch, setBranch] = useState([]);
+
+  // Error Variables
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [errorId, setErrorId] = useState(0);
 
   //  Code added by Chandra Sarkar on 22th september 2025  -- starts from here
   const [formData, setFormData] = useState({
@@ -500,6 +507,16 @@ const PostBoxForm = () => {
     console.log("Next Button is Submitted Successfully !");
     console.log("Form Data Submitted:", formData);
 
+    const errorMsg = validateDocuments(formData);
+    console.log("Here is my Error message before submitting the form !", errorMsg);
+    if (errorMsg) {
+      setError(errorMsg);
+      setErrorId(Date.now());
+      return;
+    }
+
+    console.log("Here is my Error message ", errorMsg);
+
     // setError(null);
     // setSuccess(null);
     // if (!formData.full_name.trim() || !formData.gender || !formData.dob) {
@@ -531,6 +548,16 @@ const PostBoxForm = () => {
             },
           },
         );
+
+        if (!response.data.success) {
+          setError(response.data.message);
+          setErrorId(Date.now());
+          return;
+        }
+
+        setSuccess("Candidate added successfully!");
+
+
       } else {
         response = await axios.post(
           `${apiurl}/api/jobposting/add_job_posting_details`,
@@ -542,6 +569,14 @@ const PostBoxForm = () => {
             },
           }
         );
+
+        if (!response.data.success) {
+          setError(response.data.message);
+          setErrorId(Date.now());
+          return;
+        }
+
+        setSuccess("Candidate added successfully!");
       }
 
 
@@ -569,18 +604,47 @@ const PostBoxForm = () => {
       // setSuccess_main("Details updated successfully!");
       // setReload(true);
       // setTimeout(() => onClose(), 1500); // Close modal after success
+
+      console.log("My Try Block is executing  --  By Chandra sarkar ");
     } catch (error) {
       console.error("Upload failed:", error);
+
+      setError("Failed. Try again.");
+      setErrorId(Date.now());
+
+
+      if (error.response) {
+        // ✅ The request was made and the server responded with a status code outside 2xx
+        console.error("🔹 Response data:", error.response.data);
+        console.error("🔹 Status code:", error.response.status);
+        console.error("🔹 Headers:", error.response.headers);
+      } else if (error.request) {
+        // ✅ The request was made but no response was received
+        console.error("⚠️ No response received from server:", error.request);
+      } else {
+        // ✅ Something happened while setting up the request
+        console.error("⚙️ Error setting up request:", error.message);
+      }
       // setError("Failed to update Details. Please try again.");
       // setError_main("Failed to update Details. Please try again.");
+
+      console.log("My Catch Block is executing  --  By Chandra sarkar ");
+
     } finally {
       // setLoading(false);
+
+      console.log("My finally Block is executing  --  By Chandra sarkar ");
     }
   };
 
   return (
     <>
       <form className="default-form" onSubmit={handleSubmit}>
+        <MessageComponent
+          error={error}
+          success={success}
+          errorId={errorId}
+        />
         <div className="row">
           {/* <!-- Input --> */}
           <div className="form-group col-lg-12 col-md-12 mt-2" id="jobTitleBlock">
@@ -639,6 +703,14 @@ const PostBoxForm = () => {
             />
           </div>
 
+          <div className="form-group col-lg-6 col-md-12" id="numberOfPositionAvaiable">
+            <label htmlFor="positionAvaiable">
+              <b>Number of Positions Available{" "}</b>
+              <span style={{ color: "red" }}>*</span>
+            </label>
+            <input type="number" name="positionAvailable" id="positionAvaiable" value={formData.positionAvailable} onChange={handleChange} required min={1} placeholder="1" className="form-control" />
+          </div>
+
           {/* Here is my Job Type Block start -------    */}
 
           <div className="form-group col-lg-6 col-md-12" id="jobType">
@@ -660,7 +732,20 @@ const PostBoxForm = () => {
                   ? selectedOptions.map((opt) => opt.value)
                   : [];
 
-                const isPartTimeSelected = selectedValues.includes("Part-time"); // adjust if your value is different
+                // Find the labels of the selected job types
+                const selectedLabels = jobType
+                  .filter((opt) => selectedValues.includes(opt.value))
+                  .map((opt) => opt.label);
+
+                // ✅ Log the selected job type values
+                console.log("Selected Job Types dang dang--:", selectedValues);
+
+                // const isPartTimeSelected = selectedValues.includes("Part-time"); // adjust if your value is different
+
+                const isPartTimeSelected = selectedLabels.includes("Part-time");
+
+                console.log("print isPartTimeSelected is present or not---", isPartTimeSelected);
+
                 const isInternLikeSelected = selectedValues.some((v) =>
                   ["Internship", "Contractual / Temporary", "Freelance"].includes(v)
                 );
@@ -684,14 +769,6 @@ const PostBoxForm = () => {
 
           {/* Here is my Job Type Block end -------    */}
 
-          <div className="form-group col-lg-6 col-md-12" id="numberOfPositionAvaiable">
-            <label htmlFor="positionAvaiable">
-              <b>Number of Positions Available{" "}</b>
-              <span style={{ color: "red" }}>*</span>
-            </label>
-            <input type="number" name="positionAvailable" id="positionAvaiable" value={formData.positionAvailable} onChange={handleChange} required placeholder="" className="form-control" />
-          </div>
-
 
           {/* Part-time => Expected hours */}
           {/* Fixed Timing for Part Time */}
@@ -714,7 +791,7 @@ const PostBoxForm = () => {
                     }))
                   }
                   }>
-                    <option value="">Select</option>
+                    {/* <option value="">Select</option> */}
                     <option value="fixed">Fixed hours</option>
                     <option value="range">Range</option>
                     <option value="maximum">Maximum</option>
@@ -928,7 +1005,10 @@ const PostBoxForm = () => {
           {/* Salary Part Added By Chandra  starts from here */}
 
           <div className="form-group col-lg-12 col-md-12" id="salaryBlock">
-            <label>Salary</label>
+            <label>
+              <b>Salary{" "}</b>
+              <span style={{ color: "red" }}>*</span>
+            </label>
             <div className="d-flex gap-3">
               {/* Show pay by Dropdown */}
               <div className="flex-fill">
@@ -1390,11 +1470,11 @@ const PostBoxForm = () => {
             <button className="theme-btn btn-style-one">Next</button>
           </div>
 
-          {/* <div className="form-group col-lg-12 col-md-12 text-right">
+          <div className="form-group col-lg-12 col-md-12 text-right">
             <button type="button" className="theme-btn btn-style-one" onClick={() => {
               console.log("Hello Print", formData);
             }}>Hello Print</button>
-          </div> */}
+          </div>
         </div>
       </form >
       <style jsx>{`

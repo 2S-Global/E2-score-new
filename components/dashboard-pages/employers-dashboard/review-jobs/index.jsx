@@ -296,52 +296,79 @@ const Index = () => {
                             <div className="detail-row">
                                 <div className="detail-label">Pay</div>
                                 <div className="detail-value">
-                                    {data.salary?.structure === "range" && (
-                                        <>
-                                            {data.salary.currency}
-                                            {data.salary.min.toLocaleString("en-IN", { maximumFractionDigits: 2 })} -{" "}
-                                            {data.salary.currency}
-                                            {data.salary.max.toLocaleString("en-IN", { maximumFractionDigits: 2 })}{" "}
-                                            {data.salary.rate}
-                                        </>
-                                    )}
+                                    {(() => {
+                                        const { structure, currency, min, max, amount, rate } = data.salary;
 
-                                    {data.salary?.structure === "starting amount" && (
-                                        <>
-                                            From {data.salary.currency}
-                                            {data.salary.amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })}{" "}
-                                            {data.salary.rate}
-                                        </>
-                                    )}
+                                        switch (structure) {
+                                            case "range":
+                                                if (currency && min != null && max != null && rate) {
+                                                    return (
+                                                        <>
+                                                            {currency}
+                                                            {min.toLocaleString("en-IN", { maximumFractionDigits: 2 })} -{" "}
+                                                            {currency}
+                                                            {max.toLocaleString("en-IN", { maximumFractionDigits: 2 })} {rate}
+                                                        </>
+                                                    );
+                                                }
+                                                return <span>Incomplete salary data</span>;
 
-                                    {data.salary?.structure === "maximum amount" && (
-                                        <>
-                                            Up to {data.salary.currency}
-                                            {data.salary.amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })}{" "}
-                                            {data.salary.rate}
-                                        </>
-                                    )}
+                                            case "starting amount":
+                                                if (currency && amount != null && rate) {
+                                                    return (
+                                                        <>
+                                                            From {currency}
+                                                            {amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })} {rate}
+                                                        </>
+                                                    );
+                                                }
+                                                return <span>Incomplete salary data</span>;
 
-                                    {data.salary?.structure === "exact amount" && (
-                                        <>
-                                            {data.salary.currency}
-                                            {data.salary.amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })}{" "}
-                                            {data.salary.rate}
-                                        </>
-                                    )}
-                                    <span className="edit-icon"
+                                            case "maximum amount":
+                                                if (currency && amount != null && rate) {
+                                                    return (
+                                                        <>
+                                                            Up to {currency}
+                                                            {amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })} {rate}
+                                                        </>
+                                                    );
+                                                }
+                                                return <span>Incomplete salary data</span>;
+
+                                            case "exact amount":
+                                                if (currency && amount != null && rate) {
+                                                    return (
+                                                        <>
+                                                            {currency}
+                                                            {amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })} {rate}
+                                                        </>
+                                                    );
+                                                }
+                                                return <span>Incomplete salary data</span>;
+
+                                            default:
+                                                return <span>Salary data not available</span>;
+                                        }
+                                    })()}
+
+                                    <span
+                                        className="edit-icon"
                                         onClick={async () => {
                                             setLoading(true);
-                                            router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=salaryBlock`);
+                                            router.push(
+                                                `/employers-dashboard/post-jobs/edit/${jobId}?type=salaryBlock`
+                                            );
                                         }}
-                                    >{/* &#9998; */}
+                                    >
                                         {loading ? <CustomizedProgressBars /> : "✎"}
                                     </span>
                                 </div>
                             </div>
                         )}
 
-                        {data?.benefits && (
+
+
+                        {data?.benefits && data.benefits.length > 0 && (
                             <div className="detail-row">
                                 <div className="detail-label">Benefits</div>
                                 <div className="detail-value">
@@ -397,7 +424,7 @@ const Index = () => {
 
                         {/* Gender Block */}
 
-                        {data?.gender && (
+                        {data?.gender && data.gender.length > 0 && (
                             <div className="detail-row">
                                 <div className="detail-label">Gender</div>
                                 <div className="detail-value">
@@ -415,7 +442,7 @@ const Index = () => {
                         )}
 
                         {/* Industry Level block */}
-                        
+
                         {/* {data?.industry && (
                             <div className="detail-row">
                                 <div className="detail-label">Industry</div>
@@ -435,7 +462,7 @@ const Index = () => {
 
                         {/* Qualification Block */}
 
-                        {data?.qualification && (
+                        {data?.qualification && data.qualification.length > 0 && (
                             <div className="detail-row">
                                 <div className="detail-label">Qualification</div>
                                 <div className="detail-value">
@@ -525,7 +552,7 @@ const Index = () => {
                             </div>
                         )}
 
-                        {data?.jobExpiryDate && (
+                        {data?.jobExpiryDate && new Date(data.jobExpiryDate).toString() !== "Invalid Date" && (
                             <div className="detail-row">
                                 <div className="detail-label">Job Expiry Date</div>
                                 <div className="detail-value">
