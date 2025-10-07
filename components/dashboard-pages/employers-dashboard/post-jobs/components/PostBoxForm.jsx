@@ -6,23 +6,15 @@ import axios from "axios";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-// import { useParams } from "react-router-dom"; // or next/navigation if Next.js
 import { useParams, useSearchParams } from "next/navigation";
 import { validateDocuments } from "./validatePostJobDocuments";
 import MessageComponent from "@/components/common/ResponseMsg";
 
 const PostBoxForm = () => {
-  // const { id } = useParams();
-  // console.log("Here is my dang dang id:  ", id);
   const params = useParams();  // for dynamic route parts like [jobId]
   const searchParams = useSearchParams(); // for query params like ?type=jobTitle
   const id = params.jobId;   // from route /edit/[jobId]
   const type = searchParams.get("type");        // from query string ?type=jobTitle
-
-
-  console.log("Job ID:", id);
-  console.log("Type:", type);
-  // console.log("Here is my dang dang id:  ", id);
 
   const [showBy, setShowBy] = useState("fixed"); // Track dropdown selection
   const [selectedJobTypes, setSelectedJobTypes] = useState([]);
@@ -59,7 +51,7 @@ const PostBoxForm = () => {
   const [success, setSuccess] = useState(null);
   const [errorId, setErrorId] = useState(0);
 
-  //  Code added by Chandra Sarkar on 22th september 2025  -- starts from here
+  // Initilize form data
   const [formData, setFormData] = useState({
     jobTitle: "",
     jobDescription: "",
@@ -97,33 +89,6 @@ const PostBoxForm = () => {
     advertiseCityName: "",
   });
 
-
-  /*
-  useEffect(() => {
-    if (type) {
-      const element = document.getElementById(type);
-
-      if (element) {
-        // Scroll into view
-        element.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
-
-        if (type != "all") {
-          // Add highlight class
-          element.classList.add("highlight");
-        }
-        // Remove after 3s
-        const timeout = setTimeout(() => {
-          element.classList.remove("highlight");
-        }, 3000);
-
-        // Cleanup if effect re-runs
-        return () => clearTimeout(timeout);
-      }
-    }
-  }, [type]);
-
-  */
-
   useEffect(() => {
     if (!type) return;
 
@@ -147,10 +112,7 @@ const PostBoxForm = () => {
   useEffect(() => {
     if (id) {
       const fetchData = async () => {
-
-        console.log("My dang dang useEffect is running successfully !");
         try {
-
           const response = await axios.get(`${apiurl}/api/jobposting/get_job_posting_details`, {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -162,10 +124,7 @@ const PostBoxForm = () => {
           });
 
           if (response.data.success && response.status === 200) {
-            // setFormData(response.data.data);
-            const job = response.data.data; // your "data" object from response
-
-
+            const job = response.data.data;
             setFormData({
               jobTitle: job.jobTitle || "",
               jobDescription: job.jobDescription || "",
@@ -214,50 +173,17 @@ const PostBoxForm = () => {
               advertiseCity: job.advertiseCity || "",
               advertiseCityName: job.advertiseCityName || "",
             });
-
-
-
           }
-
-
-
         } catch (error) {
           console.error("Error fetching data", error);
         }
       };
-
       fetchData();
     }
   }, [id]);
 
   const handleChange = (e) => {
-    // console.log("Console By Chandra Sarkar: ", e.target.value);
     const { name, value } = e.target;
-
-    /*
-    if (name === "full_name") {
-      const onlyLetters = /^[A-Za-z\s]*$/; // Allow letters and spaces only
-
-      if (!onlyLetters.test(value)) {
-        return; // Don't update state if invalid character
-      }
-    }
-
-    if (name === "phone") {
-      const onlyNumbers = /^[0-9]*$/; // Only numbers allowed
-
-      // If value contains any non-numeric characters, prevent update
-      if (!onlyNumbers.test(value)) {
-        return; // Don't update state if invalid character
-      }
-
-      // Check for exact 10 characters
-      if (value.length > 10) {
-        return; // Prevent more than 10 characters
-      }
-    }
-
-    */
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -265,24 +191,10 @@ const PostBoxForm = () => {
   };
 
   const handleDateChange = (date) => {
-    console.log("I am getting value from date picker in Job Posting Section -- Chandra Sarkar : ", date);
     if (date) {
-      setFormData({ ...formData, jobExpiryDate: date }); // Store raw Date object
+      setFormData({ ...formData, jobExpiryDate: date });
     }
   };
-
-  //  Code added by Chandra Sarkar on 22th september 2025  -- till the end
-
-  // helper flags
-  // const selectedValues = selectedJobTypes.map((j) => j.value);
-
-  // const isPartTime = selectedValues.includes("Part-time");
-
-  // const isInternLike = selectedValues.some((v) =>
-  //   ["Internship", "Contractual / Temporary", "Freelance"].includes(v)
-  // );
-
-  // const selectedValues = (formData.jobType || []).map((j) => j.label);
 
   const selectedValues = (formData.jobType || [])
     .map((id) => {
@@ -290,7 +202,6 @@ const PostBoxForm = () => {
       return option ? option.label : null;
     })
     .filter(Boolean); // remove nulls if any
-
 
   const isPartTime = selectedValues.includes("Part-time");
 
@@ -504,27 +415,14 @@ const PostBoxForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // prevent page reload
-    console.log("Next Button is Submitted Successfully !");
     console.log("Form Data Submitted:", formData);
 
     const errorMsg = validateDocuments(formData);
-    console.log("Here is my Error message before submitting the form !", errorMsg);
     if (errorMsg) {
       setError(errorMsg);
       setErrorId(Date.now());
       return;
     }
-
-    console.log("Here is my Error message ", errorMsg);
-
-    // setError(null);
-    // setSuccess(null);
-    // if (!formData.full_name.trim() || !formData.gender || !formData.dob) {
-    //   setError("Please fill in all required fields.");
-    //   return;
-    // }
-
-    // setLoading(true);
 
     if (!token) {
       setError("Authorization token is missing. Please log in.");
@@ -533,7 +431,6 @@ const PostBoxForm = () => {
     try {
       let response;
       if (id) {
-
         response = await axios.post(
           `${apiurl}/api/jobposting/edit_job_posting_details`,
           formData,
@@ -596,44 +493,18 @@ const PostBoxForm = () => {
         throw new Error(response.data.message || "An error occurred");
       }
 
-      // console.log("Upload successful:", response.data);
       if (!response.data.success) {
         throw new Error(response.data.message || "An error occurred");
       }
-      // setSuccess("Details updated successfully!");
-      // setSuccess_main("Details updated successfully!");
-      // setReload(true);
-      // setTimeout(() => onClose(), 1500); // Close modal after success
-
-      console.log("My Try Block is executing  --  By Chandra sarkar ");
+      
     } catch (error) {
       console.error("Upload failed:", error);
 
       setError("Failed. Try again.");
       setErrorId(Date.now());
 
-
-      if (error.response) {
-        // ✅ The request was made and the server responded with a status code outside 2xx
-        console.error("🔹 Response data:", error.response.data);
-        console.error("🔹 Status code:", error.response.status);
-        console.error("🔹 Headers:", error.response.headers);
-      } else if (error.request) {
-        // ✅ The request was made but no response was received
-        console.error("⚠️ No response received from server:", error.request);
-      } else {
-        // ✅ Something happened while setting up the request
-        console.error("⚙️ Error setting up request:", error.message);
-      }
-      // setError("Failed to update Details. Please try again.");
-      // setError_main("Failed to update Details. Please try again.");
-
-      console.log("My Catch Block is executing  --  By Chandra sarkar ");
-
     } finally {
       // setLoading(false);
-
-      console.log("My finally Block is executing  --  By Chandra sarkar ");
     }
   };
 
@@ -682,16 +553,9 @@ const PostBoxForm = () => {
               options={specialization}
               className="basic-multi-select"
               classNamePrefix="select"
-              // value={formData.specialization}
-              // onChange={(selectedOptions) =>
-              //   setFormData((prev) => ({
-              //     ...prev,
-              //     specialization: selectedOptions || [],
-              //   }))
-              // }
               value={specialization.filter(option =>
                 formData.specialization.includes(option.value)
-              )} // ensure proper value binding
+              )}
               onChange={(selectedOptions) =>
                 setFormData((prev) => ({
                   ...prev,
@@ -711,8 +575,7 @@ const PostBoxForm = () => {
             <input type="number" name="positionAvailable" id="positionAvaiable" value={formData.positionAvailable} onChange={handleChange} required min={1} placeholder="1" className="form-control" />
           </div>
 
-          {/* Here is my Job Type Block start -------    */}
-
+          {/* Job Type Block started from here -------    */}
           <div className="form-group col-lg-6 col-md-12" id="jobType">
             <label>
               <b>Job Type </b>
@@ -732,15 +595,9 @@ const PostBoxForm = () => {
                   ? selectedOptions.map((opt) => opt.value)
                   : [];
 
-                // Find the labels of the selected job types
                 const selectedLabels = jobType
                   .filter((opt) => selectedValues.includes(opt.value))
                   .map((opt) => opt.label);
-
-                // ✅ Log the selected job type values
-                console.log("Selected Job Types dang dang--:", selectedValues);
-
-                // const isPartTimeSelected = selectedValues.includes("Part-time"); // adjust if your value is different
 
                 const isPartTimeSelected = selectedLabels.includes("Part-time");
 
@@ -749,6 +606,8 @@ const PostBoxForm = () => {
                 const isInternLikeSelected = selectedValues.some((v) =>
                   ["Internship", "Contractual / Temporary", "Freelance"].includes(v)
                 );
+
+                console.log("print isInternLikeSelected is present or not---", isInternLikeSelected);
 
                 setFormData((prev) => ({
                   ...prev,
@@ -765,9 +624,7 @@ const PostBoxForm = () => {
               }}
             />
           </div>
-
-
-          {/* Here is my Job Type Block end -------    */}
+          {/* Job Type Block ended here --*/}
 
 
           {/* Part-time => Expected hours */}
