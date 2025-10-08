@@ -9,6 +9,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useParams, useSearchParams } from "next/navigation";
 import { validateDocuments } from "./validatePostJobDocuments";
 import MessageComponent from "@/components/common/ResponseMsg";
+import React, { useRef } from "react";
 
 const PostBoxForm = () => {
   const params = useParams();  // for dynamic route parts like [jobId]
@@ -23,6 +24,38 @@ const PostBoxForm = () => {
   const [salaryStructure, setSalaryStructure] = useState("");
 
   const [loading, setLoading] = useState(true);
+
+  const jobTitleRef = useRef();
+  const jobDescriptionRef = useRef();
+  const getApplicationUpdateEmailRef = useRef();
+  const positionAvailableRef = useRef();
+  const jobTypeRef = useRef();
+  const jobExpiryDateRef = useRef();
+  const salaryStructureRef = useRef();
+  const jobLocationTypeRef = useRef();
+  const advertiseCityRef = useRef();
+  const advertiseCityNameRef = useRef();
+  const countryRef = useRef();
+  const cityRef = useRef();
+  const branchRef = useRef();
+  const addressRef = useRef();
+
+  const refs = {
+    jobTitle: jobTitleRef,
+    jobDescription: jobDescriptionRef,
+    getApplicationUpdateEmail: getApplicationUpdateEmailRef,
+    positionAvailable: positionAvailableRef,
+    jobType: jobTypeRef,
+    jobExpiryDate: jobExpiryDateRef,
+    jobLocationType: jobLocationTypeRef,
+    salaryStructure: salaryStructureRef,
+    advertiseCity: advertiseCityRef,
+    advertiseCityName: advertiseCityNameRef,
+    country: countryRef,
+    city: cityRef,
+    branch: branchRef,
+    address: addressRef,
+  };
 
   //main
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
@@ -50,6 +83,7 @@ const PostBoxForm = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [errorId, setErrorId] = useState(0);
+  const [errorField, setErrorField] = useState(0);
 
   // Initilize form data
   const [formData, setFormData] = useState({
@@ -419,8 +453,31 @@ const PostBoxForm = () => {
 
     const errorMsg = validateDocuments(formData);
     if (errorMsg) {
-      setError(errorMsg);
+      const { field, message } = errorMsg;
+      setError(message);
       setErrorId(Date.now());
+      setErrorField(field); // keep track of which field failed
+
+      // 🧩 Step 2: Focus and highlight the invalid field
+      const ref = refs[field];
+      console.log("Here is my field which is used in ref: ", field);
+      console.log("Here is my ref: ", ref);
+      console.log("Here is my all refs variables: ", refs);
+      if (ref && ref.current) {
+        try {
+          // For react-select or normal inputs
+          if (ref.current.focus) ref.current.focus();
+          if (ref.current.select) ref.current.select.focus();
+        } catch (err) {
+          console.warn("Focus failed for field:", field, err);
+        }
+
+        // Add red border highlight temporarily
+        const el = ref.current.controlRef || ref.current; // handle react-select
+        el.classList?.add("error-highlight");
+        setTimeout(() => el.classList?.remove("error-highlight"), 2000);
+      }
+
       return;
     }
 
@@ -496,7 +553,7 @@ const PostBoxForm = () => {
       if (!response.data.success) {
         throw new Error(response.data.message || "An error occurred");
       }
-      
+
     } catch (error) {
       console.error("Upload failed:", error);
 
@@ -523,7 +580,12 @@ const PostBoxForm = () => {
               <b>Job Title{" "}</b>
               <span style={{ color: "red" }}>*</span>
             </label>
-            <input type="text" name="jobTitle" value={formData.jobTitle} onChange={handleChange} required id="jobTitleInput" placeholder="Title" />
+            <input type="text" name="jobTitle" ref={jobTitleRef} value={formData.jobTitle} onChange={handleChange} id="jobTitleInput" placeholder="Title" />
+            {/* {errorField === "jobTitle" && error && (
+              <span className="text-danger" style={{ fontSize: "0.9rem" }}>
+                {error}
+              </span>
+            )} */}
           </div>
 
           {/* <!-- About Company --> */}
@@ -532,7 +594,7 @@ const PostBoxForm = () => {
               <b>Job Description{" "}</b>
               <span style={{ color: "red" }}>*</span>
             </label>
-            <textarea placeholder="Spent several years working on sheep on Wall Street. Had moderate success investing in Yugo's on Wall Street. Managed a small team buying and selling Pogo sticks for farmers. Spent several years licensing licorice in West Palm Beach, FL. Developed several new methods for working it banjos in the aftermarket. Spent a weekend importing banjos in West Palm Beach, FL.In this position, the Software Engineer collaborates with Evention's Development team to continuously enhance our current software solutions as well as create new solutions to eliminate the back-office operations and management challenges present" name="jobDescription" value={formData.jobDescription} onChange={handleChange} required id="jobDescription"></textarea>
+            <textarea placeholder="Spent several years working on sheep on Wall Street. Had moderate success investing in Yugo's on Wall Street. Managed a small team buying and selling Pogo sticks for farmers. Spent several years licensing licorice in West Palm Beach, FL. Developed several new methods for working it banjos in the aftermarket. Spent a weekend importing banjos in West Palm Beach, FL.In this position, the Software Engineer collaborates with Evention's Development team to continuously enhance our current software solutions as well as create new solutions to eliminate the back-office operations and management challenges present" name="jobDescription" value={formData.jobDescription} ref={jobDescriptionRef} onChange={handleChange} id="jobDescription"></textarea>
           </div>
 
           {/* <!-- Input --> */}
@@ -541,7 +603,7 @@ const PostBoxForm = () => {
               <b>Get application updates{" "}</b>
               <span style={{ color: "red" }}>*</span>
             </label>
-            <input type="text" name="getApplicationUpdateEmail" id="getApplicationUpdateEmail" value={formData.getApplicationUpdateEmail} onChange={handleChange} required placeholder="testing@gmail.com" />
+            <input type="text" name="getApplicationUpdateEmail" ref={getApplicationUpdateEmailRef} id="getApplicationUpdateEmail" value={formData.getApplicationUpdateEmail} onChange={handleChange} placeholder="testing@gmail.com" />
           </div>
 
           {/* <!-- Search Select --> */}
@@ -572,7 +634,7 @@ const PostBoxForm = () => {
               <b>Number of Positions Available{" "}</b>
               <span style={{ color: "red" }}>*</span>
             </label>
-            <input type="number" name="positionAvailable" id="positionAvaiable" value={formData.positionAvailable} onChange={handleChange} required min={1} placeholder="1" className="form-control" />
+            <input type="number" name="positionAvailable" id="positionAvaiable" value={formData.positionAvailable} ref={positionAvailableRef} onChange={handleChange} min={1} placeholder="1" className="form-control" />
           </div>
 
           {/* Job Type Block started from here -------    */}
@@ -584,8 +646,9 @@ const PostBoxForm = () => {
             <Select
               isMulti
               name="jobType"
+              ref={jobTypeRef}
               options={jobType}
-              className="basic-multi-select"
+              className={`basic-multi-select ${errorField === "jobType" ? "error-highlight" : ""}`}
               classNamePrefix="select"
               value={jobType.filter(option =>
                 formData.jobType.includes(option.value)
@@ -622,6 +685,7 @@ const PostBoxForm = () => {
                   contractPeriod: isInternLikeSelected ? prev.contractPeriod : "",
                 }));
               }}
+              
             />
           </div>
           {/* Job Type Block ended here --*/}
@@ -649,6 +713,7 @@ const PostBoxForm = () => {
                   }
                   }>
                     {/* <option value="">Select</option> */}
+                    <option value="">Select</option>
                     <option value="fixed">Fixed hours</option>
                     <option value="range">Range</option>
                     <option value="maximum">Maximum</option>
@@ -735,7 +800,7 @@ const PostBoxForm = () => {
                 {/* Show pay by Dropdown */}
                 <div className="flex-fill">
                   <label className="form-label small">Length</label>
-                  <input type="number" name="contractLength" placeholder="" value={formData.contractLength ?? ""}
+                  <input type="number" name="contractLength" placeholder="" min={1} value={formData.contractLength ?? ""}
                     onChange={(e) => {
                       console.log("Contract Length selected value -- Chandra Sarkar : ", e.target.value);
                       setFormData((prev) => ({
@@ -840,8 +905,9 @@ const PostBoxForm = () => {
                 format="dd/MM/yyyy"
                 slotProps={{
                   textField: {
+                    inputRef: jobExpiryDateRef,
                     id: "jobExpiryDate",
-                    required: true,
+                    // required: true,
                     placeholder: "dd/mm/yyyy",
                     className: "form-control",
                     style: {
@@ -870,7 +936,7 @@ const PostBoxForm = () => {
               {/* Show pay by Dropdown */}
               <div className="flex-fill">
                 <label className="form-label small">Show pay by</label>
-                <select className="form-select" value={formData.salary.structure}
+                <select className="form-select" value={formData.salary.structure} ref={salaryStructureRef}
                   onChange={(e) => {
                     const structure = e.target.value;
 
@@ -903,7 +969,7 @@ const PostBoxForm = () => {
                     }
 
                     setFormData({ ...formData, salary: newSalary });
-                  }}>
+                  }} >
                   <option value="range">Range</option>
                   <option value="starting amount">Starting amount</option>
                   <option value="maximum amount">Maximum amount</option>
@@ -1146,7 +1212,7 @@ const PostBoxForm = () => {
               <b>Which option best describes this job's location?{" "}</b>
               <span style={{ color: "red" }}>*</span>
             </label>
-            <select className="chosen-single form-select" value={formData.jobLocationType} onChange={(e) => {
+            <select className="chosen-single form-select" value={formData.jobLocationType} ref={jobLocationTypeRef} onChange={(e) => {
               setFormData((prev) => ({
                 ...prev,
                 jobLocationType: e.target.value,
@@ -1175,7 +1241,7 @@ const PostBoxForm = () => {
                       country: e.target.value,
                     }))
                   }
-                  }>
+                  } ref={countryRef}>
                   <option value="">Select</option>
                   {country.map((level) => (
                     <option key={level.id} value={level.id}>
@@ -1199,7 +1265,7 @@ const PostBoxForm = () => {
                       city: e.target.value,
                     }))
                   }
-                  }>
+                  } ref={cityRef}>
                   <option value="">Select</option>
                   {city.map((level) => (
                     <option key={level.id} value={level.id}>
@@ -1223,7 +1289,7 @@ const PostBoxForm = () => {
                       branch: e.target.value,
                     }))
                   }
-                  }>
+                  } ref={branchRef}>
                   <option value="">Select</option>
                   {branch.map((level) => (
                     <option key={level._id} value={level._id}>
@@ -1242,6 +1308,7 @@ const PostBoxForm = () => {
                 <input
                   type="text"
                   name="address"
+                  ref={addressRef}
                   placeholder="329 Queensberry Street, North Melbourne VIC 3051, Australia."
                   value={formData.address}
                   onChange={(e) => {
@@ -1260,7 +1327,7 @@ const PostBoxForm = () => {
 
           {/* Show when Remote */}
           {formData.jobLocationType === "remote" && (
-            <div className="form-group col-lg-12 col-md-12">
+            <div className="form-group col-lg-12 col-md-12" ref={advertiseCityRef}>
               <label className="form-label">
                 <b>Do you want to advertise your job in a specific city?{" "}</b>
                 <span style={{ color: "red" }}>*</span>
@@ -1318,7 +1385,7 @@ const PostBoxForm = () => {
                 <b>Where do you want to advertise this job?{" "}</b>
                 <span style={{ color: "red" }}>*</span>
               </label>
-              <input type="text" name="advertiseCityName" value={formData.advertiseCityName} onChange={handleChange} placeholder="" />
+              <input type="text" name="advertiseCityName" value={formData.advertiseCityName} onChange={handleChange} placeholder="" ref={advertiseCityName} />
             </div>
           )}
 
@@ -1340,6 +1407,17 @@ const PostBoxForm = () => {
         border-radius: 8px;
         padding: 12px;
         transition: background-color 0.3s ease;
+      }
+      .error-highlight {
+        border: 2px solid red !important;
+        background-color: #fff2f2 !important;
+        transition: all 0.3s ease;
+      }
+      .basic-multi-select.error-highlight .select__control {
+        border: 2px solid red !important;
+        box-shadow: 0 0 6px rgba(255, 0, 0, 0.4);
+        background-color: #fff2f2;
+        transition: all 0.3s ease;
       }
     `}</style>
     </>
