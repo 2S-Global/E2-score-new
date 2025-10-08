@@ -1385,7 +1385,7 @@ const PostBoxForm = () => {
                 <b>Where do you want to advertise this job?{" "}</b>
                 <span style={{ color: "red" }}>*</span>
               </label>
-              <input type="text" name="advertiseCityName" value={formData.advertiseCityName} onChange={handleChange} placeholder="" ref={advertiseCityName} />
+              <input type="text" name="advertiseCityName" value={formData.advertiseCityName} onChange={handleChange} placeholder="" ref={advertiseCityNameRef} />
             </div>
           )}
 
