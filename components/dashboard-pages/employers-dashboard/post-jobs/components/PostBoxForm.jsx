@@ -1327,11 +1327,11 @@ const PostBoxForm = () => {
             <button className="theme-btn btn-style-one">Next</button>
           </div>
 
-          <div className="form-group col-lg-12 col-md-12 text-right">
+          {/* <div className="form-group col-lg-12 col-md-12 text-right">
             <button type="button" className="theme-btn btn-style-one" onClick={() => {
               console.log("Hello Print", formData);
             }}>Hello Print</button>
-          </div>
+          </div> */}
         </div>
       </form >
       <style jsx>{`
