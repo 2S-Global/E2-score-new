@@ -153,7 +153,6 @@ const PostBoxForm = () => {
             },
             params: {
               jobId: id,
-              status: "draft",
             },
           });
 
@@ -498,7 +497,6 @@ const PostBoxForm = () => {
             },
             params: {
               jobId: id,
-              status: "draft",
             },
           },
         );

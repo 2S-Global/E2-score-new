@@ -60,7 +60,6 @@ const Index = () => {
                     },
                     params: {
                         jobId: jobId,
-                        status: "draft",
                     },
                 }
             );
