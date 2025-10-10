@@ -507,7 +507,7 @@ const PostBoxForm = () => {
           return;
         }
 
-        setSuccess("Candidate added successfully!");
+        setSuccess("Job post updated successfully!");
 
 
       } else {
@@ -683,7 +683,7 @@ const PostBoxForm = () => {
                   contractPeriod: isInternLikeSelected ? prev.contractPeriod : "",
                 }));
               }}
-              
+
             />
           </div>
           {/* Job Type Block ended here --*/}
@@ -785,6 +785,11 @@ const PostBoxForm = () => {
                     </div>
                   </>
                 )}
+
+                {/* Add Hours per week */}
+                <div className="d-flex justify-content-center">
+                  <span className="form-label small mb-0">Hours per week</span>
+                </div>
 
               </div>
             </div>

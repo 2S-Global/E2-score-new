@@ -1,5 +1,7 @@
 "use client";
 import { use } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { useParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import jobs from "@/data/job-featured";
@@ -16,11 +18,49 @@ import SocialTwo from "@/components/job-single-pages/social/SocialTwo";
 import JobDetailsDescriptions from "@/components/job-single-pages/shared-components/JobDetailsDescriptions";
 import ApplyJobModalContent from "@/components/job-single-pages/shared-components/ApplyJobModalContent";
 import Image from "next/image";
+import JobDescription from "@/components/job-single-pages/shared-components/JobDescription";
 
 const JobSingleDynamicV1 = () => {
   const params = useParams(); // ✅ Don't wrap it with `use()`
   const id = params.id;
   const company = jobs.find((item) => item.id == id) || jobs[0];
+
+  //Get Token
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const token = localStorage.getItem("employer_token");
+  if (!token) {
+    console.log("No token");
+  }
+
+  const [jobPreviewDetails, setJobPreviewDetails] = useState([]);
+
+  //My Custom code
+  useEffect(() => {
+    const fetchJobPreviewDetails = async () => {
+      // setLoading(true);
+      try {
+        const response = await axios.get(`${apiurl}/api/jobposting/get_job_preview_details`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            jobId: id,
+          },
+        });
+
+        console.log("Here is my all job listing data which is coming from useEffect !", response.data);
+
+        if (response.data.success && response.status === 200) {
+          setJobPreviewDetails(response.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching data", error);
+      }
+    };
+
+    fetchJobPreviewDetails();
+  }, []);
+
 
   return (
     <>
@@ -44,51 +84,133 @@ const JobSingleDynamicV1 = () => {
               <div className="inner-box">
                 <div className="content">
                   <span className="company-logo">
-                    <Image
-                      width={100}
-                      height={98}
-                      src={company?.logo}
-                      alt="logo"
-                    />
+                    {jobPreviewDetails?.logoImage && (
+                      <Image
+                        width={100}
+                        height={98}
+                        // src={company?.logo}
+                        src={jobPreviewDetails?.logoImage || "/images/resource/no_user.png"}
+                        alt="logo"
+                      />
+                    )}
                   </span>
-                  <h4>{company?.jobTitle}</h4>
+
+                  {jobPreviewDetails?.title && <h4>{jobPreviewDetails?.title}</h4>}
 
                   <ul className="job-info">
-                    <li>
-                      <span className="icon flaticon-briefcase"></span>
-                      {company?.company}
-                    </li>
-                    {/* compnay info */}
-                    <li>
-                      <span className="icon flaticon-map-locator"></span>
-                      {company?.location}
-                    </li>
-                    {/* location info */}
-                    <li>
-                      <span className="icon flaticon-clock-3"></span>{" "}
-                      {company?.time}
-                    </li>
-                    {/* time info */}
-                    <li>
-                      <span className="icon flaticon-money"></span>{" "}
-                      {company?.salary}
-                    </li>
+                    {/* Industry Type */}
+                    {jobPreviewDetails?.industry && (
+                      <li>
+                        <span className="icon flaticon-briefcase"></span>
+                        {jobPreviewDetails?.industry || "N/A"}
+                      </li>
+                    )}
+                    {/* Location */}
+                    {jobPreviewDetails?.location && (
+                      <li>
+                        <span className="icon flaticon-map-locator"></span>
+                        {jobPreviewDetails?.location || "N/A"}
+                      </li>
+                    )}
+                    {/* Created Ago */}
+                    {jobPreviewDetails?.createdAgo && (
+                      <li>
+                        <span className="icon flaticon-clock-3"></span>{" "}
+                        {jobPreviewDetails?.createdAgo || "N/A"}
+                      </li>
+                    )}
+                    {/* Salary Data */}
+                    {jobPreviewDetails?.salary?.structure && (
+                      <li>
+                        <span className="icon flaticon-money"></span>{" "}
+                        {jobPreviewDetails?.salary ? (
+                          (() => {
+                            const { structure, currency, min, max, amount, rate } = jobPreviewDetails.salary;
+
+                            switch (structure) {
+                              case "range":
+                                if (currency && min != null && max != null && rate) {
+                                  return (
+                                    <>
+                                      {currency}
+                                      {min.toLocaleString("en-IN", { maximumFractionDigits: 2 })} -{" "}
+                                      {currency}
+                                      {max.toLocaleString("en-IN", { maximumFractionDigits: 2 })} {rate}
+                                    </>
+                                  );
+                                }
+                                return <span>Incomplete salary data</span>;
+
+                              case "starting amount":
+                                if (currency && amount != null && rate) {
+                                  return (
+                                    <>
+                                      From {currency}
+                                      {amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })} {rate}
+                                    </>
+                                  );
+                                }
+                                return <span>Incomplete salary data</span>;
+
+                              case "maximum amount":
+                                if (currency && amount != null && rate) {
+                                  return (
+                                    <>
+                                      Up to {currency}
+                                      {amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })} {rate}
+                                    </>
+                                  );
+                                }
+                                return <span>Incomplete salary data</span>;
+
+                              case "exact amount":
+                                if (currency && amount != null && rate) {
+                                  return (
+                                    <>
+                                      {currency}
+                                      {amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })} {rate}
+                                    </>
+                                  );
+                                }
+                                return <span>Incomplete salary data</span>;
+
+                              default:
+                                return <span>Salary data not available</span>;
+                            }
+                          })()
+                        ) : (
+                          <span>Salary not specified</span>
+                        )}
+                      </li>
+
+                    )}
                     {/* salary info */}
                   </ul>
                   {/* End .job-info */}
 
-                  <ul className="job-other-info">
+                  {/* <ul className="job-other-info">
                     {company?.jobType?.map((val, i) => (
                       <li key={i} className={`${val.styleClass}`}>
                         {val.type}
                       </li>
                     ))}
+                  </ul> */}
+
+                  <ul className="job-other-info">
+                    {Array.isArray(jobPreviewDetails?.jobType) &&
+                      jobPreviewDetails.jobType.map((type, index) => (
+                        <li key={index} className="time">
+                          {type}
+                        </li>
+                      ))}
                   </ul>
                   {/* End .job-other-info */}
                 </div>
                 {/* End .content */}
 
-                <div className="btn-box">
+                {/* This Part should uncomment for only candidate ----------Start */}
+
+                {/* <div className="btn-box">
                   <a
                     href="#"
                     className="theme-btn btn-style-one"
@@ -100,7 +222,10 @@ const JobSingleDynamicV1 = () => {
                   <button className="bookmark-btn">
                     <i className="flaticon-bookmark"></i>
                   </button>
-                </div>
+                </div> */}
+
+                {/* This Part should uncomment for only candidate ----------end */}
+
                 {/* End apply for job btn */}
 
                 {/* <!-- Modal --> */}
@@ -141,7 +266,10 @@ const JobSingleDynamicV1 = () => {
           <div className="auto-container">
             <div className="row">
               <div className="content-column col-lg-8 col-md-12 col-sm-12">
-                <JobDetailsDescriptions />
+                {/* <JobDetailsDescriptions /> */}
+                {jobPreviewDetails?.jobDescription && (
+                  <JobDescription description={jobPreviewDetails?.jobDescription}/>
+                )}
                 {/* End jobdetails content */}
 
                 <div className="other-options">
@@ -172,7 +300,7 @@ const JobSingleDynamicV1 = () => {
                   <div className="sidebar-widget">
                     {/* <!-- Job Overview --> */}
                     <h4 className="widget-title">Job Overview</h4>
-                    <JobOverView />
+                    <JobOverView overview={jobPreviewDetails} />
                     {/* if you want to add map then uncomment this . but dont uncommint in dev mode without map reconfiguration */}
                     {/* <!-- Map Widget --> */}
                     {/* <h4 className="widget-title mt-5">Job Location</h4>

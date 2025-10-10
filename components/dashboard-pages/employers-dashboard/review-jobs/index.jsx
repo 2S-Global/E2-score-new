@@ -442,11 +442,11 @@ const Index = () => {
 
                         {/* Industry Level block */}
 
-                        {/* {data?.industry && (
+                        {data?.industryName && (
                             <div className="detail-row">
                                 <div className="detail-label">Industry</div>
                                 <div className="detail-value">
-                                    {data.industry}
+                                    {data.industryName}
                                     <span className="edit-icon"
                                         onClick={async () => {
                                             setLoading(true);
@@ -457,7 +457,7 @@ const Index = () => {
                                     </span>
                                 </div>
                             </div>
-                        )}  */}
+                        )} 
 
                         {/* Qualification Block */}
 
