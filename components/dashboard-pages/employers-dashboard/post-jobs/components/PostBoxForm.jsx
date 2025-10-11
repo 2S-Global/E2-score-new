@@ -32,6 +32,9 @@ const PostBoxForm = () => {
   const jobTypeRef = useRef();
   const jobExpiryDateRef = useRef();
   const salaryStructureRef = useRef();
+  const careerLevelRef = useRef();
+  const industryRef = useRef();
+  const qualificationRef = useRef();
   const jobLocationTypeRef = useRef();
   const advertiseCityRef = useRef();
   const advertiseCityNameRef = useRef();
@@ -39,6 +42,7 @@ const PostBoxForm = () => {
   const cityRef = useRef();
   const branchRef = useRef();
   const addressRef = useRef();
+  const experienceLevelRef = useRef();
 
   const refs = {
     jobTitle: jobTitleRef,
@@ -49,6 +53,10 @@ const PostBoxForm = () => {
     jobExpiryDate: jobExpiryDateRef,
     jobLocationType: jobLocationTypeRef,
     salaryStructure: salaryStructureRef,
+    careerLevel: careerLevelRef,
+    experienceLevel: experienceLevelRef,
+    industry: industryRef,
+    qualification: qualificationRef,
     advertiseCity: advertiseCityRef,
     advertiseCityName: advertiseCityNameRef,
     country: countryRef,
@@ -459,9 +467,9 @@ const PostBoxForm = () => {
 
       // 🧩 Step 2: Focus and highlight the invalid field
       const ref = refs[field];
-      console.log("Here is my field which is used in ref: ", field);
-      console.log("Here is my ref: ", ref);
-      console.log("Here is my all refs variables: ", refs);
+
+      console.log("Here is my ref value: ", ref);
+      console.log("Here is my ref.current value: ", ref.current);
       if (ref && ref.current) {
         try {
           // For react-select or normal inputs
@@ -472,9 +480,19 @@ const PostBoxForm = () => {
         }
 
         // Add red border highlight temporarily
-        const el = ref.current.controlRef || ref.current; // handle react-select
-        el.classList?.add("error-highlight");
-        setTimeout(() => el.classList?.remove("error-highlight"), 2000);
+        // const el = ref.current.controlRef || ref.current;
+
+        const el =
+          ref.current?.controlRef ||
+          // ref.current?.controlRef?.current ||
+          ref.current?.select?.controlRef ||
+          ref.current; // fallback
+
+        // console.log("Here is my actual el---dang dang", el);
+
+
+        // el.classList?.add("error-highlight");
+        // setTimeout(() => el.classList?.remove("error-highlight"), 2000);
       }
 
       return;
@@ -646,7 +664,8 @@ const PostBoxForm = () => {
               name="jobType"
               ref={jobTypeRef}
               options={jobType}
-              className={`basic-multi-select ${errorField === "jobType" ? "error-highlight" : ""}`}
+              // className={`basic-multi-select ${errorField === "jobType" ? "error-highlight" : ""}`}
+              className="basic-multi-select"
               classNamePrefix="select"
               value={jobType.filter(option =>
                 formData.jobType.includes(option.value)
@@ -683,7 +702,6 @@ const PostBoxForm = () => {
                   contractPeriod: isInternLikeSelected ? prev.contractPeriod : "",
                 }));
               }}
-
             />
           </div>
           {/* Job Type Block ended here --*/}
@@ -787,7 +805,7 @@ const PostBoxForm = () => {
                 )}
 
                 {/* Add Hours per week */}
-                <div className="d-flex justify-content-center">
+                <div style={{ marginTop: "50px" }}>
                   <span className="form-label small mb-0">Hours per week</span>
                 </div>
 
@@ -1103,13 +1121,18 @@ const PostBoxForm = () => {
           {/* Benefits Part Added By Chandra ends here */}
 
           <div className="form-group col-lg-6 col-md-12" id="careerLevelBlock">
-            <label>Career Level</label>
-            <select className="chosen-single form-select" value={formData.careerLevel} onChange={(e) => {
+            <label>
+              <b>
+                Career Level{" "}
+                <span style={{ color: "red" }}>*</span>
+              </b>
+            </label>
+            <select className="form-select" value={formData.careerLevel} onChange={(e) => {
               setFormData((prev) => ({
                 ...prev,
                 careerLevel: e.target.value,
               }));
-            }}>
+            }} ref={careerLevelRef}>
               <option value="">Select</option>
               {careerLevel.map((level) => (
                 <option key={level._id} value={level._id}>
@@ -1120,13 +1143,18 @@ const PostBoxForm = () => {
           </div>
 
           <div className="form-group col-lg-6 col-md-12" id="experienceLevelBlock">
-            <label>Experience Level</label>
+            <label>
+              <b>
+                Experience Level{" "}
+                <span style={{ color: "red" }}>*</span>
+              </b>
+            </label>
             <select className="chosen-single form-select" value={formData.experienceLevel} onChange={(e) => {
               setFormData((prev) => ({
                 ...prev,
                 experienceLevel: e.target.value,
               }));
-            }}>
+            }} ref={experienceLevelRef}>
               <option value="">Select</option>
               {experienceLevel.map((level) => (
                 <option key={level._id} value={level._id}>
@@ -1167,10 +1195,15 @@ const PostBoxForm = () => {
           </div>
 
           <div className="form-group col-lg-6 col-md-12" id="industryBlock">
-            <label>Industry</label>
+            <label>
+              <b>
+                Industry{" "}
+                <span style={{ color: "red" }}>*</span>
+              </b>
+            </label>
             <select className="chosen-single form-select" value={formData.industry} onChange={(e) => {
               setFormData((prev) => ({ ...prev, industry: e.target.value }))
-            }}>
+            }} ref={industryRef}>
               <option value="">Select</option>
               {industry.map((level) => (
                 <option key={level.id} value={level.id}>
@@ -1181,10 +1214,16 @@ const PostBoxForm = () => {
           </div>
 
           <div className="form-group col-lg-6 col-md-12" id="qualificationBlock">
-            <label>Qualification</label>
+            <label>
+              <b>
+                Qualification{" "}
+                <span style={{ color: "red" }}>*</span>
+              </b>
+            </label>
             <Select
               isMulti
               name="qualification"
+              ref={qualificationRef}
               options={qualification}
               className="basic-multi-select"
               classNamePrefix="select"
@@ -1410,17 +1449,6 @@ const PostBoxForm = () => {
         border-radius: 8px;
         padding: 12px;
         transition: background-color 0.3s ease;
-      }
-      .error-highlight {
-        border: 2px solid red !important;
-        background-color: #fff2f2 !important;
-        transition: all 0.3s ease;
-      }
-      .basic-multi-select.error-highlight .select__control {
-        border: 2px solid red !important;
-        box-shadow: 0 0 6px rgba(255, 0, 0, 0.4);
-        background-color: #fff2f2;
-        transition: all 0.3s ease;
       }
     `}</style>
     </>
