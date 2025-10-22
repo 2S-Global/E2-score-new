@@ -44,7 +44,7 @@ const DashboardHeader = () => {
       }
     };
 
-    fetchSwitchedRoleUser();
+    //  fetchSwitchedRoleUser();
   }, []);
 
   const router = useRouter();
