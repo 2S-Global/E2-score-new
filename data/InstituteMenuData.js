@@ -15,6 +15,13 @@ module.exports = [
   },
   {
     id: 3,
+    name: "Student Verification",
+    icon: "la-user-tie",
+    routePath: "/institute-dashboard/student-verification",
+    active: "",
+  },
+  {
+    id: 4,
     name: "Student List",
     icon: "la-paper-plane",
     routePath: "#",

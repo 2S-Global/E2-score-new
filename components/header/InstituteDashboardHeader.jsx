@@ -50,6 +50,14 @@ const DashboardHeader = () => {
   }, []);
 
   const router = useRouter();
+  const handleLogout = () => {
+    // Clear data
+    localStorage.removeItem("Institute_token");
+    localStorage.clear();
+
+    // Redirect after cleanup
+    router.push("/");
+  };
   return (
     // <!-- Main Header-->
     <header
@@ -132,7 +140,7 @@ const DashboardHeader = () => {
                   } mb-1`}
                   key={11}
                 >
-                  <Link href="/" onClick={() => localStorage.clear()}>
+                  <Link href="/" onClick={handleLogout}>
                     <i className={`la la-sign-out`}></i>Logout
                   </Link>
                 </li>
