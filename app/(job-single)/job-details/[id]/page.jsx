@@ -84,15 +84,12 @@ const JobSingleDynamicV1 = () => {
               <div className="inner-box">
                 <div className="content">
                   <span className="company-logo">
-                    {jobPreviewDetails?.logoImage && (
-                      <Image
-                        width={100}
-                        height={98}
-                        // src={company?.logo}
-                        src={jobPreviewDetails?.logoImage || "/images/resource/no_user.png"}
-                        alt="logo"
-                      />
-                    )}
+                    <Image
+                      width={100}
+                      height={98}
+                      src={jobPreviewDetails?.logoImage || "/images/resource/no_user.png"}
+                      alt="logo"
+                    />
                   </span>
 
                   {jobPreviewDetails?.title && <h4>{jobPreviewDetails?.title}</h4>}
@@ -268,18 +265,23 @@ const JobSingleDynamicV1 = () => {
               <div className="content-column col-lg-8 col-md-12 col-sm-12">
                 {/* <JobDetailsDescriptions /> */}
                 {jobPreviewDetails?.jobDescription && (
-                  <JobDescription description={jobPreviewDetails?.jobDescription}/>
+                  <JobDescription description={jobPreviewDetails?.jobDescription} />
                 )}
                 {/* End jobdetails content */}
 
+                {/*
                 <div className="other-options">
                   <div className="social-share">
                     <h5>Share this job</h5>
                     <SocialTwo />
                   </div>
                 </div>
+                */}
+
+
                 {/* <!-- Other Options --> */}
 
+                {/*
                 <div className="related-jobs">
                   <div className="title-box">
                     <h3>Related Jobs</h3>
@@ -287,10 +289,10 @@ const JobSingleDynamicV1 = () => {
                       2020 jobs live - 293 added today.
                     </div>
                   </div>
-                  {/* End title box */}
-
                   <RelatedJobs />
                 </div>
+                */}
+                
                 {/* <!-- Related Jobs --> */}
               </div>
               {/* End .content-column */}
