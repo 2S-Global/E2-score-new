@@ -1,6 +1,6 @@
 const JobOverView = ({ overview }) => {
 
-  const { createdAgo, expiredAt, jobLocationType, location, advertiseCityName, title, salary } = overview || {};
+  const { createdAgo, expiredAt, jobLocationType, location, advertiseCityName, title, salary, expectedHours } = overview || {};
 
   return (
     <div className="widget-content">
@@ -39,11 +39,13 @@ const JobOverView = ({ overview }) => {
             <span>{title}</span>
           </li>
         )}
-        <li>
-          <i className="icon icon-clock"></i>
-          <h5>Hours:</h5>
-          <span>50h / week</span>
-        </li>
+        {expectedHours && (
+          <li>
+            <i className="icon icon-clock"></i>
+            <h5>Hours:</h5>
+            <span>{expectedHours}h / week</span>
+          </li>
+        )}
         <li>
           <i className="icon icon-rate"></i>
           <h5>Rate:</h5>
