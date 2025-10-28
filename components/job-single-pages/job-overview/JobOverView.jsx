@@ -1,3 +1,7 @@
+"use client";
+import { use } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 const JobOverView = ({ overview }) => {
 
   const { createdAgo, expiredAt, jobLocationType, location, advertiseCityName, title, salary, expectedHours } = overview || {};

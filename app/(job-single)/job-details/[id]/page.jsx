@@ -292,7 +292,7 @@ const JobSingleDynamicV1 = () => {
                   <RelatedJobs />
                 </div>
                 */}
-                
+
                 {/* <!-- Related Jobs --> */}
               </div>
               {/* End .content-column */}
@@ -330,11 +330,11 @@ const JobSingleDynamicV1 = () => {
                           <Image
                             width={54}
                             height={53}
-                            src={company.logo}
+                            src={jobPreviewDetails?.logoImage || "/images/resource/no_user.png"}
                             alt="resource"
                           />
                         </div>
-                        <h5 className="company-name">{company.company}</h5>
+                        <h5 className="company-name">{jobPreviewDetails?.companyName || "Not specified"}</h5>
                         <a href="#" className="profile-link">
                           View company profile
                         </a>
@@ -343,16 +343,18 @@ const JobSingleDynamicV1 = () => {
 
                       <CompnayInfo />
 
-                      <div className="btn-box">
-                        <a
-                          href="#"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="theme-btn btn-style-three"
-                        >
-                          {company?.link}
-                        </a>
-                      </div>
+                      {jobPreviewDetails?.jobDescription && (
+                        <div className="btn-box">
+                          <a
+                            href="#"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="theme-btn btn-style-three"
+                          >
+                            {jobPreviewDetails?.companyWebsite}
+                          </a>
+                        </div>
+                      )}
                       {/* End btn-box */}
                     </div>
                   </div>
