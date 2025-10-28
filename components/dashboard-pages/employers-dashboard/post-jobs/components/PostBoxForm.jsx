@@ -1434,7 +1434,7 @@ const PostBoxForm = () => {
           )}
 
           {/* ckeckbox */}
-          <div className="mb-3 form-group">
+          <div className="mb-3 form-group" id="requireRemumeBlock">
             <div className="form-check">
               <input
                 className="form-check-input"

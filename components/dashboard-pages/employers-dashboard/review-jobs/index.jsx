@@ -526,7 +526,7 @@ const Index = () => {
                                 <span className="edit-icon"
                                     onClick={async () => {
                                         setLoading(true);
-                                        router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+                                        router.push(`/employers-dashboard/post-jobs/edit/${jobId}?type=requireRemumeBlock`);
                                     }}
                                 >{/* &#9998; */}
                                     {loading ? <CustomizedProgressBars /> : "✎"}
