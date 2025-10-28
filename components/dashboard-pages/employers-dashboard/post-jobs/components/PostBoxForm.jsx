@@ -129,6 +129,7 @@ const PostBoxForm = () => {
     address: "",
     advertiseCity: "",
     advertiseCityName: "",
+    resumeRequired: false
   });
 
   useEffect(() => {
@@ -213,6 +214,7 @@ const PostBoxForm = () => {
 
               advertiseCity: job.advertiseCity || "",
               advertiseCityName: job.advertiseCityName || "",
+              resumeRequired: job.resumeRequired || false,
             });
           }
         } catch (error) {
@@ -1430,6 +1432,31 @@ const PostBoxForm = () => {
               <input type="text" name="advertiseCityName" value={formData.advertiseCityName} onChange={handleChange} placeholder="" ref={advertiseCityNameRef} />
             </div>
           )}
+
+          {/* ckeckbox */}
+          <div className="mb-3 form-group">
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="rememberMe"
+                checked={formData.resumeRequired}
+                onChange={(e) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    resumeRequired: e.target.checked,
+                  }))
+                }
+                }
+              />
+              <label
+                className="form-check-label"
+                htmlFor="rememberMe"
+              >
+                Resume is required
+              </label>
+            </div>
+          </div>
 
           {/* <!-- Input --> */}
           <div className="form-group col-lg-12 col-md-12 text-right">

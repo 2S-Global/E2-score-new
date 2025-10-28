@@ -457,7 +457,7 @@ const Index = () => {
                                     </span>
                                 </div>
                             </div>
-                        )} 
+                        )}
 
                         {/* Qualification Block */}
 
@@ -522,7 +522,7 @@ const Index = () => {
                         <div className="detail-row">
                             <div className="detail-label">Require resume</div>
                             <div className="detail-value">
-                                Yes
+                                {data?.resumeRequired ? "Yes" : "No"}
                                 <span className="edit-icon"
                                     onClick={async () => {
                                         setLoading(true);
