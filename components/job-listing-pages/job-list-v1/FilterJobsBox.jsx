@@ -1,5 +1,7 @@
 "use client";
-
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Link from "next/link";
 import jobs from "../../../data/job-featured";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,6 +41,40 @@ const FilterJobsBox = () => {
 
   const { sort, perPage } = jobSort;
 
+  // My code is starts from here
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const token = localStorage.getItem("candidate_token");
+
+  const [allJobs, setAllJobs] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchAllJobs = async () => {
+      // setLoading(true); // start loader
+      try {
+        const response = await axios.get(`${apiurl}/api/candidate/joblisting/get_all_job_list`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        console.log("------So here is my all jobs getting from API: ------------", response.data);
+
+        if (response.data.success && response.status === 200) {
+          setAllJobs(response.data.data);
+        }
+      } catch (err) {
+        setError(err.response?.data?.message || err.message);
+      } finally {
+        // setLoading(false); // stop loader
+      }
+    };
+
+    fetchAllJobs();
+  }, []);
+
+  // My code is ended here
+
   const dispatch = useDispatch();
 
   // keyword filter on title
@@ -51,8 +87,8 @@ const FilterJobsBox = () => {
   const locationFilter = (item) =>
     location !== ""
       ? item?.location
-          ?.toLocaleLowerCase()
-          .includes(location?.toLocaleLowerCase())
+        ?.toLocaleLowerCase()
+        .includes(location?.toLocaleLowerCase())
       : item;
 
   // location filter
@@ -70,26 +106,26 @@ const FilterJobsBox = () => {
   const jobTypeFilter = (item) =>
     jobType?.length !== 0 && item?.jobType !== undefined
       ? jobType?.includes(
-          item?.jobType[0]?.type.toLocaleLowerCase().split(" ").join("-"),
-        )
+        item?.jobType[0]?.type.toLocaleLowerCase().split(" ").join("-"),
+      )
       : item;
 
   // date-posted filter
   const datePostedFilter = (item) =>
     datePosted !== "all" && datePosted !== ""
       ? item?.created_at
-          ?.toLocaleLowerCase()
-          .split(" ")
-          .join("-")
-          .includes(datePosted)
+        ?.toLocaleLowerCase()
+        .split(" ")
+        .join("-")
+        .includes(datePosted)
       : item;
 
   // experience level filter
   const experienceFilter = (item) =>
     experience?.length !== 0
       ? experience?.includes(
-          item?.experience?.split(" ").join("-").toLocaleLowerCase(),
-        )
+        item?.experience?.split(" ").join("-").toLocaleLowerCase(),
+      )
       : item;
 
   // salary filter
@@ -104,34 +140,37 @@ const FilterJobsBox = () => {
   const sortFilter = (a, b) =>
     sort === "des" ? a.id > b.id && -1 : a.id < b.id && -1;
 
-  let content = jobs
+  let content = allJobs
     ?.filter(keywordFilter)
     ?.filter(locationFilter)
-    ?.filter(destinationFilter)
-    ?.filter(categoryFilter)
-    ?.filter(jobTypeFilter)
-    ?.filter(datePostedFilter)
-    ?.filter(experienceFilter)
-    ?.filter(salaryFilter)
+    // ?.filter(destinationFilter)
+    // ?.filter(categoryFilter)
+    // ?.filter(jobTypeFilter)
+    // ?.filter(datePostedFilter)
+    // ?.filter(experienceFilter)
+    // ?.filter(salaryFilter)
     ?.filter(tagFilter)
     ?.sort(sortFilter)
     .slice(perPage.start, perPage.end !== 0 ? perPage.end : 10)
     ?.map((item) => (
-      <div className="job-block" key={item.id}>
+      <div className="job-block" key={item._id}>
         <div className="inner-box">
           <div className="content">
             <span className="company-logo">
-              <Image width={50} height={49} src={item.logo} alt="item brand" />
+              <Image width={50} height={49} src={item.logo || "/images/resource/no_user.png"} alt="Company Logo" />
             </span>
-            <h4>
-              <Link href={`/job-details/${item.id}`}>{item.jobTitle}</Link>
+            <h4 style={{ marginBottom: "5px" }}>
+              <Link href={`/job-details/${item._id}`}>{item.jobTitle}</Link>
             </h4>
+            <h6 style={{ fontSize: "13px", marginBottom: "12px" }}>{item.companyName}</h6>
 
             <ul className="job-info">
-              <li>
-                <span className="icon flaticon-briefcase"></span>
-                {item.company}
-              </li>
+              {item.jobExperienceLevel && (
+                <li>
+                  <span className="icon flaticon-briefcase"></span>
+                  {item.jobExperienceLevel}
+                </li>
+              )}
               {/* compnay info */}
               <li>
                 <span className="icon flaticon-map-locator"></span>
@@ -143,7 +182,7 @@ const FilterJobsBox = () => {
               </li>
               {/* time info */}
               <li>
-                <span className="icon flaticon-money"></span> {item.salary}
+                <span className="icon flaticon-money"></span> {item.salary.min}
               </li>
               {/* salary info */}
             </ul>
@@ -220,19 +259,19 @@ const FilterJobsBox = () => {
 
         <div className="sort-by">
           {keyword !== "" ||
-          location !== "" ||
-          destination?.min !== 0 ||
-          destination?.max !== 100 ||
-          category !== "" ||
-          jobType?.length !== 0 ||
-          datePosted !== "" ||
-          experience?.length !== 0 ||
-          salary?.min !== 0 ||
-          salary?.max !== 20000 ||
-          tag !== "" ||
-          sort !== "" ||
-          perPage.start !== 0 ||
-          perPage.end !== 0 ? (
+            location !== "" ||
+            destination?.min !== 0 ||
+            destination?.max !== 100 ||
+            category !== "" ||
+            jobType?.length !== 0 ||
+            datePosted !== "" ||
+            experience?.length !== 0 ||
+            salary?.min !== 0 ||
+            salary?.max !== 20000 ||
+            tag !== "" ||
+            sort !== "" ||
+            perPage.start !== 0 ||
+            perPage.end !== 0 ? (
             <button
               onClick={clearAll}
               className="btn btn-danger text-nowrap me-2"
