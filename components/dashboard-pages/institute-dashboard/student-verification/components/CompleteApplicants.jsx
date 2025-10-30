@@ -7,9 +7,9 @@ import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
 import axios from "axios";
 
-const CompleteApplicants = () => {
+const Applicants = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [candidatesData, setCandidatesData] = useState([]);
   const [error, setError] = useState(null);
   const [errorId, setErrorId] = useState(null);
@@ -23,34 +23,35 @@ const CompleteApplicants = () => {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setToken(localStorage.getItem("employer_token"));
+      setToken(localStorage.getItem("Institute_token"));
     }
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!token) return;
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `${apiurl}/api/companyprofile/get_verified_user`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (response.data.success) {
-          setCandidatesData(response.data.data);
-        }
-      } catch (error) {
-        // setError("Failed to fetch candidates");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, [token, apiurl]);
+
+  const fetchData = async () => {
+    if (!token) return;
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${apiurl}/api/institutestudent/get_verified_students`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        setCandidatesData(response.data.data);
+      }
+    } catch (error) {
+      // setError("Failed to fetch candidates");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const openModalRH = (id, empId) => {
     setIsModalOpen(true);
@@ -62,6 +63,7 @@ const CompleteApplicants = () => {
 
   const closeModalRH = () => {
     setIsModalOpen(false);
+    fetchData();
     document.body.style.overflow = "auto";
   };
 
@@ -109,7 +111,7 @@ const CompleteApplicants = () => {
                         </Link>
                       </h6>
                       <p className="mb-1 small text-muted">
-                        {candidate.jobTitle}
+                        {candidate.details}
                       </p>
 
                       {/* ✅ FIX: Bootstrap text-break for long emails */}
@@ -159,6 +161,10 @@ const CompleteApplicants = () => {
           onClose={closeModalRH}
           can_id={can_id}
           emp_id={employmentId}
+          setSuccess={setSuccess}
+          setError={setError}
+          setErrorId={setErrorId}
+          setMessageId={setMessageId}
           is_complete={true}
         />
       )}
@@ -166,4 +172,4 @@ const CompleteApplicants = () => {
   );
 };
 
-export default CompleteApplicants;
+export default Applicants;

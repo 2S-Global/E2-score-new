@@ -10,6 +10,10 @@ const VerificationFormSection = ({
   setFormData,
   onClose,
   is_complete,
+  setSuccess = () => {},
+  setMessageId = () => {},
+  setError = () => {},
+  setErrorId = () => {},
 }) => {
   // ✅ Skip rendering when complete
   if (is_complete) return null;
@@ -57,8 +61,8 @@ const VerificationFormSection = ({
     async (e) => {
       e.preventDefault();
       try {
-        const response = await axios.post(
-          `${apiurl}/api/companyprofile/add_student_verification_details`,
+        const response = await axios.put(
+          `${apiurl}/api/institutestudent/update_student_status`,
           formdata,
           {
             headers: {
@@ -68,7 +72,7 @@ const VerificationFormSection = ({
           }
         );
 
-        console.log("Form submitted successfully:", response.data);
+        //  console.log("Form submitted successfully:", response.data);
 
         if (response.data.success) {
           setSuccess(response.data.message);

@@ -161,6 +161,10 @@ const Applicants = () => {
           onClose={closeModalRH}
           can_id={can_id}
           emp_id={employmentId}
+          setSuccess={setSuccess}
+          setError={setError}
+          setErrorId={setErrorId}
+          setMessageId={setMessageId}
         />
       )}
     </>

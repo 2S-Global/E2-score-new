@@ -8,14 +8,24 @@ import PersonalInfoCard from "./PersonalDetailsCard";
 
 import VerificationFormSection from "./VerificationFormSection";
 
-const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
+const Modal = ({
+  show,
+  onClose,
+  can_id,
+  emp_id,
+  setSuccess = () => {},
+  setMessageId = () => {},
+  setError = () => {},
+  setErrorId = () => {},
+  is_complete = false,
+}) => {
   if (!show) return null;
 
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const [error, setErrorthis] = useState(null);
+  const [success, setSuccessthis] = useState(null);
   const [token, setToken] = useState(null);
   const [user, setUser] = useState({});
   const [formdata, setFormData] = useState({});
@@ -50,7 +60,7 @@ const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
           levelname: data.levelname || "",
           course_type: data.courseType || "",
           courseTypename: data.courseTypename || "",
-          course_id: data.courseId || "",
+          course_id: data.courseName_id || "",
           courseName: data.courseName || "",
           course_name: data.courseName || "",
           duration: data.duration || "",
@@ -94,8 +104,8 @@ const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
       <MessageComponent
         error={error}
         success={success}
-        setError={setError}
-        setSuccess={setSuccess}
+        setError={setErrorthis}
+        setSuccess={setSuccessthis}
       />
 
       <div className="modal-dialog modal-dialog-centered modal-lg">
@@ -130,6 +140,10 @@ const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
                     is_complete={is_complete}
                     loading={loading}
                     setLoading={setLoading}
+                    setSuccess={setSuccess}
+                    setError={setError}
+                    setErrorId={setErrorId}
+                    setMessageId={setMessageId}
                   />
                 ) : (
                   <>
