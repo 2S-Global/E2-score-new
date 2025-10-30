@@ -4,7 +4,7 @@ import { queueRequest } from "../../helper/queueHelper";
 import React, { useState, useEffect } from "react";
 import EmploymentModal from "./modal.jsx"; // Import the modal component
 import axios from "axios";
-import { BadgeCheck, BadgeAlert } from "lucide-react";
+import { BadgeCheck, BadgeAlert, Info } from "lucide-react";
 //utils
 import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
@@ -132,7 +132,22 @@ const Employsectionmain = () => {
                               </>
                             )}
                           </span>{" "}
-                          {row.isVerified ? null : (
+                          {row.isVerified ? (
+                            <>
+                              <span
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="top"
+                                title={row.remarks || "No remarks"}
+                                style={{ cursor: "pointer" }}
+                              >
+                                <Info
+                                  size={20}
+                                  color="green"
+                                  className="ms-2"
+                                />
+                              </span>
+                            </>
+                          ) : (
                             <>
                               <i
                                 className="la la-pencil-alt"
