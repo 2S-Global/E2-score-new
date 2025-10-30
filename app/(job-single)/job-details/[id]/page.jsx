@@ -215,19 +215,21 @@ const JobSingleDynamicV1 = () => {
 
                 {/* This Part should uncomment for only candidate ----------Start */}
 
-                {/* <div className="btn-box">
-                  <a
-                    href="#"
-                    className="theme-btn btn-style-one"
-                    data-bs-toggle="modal"
-                    data-bs-target="#applyJobModal"
-                  >
-                    Apply For Job
-                  </a>
-                  <button className="bookmark-btn">
-                    <i className="flaticon-bookmark"></i>
-                  </button>
-                </div> */}
+                {view === "candidate" && (
+                  <div className="btn-box">
+                    <a
+                      href="#"
+                      className="theme-btn btn-style-one"
+                      data-bs-toggle="modal"
+                      data-bs-target="#applyJobModal"
+                    >
+                      Apply For Job
+                    </a>
+                    <button className="bookmark-btn">
+                      <i className="flaticon-bookmark"></i>
+                    </button>
+                  </div>
+                )}
 
                 {/* This Part should uncomment for only candidate ----------end */}
 

@@ -50,11 +50,11 @@ const JobOverView = ({ overview }) => {
             <span>{expectedHours}h / week</span>
           </li>
         )}
-        <li>
+        {/* <li>
           <i className="icon icon-rate"></i>
           <h5>Rate:</h5>
           <span>$15 - $25 / hour</span>
-        </li>
+        </li> */}
         {salary && (
           <li>
             <i className="icon icon-salary"></i>
