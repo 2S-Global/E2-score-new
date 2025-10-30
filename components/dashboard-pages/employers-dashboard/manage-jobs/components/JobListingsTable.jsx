@@ -134,7 +134,7 @@ const JobListingsTable = () => {
                         />
                         <div>
                           <small className="mb-1">
-                            <Link href={`/job-details/${job._id}`}>
+                            <Link href={`/job-details/${job._id}?view=employer`}>
                               {job.jobTitle}
                             </Link>
                           </small>

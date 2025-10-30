@@ -160,10 +160,9 @@ const FilterJobsBox = () => {
               <Image width={50} height={49} src={item.logo || "/images/resource/no_user.png"} alt="Company Logo" />
             </span>
             <h4 style={{ marginBottom: "5px" }}>
-              <Link href={`/job-details/${item._id}`}>{item.jobTitle}</Link>
+              <Link href={`/job-details/${item._id}?view=candidate`}>{item.jobTitle}</Link>
             </h4>
             <h6 style={{ fontSize: "13px", marginBottom: "12px" }}>{item.companyName}</h6>
-
             <ul className="job-info">
               {item.jobExperienceLevel && (
                 <li>
@@ -171,29 +170,94 @@ const FilterJobsBox = () => {
                   {item.jobExperienceLevel}
                 </li>
               )}
-              {/* compnay info */}
-              <li>
-                <span className="icon flaticon-map-locator"></span>
-                {item.location}
-              </li>
-              {/* location info */}
-              <li>
-                <span className="icon flaticon-clock-3"></span> {item.time}
-              </li>
-              {/* time info */}
-              <li>
-                <span className="icon flaticon-money"></span> {item.salary.min}
-              </li>
               {/* salary info */}
+              <li>
+                <span className="icon flaticon-money"></span>
+                {(() => {
+                  const { structure, currency, min, max, amount, rate } = item.salary;
+
+                  switch (structure) {
+                    case "range":
+                      if (currency && min != null && max != null && rate) {
+                        return (
+                          <>
+                            {currency}
+                            {min.toLocaleString("en-IN", { maximumFractionDigits: 2 })} -{" "}
+                            {currency}
+                            {max.toLocaleString("en-IN", { maximumFractionDigits: 2 })} {rate}
+                          </>
+                        );
+                      }
+                      return <span>Incomplete salary data</span>;
+
+                    case "starting amount":
+                      if (currency && amount != null && rate) {
+                        return (
+                          <>
+                            From {currency}
+                            {amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })} {rate}
+                          </>
+                        );
+                      }
+                      return <span>Incomplete salary data</span>;
+
+                    case "maximum amount":
+                      if (currency && amount != null && rate) {
+                        return (
+                          <>
+                            Up to {currency}
+                            {amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })} {rate}
+                          </>
+                        );
+                      }
+                      return <span>Incomplete salary data</span>;
+
+                    case "exact amount":
+                      if (currency && amount != null && rate) {
+                        return (
+                          <>
+                            {currency}
+                            {amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })} {rate}
+                          </>
+                        );
+                      }
+                      return <span>Incomplete salary data</span>;
+
+                    default:
+                      return <span>Salary data not available</span>;
+                  }
+                })()}
+              </li>
+              {/* compnay info */}
+              {item.location && (
+                <li>
+                  <span className="icon flaticon-map-locator"></span>
+                  {item.jobLocationType === "remote"
+                    ? item.advertiseCityName
+                      ? `Remote - ${item.advertiseCityName}`
+                      : "Remote"
+                    : item.jobLocationType === "on-site"
+                      ? item.location || "N/A"
+                      : item.location || "N/A"}
+                </li>
+              )}
+              {/* location info */}
+              {item.createdAgo && (
+                <li>
+                  <span className="icon flaticon-clock-3"></span> {item.createdAgo}
+                </li>
+              )}
+              {/* time info */}
             </ul>
             {/* End .job-info */}
 
             <ul className="job-other-info">
-              {item?.jobType?.map((val, i) => (
-                <li key={i} className={`${val.styleClass}`}>
-                  {val.type}
-                </li>
-              ))}
+              {Array.isArray(item?.jobType) &&
+                item.jobType.map((type, index) => (
+                  <li key={index} className="time">
+                    {type}
+                  </li>
+                ))}
             </ul>
             {/* End .job-other-info */}
 

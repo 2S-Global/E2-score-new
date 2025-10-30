@@ -2,7 +2,7 @@
 import { use } from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import jobs from "@/data/job-featured";
 import LoginPopup from "@/components/common/form/login/LoginPopup";
@@ -21,13 +21,21 @@ import Image from "next/image";
 import JobDescription from "@/components/job-single-pages/shared-components/JobDescription";
 
 const JobSingleDynamicV1 = () => {
-  const params = useParams(); // ✅ Don't wrap it with `use()`
+  const params = useParams(); // ✅ Don't wrap it with `use()` && get dynamic route params (/job-details/[id])
   const id = params.id;
+
+  const searchParams = useSearchParams(); // get query params (?view=candidate)
+  const view = searchParams.get("view"); // e.g., "candidate" or "employer"
+
   const company = jobs.find((item) => item.id == id) || jobs[0];
 
   //Get Token
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
-  const token = localStorage.getItem("employer_token");
+  // const token = localStorage.getItem("employer_token");
+  const token =
+    view === "employer"
+      ? localStorage.getItem("employer_token")
+      : localStorage.getItem("candidate_token");
   if (!token) {
     console.log("No token");
   }
@@ -343,15 +351,19 @@ const JobSingleDynamicV1 = () => {
 
                       <CompnayInfo />
 
-                      {jobPreviewDetails?.jobDescription && (
+                      {jobPreviewDetails?.companyWebsite && (
                         <div className="btn-box">
                           <a
-                            href="#"
+                            href={
+                              jobPreviewDetails.companyWebsite.startsWith("http")
+                                ? jobPreviewDetails.companyWebsite
+                                : `https://${jobPreviewDetails.companyWebsite}`
+                            }
                             target="_blank"
                             rel="noopener noreferrer"
                             className="theme-btn btn-style-three"
                           >
-                            {jobPreviewDetails?.companyWebsite}
+                            Visit Official Website
                           </a>
                         </div>
                       )}
