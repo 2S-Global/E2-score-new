@@ -160,9 +160,8 @@ const AccountBox = ({ setActiveTab }) => {
               required
               placeholder="Enter your company name"
               value={formdata.companyname}
-              onChange={(e) =>
-                setFormData({ ...formdata, companyname: e.target.value })
-              }
+              style={{ pointerEvents: "none" }}
+              readOnly
             />
           </div>
 
