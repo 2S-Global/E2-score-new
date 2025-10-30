@@ -62,7 +62,7 @@ const SchoolForm = ({
           setIsFocused={setIsFocused}
         />
 
-        <SearchableInput
+        {/*  <SearchableInput
           label="School Name"
           name="school_name"
           value={formData.school_name || schoolSearch}
@@ -82,7 +82,7 @@ const SchoolForm = ({
           handleBlur={handleBlur}
           isFocused={isFocused}
           setIsFocused={setIsFocused}
-        />
+        /> */}
 
         <div className="row">
           <div className="form-group col-md-6">
