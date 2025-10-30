@@ -28,29 +28,30 @@ const Applicants = () => {
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!token) return;
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `${apiurl}/api/institutestudent/get_unverfired_students`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (response.data.success) {
-          setCandidatesData(response.data.data);
-        }
-      } catch (error) {
-        // setError("Failed to fetch candidates");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, [token, apiurl]);
+
+  const fetchData = async () => {
+    if (!token) return;
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${apiurl}/api/institutestudent/get_unverfired_students`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        setCandidatesData(response.data.data);
+      }
+    } catch (error) {
+      // setError("Failed to fetch candidates");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const openModalRH = (id, empId) => {
     setIsModalOpen(true);
@@ -62,6 +63,7 @@ const Applicants = () => {
 
   const closeModalRH = () => {
     setIsModalOpen(false);
+    fetchData();
     document.body.style.overflow = "auto";
   };
 

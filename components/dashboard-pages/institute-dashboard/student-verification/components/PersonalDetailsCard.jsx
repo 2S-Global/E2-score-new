@@ -22,7 +22,10 @@ const PersonalInfoCard = ({ user }) => {
             <strong>Mobile Number:</strong> {user.mobile || "N/A"}
           </div>
           <div className="col-sm-6">
-            <strong>Date of Birth:</strong> {user.dob || "N/A"}
+            <strong>Date of Birth:</strong>{" "}
+            {new Date(user.dob).toLocaleDateString("en-IN", {
+              timeZone: "Asia/Kolkata",
+            })}
           </div>
           <div className="col-sm-6">
             <strong>Gender:</strong> {user.gender || "N/A"}

@@ -7,31 +7,33 @@ const EmployeeInfoCard = ({ user }) => {
       style={{ width: "100%", margin: "0 auto", height: "auto" }}
     >
       <div className="card-body p-3">
-        <h5 className="card-title mb-3">Employment Information</h5>
+        <h5 className="card-title mb-3">Academic Information</h5>
         <div className="row g-2">
           <div className="col-sm-6">
-            <strong>Designation:</strong> {user.designation}
+            <strong>Level of Education:</strong> {user.levelname}
           </div>
           <div className="col-sm-6">
-            <strong>Employment Type:</strong>{" "}
-            {user.employmenttype
-              ? user.employmenttype.charAt(0).toUpperCase() +
-                user.employmenttype.slice(1)
+            <strong>Course Type:</strong>{" "}
+            {user.courseTypename
+              ? user.courseTypename.charAt(0).toUpperCase() +
+                user.courseTypename.slice(1)
               : ""}
           </div>
           <div className="col-sm-6">
-            <strong>Joining Date:</strong> {user.joiningdate}
+            <strong>Course Name :</strong> {user.courseName}
           </div>
           <div className="col-sm-6">
-            <strong>Leave Date:</strong> {user.leavedate}
+            <strong>Course Duration :</strong> {user.durationstring}
           </div>
           <div className="col-sm-6">
-            <strong>Currently Employed:</strong>{" "}
-            {user.currentlyemployed ? (
-              <span className="badge bg-success">Yes</span>
-            ) : (
-              <span className="badge bg-secondary">No</span>
-            )}
+            <strong>Grading System : </strong>
+            {user.gradingSystem
+              ? user.gradingSystem.charAt(0).toUpperCase() +
+                user.gradingSystem.slice(1)
+              : ""}
+          </div>
+          <div className="col-sm-6">
+            <strong>Marks:</strong> {user.marks}
           </div>
         </div>
       </div>
