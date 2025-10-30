@@ -482,7 +482,10 @@ const Index = () => {
                             <div className="detail-row">
                                 <div className="detail-label">Job description</div>
                                 <div className="detail-value">
-                                    {data.jobDescription}
+                                    {/* {data.jobDescription} */}
+                                    <div
+                                        dangerouslySetInnerHTML={{ __html: data.jobDescription }}
+                                    />
                                     <span className="edit-icon"
                                         onClick={async () => {
                                             setLoading(true);

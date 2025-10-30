@@ -9,7 +9,12 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useParams, useSearchParams } from "next/navigation";
 import { validateDocuments } from "./validatePostJobDocuments";
 import MessageComponent from "@/components/common/ResponseMsg";
+import dynamic from 'next/dynamic';
 import React, { useRef } from "react";
+import 'react-quill-new/dist/quill.snow.css';
+
+// Dynamically import ReactQuill to avoid SSR issues
+const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
 
 const PostBoxForm = () => {
   const params = useParams();  // for dynamic route parts like [jobId]
@@ -607,12 +612,32 @@ const PostBoxForm = () => {
           </div>
 
           {/* <!-- About Company --> */}
-          <div className="form-group col-lg-12 col-md-12" id="jobDescriptionBlock">
+          {/* <div className="form-group col-lg-12 col-md-12" id="jobDescriptionBlock">
             <label htmlFor="jobDescription">
               <b>Job Description{" "}</b>
               <span style={{ color: "red" }}>*</span>
             </label>
             <textarea placeholder="Spent several years working on sheep on Wall Street. Had moderate success investing in Yugo's on Wall Street. Managed a small team buying and selling Pogo sticks for farmers. Spent several years licensing licorice in West Palm Beach, FL. Developed several new methods for working it banjos in the aftermarket. Spent a weekend importing banjos in West Palm Beach, FL.In this position, the Software Engineer collaborates with Evention's Development team to continuously enhance our current software solutions as well as create new solutions to eliminate the back-office operations and management challenges present" name="jobDescription" value={formData.jobDescription} ref={jobDescriptionRef} onChange={handleChange} id="jobDescription"></textarea>
+          </div> */}
+
+          <div className="form-group col-lg-12 col-md-12" id="jobDescriptionBlock">
+            <label htmlFor="jobDescription">
+              <b>Job Description{" "}</b>
+              <span style={{ color: "red" }}>*</span>
+            </label>
+            <ReactQuill
+              id="jobDescription"
+              name="jobDescription"
+              theme="snow"
+              value={formData.jobDescription}
+              ref={jobDescriptionRef}
+              onChange={(content) =>
+                setFormData((prev) => ({ ...prev, jobDescription: content }))
+              }
+              placeholder="Write detailed job description here..."
+              style={{ height: '250px', marginBottom: '40px' }}
+              className="form-group"
+            />
           </div>
 
           {/* <!-- Input --> */}

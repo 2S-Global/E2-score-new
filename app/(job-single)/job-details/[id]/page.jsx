@@ -272,7 +272,7 @@ const JobSingleDynamicV1 = () => {
         <div className="job-detail-outer">
           <div className="auto-container">
             <div className="row">
-              <div className="content-column col-lg-8 col-md-12 col-sm-12">
+              <div className="content-column col-lg-8 col-md-12 col-sm-12" style={{listStyleType: "unset"}}>
                 {/* <JobDetailsDescriptions /> */}
                 {jobPreviewDetails?.jobDescription && (
                   <JobDescription description={jobPreviewDetails?.jobDescription} />
