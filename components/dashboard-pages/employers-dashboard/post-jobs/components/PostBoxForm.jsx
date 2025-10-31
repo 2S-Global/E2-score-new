@@ -1,4 +1,6 @@
 "use client";
+// import { queueRequest } from "../helper/queueHelper";
+import { queueRequest } from "@/components/dashboard-pages/candidates-dashboard/my-profile/helper/queueHelper";
 import { useRouter } from "next/navigation";
 import Select from "react-select";
 import { useState, useEffect } from "react";
@@ -91,6 +93,7 @@ const PostBoxForm = () => {
   const [country, setCountry] = useState([]);
   const [city, setCity] = useState([]);
   const [branch, setBranch] = useState([]);
+  const [jobSkills, setJobSkills] = useState([]);
 
   // Error Variables
   const [error, setError] = useState(null);
@@ -134,7 +137,8 @@ const PostBoxForm = () => {
     address: "",
     advertiseCity: "",
     advertiseCityName: "",
-    resumeRequired: false
+    resumeRequired: false,
+    jobSkills: []
   });
 
   useEffect(() => {
@@ -220,6 +224,11 @@ const PostBoxForm = () => {
               advertiseCity: job.advertiseCity || "",
               advertiseCityName: job.advertiseCityName || "",
               resumeRequired: job.resumeRequired || false,
+              // jobSkills: job.jobSkills?.map((s) => s.Skill) || [],
+              jobSkills: job.jobSkills?.map((s) => ({
+                value: s.Skill,
+                label: s.Skill,
+              })) || [],
             });
           }
         } catch (error) {
@@ -242,6 +251,119 @@ const PostBoxForm = () => {
     if (date) {
       setFormData({ ...formData, jobExpiryDate: date });
     }
+  };
+
+  // For Job Skills
+
+  // ✅ 1. Fetch random skills on mount
+  useEffect(() => {
+    const fetchRandomSkills = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(`${apiurl}/api/sql/dropdown/Random_Skill`);
+        const data = res.data.data || [];
+
+        console.log("Here is my all random skills::::'''''", data);
+        setJobSkills(
+          Array.from(
+            new Set(
+              data.filter(Boolean).map((s) => s.trim().toLowerCase())
+            )
+          ).map((skill) => ({
+            label: skill.charAt(0).toUpperCase() + skill.slice(1),
+            value: skill,
+          }))
+        );
+      } catch (err) {
+        console.error("Error fetching random skills:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRandomSkills();
+  }, [apiurl]);
+
+
+
+
+  const fetchSkills = async (inputValue) => {
+    if (!inputValue || inputValue.length < 2) return; // avoid too frequent calls
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("candidate_token");
+
+      const response = await queueRequest(() =>
+        axios.get(`${apiurl}/api/sql/dropdown/matching_Skill?skill_name=${inputValue}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+      );
+
+      console.log("Data is coming successfully in the fontend:  ---tiktik outside //", response.data);
+
+      if (response.status === 200 && Array.isArray(response.data.data)) {
+        // convert API response to react-select format
+        console.log("Data is coming successfully in the fontend:  ---tiktik //", response.data);
+
+        // const formattedOptions = response.data.data.map((skill) => ({
+        //   label: skill.charAt(0).toUpperCase() + skill.slice(1),
+        //   value: skill,
+        // }));
+        // // setJobSkills(formattedOptions);
+        // setJobSkills(
+        //   Array.from(
+        //     new Set(
+        //       (response.data.data || [])
+        //         .filter(Boolean)
+        //         .map((skill) => skill.trim().toLowerCase())
+        //     )
+        //   ).map((skill) => ({
+        //     label: skill.charAt(0).toUpperCase() + skill.slice(1),
+        //     value: skill,
+        //   }))
+        // );
+
+        // New Code Starts from here
+        const fetched = response.data.data || [];
+
+        // Normalize and remove duplicates
+        const normalizedFetched = Array.from(
+          new Set(
+            fetched
+              .filter(Boolean)
+              .map((s) => s.trim().toLowerCase())
+          )
+        ).map((skill) => ({
+          label: skill.charAt(0).toUpperCase() + skill.slice(1),
+          value: skill,
+        }));
+
+        // ✅ Keep old selected options (from formData)
+        const selectedOptions = formData.jobSkills.map((skill) => ({
+          label: skill.charAt(0).toUpperCase() + skill.slice(1),
+          value: skill,
+        }));
+
+        // ✅ Merge them so selected options are never lost
+        const merged = [
+          ...selectedOptions,
+          ...normalizedFetched.filter(
+            (opt) => !selectedOptions.some((sel) => sel.value === opt.value)
+          ),
+        ];
+
+        setJobSkills(merged);
+
+      }
+    } catch (error) {
+      console.error("Error fetching skills:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 🔹 When user types
+  const handleInputChange = (inputValue) => {
+    fetchSkills(inputValue);
   };
 
   const selectedValues = (formData.jobType || [])
@@ -672,6 +794,50 @@ const PostBoxForm = () => {
             />
           </div>
 
+          {/* <!-- Search Select for Skill Field --> */}
+          <div className="form-group col-lg-6 col-md-12" id="specializationBlock">
+            <label >Skills </label>
+            {/* <Select
+              isMulti
+              name="jobSkills"
+              options={jobSkills}
+              className="basic-multi-select"
+              classNamePrefix="select"
+              value={jobSkills.filter(option =>
+                formData.jobSkills.includes(option.value)
+              )}
+              onChange={(selectedOptions) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  jobSkills: selectedOptions
+                    ? selectedOptions.map((opt) => opt.value)
+                    : [],
+                }))
+              }
+            /> */}
+            <Select
+              isMulti
+              name="jobSkills"
+              options={jobSkills}
+              // isLoading={loading}
+              className="basic-multi-select"
+              classNamePrefix="select"
+              placeholder="Type to search skills..."
+              value={jobSkills.filter((option) =>
+                formData.jobSkills.includes(option.value)
+              )}
+              onInputChange={handleInputChange}
+              onChange={(selectedOptions) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  jobSkills: selectedOptions
+                    ? selectedOptions.map((opt) => opt.value)
+                    : [],
+                }))
+              }
+            />
+          </div>
+
           <div className="form-group col-lg-6 col-md-12" id="numberOfPositionAvaiable">
             <label htmlFor="positionAvaiable">
               <b>Number of Positions Available{" "}</b>
@@ -938,7 +1104,9 @@ const PostBoxForm = () => {
           {/* Date Picker added by me --Chandra Sarkar -- starts from here */}
 
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <div className="mb-3 form-group" id="jobExpiryDateBlock">
+            {/* form-group col-lg-6 col-md-12  -- For Testing */}
+            {/* mb-3 form-group   -- Actual */}
+            <div className="form-group col-lg-6 col-md-12" id="jobExpiryDateBlock">
               <label htmlFor="jobExpiryDate" className="form-label">
                 <b>
                   Job Expiry Date{" "}
