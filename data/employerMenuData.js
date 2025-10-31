@@ -124,7 +124,7 @@ module.exports = [
     id: 18,
     name: "Logout",
     icon: "la-sign-out",
-    routePath: "/",
+    routePath: "/logout",
     active: "",
   },
 ];
