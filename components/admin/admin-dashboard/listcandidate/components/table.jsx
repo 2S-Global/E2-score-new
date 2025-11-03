@@ -13,10 +13,12 @@ import {
   FilePen,
   Mailbox,
   ShoppingCart,
+  Eye,
 } from "lucide-react";
 import EditfieldModal from "./modals/editfield";
 import EditplanModal from "./modals/planmodal";
 import VerifiedlistModal from "./modals/verifiedlistModal";
+import { ro } from "@faker-js/faker";
 const Companytable = () => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
@@ -205,7 +207,8 @@ const Companytable = () => {
                     <th style={{ textAlign: "center" }}>Candidate Name</th>
                     <th style={{ textAlign: "center" }}>Candidate Email</th>
                     <th style={{ textAlign: "center" }}>Candidate Status</th>
-                    <th style={{ textAlign: "center" }}>Total Verification</th>
+                    {/* 
+                    <th style={{ textAlign: "center" }}>Total Verification</th> */}
                     <th style={{ textAlign: "center" }}>Created Date</th>
                     <th style={{ textAlign: "center" }}>Action</th>
                   </tr>
@@ -247,7 +250,7 @@ const Companytable = () => {
                             </label>
                           </div>
                         </td>
-                        <td
+                        {/*    <td
                           style={{
                             textAlign: "center",
                             cursor:
@@ -267,7 +270,7 @@ const Companytable = () => {
                           }}
                         >
                           {company.orderCount > 0 ? company.orderCount : 0}
-                        </td>
+                        </td> */}
                         <td style={{ textAlign: "center" }}>
                           {new Date(company.createdAt).toLocaleString("en-IN", {
                             day: "2-digit",
@@ -282,6 +285,18 @@ const Companytable = () => {
                         </td>
                         <td className="text-center">
                           <div className="d-flex justify-content-center gap-3">
+                            <span title="View Details">
+                              <Eye
+                                color="green"
+                                style={{ cursor: "pointer" }}
+                                onClick={() =>
+                                  router.push(
+                                    `/candidates-details/${company._id}`
+                                  )
+                                }
+                                size={20}
+                              />
+                            </span>
                             <span title="Edit">
                               <Pencil
                                 className="text-primary"

@@ -328,7 +328,7 @@ const Companytable = () => {
                     <th style={{ textAlign: "center" }}>Company Name</th>
                     <th style={{ textAlign: "center" }}>Company Email</th>
                     <th style={{ textAlign: "center" }}>Company Status</th>
-                    <th style={{ textAlign: "center" }}>Total Verification</th>
+                    {/*  <th style={{ textAlign: "center" }}>Total Verification</th> */}
                     <th style={{ textAlign: "center" }}>Created Date</th>
                     <th style={{ textAlign: "center" }}>Action</th>
                   </tr>
@@ -370,7 +370,7 @@ const Companytable = () => {
                             </label>
                           </div>
                         </td>
-                        <td
+                        {/*  <td
                           style={{
                             textAlign: "center",
                             cursor:
@@ -390,7 +390,7 @@ const Companytable = () => {
                           }}
                         >
                           {company.orderCount > 0 ? company.orderCount : 0}
-                        </td>
+                        </td> */}
                         <td style={{ textAlign: "center" }}>
                           {new Date(company.createdAt).toLocaleString("en-IN", {
                             day: "2-digit",
@@ -414,7 +414,7 @@ const Companytable = () => {
                                 size={20}
                               />
                             </span>
-
+                            {/* 
                             <span title="Plan">
                               <PackageOpen
                                 className="text-info"
@@ -422,7 +422,7 @@ const Companytable = () => {
                                 onClick={() => openModalPlanRH(company)}
                                 size={20}
                               />
-                            </span>
+                            </span> */}
 
                             <span title="Delete">
                               <Trash2

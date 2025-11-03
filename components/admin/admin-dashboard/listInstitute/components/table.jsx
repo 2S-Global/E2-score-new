@@ -205,7 +205,7 @@ const Companytable = () => {
                     <th style={{ textAlign: "center" }}>Institute Name</th>
                     <th style={{ textAlign: "center" }}>Institute Email</th>
                     <th style={{ textAlign: "center" }}>Institute Status</th>
-                    <th style={{ textAlign: "center" }}>Total Verification</th>
+                    {/*   <th style={{ textAlign: "center" }}>Total Verification</th> */}
                     <th style={{ textAlign: "center" }}>Created Date</th>
                     <th style={{ textAlign: "center" }}>Action</th>
                   </tr>
@@ -247,7 +247,7 @@ const Companytable = () => {
                             </label>
                           </div>
                         </td>
-                        <td
+                        {/*   <td
                           style={{
                             textAlign: "center",
                             cursor:
@@ -267,7 +267,7 @@ const Companytable = () => {
                           }}
                         >
                           {company.orderCount > 0 ? company.orderCount : 0}
-                        </td>
+                        </td> */}
                         <td style={{ textAlign: "center" }}>
                           {new Date(company.createdAt).toLocaleString("en-IN", {
                             day: "2-digit",
@@ -291,14 +291,14 @@ const Companytable = () => {
                                 size={20}
                               />
                             </span>
-                            <span title="Plan">
+                            {/*  <span title="Plan">
                               <PackageOpen
                                 className="text-info"
                                 style={{ cursor: "pointer" }}
                                 onClick={() => openModalPlanRH(company)}
                                 size={20}
                               />
-                            </span>
+                            </span> */}
 
                             <span title="Delete">
                               <Trash2

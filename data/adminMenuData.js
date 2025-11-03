@@ -22,20 +22,20 @@ module.exports = [
     active: "",
   },
 
-    {
+  {
     id: 4,
     name: "List  Candidate",
     icon: "la-id-badge",
     routePath: "/admin/listcandidate",
     active: "",
   },
-  {
+  /*  {
     id: 5,
     name: "List Packages",
     icon: "la-boxes",
     routePath: "/admin/listpackage",
     active: "",
-  },
+  }, */
 
   // {
   //   id: 6,
