@@ -13,6 +13,7 @@ import {
   FilePen,
   Mailbox,
   ShoppingCart,
+  Eye,
 } from "lucide-react";
 import EditfieldModal from "./modals/editfield";
 import EditplanModal from "./modals/planmodal";
@@ -406,6 +407,19 @@ const Companytable = () => {
 
                         <td className="text-center">
                           <div className="d-flex justify-content-center gap-3">
+                            <span title="View Details">
+                              <Eye
+                                color="green"
+                                style={{ cursor: "pointer" }}
+                                onClick={() =>
+                                  router.push(
+                                    `/employers-details/${company._id}`
+                                  )
+                                }
+                                size={20}
+                              />
+                            </span>
+
                             <span title="Edit">
                               <Pencil
                                 className="text-primary"

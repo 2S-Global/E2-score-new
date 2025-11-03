@@ -5,20 +5,34 @@ import Header from "./Header";
 const index = () => {
   return (
     <>
-      <Header />
-      {/* <!--End Main Header -->  */}
+      {/* <Header />
+      
 
-      <MobileMenu />
-      {/* End MobileMenu */}
-
-      <div className="login-section">
+      <MobileMenu /> */}
+      <div
+        style={{
+          backgroundColor: "#EBE8E2",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <div
-          className="image-layer"
-          style={{ backgroundImage: "url(/images/background/12.jpg)" }}
-        ></div>
-        <div className="outer-box">
+          className="flex-grow"
+          style={{
+            position: "relative",
+            minHeight: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "60px 0 25px",
+            overflow: "auto",
+          }}
+        >
           {/* <!-- Login Form --> */}
-          <div className="login-form default-form">
+          <div
+            className="login-form default-form"
+            style={{ backgroundColor: "#FFFFFF" }}
+          >
             <Register2 />
           </div>
           {/* <!--End Login Form --> */}

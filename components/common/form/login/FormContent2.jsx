@@ -8,7 +8,7 @@ import React, { useEffect, useState } from "react";
 
 //new component
 import MessageComponent from "../../ResponseMsg";
-import { se } from "date-fns/locale/se";
+
 const FormContent2 = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -81,8 +81,24 @@ const FormContent2 = () => {
   };
 
   return (
-    <div className="form-inner">
-      <h3>Login to GEISIL</h3>
+    <div className="form-inner p-4">
+      <div className="mb-3 d-flex justify-content-center pb-4 pt-4">
+        <Image
+          alt="brand"
+          src="/images/logo 3.png"
+          width={214}
+          height={70}
+          priority
+        />
+      </div>
+      <h3
+        style={{
+          textAlign: "center",
+        }}
+      >
+        GLOBAL EMPLOYABILITY INFORMATION SERVICES INDIA LIMITED
+      </h3>
+
       <MessageComponent
         error={error}
         success={success}
@@ -154,11 +170,11 @@ const FormContent2 = () => {
           </Link>
         </div>
 
-        <div className="divider">
+        {/* <div className="divider">
           <span>or</span>
         </div>
 
-        <LoginWithSocial />
+        <LoginWithSocial /> */}
       </div>
       {/* End bottom-box LoginWithSocial */}
     </div>

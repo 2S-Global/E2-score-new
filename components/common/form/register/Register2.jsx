@@ -6,11 +6,27 @@ import FormContent2 from "./FormContent";
 import FormContentcom from "./companyform";
 import InstituteFormContent from "./InstituteRegister";
 import Link from "next/link";
+import Image from "next/image";
 
 const Register2 = () => {
   return (
-    <div className="form-inner">
-      <h3>Create a Free E²-Score Account</h3>
+    <div className="form-inner p-4">
+      <div className="mb-3 d-flex justify-content-center pb-4 pt-4">
+        <Image
+          alt="brand"
+          src="/images/logo 3.png"
+          width={214}
+          height={70}
+          priority
+        />
+      </div>
+      <h3
+        style={{
+          textAlign: "center",
+        }}
+      >
+        GLOBAL EMPLOYABILITY INFORMATION SERVICES INDIA LIMITED
+      </h3>
 
       <Tabs>
         <div className="form-group register-dual">
@@ -62,10 +78,10 @@ const Register2 = () => {
             LogIn
           </Link>
         </div>
-        <div className="divider">
+        {/* <div className="divider">
           <span>or</span>
         </div>
-        <LoginWithSocial />
+        <LoginWithSocial /> */}
       </div>
       {/* End bottom-box LoginWithSocial */}
     </div>

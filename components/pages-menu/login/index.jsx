@@ -18,23 +18,49 @@ const Index = () => {
 
   return (
     <>
-      <Header />
+      {/*       <Header /> */}
       {/* <!--End Main Header -->  */}
 
-      <MobileMenu />
+      {/* <MobileMenu /> */}
       {/* End MobileMenu */}
 
-      <div className="login-section">
+      {/* <div className="login-section">
         <div
           className="image-layer"
           style={{ backgroundImage: "url(/images/background/12.jpg)" }}
         ></div>
         <div className="outer-box">
-          {/* <!-- Login Form --> */}
           <div className="login-form default-form">
             <FormContent2 />
           </div>
-          {/* <!--End Login Form --> */}
+        </div>
+      </div> */}
+
+      <div
+        style={{
+          backgroundColor: "#EBE8E2",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <div
+          className="flex-grow"
+          style={{
+            position: "relative",
+            minHeight: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "60px 0 25px",
+            overflow: "auto",
+          }}
+        >
+          <div
+            className="login-form default-form"
+            style={{ backgroundColor: "#FFFFFF" }}
+          >
+            <FormContent2 />
+          </div>
         </div>
       </div>
       {/* <!-- End Info Section --> */}
