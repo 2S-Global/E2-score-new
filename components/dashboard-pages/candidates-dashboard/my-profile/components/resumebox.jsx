@@ -6,6 +6,7 @@ import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
 import { Download, Trash2 } from "lucide-react";
 import Swal from "sweetalert2";
+import { se } from "date-fns/locale/se";
 
 const ResumeBox = () => {
   const [loading, setLoading] = useState(false);
@@ -17,6 +18,7 @@ const ResumeBox = () => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [downloadLoading, setDownloadLoading] = useState(false);
 
   const fetchResume = useCallback(async () => {
     try {
@@ -208,6 +210,41 @@ const ResumeBox = () => {
       }
     });
   };
+  const handledownloadfullpdf = async () => {
+    console.log("Download Full PDF clicked");
+    setDownloadLoading(true);
+    try {
+      const token = localStorage.getItem("candidate_token");
+      if (!token) {
+        setError("Authentication token missing");
+        return;
+      }
+
+      const response = await axios({
+        url: `${apiurl}/api/candidate/resume/get_resume`,
+        method: "GET",
+        responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], { type: "application/pdf" })
+      );
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "Resume.pdf");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Error downloading full PDF:", error);
+      setError("Failed to download resume");
+    } finally {
+      setDownloadLoading(false);
+    }
+  };
 
   return (
     <div className="ls-widget">
@@ -251,6 +288,16 @@ const ResumeBox = () => {
                       Download
                     </a>
                   )}
+                  <button
+                    onClick={handledownloadfullpdf}
+                    className="btn btn-outline-success btn-sm d-flex align-items-center gap-2"
+                    disabled={downloadLoading}
+                    style={{ opacity: downloadLoading ? 0.5 : 1 }}
+                  >
+                    <Download size={16} />
+                    {downloadLoading ? "Downloading..." : "Download Full PDF"}
+                  </button>
+
                   <button
                     onClick={confirmDelete}
                     className="btn btn-outline-danger btn-sm d-flex align-items-center gap-2"
