@@ -34,42 +34,47 @@ const HeaderNavContent = () => {
           </li>
           {/* End homepage menu items */}
 
-          <li
-            className={`${
-              isActiveParent(findJobItems, usePathname()) ? "current" : ""
-            } dropdown has-mega-menu`}
-            id="has-mega-menu"
-          >
-            <Link href="/job-list">Find Jobs</Link>
-          </li>
+          {localStorage.getItem("employer_token") ? null : (
+            <li
+              className={`${
+                isActiveParent(findJobItems, usePathname()) ? "current" : ""
+              } dropdown has-mega-menu`}
+              id="has-mega-menu"
+            >
+              <Link href="/job-list">Find Jobs</Link>
+            </li>
+          )}
           {/* End findjobs menu items */}
 
-          <li
-            className={`${
-              isActiveParent(employerItems, usePathname()) ||
-              usePathname()?.split("/")[1] === "employers-dashboard"
-                ? "current"
-                : ""
-            } dropdown`}
-          >
-            <Link href="/employers-list">Employers</Link>
-          </li>
-          {/* End Employers menu items */}
-
-          <li
-            className={`${
-              isActiveParent(candidateItems, usePathname()) ||
-              usePathname()?.split("/")[1] === "candidates-dashboard"
-                ? "current"
-                : ""
+          {localStorage.getItem("employer_token") ? null : (
+            <li
+              className={`${
+                isActiveParent(employerItems, usePathname()) ||
+                usePathname()?.split("/")[1] === "employers-dashboard"
                   ? "current"
                   : ""
-            } dropdown`}
-          >
-            <Link href="/candidates-list">
-              <span>Candidates</span>
-            </Link>
-          </li>
+              } dropdown`}
+            >
+              <Link href="/employers-list">Employers</Link>
+            </li>
+          )}
+          {/* End Employers menu items */}
+          {localStorage.getItem("candidate_token") ? null : (
+            <li
+              className={`${
+                isActiveParent(candidateItems, usePathname()) ||
+                usePathname()?.split("/")[1] === "candidates-dashboard"
+                  ? "current"
+                  : ""
+                    ? "current"
+                    : ""
+              } dropdown`}
+            >
+              <Link href="/candidates-list">
+                <span>Candidates</span>
+              </Link>
+            </li>
+          )}
           {/* End Candidates menu items */}
 
           <li
