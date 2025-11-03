@@ -264,49 +264,63 @@ const ResumeBox = () => {
               setSuccess={setSuccess}
             />
 
-            {transcriptFile && (
-              <div className="row align-items-center">
-                <div className="col-md-6">
-                  <p className="resume-file fw-semibold mb-1">
-                    {transcriptFile.name}
-                  </p>
-                  {uploadDate && (
-                    <p className="upload-date text-muted">
-                      Uploaded on {uploadDate}
+            {transcriptFile ? (
+              <>
+                (
+                <div className="row align-items-center">
+                  <div className="col-md-6">
+                    <p className="resume-file fw-semibold mb-1">
+                      {transcriptFile.name}
                     </p>
-                  )}
-                </div>
-                <div className="col-md-6 d-flex gap-3 justify-content-md-end mt-3 mt-md-0">
-                  {resumeUrl && (
-                    <a
-                      href={resumeUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    {uploadDate && (
+                      <p className="upload-date text-muted">
+                        Uploaded on {uploadDate}
+                      </p>
+                    )}
+                  </div>
+                  <div className="col-md-6 d-flex gap-3 justify-content-md-end mt-3 mt-md-0">
+                    {resumeUrl && (
+                      <a
+                        href={resumeUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-outline-success btn-sm d-flex align-items-center gap-2"
+                      >
+                        <Download size={16} />
+                        Download
+                      </a>
+                    )}
+                    <button
+                      onClick={handledownloadfullpdf}
                       className="btn btn-outline-success btn-sm d-flex align-items-center gap-2"
+                      disabled={downloadLoading}
+                      style={{ opacity: downloadLoading ? 0.5 : 1 }}
                     >
                       <Download size={16} />
-                      Download
-                    </a>
-                  )}
-                  <button
-                    onClick={handledownloadfullpdf}
-                    className="btn btn-outline-success btn-sm d-flex align-items-center gap-2"
-                    disabled={downloadLoading}
-                    style={{ opacity: downloadLoading ? 0.5 : 1 }}
-                  >
-                    <Download size={16} />
-                    {downloadLoading ? "Downloading..." : "Download Full PDF"}
-                  </button>
+                      {downloadLoading ? "Downloading..." : "Download Full PDF"}
+                    </button>
 
-                  <button
-                    onClick={confirmDelete}
-                    className="btn btn-outline-danger btn-sm d-flex align-items-center gap-2"
-                  >
-                    <Trash2 size={16} />
-                    Delete
-                  </button>
+                    <button
+                      onClick={confirmDelete}
+                      className="btn btn-outline-danger btn-sm d-flex align-items-center gap-2"
+                    >
+                      <Trash2 size={16} />
+                      Delete
+                    </button>
+                  </div>
                 </div>
-              </div>
+                )
+              </>
+            ) : (
+              <button
+                onClick={handledownloadfullpdf}
+                className="btn btn-outline-success btn-sm d-flex align-items-center gap-2"
+                disabled={downloadLoading}
+                style={{ opacity: downloadLoading ? 0.5 : 1 }}
+              >
+                <Download size={16} />
+                {downloadLoading ? "Downloading..." : "Download Full PDF"}
+              </button>
             )}
 
             <div

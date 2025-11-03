@@ -14,6 +14,7 @@ import {
   Mailbox,
   ShoppingCart,
   Eye,
+  FileDown,
 } from "lucide-react";
 import EditfieldModal from "./modals/editfield";
 import EditplanModal from "./modals/planmodal";
@@ -182,6 +183,51 @@ const Companytable = () => {
     }
   };
 
+  const handleDownload = async (id) => {
+    try {
+      const token = localStorage.getItem("Super_token");
+      if (!token) {
+        setError("Token not found. Please log in again.");
+        return;
+      }
+
+      const response = await axios({
+        url: `${apiurl}/api/candidate/resume/get_resume_admin`,
+        method: "GET",
+        params: { userId: id },
+        responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], { type: "application/pdf" })
+      );
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "Resume.pdf");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Error downloading resume:", error);
+
+      if (error.response) {
+        // Server responded with an error status
+        setError(
+          `Download failed: ${error.response.data.message || "Server error"}`
+        );
+      } else if (error.request) {
+        // Request made but no response received
+        setError("No response from server. Please try again later.");
+      } else {
+        // Something else happened
+        setError("An unexpected error occurred. Please try again.");
+      }
+    }
+  };
+
   return (
     <>
       <MessageComponent
@@ -294,6 +340,14 @@ const Companytable = () => {
                                     `/candidates-details/${company._id}`
                                   )
                                 }
+                                size={20}
+                              />
+                            </span>
+                            <span title="Download">
+                              <FileDown
+                                className="text-primary"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => handleDownload(company._id)}
                                 size={20}
                               />
                             </span>
