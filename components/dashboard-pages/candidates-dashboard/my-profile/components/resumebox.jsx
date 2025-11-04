@@ -266,7 +266,6 @@ const ResumeBox = () => {
 
             {transcriptFile ? (
               <>
-                (
                 <div className="row align-items-center">
                   <div className="col-md-6">
                     <p className="resume-file fw-semibold mb-1">
@@ -309,7 +308,6 @@ const ResumeBox = () => {
                     </button>
                   </div>
                 </div>
-                )
               </>
             ) : (
               <button
