@@ -83,11 +83,12 @@ const FormContent2 = () => {
   return (
     <div className="form-inner p-4">
       <div className="mb-3 d-flex justify-content-center pb-4 pt-4">
-        <img
+        <Image
           alt="brand"
-          src="/images/logo3.png"
-          width={214}
-          height={70}
+          src="/images/Logo3.png"
+          width={154}
+          height={60}
+          style={{ height: "60px" }}
           priority
         />
       </div>
