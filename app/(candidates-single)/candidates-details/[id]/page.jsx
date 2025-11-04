@@ -102,10 +102,10 @@ const CandidateSingleDynamicV2 = () => {
                     libero vulputate pulvinar.
                   </p>
 
-                  <div className="video-outer">
+                  {/*   <div className="video-outer">
                     <h4>Candidates About</h4>
                     <AboutVideo />
-                  </div>
+                  </div> */}
                   {/* <!-- About Video Box --> */}
 
                   {/* <!-- Candidate Resume Start --> */}
@@ -142,11 +142,11 @@ const CandidateSingleDynamicV2 = () => {
                   ))}
                   {/* <!-- Candidate Resume End --> */}
 
-                  <div className="portfolio-outer">
+                  {/*  <div className="portfolio-outer">
                     <div className="row">
                       <GalleryBox />
                     </div>
-                  </div>
+                  </div> */}
                   {/* <!-- Portfolio --> */}
                 </div>
                 {/* End job-details */}

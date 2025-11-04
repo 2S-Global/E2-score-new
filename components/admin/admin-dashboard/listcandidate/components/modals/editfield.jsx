@@ -3,7 +3,13 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
 
-const EditfieldModal = ({ show, onClose, field }) => {
+const EditfieldModal = ({
+  show,
+  onClose,
+  field,
+  refresh,
+  setRefresh = () => {},
+}) => {
   const router = useRouter();
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -173,9 +179,9 @@ const EditfieldModal = ({ show, onClose, field }) => {
     try {
       const response = await axios.post(
         `${apiurl}/api/companyRoutes/edit_user`,
-         {
-          ...formData, 
-          role: 1, 
+        {
+          ...formData,
+          role: 1,
         },
         {
           headers: {
@@ -184,8 +190,9 @@ const EditfieldModal = ({ show, onClose, field }) => {
         }
       );
 
+      setRefresh(true);
       setSuccess(response.data.message);
-      window.location.reload();
+      // window.location.reload();
       // router.push("/admin/listcompany");
     } catch (err) {
       setError(
@@ -212,7 +219,7 @@ const EditfieldModal = ({ show, onClose, field }) => {
         <div className="modal-content">
           {/* Modal Header */}
           <div className="modal-header">
-            <h5 className="modal-title">Edit Company</h5>
+            <h5 className="modal-title">Edit Candidate</h5>
             <button
               type="button"
               className="btn-close"
@@ -304,193 +311,6 @@ const EditfieldModal = ({ show, onClose, field }) => {
                     rows={3}
                   />
                 </div>
-
-                {/* <div className="mb-3 col-md-6">
-                  <label htmlFor="gst_no" className="form-label">
-                    GST Number
-                  </label>
-                  <input
-                    type="text"
-                    name="gst_no"
-                    className={`form-control ${gstError ? "is-invalid" : ""}`}
-                    placeholder="GST Number"
-                    value={formData.gst_no}
-                    onChange={handleChange}
-                    onBlur={(e) => {
-                      const { name, value } = e.target;
-                      const trimmed = value.trim().toUpperCase(); // Convert to uppercase for validation
-
-                      setFormData({
-                        ...formData,
-                        [name]: trimmed,
-                      });
-
-                      // Set error if invalid GST
-                      setGstError(!isValidGST(trimmed));
-                    }}
-                  />
-                  {gstError && (
-                    <div className="invalid-feedback d-block">
-                      Invalid GST Number. Please enter a valid one.
-                    </div>
-                  )}
-                </div> */}
-
-                {/*   <div className="mb-3 col-md-6">
-                  <label htmlFor="package_id" className="form-label">
-                    Package
-                  </label>
-                  <select
-                    name="package_id"
-                    className="form-select"
-                    required
-                    value={formData.package_id}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Package</option>
-                    <option value="1">
-                      All( PAN, Aadhaar, EPIC, Driving License, Passport )
-                    </option>
-                    <option value="2">Individual</option>
-                  </select>
-                </div>
-
-                <div className="mb-3 col-md-6">
-                  <label htmlFor="transaction_fee" className="form-label">
-                    Transaction Fee
-                  </label>
-                  <input
-                    type="number"
-                    name="transaction_fee"
-                    className="form-control"
-                    placeholder="Transaction Fee"
-                    required
-                    value={formData.transaction_fee}
-                    onChange={handleChange}
-                    onBlur={(e) => {
-                      const { name, value } = e.target;
-
-                      let trimmedValue = value.trim();
-
-                      // If it's a decimal like 0.1234, keep the leading 0
-                      if (/^0\.\d+$/.test(trimmedValue)) {
-                        // do nothing, keep as is
-                      } else {
-                        // Remove leading zeros, but preserve decimal portion
-                        trimmedValue =
-                          trimmedValue.replace(/^0+(?=\d)/, "") || "0";
-                      }
-
-                      setFormData({
-                        ...formData,
-                        [name]: trimmedValue,
-                      });
-                    }}
-                  />
-                </div>
-                {formData.package_id === "" ? null : formData.package_id ==
-                  2 ? (
-                  <div className="mb-3 text-center">
-                    <strong className="d-block mb-2">
-                      Allowed Verifications
-                    </strong>
-                    <div className="d-flex justify-content-center flex-wrap gap-3">
-                      {verificationOptions.map((item, index) => (
-                        <div className="form-check" key={index}>
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id={`check-${index}`}
-                            value={item}
-                            checked={selectedVerifications.includes(item)}
-                            onChange={handleCheckboxChange}
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor={`check-${index}`}
-                          >
-                            {item}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="mb-4 text-center col-md-12">
-                    <span className="fw-semibold fs-5 text-success">
-                      All verifications are selected by default ( PAN, Aadhaar,
-                      EPIC, Driving License, Passport )
-                    </span>
-                  </div>
-                )}
-
-                <div className="mb-3 col-md-6">
-                  <label htmlFor="discount_percent" className="form-label">
-                    Discount Percentage (%)
-                  </label>
-                  <input
-                    type="number"
-                    name="discount_percent"
-                    className="form-control"
-                    placeholder="Discount Percentage"
-                    required
-                    value={formData.discount_percent}
-                    onChange={handleChange}
-                    onBlur={(e) => {
-                      const { name, value } = e.target;
-
-                      let trimmedValue = value.trim();
-
-                      // If it's a decimal like 0.1234, keep the leading 0
-                      if (/^0\.\d+$/.test(trimmedValue)) {
-                        // do nothing, keep as is
-                      } else {
-                        // Remove leading zeros, but preserve decimal portion
-                        trimmedValue =
-                          trimmedValue.replace(/^0+(?=\d)/, "") || "0";
-                      }
-
-                      setFormData({
-                        ...formData,
-                        [name]: trimmedValue,
-                      });
-                    }}
-                  />
-                </div>
-
-                <div className="mb-3 col-md-6">
-                  <label htmlFor="transaction_gst" className="form-label">
-                    Transaction GST (%)
-                  </label>
-                  <input
-                    type="number"
-                    name="transaction_gst"
-                    className="form-control"
-                    placeholder="Transaction GST"
-                    required
-                    value={formData.transaction_gst}
-                    onChange={handleChange}
-                    onBlur={(e) => {
-                      const { name, value } = e.target;
-
-                      let trimmedValue = value.trim();
-
-                      // If it's a decimal like 0.1234, keep the leading 0
-                      if (/^0\.\d+$/.test(trimmedValue)) {
-                        // do nothing, keep as is
-                      } else {
-                        // Remove leading zeros, but preserve decimal portion
-                        trimmedValue =
-                          trimmedValue.replace(/^0+(?=\d)/, "") || "0";
-                      }
-
-                      setFormData({
-                        ...formData,
-                        [name]: trimmedValue,
-                      });
-                    }}
-                  />
-                </div> */}
               </div>
               <button
                 type="submit"

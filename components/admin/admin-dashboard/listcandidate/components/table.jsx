@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
@@ -20,7 +20,7 @@ import EditfieldModal from "./modals/editfield";
 import EditplanModal from "./modals/planmodal";
 import VerifiedlistModal from "./modals/verifiedlistModal";
 import { ro } from "@faker-js/faker";
-const Companytable = () => {
+const Companytable = ({ setRefresh, refresh }) => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
 
@@ -77,40 +77,47 @@ const Companytable = () => {
   };
 
   useEffect(() => {
+    fetchCompanies();
+  }, [apiurl]);
+
+  useEffect(() => {
+    if (refresh) {
+      fetchCompanies();
+      setRefresh(false);
+    }
+  }, [refresh]);
+
+  const fetchCompanies = async () => {
     const token = localStorage.getItem("Super_token");
     if (!token) {
       setError("Token not found. Please log in again.");
       return;
     }
 
-    const fetchCompanies = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.post(
-          `${apiurl}/api/companyRoutes/list-companies`,
-          { role: 1 },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response.data.success) {
-          setCompanies(response.data.data);
-          setSuccess(response.data.message);
-        } else {
-          setError(response.data.message);
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `${apiurl}/api/companyRoutes/list-companies`,
+        { role: 1 },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      } catch (err) {
-        setError("Error fetching companies. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
+      );
 
-    fetchCompanies();
-  }, [apiurl]);
+      if (response.data.success) {
+        setCompanies(response.data.data);
+        setSuccess(response.data.message);
+      } else {
+        setError(response.data.message);
+      }
+    } catch (err) {
+      setError("Error fetching companies. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleDelete = async (id) => {
     const token = localStorage.getItem("Super_token");
@@ -131,7 +138,8 @@ const Companytable = () => {
       );
 
       if (response.data.success) {
-        setCompanies((prev) => prev.filter((company) => company._id !== id));
+        // setCompanies((prev) => prev.filter((company) => company._id !== id));
+        setRefresh(true);
         setSuccess(response.data.message);
       } else {
         setError(response.data.message);
@@ -391,6 +399,8 @@ const Companytable = () => {
           show={isModalOpen}
           onClose={closeModalRH}
           field={editcompany}
+          refresh={refresh}
+          setRefresh={setRefresh}
         />
       )}
 

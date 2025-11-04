@@ -13,6 +13,8 @@ import { useState } from "react";
 const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
+
+  const [refresh, setRefresh] = useState(false);
   const openModalRH = () => {
     setIsModalOpen(true);
     document.body.style.overflow = "hidden";
@@ -51,27 +53,31 @@ const Index = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="applicants-widget ls-widget">
-                  <div className="widget-title"
-                  
-                  style={{ display:"flex",justifyContent:"space-between",alignItems:"center" }}>
+                  <div
+                    className="widget-title"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
                     <h4>Candidate List</h4>
 
+                    <div style={{ display: "flex", gap: "15px" }}>
+                      <span
+                        onClick={openModalRH}
+                        style={{
+                          cursor: "pointer",
+                          float: "right",
+                          color: "#275df5",
+                          fontWeight: 700,
+                          fontSize: "16px",
+                        }}
+                      >
+                        Add Candidate
+                      </span>
 
-                   <div style={{ display: "flex", gap: "15px" }}>
-                    <span
-                      onClick={openModalRH}
-                      style={{
-                        cursor: "pointer",
-                        float: "right",
-                        color: "#275df5",
-                        fontWeight: 700,
-                        fontSize: "16px",
-                      }}
-                    >
-                      Add Candidate
-                    </span>
-
-                     <span
+                      <span
                         onClick={openCsvModal}
                         style={{
                           cursor: "pointer",
@@ -82,9 +88,9 @@ const Index = () => {
                       >
                         Import CSV
                       </span>
-                      </div>
+                    </div>
                   </div>
-                  <Candidatetable />
+                  <Candidatetable setRefresh={setRefresh} refresh={refresh} />
                 </div>
               </div>
             </div>
@@ -98,7 +104,12 @@ const Index = () => {
       </div>
       {/* Render Modal if isModalOpen is true */}
       {isModalOpen && (
-        <AddCompanyModal show={isModalOpen} onClose={closeModalRH} />
+        <AddCompanyModal
+          show={isModalOpen}
+          onClose={closeModalRH}
+          setRefresh={setRefresh}
+          refresh={refresh}
+        />
       )}
 
       {isCsvModalOpen && (

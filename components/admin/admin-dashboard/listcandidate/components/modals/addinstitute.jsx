@@ -178,9 +178,9 @@ const AddInstituteModal = ({ show, onClose }) => {
     try {
       const response = await axios.post(
         `${apiurl}/api/companyRoutes/register`,
-         {
-          ...formData, 
-          role: 1, 
+        {
+          ...formData,
+          role: 1,
         },
         {
           headers: {
@@ -220,7 +220,7 @@ const AddInstituteModal = ({ show, onClose }) => {
           <div className="modal-content">
             {/* Modal Header */}
             <div className="modal-header">
-              <h5 className="modal-title">Add New Institute</h5>
+              <h5 className="modal-title">Add New Candidate</h5>
               <button
                 type="button"
                 className="btn-close"
@@ -311,10 +311,6 @@ const AddInstituteModal = ({ show, onClose }) => {
                       rows={3}
                     />
                   </div>
-
-                
-
-            
                 </div>
                 <button
                   type="submit"
