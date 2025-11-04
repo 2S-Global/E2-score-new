@@ -8,11 +8,11 @@ import { useEffect } from "react";
 const Index = () => {
   useEffect(() => {
     // Disable scrolling
-    document.body.style.overflow = "hidden";
+    // document.body.style.overflow = "hidden";
 
     return () => {
       // Enable scrolling when component unmounts
-      document.body.style.overflow = "auto";
+      //   document.body.style.overflow = "auto";
     };
   }, []);
 
@@ -51,7 +51,7 @@ const Index = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            padding: "60px 0 25px",
+            padding: "60px 0 60px",
             overflow: "auto",
           }}
         >
