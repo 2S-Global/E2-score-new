@@ -64,7 +64,7 @@ const DashboardHeader = () => {
                 <Link href="/">
                   <Image
                     alt="brand"
-                    src="/images/Logo 3.png"
+                    src="/images/Logo3.png"
                     width={154}
                     height={50}
                     priority

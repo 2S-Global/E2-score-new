@@ -63,7 +63,7 @@ const DashboardCandidatesHeader = () => {
                 <Link href="/">
                   <Image
                     alt="brand"
-                    src="/images/Logo 3.png"
+                    src="/images/Logo3.png"
                     width={154}
                     height={60}
                     style={{ height: "60px" }}

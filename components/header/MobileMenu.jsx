@@ -16,7 +16,7 @@ const MobileMenu = () => {
                   <Image
                     width={154}
                     height={50}
-                    src="/images/Logo 3.png"
+                    src="/images/Logo3.png"
                     alt="brand"
                   />
                 </Link>

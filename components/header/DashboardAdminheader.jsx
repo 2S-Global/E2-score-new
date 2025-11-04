@@ -10,14 +10,14 @@ import { usePathname } from "next/navigation";
 import { color } from "framer-motion";
 
 const DashboardHeader = () => {
-  const [navbar, setNavbar] = useState(false);
+  const [navbar, setNavbar] = useState(true);
   const name = localStorage.getItem("Super_name");
 
   const changeBackground = () => {
     if (window.scrollY >= 0) {
       setNavbar(true);
     } else {
-      setNavbar(false);
+      setNavbar(true);
     }
   };
 
@@ -40,7 +40,7 @@ const DashboardHeader = () => {
                 {/*  <Link href="/"> */}
                 <Image
                   alt="brand"
-                  src="/images/Logo 3.png"
+                  src="/images/Logo3.png"
                   width={154}
                   height={50}
                   priority
@@ -62,12 +62,24 @@ const DashboardHeader = () => {
               textTransform: "uppercase",
             }}
           >
-            <span ><span style={{color:"red"}}>G</span>LOBAL</span>{" "}
-            <span ><span style={{color:"red"}}>E</span>MPLOYABILITY</span>{" "}
-            <span ><span style={{color:"red"}}>I</span>NFORMATION</span>{" "}
-            <span ><span style={{color:"red"}}>S</span>ERVICES</span>{" "}
-            <span ><span style={{color:"red"}}>I</span>NDIA</span>{" "}
-            <span ><span style={{color:"red"}}>L</span>IMITED</span>{" "}
+            <span>
+              <span style={{ color: "red" }}>G</span>LOBAL
+            </span>{" "}
+            <span>
+              <span style={{ color: "red" }}>E</span>MPLOYABILITY
+            </span>{" "}
+            <span>
+              <span style={{ color: "red" }}>I</span>NFORMATION
+            </span>{" "}
+            <span>
+              <span style={{ color: "red" }}>S</span>ERVICES
+            </span>{" "}
+            <span>
+              <span style={{ color: "red" }}>I</span>NDIA
+            </span>{" "}
+            <span>
+              <span style={{ color: "red" }}>L</span>IMITED
+            </span>{" "}
           </p>{" "}
           <div className="outer-box">
             {/* End notification-icon */}
@@ -105,21 +117,18 @@ const DashboardHeader = () => {
                       <i className={`la ${item.icon}`}></i> {item.name}
                     </Link>
                   </li>
-
-                  
                 ))}
 
-                      <li
-            className={`${
-              isActiveLink("/", usePathname()) ? "active" : ""
-            } mb-1`}
-            key={11}
- 
-          >
-            <Link href="/" onClick={() => localStorage.clear()}>
-              <i className={`la la-sign-out`}></i>Logout
-            </Link>
-          </li>
+                <li
+                  className={`${
+                    isActiveLink("/", usePathname()) ? "active" : ""
+                  } mb-1`}
+                  key={11}
+                >
+                  <Link href="/" onClick={() => localStorage.clear()}>
+                    <i className={`la la-sign-out`}></i>Logout
+                  </Link>
+                </li>
               </ul>
             </div>
             {/* End dropdown */}

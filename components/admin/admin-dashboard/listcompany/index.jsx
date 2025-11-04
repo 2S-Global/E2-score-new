@@ -8,17 +8,17 @@ import CopyrightFooter from "../../CopyrightFooter";
 import Companytable from "./components/table";
 
 import AddCompanyModal from "./components/modals/addcompany";
-import AddCsvModal from "./components/modals/csv"
+import AddCsvModal from "./components/modals/csv";
 import { useState } from "react";
 const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
+  const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
   const openModalRH = () => {
     setIsModalOpen(true);
     document.body.style.overflow = "hidden"; // Disable background scrolling
   };
 
-    const openCsvModal = () => {
+  const openCsvModal = () => {
     setIsCsvModalOpen(true);
     document.body.style.overflow = "hidden"; // Disable background scrolling
   };
@@ -28,7 +28,7 @@ const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
     document.body.style.overflow = "auto"; // Re-enable background scrolling
   };
 
-    const closeModalCsv = () => {
+  const closeModalCsv = () => {
     setIsCsvModalOpen(false);
     document.body.style.overflow = "auto"; // Re-enable background scrolling
   };

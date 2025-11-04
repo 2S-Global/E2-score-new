@@ -14,7 +14,7 @@ const Register2 = () => {
       <div className="mb-3 d-flex justify-content-center pb-4 pt-4">
         <Image
           alt="brand"
-          src="/images/logo 3.png"
+          src="/images/logo3.png"
           width={214}
           height={70}
           priority
