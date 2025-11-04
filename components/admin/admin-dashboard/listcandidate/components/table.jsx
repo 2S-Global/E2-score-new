@@ -344,8 +344,10 @@ const Companytable = ({ setRefresh, refresh }) => {
                                 color="green"
                                 style={{ cursor: "pointer" }}
                                 onClick={() =>
-                                  router.push(
-                                    `/candidates-details/${company._id}`
+                                  window.open(
+                                    `/candidates-details/${company._id}`,
+                                    "_blank",
+                                    "noopener,noreferrer"
                                   )
                                 }
                                 size={20}

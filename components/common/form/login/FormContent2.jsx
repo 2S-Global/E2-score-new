@@ -23,11 +23,13 @@ const FormContent2 = () => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [token, setToken] = useState(null);
 
+  const [hastoken, setHasToken] = useState(true);
+
   // Handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+  //dont render anything if token exists
   useEffect(() => {
     if (localStorage.getItem("candidate_token")) {
       router.push("/candidates-dashboard/dashboard");
@@ -37,6 +39,8 @@ const FormContent2 = () => {
       router.push("/employers-dashboard/dashboard");
     } else if (localStorage.getItem("Institute_token")) {
       router.push("/institute-dashboard/dashboard");
+    } else {
+      setHasToken(false);
     }
   }, []);
 
@@ -79,6 +83,10 @@ const FormContent2 = () => {
       setLoading(false);
     }
   };
+
+  if (hastoken) {
+    return null; // or a loading spinner, etc.
+  }
 
   return (
     <div className="form-inner p-4">

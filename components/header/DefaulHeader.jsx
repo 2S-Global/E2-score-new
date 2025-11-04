@@ -50,8 +50,7 @@ const DefaulHeader = () => {
         </div>
         {/* End .nav-outer */}
 
-        <div className="outer-box">
-          {/* <!-- Login/Register --> */}
+        {/* <div className="outer-box">
           <div className="btn-box">
             <a
               href="#"
@@ -68,7 +67,7 @@ const DefaulHeader = () => {
               Job Post
             </Link>
           </div>
-        </div>
+        </div> */}
       </div>
     </header>
   );

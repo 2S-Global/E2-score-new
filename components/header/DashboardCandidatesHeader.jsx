@@ -14,18 +14,6 @@ const DashboardCandidatesHeader = () => {
   const token = localStorage.getItem("candidate_token");
   const [image, setImage] = useState("/images/resource/no_user.png");
 
-  const changeBackground = () => {
-    if (window.scrollY >= 0) {
-      setNavbar(true);
-    } else {
-      setNavbar(false);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", changeBackground);
-  }, []);
-
   const fetchimage = async () => {
     try {
       const response = await axios.get(
