@@ -54,6 +54,12 @@ const HeadSection = () => {
 
     fetchProfilePic();
   }, [reload]);
+  const salaryCurrencies = [
+    { label: "₹", value: "INR" },
+    { label: "$", value: "USD" },
+    { label: "€", value: "EUR" },
+    { label: "£", value: "GBP" },
+  ];
 
   return (
     <>
@@ -95,7 +101,15 @@ const HeadSection = () => {
                       phone={user.phone_number}
                       email={user.email}
                       gender={user.gender_name}
-                      salary={user.salary || ""}
+                      salary={
+                        user.salary
+                          ? `${
+                              salaryCurrencies.find(
+                                (c) => c.value === user.currency
+                              )?.label
+                            } ${user.salary?.toLocaleString("en-IN")}`
+                          : ""
+                      }
                       /* send dob only if only if it is not null  */
                       dob={
                         user.dob

@@ -38,6 +38,8 @@ const Cardedit = ({
     father_name: "",
     salary: "",
     currency: salaryCurrencies[0].value,
+    experience_months: "",
+    experience_years: "",
   });
 
   useEffect(() => {
@@ -105,6 +107,8 @@ const Cardedit = ({
             father_name: response.data.father_name || "",
             salary: response.data.salary || "",
             currency: response.data.currency || "INR",
+            experience_months: response.data.experience_months || "",
+            experience_years: response.data.experience_years || "",
           });
 
           if (response.data.country_id == 102) {
@@ -225,8 +229,8 @@ const Cardedit = ({
       }
       setSuccess("Details updated successfully!");
       setSuccess_main("Details updated successfully!");
-      //setReload(true);
-      //setTimeout(() => onClose(), 1500); // Close modal after success
+      setReload(true);
+      setTimeout(() => onClose(), 1500); // Close modal after success
     } catch (error) {
       console.error("Upload failed:", error);
       setError("Failed to update Details. Please try again.");
@@ -352,6 +356,59 @@ const Cardedit = ({
                             {gender.name}
                           </button>
                         ))}
+                      </div>
+                    </div>
+
+                    {/* experience yr and month dropdown */}
+                    <div className="mb-3 form-group">
+                      <label className="form-label">
+                        <b>Total Experience</b>
+                      </label>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                        }}
+                      >
+                        <select
+                          className="form-select"
+                          style={{ padding: "5px" }}
+                          value={formData.experience_years}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              experience_years: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="">Years</option>
+                          {[...Array(30).keys()].map((year) => (
+                            <option key={year} value={year}>
+                              {year} Year{year > 1 ? "s" : ""}
+                            </option>
+                          ))}
+                          <option value={"30+"}>30+ Years</option>
+                        </select>
+
+                        <select
+                          className="form-select"
+                          style={{ padding: "5px" }}
+                          value={formData.experience_months}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              experience_months: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="">Months</option>
+                          {[...Array(12).keys()].map((month) => (
+                            <option key={month} value={month}>
+                              {month} Month{month > 1 ? "s" : ""}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                     </div>
 
