@@ -23,7 +23,10 @@ const HeaderNavContent = () => {
   return (
     <>
       <nav className="nav main-menu">
-        <ul className="navigation" id="navbar">
+        <ul
+          className=" navigation d-flex justify-content-center align-items-center gap-3"
+          id="navbar"
+        >
           {/* current dropdown */}
           <li
             className={`${

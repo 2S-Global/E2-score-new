@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CustomizedProgressBars from "@/components/common/loader";
 import DatePicker2 from "react-datepicker";
@@ -240,6 +240,12 @@ const Cardedit = ({
     }
   };
 
+  useEffect(() => {
+    if (formData.experience_years === "30+") {
+      setFormData((prev) => ({ ...prev, experience_months: "" }));
+    }
+  }, [formData.experience_years]);
+
   return (
     <>
       <style>
@@ -391,24 +397,26 @@ const Cardedit = ({
                           <option value={"30+"}>30+ Years</option>
                         </select>
 
-                        <select
-                          className="form-select"
-                          style={{ padding: "5px" }}
-                          value={formData.experience_months}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              experience_months: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">Months</option>
-                          {[...Array(12).keys()].map((month) => (
-                            <option key={month} value={month}>
-                              {month} Month{month > 1 ? "s" : ""}
-                            </option>
-                          ))}
-                        </select>
+                        {formData.experience_years !== "30+" && (
+                          <select
+                            className="form-select"
+                            style={{ padding: "5px" }}
+                            value={formData.experience_months}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                experience_months: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">Months</option>
+                            {[...Array(12).keys()].map((month) => (
+                              <option key={month} value={month}>
+                                {month} Month{month > 1 ? "s" : ""}
+                              </option>
+                            ))}
+                          </select>
+                        )}
                       </div>
                     </div>
 

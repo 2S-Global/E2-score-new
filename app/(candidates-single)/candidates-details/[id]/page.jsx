@@ -226,13 +226,18 @@ const CandidateSingleDynamicV2 = () => {
               <div className="sidebar-column col-lg-4 col-md-12 col-sm-12">
                 <aside className="sidebar">
                   <div className="btn-box">
-                    <a
-                      className="theme-btn btn-style-one"
-                      href="/images/sample.pdf"
-                      download
-                    >
-                      Download CV
-                    </a>
+                    {Realcandidate?.sidebarDetails?.resumeUrl && (
+                      <a
+                        className="theme-btn btn-style-one"
+                        href={Realcandidate?.sidebarDetails?.resumeUrl || "#"}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                      >
+                        Download Resume
+                      </a>
+                    )}
+
                     <button className="bookmark-btn">
                       <i className="flaticon-bookmark"></i>
                     </button>
@@ -244,43 +249,101 @@ const CandidateSingleDynamicV2 = () => {
                         <li>
                           <i className="icon icon-calendar"></i>
                           <h5>Experience:</h5>
-                          <span>0-2 Years</span>
+                          <span>
+                            {(() => {
+                              const exp =
+                                Realcandidate?.sidebarDetails?.totalExperience;
+                              const year = exp?.year;
+                              const month = exp?.month;
+
+                              if (!year && !month)
+                                return "No experience mentioned";
+                              if (year && !month)
+                                return `${year} Year${year > 1 ? "s" : ""}`;
+                              if (!year && month)
+                                return `${month} Month${month > 1 ? "s" : ""}`;
+                              return `${year} Year${year > 1 ? "s" : ""} and ${month} Month${month > 1 ? "s" : ""}`;
+                            })()}
+                          </span>
                         </li>
 
                         <li>
                           <i className="icon icon-expiry"></i>
                           <h5>Age:</h5>
-                          <span>28-33 Years</span>
+                          <span>{Realcandidate?.sidebarDetails?.age}</span>
                         </li>
 
                         <li>
                           <i className="icon icon-rate"></i>
                           <h5>Current Salary:</h5>
-                          <span>11K - 15K</span>
+                          <span>
+                            {(() => {
+                              const salaryInfo =
+                                Realcandidate?.sidebarDetails?.currentSalary;
+                              const currency = salaryInfo?.currency;
+                              const salary = salaryInfo?.salary;
+
+                              if (!currency && !salary) return "Not Disclosed";
+                              if (currency && !salary) return currency;
+                              if (!currency && salary) return salary;
+                              return `${currency} ${salary}`;
+                            })()}
+                          </span>
                         </li>
 
                         <li>
                           <i className="icon icon-salary"></i>
                           <h5>Expected Salary:</h5>
-                          <span>26K - 30K</span>
+                          <span>
+                            {" "}
+                            {(() => {
+                              const salaryInfo =
+                                Realcandidate?.sidebarDetails?.expectedSalary;
+                              const currency = salaryInfo?.currency;
+                              const salary = salaryInfo?.salary;
+
+                              if (!currency && !salary) return "Not Disclosed";
+                              if (currency && !salary) return currency;
+                              if (!currency && salary) return salary;
+                              return `${currency} ${salary}`;
+                            })()}
+                          </span>
                         </li>
 
                         <li>
                           <i className="icon icon-user-2"></i>
                           <h5>Gender:</h5>
-                          <span>Female</span>
+                          <span>
+                            {Realcandidate?.sidebarDetails?.genderName}
+                          </span>
                         </li>
 
                         <li>
                           <i className="icon icon-language"></i>
                           <h5>Language:</h5>
-                          <span>English, German, Spanish</span>
+                          <span>
+                            {Realcandidate?.sidebarDetails?.languages?.map(
+                              (item, i) => (
+                                <span key={i}>
+                                  {item}
+                                  {i !==
+                                  Realcandidate?.sidebarDetails?.languages
+                                    .length -
+                                    1
+                                    ? ", "
+                                    : ""}
+                                </span>
+                              )
+                            )}
+                          </span>
                         </li>
 
                         <li>
                           <i className="icon icon-degree"></i>
                           <h5>Education Level:</h5>
-                          <span>Master Degree</span>
+                          <span>
+                            {Realcandidate?.sidebarDetails?.highestEducation}
+                          </span>
                         </li>
                       </ul>
                     </div>
