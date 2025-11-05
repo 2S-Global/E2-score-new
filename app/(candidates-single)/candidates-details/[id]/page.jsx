@@ -15,10 +15,41 @@ import Image from "next/image";
 import { use } from "react";
 import { useParams } from "next/navigation";
 
+import axios from "axios";
+import { useEffect, useState } from "react";
+import CustomizedProgressBars from "@/components/common/loader";
+import { it } from "@faker-js/faker";
+
 const CandidateSingleDynamicV2 = () => {
   const params = useParams();
   const id = params?.id;
   const candidate = candidates.find((item) => item.id == id) || candidates[0];
+
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+
+  const [loading, setLoading] = useState(false);
+  const [Realcandidate, setRealCandidate] = useState({});
+  useEffect(() => {
+    fetchCandidate();
+  }, [id]);
+
+  const fetchCandidate = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${apiurl}/api/candidate/candidateDetails/get_candidate_details?candidateId=${id}`
+      );
+      if (response.data.success) {
+        setRealCandidate(response.data.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    setLoading(false);
+  };
+  if (loading) {
+    return <CustomizedProgressBars />;
+  }
 
   return (
     <>
@@ -44,33 +75,54 @@ const CandidateSingleDynamicV2 = () => {
                   <div className="inner-box">
                     <div className="content">
                       <figure className="image">
-                        <Image
+                        <img
                           width={100}
                           height={100}
-                          src={candidate?.avatar}
+                          src={
+                            Realcandidate?.userInformation?.profilePicture ||
+                            "/images/resource/no_user.png"
+                          }
                           alt="avatar"
                         />
                       </figure>
-                      <h4 className="name">{candidate?.name}</h4>
+                      <h4 className="name">
+                        {Realcandidate?.userInformation?.fullName || ""}
+                      </h4>
 
                       <ul className="candidate-info">
                         <li className="designation">
-                          {candidate?.designation}
+                          {Realcandidate?.userInformation?.currentJobTitle ||
+                            ""}
                         </li>
+                        {Realcandidate?.userInformation?.currentLocation && (
+                          <li>
+                            <span className="icon flaticon-map-locator"></span>
+                            {Realcandidate?.userInformation?.currentLocation ||
+                              ""}
+                          </li>
+                        )}
                         <li>
-                          <span className="icon flaticon-map-locator"></span>
-                          {candidate?.location}
-                        </li>
-                        <li>
-                          <span className="icon flaticon-clock"></span> Member
-                          Since,Aug 19, 2020
+                          <span className="icon flaticon-clock"></span>Member
+                          Since,{" "}
+                          {new Date(
+                            Realcandidate?.userInformation?.createdAt
+                          ).toLocaleDateString("en-IN", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          }) || ""}
                         </li>
                       </ul>
 
                       <ul className="post-tags">
-                        {candidate?.tags?.map((val, i) => (
-                          <li key={i}>{val}</li>
-                        ))}
+                        {Realcandidate?.userInformation?.skills?.map(
+                          (val, i) => (
+                            <li key={i} className="m-1">
+                              {val?.trim().charAt(0).toUpperCase() +
+                                val?.trim().slice(1)}
+                            </li>
+                          )
+                        )}
                       </ul>
                     </div>
                   </div>
@@ -78,25 +130,12 @@ const CandidateSingleDynamicV2 = () => {
                 {/*  <!-- Candidate block Five --> */}
 
                 <div className="job-detail">
-                  <p>
-                    Hello my name is Nicole Wells and web developer from
-                    Portland. In pharetra orci dignissim, blandit mi semper,
-                    ultricies diam. Suspendisse malesuada suscipit nunc non
-                    volutpat. Sed porta nulla id orci laoreet tempor non
-                    consequat enim. Sed vitae aliquam velit. Aliquam ante erat,
-                    blandit at pretium et, accumsan ac est. Integer vehicula
-                    rhoncus molestie. Morbi ornare ipsum sed sem condimentum, et
-                    pulvinar tortor luctus. Suspendisse condimentum lorem ut
-                    elementum aliquam.
+                  <p className="resume-headline fw-500">
+                    <strong>
+                      {Realcandidate?.userInformation?.resumeHeadline || ""}
+                    </strong>
                   </p>
-                  <p>
-                    Mauris nec erat ut libero vulputate pulvinar. Aliquam ante
-                    erat, blandit at pretium et, accumsan ac est. Integer
-                    vehicula rhoncus molestie. Morbi ornare ipsum sed sem
-                    condimentum, et pulvinar tortor luctus. Suspendisse
-                    condimentum lorem ut elementum aliquam. Mauris nec erat ut
-                    libero vulputate pulvinar.
-                  </p>
+                  <p>{Realcandidate?.userInformation?.profileSummary || ""}</p>
 
                   {/*   <div className="video-outer">
                     <h4>Candidates About</h4>
@@ -105,37 +144,72 @@ const CandidateSingleDynamicV2 = () => {
                   {/* <!-- About Video Box --> */}
 
                   {/* <!-- Candidate Resume Start --> */}
-                  {candidateResume.map((resume) => (
-                    <div
-                      className={`resume-outer ${resume.themeColor}`}
-                      key={resume.id}
-                    >
-                      <div className="upper-title">
-                        <h4>{resume?.title}</h4>
-                      </div>
 
-                      {/* <!-- Start Resume BLock --> */}
-                      {resume?.blockList?.map((item) => (
-                        <div className="resume-block" key={item.id}>
-                          <div className="inner">
-                            <span className="name">{item.meta}</span>
-                            <div className="title-box">
-                              <div className="info-box">
-                                <h3>{item.name}</h3>
-                                <span>{item.industry}</span>
-                              </div>
-                              <div className="edit-box">
-                                <span className="year">{item.year}</span>
-                              </div>
-                            </div>
-                            <div className="text">{item.text}</div>
-                          </div>
-                        </div>
-                      ))}
-
-                      {/* <!-- End Resume BLock --> */}
+                  {/* Education */}
+                  <div className={`resume-outer theme-red`}>
+                    <div className="upper-title">
+                      <h4>Education</h4>
                     </div>
-                  ))}
+
+                    {/* <!-- Start Resume BLock --> */}
+                    {Realcandidate?.education?.map((item) => (
+                      <div className="resume-block" key={item._id}>
+                        <div className="inner">
+                          <span className="name">{item.meta || ""}</span>
+                          <div className="title-box">
+                            <div className="info-box">
+                              <h3>{item.courseName || item.levelName || ""}</h3>
+                              <span>
+                                {item.instituteName || item.board || ""}
+                              </span>
+                            </div>
+                            <div className="edit-box">
+                              <span className="year">
+                                {item.from || item.to
+                                  ? `${item.from || ""} - ${item.to || "Present"}`
+                                  : item.year_of_passing}
+                              </span>
+                            </div>
+                          </div>
+                          {/*    <div className="text">{item.text}</div> */}
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* <!-- End Resume BLock --> */}
+                  </div>
+
+                  {/* Work & Experience */}
+                  <div className={`resume-outer theme-blue`}>
+                    <div className="upper-title">
+                      <h4>Work & Experience</h4>
+                    </div>
+                    {Realcandidate?.employment?.map((item) => (
+                      <div className="resume-block" key={item._id}>
+                        <div className="inner">
+                          <span className="name">{item.meta || ""}</span>
+                          <div className="title-box">
+                            <div className="info-box">
+                              <h3>{item.jobTitle || ""}</h3>
+                              <span>{item.companyName || ""}</span>
+                            </div>
+                            <div className="edit-box">
+                              <span className="year">
+                                {item.duration || ""}
+                              </span>
+                            </div>
+                          </div>
+                          <div
+                            className="text"
+                            dangerouslySetInnerHTML={{
+                              __html: item.jobDescription || "",
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
                   {/* <!-- Candidate Resume End --> */}
 
                   {/*  <div className="portfolio-outer">

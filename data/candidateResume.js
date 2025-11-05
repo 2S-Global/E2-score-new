@@ -1,7 +1,7 @@
 module.exports = [
   {
     id: 1,
-    title: "Education",
+    title: "Education Static",
     themeColor: "",
     blockList: [
       {
@@ -26,7 +26,7 @@ module.exports = [
   },
   {
     id: 2,
-    title: "Work & Experience",
+    title: "Work & Experience Static",
     themeColor: "theme-blue",
     blockList: [
       {
