@@ -21,6 +21,13 @@ const Cardedit = ({
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
+  const salaryCurrencies = [
+    { label: "₹", value: "INR" },
+    { label: "$", value: "USD" },
+    { label: "€", value: "EUR" },
+    { label: "£", value: "GBP" },
+  ];
+
   const [formData, setFormData] = useState({
     full_name: "",
     gender: "",
@@ -29,6 +36,8 @@ const Cardedit = ({
     currentLocation: "",
     hometown: "",
     father_name: "",
+    salary: "",
+    currency: salaryCurrencies[0].value,
   });
 
   useEffect(() => {
@@ -94,6 +103,8 @@ const Cardedit = ({
             currentLocation: response.data.currentLocation || "",
             hometown: response.data.hometown || "",
             father_name: response.data.father_name || "",
+            salary: response.data.salary || "",
+            currency: response.data.currency || "INR",
           });
 
           if (response.data.country_id == 102) {
@@ -214,8 +225,8 @@ const Cardedit = ({
       }
       setSuccess("Details updated successfully!");
       setSuccess_main("Details updated successfully!");
-      setReload(true);
-      setTimeout(() => onClose(), 1500); // Close modal after success
+      //setReload(true);
+      //setTimeout(() => onClose(), 1500); // Close modal after success
     } catch (error) {
       console.error("Upload failed:", error);
       setError("Failed to update Details. Please try again.");
@@ -341,6 +352,59 @@ const Cardedit = ({
                             {gender.name}
                           </button>
                         ))}
+                      </div>
+                    </div>
+
+                    <div className="my-3 form-group">
+                      <label className="form-label">
+                        <b>Current salary</b>
+                      </label>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                        }}
+                      >
+                        {/* Currency Selector */}
+                        <select
+                          className="form-select"
+                          style={{ width: "60px", padding: "5px" }}
+                          value={formData.currency}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              currency: e.target.value,
+                            })
+                          }
+                        >
+                          {salaryCurrencies.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+
+                        {/* Salary Input */}
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          value={Number(formData.salary || 0).toLocaleString(
+                            "en-IN"
+                          )}
+                          className="form-control"
+                          placeholder="Enter current salary"
+                          style={{ flex: 1 }}
+                          onChange={(e) => {
+                            const raw = e.target.value.replace(/,/g, ""); // Remove commas
+                            if (/^\d*$/.test(raw)) {
+                              setFormData({
+                                ...formData,
+                                salary: raw, // Store raw number
+                              });
+                            }
+                          }}
+                        />
                       </div>
                     </div>
 

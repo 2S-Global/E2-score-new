@@ -95,6 +95,7 @@ const HeadSection = () => {
                       phone={user.phone_number}
                       email={user.email}
                       gender={user.gender_name}
+                      salary={user.salary || "180000 INR"}
                       /* send dob only if only if it is not null  */
                       dob={
                         user.dob

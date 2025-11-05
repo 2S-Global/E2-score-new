@@ -155,7 +155,7 @@ const CandidateSingleDynamicV2 = () => {
                     {Realcandidate?.education?.map((item) => (
                       <div className="resume-block" key={item._id}>
                         <div className="inner">
-                          <span className="name">{item.meta || ""}</span>
+                          <span className="name">{/* item.meta ||  */ ""}</span>
                           <div className="title-box">
                             <div className="info-box">
                               <h3>{item.courseName || item.levelName || ""}</h3>
@@ -187,7 +187,7 @@ const CandidateSingleDynamicV2 = () => {
                     {Realcandidate?.employment?.map((item) => (
                       <div className="resume-block" key={item._id}>
                         <div className="inner">
-                          <span className="name">{item.meta || ""}</span>
+                          <span className="name">{/* item.meta ||  */ ""}</span>
                           <div className="title-box">
                             <div className="info-box">
                               <h3>{item.jobTitle || ""}</h3>

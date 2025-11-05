@@ -6,6 +6,7 @@ import {
   FaUser,
   FaBirthdayCake,
   FaCheckCircle,
+  FaRegMoneyBillAlt,
 } from "react-icons/fa";
 import { FaRegCircleXmark } from "react-icons/fa6";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -26,6 +27,7 @@ const ProfileCard = ({
   setSuccess,
   isIndianNumber,
   numberVerified,
+  salary,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -91,6 +93,11 @@ const ProfileCard = ({
               {dob && (
                 <p className="mb-2 d-flex align-items-center text-secondary">
                   <FaBirthdayCake className="me-2" /> {dob}
+                </p>
+              )}
+              {salary && (
+                <p className="mb-2 d-flex align-items-center text-secondary">
+                  <FaRegMoneyBillAlt className="me-2" /> {salary}
                 </p>
               )}
               <p
