@@ -51,6 +51,13 @@ const CandidateSingleDynamicV2 = () => {
     return <CustomizedProgressBars />;
   }
 
+  const socialContent = [
+    { id: 1, icon: "fa-facebook-f", link: "https://www.facebook.com/" },
+    { id: 2, icon: "fa-twitter", link: "https://www.twitter.com/" },
+    { id: 3, icon: "fa-instagram", link: "https://www.instagram.com/" },
+    { id: 4, icon: "fa-linkedin-in", link: "https://www.linkedin.com/" },
+  ];
+
   return (
     <>
       {/* <!-- Header Span --> */}
@@ -350,21 +357,52 @@ const CandidateSingleDynamicV2 = () => {
                   </div>
                   {/* End .sidebar-widget conadidate overview */}
 
-                  <div className="sidebar-widget social-media-widget">
-                    <h4 className="widget-title">Social media</h4>
-                    <div className="widget-content">
-                      <div className="social-links">
-                        <Social />
+                  {Realcandidate?.onlineProfiles?.length > 0 && (
+                    <div className="sidebar-widget social-media-widget">
+                      <h4 className="widget-title">Online Profile</h4>
+                      <div className="widget-content">
+                        <div className="social-links">
+                          <div className="social-links">
+                            {Realcandidate?.onlineProfiles?.map((item) => (
+                              <a
+                                href={item.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                key={item._id}
+                              >
+                                <i className={`fab ${item.icon}`}></i>
+                              </a>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
+
                   {/* End .sidebar-widget social-media-widget */}
 
                   <div className="sidebar-widget">
-                    <h4 className="widget-title">Professional Skills</h4>
+                    <h4 className="widget-title">IT Skills</h4>
                     <div className="widget-content">
                       <ul className="job-skills">
-                        <JobSkills />
+                        <JobSkills
+                          skills={
+                            Realcandidate?.userInformation?.itskills || []
+                          }
+                        />
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="sidebar-widget">
+                    <h4 className="widget-title">Other Skills</h4>
+                    <div className="widget-content">
+                      <ul className="job-skills">
+                        <JobSkills
+                          skills={
+                            Realcandidate?.userInformation?.itskills || []
+                          }
+                        />
                       </ul>
                     </div>
                   </div>

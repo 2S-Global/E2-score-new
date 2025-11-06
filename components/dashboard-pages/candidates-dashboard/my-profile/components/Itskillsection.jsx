@@ -129,8 +129,20 @@ const ItkeySection = () => {
                             <td>{skill.version || "N/A"}</td>
                             <td>{skill.lastUsed || "N/A"}</td>
                             <td>
-                              {skill.experienceyear || "0"} yr{" "}
-                              {skill.experiencemonth || "0"} mo
+                              {(() => {
+                                const year = skill.experienceyear;
+                                const month = skill.experiencemonth;
+
+                                if (!year && !month)
+                                  return "No experience mentioned";
+                                if (year && !month)
+                                  return `${year} Year${year > 1 ? "s" : ""}`;
+                                if (!year && month)
+                                  return `${month} Month${month > 1 ? "s" : ""}`;
+                                return `${year} Year${year > 1 ? "s" : ""} and ${month} Month${month > 1 ? "s" : ""}`;
+                              })()}
+                              {/*  {skill.experienceyear || "0"} yr{" "}
+                              {skill.experiencemonth || "0"} mo */}
                             </td>
                             <td>
                               <i

@@ -369,7 +369,9 @@ const Cardedit = ({
                     <div className="mb-3 form-group">
                       <label className="form-label">
                         <b>Total Experience</b>
+                        {/* <span style={{ color: "red" }}>*</span> */}
                       </label>
+
                       <div
                         style={{
                           display: "flex",
@@ -377,31 +379,41 @@ const Cardedit = ({
                           gap: "10px",
                         }}
                       >
+                        {/* Years Select */}
                         <select
                           className="form-select"
                           style={{ padding: "5px" }}
-                          value={formData.experience_years}
-                          onChange={(e) =>
+                          value={formData.experience_years || ""}
+                          onChange={(e) => {
+                            const yearValue = e.target.value;
                             setFormData({
                               ...formData,
-                              experience_years: e.target.value,
-                            })
-                          }
+                              experience_years: yearValue,
+                              // Reset months if user chooses "30+"
+                              experience_months:
+                                yearValue === "30+"
+                                  ? ""
+                                  : formData.experience_months,
+                            });
+                          }}
                         >
-                          <option value="">Years</option>
-                          {[...Array(30).keys()].map((year) => (
+                          <option value="" disabled hidden>
+                            Years
+                          </option>
+                          {[...Array(31).keys()].map((year) => (
                             <option key={year} value={year}>
-                              {year} Year{year > 1 ? "s" : ""}
+                              {year} Year{year !== 1 ? "s" : ""}
                             </option>
                           ))}
-                          <option value={"30+"}>30+ Years</option>
+                          <option value="30+">30+ Years</option>
                         </select>
 
+                        {/* Months Select */}
                         {formData.experience_years !== "30+" && (
                           <select
                             className="form-select"
                             style={{ padding: "5px" }}
-                            value={formData.experience_months}
+                            value={formData.experience_months || ""}
                             onChange={(e) =>
                               setFormData({
                                 ...formData,
@@ -409,16 +421,20 @@ const Cardedit = ({
                               })
                             }
                           >
-                            <option value="">Months</option>
+                            <option value="" disabled hidden>
+                              Months
+                            </option>
                             {[...Array(12).keys()].map((month) => (
                               <option key={month} value={month}>
-                                {month} Month{month > 1 ? "s" : ""}
+                                {month} Month{month !== 1 ? "s" : ""}
                               </option>
                             ))}
                           </select>
                         )}
                       </div>
                     </div>
+
+                    {/* render only if experience is present */}
 
                     <div className="my-3 form-group">
                       <label className="form-label">

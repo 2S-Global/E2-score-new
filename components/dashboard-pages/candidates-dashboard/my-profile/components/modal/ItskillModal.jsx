@@ -221,6 +221,12 @@ const ItskillModal = ({
     }
   };
 
+  useEffect(() => {
+    if (experienceyear === "30+") {
+      setExperiencemonth("");
+    }
+  }, [experienceyear]);
+
   return (
     <div
       className="modal fade show d-block"
@@ -343,6 +349,7 @@ const ItskillModal = ({
                       className="form-control"
                       value={experiencemonth}
                       onChange={(e) => setExperiencemonth(e.target.value)}
+                      disabled={experienceyear === "30+"}
                     >
                       <option>Select Month</option>
                       {Array.from({ length: 12 }, (_, i) => i + 0)
