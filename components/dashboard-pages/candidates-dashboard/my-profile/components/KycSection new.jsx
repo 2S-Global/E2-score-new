@@ -353,18 +353,18 @@ const KYCSection = () => {
                       </div>
                     </div>
                   </div>
-                  {userdata && (
-                    <AadharCardInfo
-                      userdata={userdata}
-                      openModalRH={openModalRH}
-                      setSectionloading={setSectionloading}
-                      setError={setError}
-                      setErrorId={setErrorId}
-                      setSuccess={setSuccess}
-                      setMessageId={setMessageId}
-                      setReload={setReload}
-                    />
-                  )}
+                  {/* {userdata && ( */}
+                  <AadharCardInfo
+                    userdata={userdata}
+                    openModalRH={openModalRH}
+                    setSectionloading={setSectionloading}
+                    setError={setError}
+                    setErrorId={setErrorId}
+                    setSuccess={setSuccess}
+                    setMessageId={setMessageId}
+                    setReload={setReload}
+                  />
+                  {/*       )} */}
                 </div>
               </div>{" "}
             </>

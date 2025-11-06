@@ -1,9 +1,10 @@
 "use client";
-import React, { use, useEffect, useState } from "react";
+import React, { useMemo, useEffect, useState } from "react";
+
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
-
+import DataTable from "react-data-table-component";
 import {
   Trash2,
   Settings,
@@ -19,7 +20,7 @@ import {
 import EditfieldModal from "./modals/editfield";
 import EditplanModal from "./modals/planmodal";
 import VerifiedlistModal from "./modals/verifiedlistModal";
-import { ro } from "@faker-js/faker";
+
 const Companytable = ({ setRefresh, refresh }) => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
@@ -236,6 +237,122 @@ const Companytable = ({ setRefresh, refresh }) => {
     }
   };
 
+  const [searchText, setSearchText] = useState("");
+
+  // 🔎 Filter data based on search text
+  const filteredCompanies = useMemo(() => {
+    return companies.filter((company) => {
+      const search = searchText.toLowerCase();
+      return (
+        company.name?.toLowerCase().includes(search) ||
+        company.email?.toLowerCase().includes(search) ||
+        (company.is_active ? "active" : "inactive").includes(search)
+      );
+    });
+  }, [companies, searchText]);
+
+  const columns = [
+    {
+      name: "S/N",
+      selector: (row, index) => index + 1,
+      width: "80px",
+      center: true,
+      sortable: true,
+    },
+    {
+      name: "Candidate Name",
+      selector: (row) => row.name,
+      sortable: true,
+      center: true,
+    },
+    {
+      name: "Candidate Email",
+      selector: (row) => row.email,
+      sortable: true,
+      center: true,
+    },
+    {
+      name: "Candidate Status",
+      cell: (row) => (
+        <div className="form-check form-switch d-flex justify-content-center ">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            role="switch"
+            checked={row.is_active}
+            onChange={() => toggleStatus(row._id, row.is_active)}
+          />
+          <label
+            className={`form-check-label ms-2 fw-semibold ${
+              row.is_active ? "text-success" : "text-danger"
+            }`}
+          >
+            {row.is_active ? "Active" : "Inactive"}
+          </label>
+        </div>
+      ),
+      center: true,
+    },
+    {
+      name: "Created Date",
+      selector: (row) =>
+        new Date(row.createdAt).toLocaleString("en-IN", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+          timeZone: "Asia/Kolkata",
+        }),
+      sortable: true,
+      center: true,
+    },
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="d-flex justify-content-center gap-3">
+          <Eye
+            color="green"
+            style={{ cursor: "pointer" }}
+            onClick={() =>
+              window.open(
+                `/candidates-details/${row._id}`,
+                "_blank",
+                "noopener,noreferrer"
+              )
+            }
+            size={20}
+          />
+          <FileDown
+            className="text-primary"
+            style={{ cursor: "pointer" }}
+            onClick={() => handleDownload(row._id)}
+            size={20}
+          />
+          <Pencil
+            className="text-primary"
+            style={{ cursor: "pointer" }}
+            onClick={() => openModalRH(row)}
+            size={20}
+          />
+          <Trash2
+            size={20}
+            className="text-danger"
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              const confirmDelete = window.confirm(
+                "Are you sure you want to delete this candidate?"
+              );
+              if (confirmDelete) handleDelete(row._id);
+            }}
+          />
+        </div>
+      ),
+      center: true,
+    },
+  ];
+
   return (
     <>
       <MessageComponent
@@ -254,143 +371,24 @@ const Companytable = ({ setRefresh, refresh }) => {
         <div className="widget-content">
           <div className="row">
             <div className="table-responsive">
-              <table className="table table-striped table-bordered">
-                <thead className="table-light">
-                  <tr>
-                    <th style={{ textAlign: "center" }}>S/N</th>
-                    <th style={{ textAlign: "center" }}>Candidate Name</th>
-                    <th style={{ textAlign: "center" }}>Candidate Email</th>
-                    <th style={{ textAlign: "center" }}>Candidate Status</th>
-                    {/* 
-                    <th style={{ textAlign: "center" }}>Total Verification</th> */}
-                    <th style={{ textAlign: "center" }}>Created Date</th>
-                    <th style={{ textAlign: "center" }}>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {companies.length === 0 ? (
-                    <tr>
-                      <td colSpan="7" style={{ textAlign: "center" }}>
-                        No records found
-                      </td>
-                    </tr>
-                  ) : (
-                    companies.map((company, index) => (
-                      <tr key={company._id}>
-                        <td style={{ textAlign: "center" }}>{index + 1}</td>
-                        <td style={{ textAlign: "center" }}>{company.name}</td>
-                        <td style={{ textAlign: "center" }}>{company.email}</td>
-                        <td style={{ textAlign: "center" }}>
-                          <div className="form-check form-switch d-flex justify-content-center align-items-center">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              role="switch"
-                              id={`switch-${company._id}`}
-                              checked={company.is_active}
-                              onChange={() =>
-                                toggleStatus(company._id, company.is_active)
-                              }
-                            />
-                            <label
-                              className={`form-check-label ms-2 fw-semibold ${
-                                company.is_active
-                                  ? "text-success"
-                                  : "text-danger"
-                              }`}
-                              htmlFor={`switch-${company._id}`}
-                            >
-                              {company.is_active ? "Active" : "Inactive"}
-                            </label>
-                          </div>
-                        </td>
-                        {/*    <td
-                          style={{
-                            textAlign: "center",
-                            cursor:
-                              company.orderCount > 0 ? "pointer" : "default",
-                            transition: "background-color 0.3s ease",
-                          }}
-                          onClick={() =>
-                            company.orderCount > 0 && openModalVL(company)
-                          }
-                          onMouseEnter={(e) => {
-                            if (company.orderCount > 0) {
-                              e.target.style.backgroundColor = "#c6f79a"; // Light gray on hover
-                            }
-                          }}
-                          onMouseLeave={(e) => {
-                            e.target.style.backgroundColor = ""; // Reset to default
-                          }}
-                        >
-                          {company.orderCount > 0 ? company.orderCount : 0}
-                        </td> */}
-                        <td style={{ textAlign: "center" }}>
-                          {new Date(company.createdAt).toLocaleString("en-IN", {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-
-                            hour12: true,
-                            timeZone: "Asia/Kolkata",
-                          })}
-                        </td>
-                        <td className="text-center">
-                          <div className="d-flex justify-content-center gap-3">
-                            <span title="View Details">
-                              <Eye
-                                color="green"
-                                style={{ cursor: "pointer" }}
-                                onClick={() =>
-                                  window.open(
-                                    `/candidates-details/${company._id}`,
-                                    "_blank",
-                                    "noopener,noreferrer"
-                                  )
-                                }
-                                size={20}
-                              />
-                            </span>
-                            <span title="Download">
-                              <FileDown
-                                className="text-primary"
-                                style={{ cursor: "pointer" }}
-                                onClick={() => handleDownload(company._id)}
-                                size={20}
-                              />
-                            </span>
-                            <span title="Edit">
-                              <Pencil
-                                className="text-primary"
-                                style={{ cursor: "pointer" }}
-                                onClick={() => openModalRH(company)}
-                                size={20}
-                              />
-                            </span>
-                            <span title="Delete">
-                              <Trash2
-                                size={20}
-                                className="text-danger"
-                                style={{ cursor: "pointer" }}
-                                onClick={() => {
-                                  const confirmDelete = window.confirm(
-                                    "Are you sure you want to delelte this candidate?"
-                                  );
-                                  if (confirmDelete) {
-                                    handleDelete(company._id);
-                                  }
-                                }}
-                              />
-                            </span>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+              <DataTable
+                columns={columns}
+                data={filteredCompanies}
+                pagination
+                highlightOnHover
+                dense
+                fixedHeader
+                subHeader
+                subHeaderComponent={
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    className="form-control w-25"
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)} // ✅ Live filtering
+                  />
+                }
+              />
             </div>
           </div>
         </div>

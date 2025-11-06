@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
+import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 //new component
 import MessageComponent from "../../ResponseMsg";
 
@@ -87,6 +87,12 @@ const FormContent2 = () => {
   if (hastoken) {
     return null; // or a loading spinner, etc.
   }
+  const handlecompanyclick = () => {
+    handleExternalLink("https://2sglobal.co/");
+  };
+  const handleExternalLink = (url) => {
+    window.open(url, "_blank");
+  };
 
   return (
     <div className="form-inner p-4">
@@ -117,6 +123,9 @@ const FormContent2 = () => {
         </span>{" "}
         INDIA LIMITED
       </h3>
+      <h4 style={{ textAlign: "center", marginBottom: "20px" }}>
+        Access. Evaluate. Recruit.
+      </h4>
 
       <MessageComponent
         error={error}
@@ -156,10 +165,10 @@ const FormContent2 = () => {
         <div className="form-group">
           <div className="field-outer">
             <div className="input-group checkboxes square">
-              <input type="checkbox" name="remember-me" id="remember" />
-              <label htmlFor="remember" className="remember">
+              {/*    <input type="checkbox" name="remember-me" id="remember" /> */}
+              {/* <label htmlFor="remember" className="remember">
                 <span className="custom-checkbox"></span> Remember me
-              </label>
+              </label> */}
             </div>
             <a href="#" className="pwd">
               Forgot password?
@@ -196,6 +205,44 @@ const FormContent2 = () => {
         <LoginWithSocial /> */}
       </div>
       {/* End bottom-box LoginWithSocial */}
+
+      <div className="mt-5 text-center">
+        <p className="text-muted small">
+          Developed and maintained by{" "}
+          <strong
+            className="text-dark"
+            onClick={handlecompanyclick}
+            style={{ cursor: "pointer" }}
+          >
+            2S Global Technologies Ltd
+          </strong>
+        </p>
+      </div>
+
+      <div className="d-flex justify-content-center gap-3 mt-3">
+        <button
+          onClick={() =>
+            handleExternalLink(
+              "https://www.facebook.com/profile.php?id=61575548305003"
+            )
+          }
+          className="btn btn-outline-primary rounded-circle"
+          aria-label="Facebook"
+        >
+          <FaFacebookF />
+        </button>
+        <button
+          onClick={() =>
+            handleExternalLink(
+              "https://www.linkedin.com/company/global-employability-information-services-india-limited/"
+            )
+          }
+          className="btn btn-outline-primary rounded-circle"
+          aria-label="LinkedIn"
+        >
+          <FaLinkedinIn />
+        </button>
+      </div>
     </div>
   );
 };

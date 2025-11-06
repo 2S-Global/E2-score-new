@@ -244,7 +244,13 @@ const CandidateSingleDynamicV2 = () => {
                               </span>
                             </div>
                             <div className="edit-box">
-                              <span className="year">
+                              <span
+                                className="year"
+                                style={{
+                                  minWidth: "120px",
+                                  textAlign: "center",
+                                }}
+                              >
                                 {item.from || item.to
                                   ? `${item.from || ""} - ${item.to || "Present"}`
                                   : item.year_of_passing}
@@ -429,6 +435,22 @@ const CandidateSingleDynamicV2 = () => {
                           <h5>Gender:</h5>
                           <span>
                             {Realcandidate?.sidebarDetails?.genderName}
+                          </span>
+                        </li>
+                        <li>
+                          <i className="icon icon-user-2"></i>
+                          <h5>Fathername:</h5>
+                          <span>
+                            {Realcandidate?.sidebarDetails?.fatherName ||
+                              "need data"}
+                          </span>
+                        </li>
+                        <li>
+                          <i className="icon icon-location"></i>
+                          <h5>Home Town:</h5>
+                          <span>
+                            {Realcandidate?.sidebarDetails?.homeTown ||
+                              "need data"}
                           </span>
                         </li>
 
