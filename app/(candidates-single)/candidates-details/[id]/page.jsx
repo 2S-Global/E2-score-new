@@ -413,14 +413,14 @@ const CandidateSingleDynamicV2 = () => {
                   </div>
                   {/* End .sidebar-widget skill widget */}
 
-                  <div className="sidebar-widget contact-widget">
+                  {/* <div className="sidebar-widget contact-widget">
                     <h4 className="widget-title">Contact Us</h4>
                     <div className="widget-content">
                       <div className="default-form">
                         <Contact />
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   {/* End .sidebar-widget contact-widget */}
                 </aside>
                 {/* End .sidebar */}
