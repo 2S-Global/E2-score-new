@@ -81,7 +81,7 @@ const CandidateSingleDynamicV2 = () => {
                 <div className="candidate-block-five">
                   <div className="inner-box">
                     <div className="content">
-                      <figure className="image">
+                      {/*  <figure className="image">
                         <img
                           width={100}
                           height={100}
@@ -90,6 +90,17 @@ const CandidateSingleDynamicV2 = () => {
                             "/images/resource/no_user.png"
                           }
                           alt="avatar"
+                        />
+                      </figure> */}
+                      <figure className="image  mx-auto">
+                        <img
+                          className="w-100 h-100"
+                          src={
+                            Realcandidate?.userInformation?.profilePicture ||
+                            "/images/resource/no_user.png"
+                          }
+                          alt="avatar"
+                          style={{ objectFit: "cover" }}
                         />
                       </figure>
                       <h4 className="name">
@@ -385,11 +396,7 @@ const CandidateSingleDynamicV2 = () => {
                     <h4 className="widget-title">IT Skills</h4>
                     <div className="widget-content">
                       <ul className="job-skills">
-                        <JobSkills
-                          skills={
-                            Realcandidate?.userInformation?.itskills || []
-                          }
-                        />
+                        <JobSkills skills={Realcandidate?.itSkillNames || []} />
                       </ul>
                     </div>
                   </div>
@@ -399,9 +406,7 @@ const CandidateSingleDynamicV2 = () => {
                     <div className="widget-content">
                       <ul className="job-skills">
                         <JobSkills
-                          skills={
-                            Realcandidate?.userInformation?.itskills || []
-                          }
+                          skills={Realcandidate?.nonItSkillNames || []}
                         />
                       </ul>
                     </div>
