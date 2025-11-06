@@ -302,7 +302,7 @@ const CandidateSingleDynamicV2 = () => {
                               const salary = salaryInfo?.salary;
 
                               if (!currency && !salary) return "Not Disclosed";
-                              if (currency && !salary) return currency;
+                              if (currency && !salary) return "Not Disclosed";
                               if (!currency && salary) return salary;
                               return `${currency} ${salary}`;
                             })()}
@@ -321,7 +321,7 @@ const CandidateSingleDynamicV2 = () => {
                               const salary = salaryInfo?.salary;
 
                               if (!currency && !salary) return "Not Disclosed";
-                              if (currency && !salary) return currency;
+                              if (currency && !salary) return "Not Disclosed";
                               if (!currency && salary) return salary;
                               return `${currency} ${salary}`;
                             })()}
@@ -391,26 +391,30 @@ const CandidateSingleDynamicV2 = () => {
                   )}
 
                   {/* End .sidebar-widget social-media-widget */}
-
-                  <div className="sidebar-widget">
-                    <h4 className="widget-title">IT Skills</h4>
-                    <div className="widget-content">
-                      <ul className="job-skills">
-                        <JobSkills skills={Realcandidate?.itSkillNames || []} />
-                      </ul>
+                  {Realcandidate?.itSkillNames?.length > 0 && (
+                    <div className="sidebar-widget">
+                      <h4 className="widget-title">IT Skills</h4>
+                      <div className="widget-content">
+                        <ul className="job-skills">
+                          <JobSkills
+                            skills={Realcandidate?.itSkillNames || []}
+                          />
+                        </ul>
+                      </div>
                     </div>
-                  </div>
-
-                  <div className="sidebar-widget">
-                    <h4 className="widget-title">Other Skills</h4>
-                    <div className="widget-content">
-                      <ul className="job-skills">
-                        <JobSkills
-                          skills={Realcandidate?.nonItSkillNames || []}
-                        />
-                      </ul>
+                  )}
+                  {Realcandidate?.nonItSkillNames?.length > 0 && (
+                    <div className="sidebar-widget">
+                      <h4 className="widget-title">Other Skills</h4>
+                      <div className="widget-content">
+                        <ul className="job-skills">
+                          <JobSkills
+                            skills={Realcandidate?.nonItSkillNames || []}
+                          />
+                        </ul>
+                      </div>
                     </div>
-                  </div>
+                  )}
                   {/* End .sidebar-widget skill widget */}
 
                   {/* <div className="sidebar-widget contact-widget">
