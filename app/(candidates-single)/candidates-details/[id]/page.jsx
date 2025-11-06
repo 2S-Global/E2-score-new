@@ -19,6 +19,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import CustomizedProgressBars from "@/components/common/loader";
 import { it } from "@faker-js/faker";
+import { ca } from "date-fns/locale/ca";
 
 const CandidateSingleDynamicV2 = () => {
   const params = useParams();
@@ -47,16 +48,77 @@ const CandidateSingleDynamicV2 = () => {
     }
     setLoading(false);
   };
+
+  const [bookmarked, setBookmarked] = useState(false);
+  const token =
+    typeof window !== "undefined"
+      ? localStorage.getItem("employer_token") ||
+        localStorage.getItem("Institute_token") ||
+        localStorage.getItem("Super_token") ||
+        localStorage.getItem("candidate_token")
+      : null;
+  const toggleBookmark = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `${apiurl}/api/candidatebookmark/add_candidate_bookmark`,
+        {
+          bookmark: !bookmarked,
+          _id: id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        setBookmarked(response.data.data.isArchived);
+        console.log(
+          "Bookmark status updated successfully:",
+          response.data.data.isArchived
+        );
+      }
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      fetchbookmarkStatus();
+    }
+  }, [token]);
+
+  const fetchbookmarkStatus = async () => {
+    try {
+      const response = await axios.get(
+        `${apiurl}/api/candidatebookmark/get_candidate_bookmark?_id=${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        setBookmarked(response.data.data.isBookmarked);
+        console.log(
+          "Fetched bookmark status successfully:",
+          response.data.data.isBookmarked
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching bookmark status:", error);
+    }
+  };
+
   if (loading) {
     return <CustomizedProgressBars />;
   }
-
-  const socialContent = [
-    { id: 1, icon: "fa-facebook-f", link: "https://www.facebook.com/" },
-    { id: 2, icon: "fa-twitter", link: "https://www.twitter.com/" },
-    { id: 3, icon: "fa-instagram", link: "https://www.instagram.com/" },
-    { id: 4, icon: "fa-linkedin-in", link: "https://www.linkedin.com/" },
-  ];
 
   return (
     <>
@@ -256,9 +318,43 @@ const CandidateSingleDynamicV2 = () => {
                       </a>
                     )}
 
-                    <button className="bookmark-btn">
+                    {/* <button className="bookmark-btn">
                       <i className="flaticon-bookmark"></i>
-                    </button>
+                    </button> */}
+
+                    {token && (
+                      <button
+                        type="button"
+                        onClick={toggleBookmark}
+                        aria-label="Toggle bookmark"
+                        style={{
+                          display: "flex",
+                          height: "50px",
+                          width: "50px",
+                          lineHeight: "50px",
+                          textAlign: "center",
+                          justifyContent: "center",
+                          fontSize: "16px",
+                          cursor: "pointer",
+                          color: bookmarked ? "#fff" : "var(--primary-color)",
+                          borderRadius: "7px",
+                          background: bookmarked
+                            ? "var(--primary-color)"
+                            : "rgba(25, 103, 210, 0.07)",
+                          transition: "all 300ms ease",
+                          marginLeft: "20px",
+                          flex: "0 0 50px",
+                          border: "none",
+                        }}
+                      >
+                        <i
+                          className={`${bookmarked ? "fa-solid" : "fa-regular"} flaticon-bookmark`}
+                          style={{
+                            lineHeight: "50px",
+                          }}
+                        ></i>
+                      </button>
+                    )}
                   </div>
 
                   <div className="sidebar-widget">

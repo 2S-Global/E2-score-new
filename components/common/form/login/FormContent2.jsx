@@ -105,7 +105,17 @@ const FormContent2 = () => {
           textAlign: "center",
         }}
       >
-        GLOBAL EMPLOYABILITY INFORMATION SERVICES INDIA LIMITED
+        GLOBAL{" "}
+        <span
+          className="ms-1"
+          style={{
+            textDecoration: "underline",
+            textDecorationColor: "rgb(40,59,133)", // your custom color
+          }}
+        >
+          EMPLOYABILITY INFORMATION SERVICES
+        </span>{" "}
+        INDIA LIMITED
       </h3>
 
       <MessageComponent

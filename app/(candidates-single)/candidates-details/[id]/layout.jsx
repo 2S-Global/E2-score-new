@@ -3,5 +3,9 @@ export const metadata = {
   description: "E²-Score Job portal",
 };
 export default function Layout({ children }) {
-  return <>{children}</>;
+  return (
+    <>
+      <div className="container shadow-lg">{children}</div>
+    </>
+  );
 }

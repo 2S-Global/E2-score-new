@@ -4,5 +4,11 @@ export const metadata = {
 };
 import AuthWrapper from "./AuthWrapper";
 export default function Layout({ children }) {
-  return <><AuthWrapper>{children}</AuthWrapper></>;
+  return (
+    <>
+      <AuthWrapper>
+        <div className="container shadow-lg">{children}</div>
+      </AuthWrapper>
+    </>
+  );
 }

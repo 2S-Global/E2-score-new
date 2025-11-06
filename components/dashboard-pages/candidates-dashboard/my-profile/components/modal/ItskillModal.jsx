@@ -335,7 +335,9 @@ const ItskillModal = ({
                       value={experienceyear}
                       onChange={(e) => setExperienceyear(e.target.value)}
                     >
-                      <option>Select years</option>
+                      <option value="" disabled>
+                        Select years
+                      </option>
                       {Array.from({ length: 30 }, (_, i) => i).map((year) => (
                         <option key={year}>{year}</option>
                       ))}
@@ -351,7 +353,9 @@ const ItskillModal = ({
                       onChange={(e) => setExperiencemonth(e.target.value)}
                       disabled={experienceyear === "30+"}
                     >
-                      <option>Select Month</option>
+                      <option value="" disabled>
+                        Select Month
+                      </option>
                       {Array.from({ length: 12 }, (_, i) => i + 0)
                         .reverse()
                         .map((year) => (
