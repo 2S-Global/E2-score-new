@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 const Personalblock = ({ dataog = {} }) => {
   const [data, setData] = useState(dataog);
 
-  const getcarrerbreakline = async (fulldata) => {
+  const getCareerBreakLine = (data) => {
     const {
       career_break,
       currently_on_career_break,
@@ -14,8 +14,33 @@ const Personalblock = ({ dataog = {} }) => {
       career_break_end_month,
       career_break_end_year,
       career_break_reason,
-    } = fulldata;
+    } = data;
+
+    // If no career break
+    if (career_break === "No") return "No";
+
+    // Build the line step-by-step
+    let line = career_break_reason ? `${career_break_reason}` : "";
+
+    if (career_break_start_month && career_break_start_year) {
+      line += `${line ? " | " : ""}${career_break_start_month} ${career_break_start_year}`;
+    }
+
+    if (currently_on_career_break) {
+      line += " - Present";
+    } else if (career_break_end_month && career_break_end_year) {
+      line += ` - ${career_break_end_month} ${career_break_end_year}`;
+    }
+
+    return line.trim();
   };
+
+  useEffect(() => {
+    setData((prev) => ({
+      ...prev,
+      carrerbreakline: getCareerBreakLine(data),
+    }));
+  }, [data]);
 
   // Define display names for your known fields
   const fieldLabels = {

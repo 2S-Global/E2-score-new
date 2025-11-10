@@ -425,6 +425,29 @@ const Companytable = ({ setRefresh, refresh }) => {
                     onChange={(e) => setSearchText(e.target.value)} // ✅ Live filtering
                   />
                 }
+                customStyles={{
+                  rows: {
+                    style: {
+                      minHeight: "55px",
+                      borderBottom: "1px solid #f0f0f0",
+                    },
+                  },
+                  headCells: {
+                    style: {
+                      backgroundColor: "#f8f9fa",
+                      fontWeight: "600",
+                      fontSize: "14px",
+                      paddingTop: "12px",
+                      paddingBottom: "12px",
+                    },
+                  },
+                  cells: {
+                    style: {
+                      paddingLeft: "18px",
+                      paddingRight: "18px",
+                    },
+                  },
+                }}
               />
             </div>
           </div>
