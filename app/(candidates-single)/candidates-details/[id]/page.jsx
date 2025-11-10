@@ -293,12 +293,25 @@ const CandidateSingleDynamicV2 = () => {
                           <span className="name">{/* item.meta ||  */ ""}</span>
                           <div className="title-box">
                             <div className="info-box">
-                              <h3>{item.courseName || item.levelName || ""}</h3>
+                              <h3
+                                style={{
+                                  maxWidth: "80%",
+                                }}
+                              >
+                                {item.courseName || item.levelName || ""}
+                              </h3>
                               <span>
                                 {item.instituteName || item.board || ""}
                               </span>
                             </div>
-                            <div className="edit-box">
+                            <div
+                              className="edit-box"
+                              style={{
+                                position: "absolute",
+                                right: 0,
+                                top: 0,
+                              }}
+                            >
                               <span
                                 className="year"
                                 style={{
@@ -338,11 +351,30 @@ const CandidateSingleDynamicV2 = () => {
                           <span className="name">{/* item.meta ||  */ ""}</span>
                           <div className="title-box">
                             <div className="info-box">
-                              <h3>{item.jobTitle || ""}</h3>
+                              <h3
+                                style={{
+                                  maxWidth: "80%",
+                                }}
+                              >
+                                {item.jobTitle || ""}
+                              </h3>
                               <span>{item.companyName || ""}</span>
                             </div>
-                            <div className="edit-box">
-                              <span className="year">
+                            <div
+                              className="edit-box"
+                              style={{
+                                position: "absolute",
+                                right: 0,
+                                top: 0,
+                              }}
+                            >
+                              <span
+                                className="year"
+                                style={{
+                                  minWidth: "120px",
+                                  textAlign: "center",
+                                }}
+                              >
                                 {item.duration || ""}
                               </span>
                             </div>

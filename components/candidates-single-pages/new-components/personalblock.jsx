@@ -35,12 +35,40 @@ const Personalblock = ({ dataog = {} }) => {
     return line.trim();
   };
 
+  const getdaline = (data) => {
+    const { differently_abled, disability_type, disability_description } = data;
+
+    // If not differently abled
+    if (differently_abled === "No") return "No";
+
+    // Build the descriptive line
+    let line = "";
+
+    if (disability_type) {
+      line += disability_type;
+    }
+
+    if (disability_description) {
+      // Add a separator only if both fields exist
+      line += `${line ? " | " : ""}${disability_description}`;
+    }
+
+    return line.trim() || "Yes"; // Fallback: if only differently_abled === 'Yes' but no details
+  };
+
   useEffect(() => {
     const newLine = getCareerBreakLine(data);
+    const newdaline = getdaline(data);
     if (newLine !== data.carrerbreakline) {
       setData((prev) => ({
         ...prev,
         carrerbreakline: newLine,
+      }));
+    }
+    if (newdaline !== data.differentlyAbledline) {
+      setData((prev) => ({
+        ...prev,
+        differentlyAbledline: newdaline,
       }));
     }
   }, [data]);
@@ -50,9 +78,9 @@ const Personalblock = ({ dataog = {} }) => {
     more_info: "More Information",
     marital_status: "Marital Status",
     category: "Category",
-    differently_abled: "Original D/A",
+    /* differently_abled: "Original D/A", */
     differentlyAbledline: "Differently Abled",
-    career_break: "Original C/B",
+    /*  career_break: "Original C/B", */
     carrerbreakline: "Career Break",
     usaworkpermitline: "USA Work Permit",
     work_permit_other_countries: "Other County Work Permit",
