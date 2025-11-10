@@ -229,15 +229,25 @@ const ResumeBox = () => {
         },
       });
 
-      const url = window.URL.createObjectURL(
-        new Blob([response.data], { type: "application/pdf" })
-      );
+      // ✅ Read custom header (after backend exposes it)
+      console.log("Response headers:", response.headers);
+      console.log("data: ", response.headers["filename"]);
+      let filename = response.headers["filename"] || "My_Resume.pdf";
+      console.log("Detected filename:", filename);
+
+      // ✅ Create blob and download
+      const blob = new Blob([response.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "Resume.pdf");
+      link.setAttribute("download", filename);
       document.body.appendChild(link);
       link.click();
       link.remove();
+
+      // Cleanup
+      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error downloading full PDF:", error);
       setError("Failed to download resume");

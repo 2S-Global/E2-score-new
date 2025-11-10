@@ -16,16 +16,21 @@ import {
   ShoppingCart,
   Eye,
   FileDown,
+  LoaderCircle,
 } from "lucide-react";
 import EditfieldModal from "./modals/editfield";
 import EditplanModal from "./modals/planmodal";
 import VerifiedlistModal from "./modals/verifiedlistModal";
+
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Companytable = ({ setRefresh, refresh }) => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+  const [downloadingid, setDownloadingid] = useState(null);
   const [companies, setCompanies] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -192,7 +197,9 @@ const Companytable = ({ setRefresh, refresh }) => {
     }
   };
 
-  const handleDownload = async (id) => {
+  const handleDownload = async (id, name = "user") => {
+    setDownloading(true);
+    setDownloadingid(id);
     try {
       const token = localStorage.getItem("Super_token");
       if (!token) {
@@ -215,7 +222,7 @@ const Companytable = ({ setRefresh, refresh }) => {
       );
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "Resume.pdf");
+      link.setAttribute("download", `${name}_Resume.pdf`);
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -234,6 +241,9 @@ const Companytable = ({ setRefresh, refresh }) => {
         // Something else happened
         setError("An unexpected error occurred. Please try again.");
       }
+    } finally {
+      setDownloading(false);
+      setDownloadingid(null);
     }
   };
 
@@ -257,7 +267,7 @@ const Companytable = ({ setRefresh, refresh }) => {
       selector: (row, index) => index + 1,
       width: "80px",
       center: true,
-      sortable: true,
+      sortable: false,
     },
     {
       name: "Candidate Name",
@@ -324,12 +334,39 @@ const Companytable = ({ setRefresh, refresh }) => {
             }
             size={20}
           />
-          <FileDown
-            className="text-primary"
-            style={{ cursor: "pointer" }}
-            onClick={() => handleDownload(row._id)}
-            size={20}
-          />
+          {downloading && downloadingid === row._id ? (
+            <>
+              <>
+                <svg width="0" height="0" style={{ position: "absolute" }}>
+                  <defs>
+                    <linearGradient
+                      id="my_gradient"
+                      x1="0%"
+                      y1="0%"
+                      x2="0%"
+                      y2="100%"
+                    >
+                      <stop offset="0%" stopColor="#e01cd5" />
+                      <stop offset="100%" stopColor="#1CB5E0" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+
+                <CircularProgress
+                  size={20}
+                  sx={{ "svg circle": { stroke: "url(#my_gradient)" } }}
+                />
+              </>
+            </>
+          ) : (
+            <FileDown
+              className="text-primary"
+              style={{ cursor: "pointer" }}
+              onClick={() => handleDownload(row._id, row.name)}
+              size={20}
+            />
+          )}
+
           <Pencil
             className="text-primary"
             style={{ cursor: "pointer" }}

@@ -66,7 +66,9 @@ const PersonalModal = ({
       work_permit_other_countries: Array.isArray(
         data.work_permit_other_countries
       )
-        ? data.work_permit_other_countries.map(String)
+        ? data.work_permit_other_countries.map(
+            Number
+          ) /* change to String if objectid */
         : [],
       permanent_address: data.permanent_address || "",
       hometown: data.hometown || "",

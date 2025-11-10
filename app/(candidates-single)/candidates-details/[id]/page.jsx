@@ -18,18 +18,29 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import CustomizedProgressBars from "@/components/common/loader";
-import { it } from "@faker-js/faker";
-import { ca } from "date-fns/locale/ca";
+import Underdev from "@/components/common/underdev";
+///additional imports
+import KYCBlock from "@/components/candidates-single-pages/new-components/kycblock";
+import Personalblock from "@/components/candidates-single-pages/new-components/personalblock";
+import Workprofileblock from "@/components/candidates-single-pages/new-components/workprofileblock";
+import ReseachBlock from "@/components/candidates-single-pages/new-components/researchblock";
+import PresentationBlock from "@/components/candidates-single-pages/new-components/presentationblock";
+import PatentBlock from "@/components/candidates-single-pages/new-components/pretentblock";
+import CertificationBlock from "@/components/candidates-single-pages/new-components/Certificationblock";
+import Careerblock from "@/components/candidates-single-pages/new-components/carrerblock";
+import Projectblock from "@/components/candidates-single-pages/new-components/projectblock";
 
 const CandidateSingleDynamicV2 = () => {
-  const params = useParams();
-  const id = params?.id;
+  // const params = useParams();
+  const { id } = useParams();
   const candidate = candidates.find((item) => item.id == id) || candidates[0];
 
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
   const [loading, setLoading] = useState(false);
   const [Realcandidate, setRealCandidate] = useState({});
+
+  const [underdev, setUnderdev] = useState(false);
   useEffect(() => {
     fetchCandidate();
   }, [id]);
@@ -115,9 +126,37 @@ const CandidateSingleDynamicV2 = () => {
       console.error("Error fetching bookmark status:", error);
     }
   };
+  if (underdev) {
+    return (
+      <>
+        <span className="header-span"></span>
+        <LoginPopup />
+        {/* End Login Popup Modal */}
+        <DefaulHeader />
+        {/* End Main Header */}
+        <MobileMenu />
+        {/* End MobileMenu */}
+        <Underdev />
+        <FooterDefault footerStyle="alternate5" />
+      </>
+    );
+  }
 
   if (loading) {
-    return <CustomizedProgressBars />;
+    return (
+      <>
+        <span className="header-span"></span>
+        <LoginPopup />
+        {/* End Login Popup Modal */}
+        <DefaulHeader />
+        {/* End Main Header */}
+        <MobileMenu />
+        <div className="d-flex justify-content-center align-items-center vh-100">
+          <CustomizedProgressBars />
+        </div>
+        <FooterDefault footerStyle="alternate5" />
+      </>
+    );
   }
 
   return (
@@ -192,6 +231,16 @@ const CandidateSingleDynamicV2 = () => {
                             year: "numeric",
                           }) || ""}
                         </li>
+
+                        <li>
+                          <span className="icon flaticon-email"></span>
+                          {Realcandidate?.userInformation?.email || ""}
+                        </li>
+
+                        <li>
+                          <span className="icon flaticon-phone-call"></span>
+                          {Realcandidate?.userInformation?.phoneNumber || ""}
+                        </li>
                       </ul>
 
                       <ul className="post-tags">
@@ -208,14 +257,20 @@ const CandidateSingleDynamicV2 = () => {
                   </div>
                 </div>
                 {/*  <!-- Candidate block Five --> */}
+                {/* kyc information */}
+                <KYCBlock kycdata={Realcandidate?.kycResult || {}} />
 
                 <div className="job-detail">
-                  <p className="resume-headline fw-500">
+                  <p className="resume-headline fw-500 ">
                     <strong>
                       {Realcandidate?.userInformation?.resumeHeadline || ""}
                     </strong>
                   </p>
                   <p>{Realcandidate?.userInformation?.profileSummary || ""}</p>
+
+                  <Personalblock
+                    dataog={Realcandidate.candidatePersonalDetails || {}}
+                  />
 
                   {/*   <div className="video-outer">
                     <h4>Candidates About</h4>
@@ -265,6 +320,13 @@ const CandidateSingleDynamicV2 = () => {
                     {/* <!-- End Resume BLock --> */}
                   </div>
 
+                  <Workprofileblock data={Realcandidate.workSamples} />
+                  <ReseachBlock data={Realcandidate.researchPublications} />
+                  <PresentationBlock data={Realcandidate.userPresentations} />
+                  <PatentBlock data={Realcandidate.userPatents} />
+                  <CertificationBlock data={Realcandidate.userCertifications} />
+                  <Careerblock data={Realcandidate.candidateCareerProfile} />
+
                   {/* Work & Experience */}
                   <div className={`resume-outer theme-blue`}>
                     <div className="upper-title">
@@ -296,6 +358,8 @@ const CandidateSingleDynamicV2 = () => {
                     ))}
                   </div>
 
+                  <Projectblock data={Realcandidate.candidateProjects} />
+
                   {/* <!-- Candidate Resume End --> */}
 
                   {/*  <div className="portfolio-outer">
@@ -314,11 +378,9 @@ const CandidateSingleDynamicV2 = () => {
                   <div className="btn-box">
                     {Realcandidate?.sidebarDetails?.resumeUrl && (
                       <a
-                        className="theme-btn btn-style-one"
+                        className="theme-btn btn-style-one me-2"
                         href={Realcandidate?.sidebarDetails?.resumeUrl || "#"}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        download
+                        download // 👈 This triggers a download instead of opening
                       >
                         Download Resume
                       </a>
@@ -348,7 +410,7 @@ const CandidateSingleDynamicV2 = () => {
                             ? "var(--primary-color)"
                             : "rgba(25, 103, 210, 0.07)",
                           transition: "all 300ms ease",
-                          marginLeft: "20px",
+                          /*  marginLeft: "20px", */
                           flex: "0 0 50px",
                           border: "none",
                         }}
@@ -441,16 +503,15 @@ const CandidateSingleDynamicV2 = () => {
                           <i className="icon icon-user-2"></i>
                           <h5>Fathername:</h5>
                           <span>
-                            {Realcandidate?.sidebarDetails?.fatherName ||
-                              "need data"}
+                            {Realcandidate?.userInformation?.fatherName ||
+                              "N/A"}
                           </span>
                         </li>
                         <li>
                           <i className="icon icon-location"></i>
                           <h5>Home Town:</h5>
                           <span>
-                            {Realcandidate?.sidebarDetails?.homeTown ||
-                              "need data"}
+                            {Realcandidate?.userInformation?.hometown || "N/A"}
                           </span>
                         </li>
 

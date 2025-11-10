@@ -5,7 +5,7 @@ export const metadata = {
 export default function Layout({ children }) {
   return (
     <>
-      <div className="container shadow-lg">{children}</div>
+      <div className="container shadow-lg special-route">{children}</div>
     </>
   );
 }
