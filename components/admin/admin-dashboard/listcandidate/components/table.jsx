@@ -426,25 +426,82 @@ const Companytable = ({ setRefresh, refresh }) => {
                   />
                 }
                 customStyles={{
+                  table: {
+                    style: {
+                      borderRadius: "10px",
+                      overflow: "hidden",
+                      border: "1px solid #e5e5e5",
+                      boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+                    },
+                  },
                   rows: {
                     style: {
-                      minHeight: "55px",
-                      borderBottom: "1px solid #f0f0f0",
+                      minHeight: "58px",
+                      borderBottom: "1px solid #f3f3f3",
+                      transition: "background-color 0.2s ease",
+                      "&:hover": {
+                        backgroundColor: "#f9fafb",
+                      },
+                    },
+                  },
+                  head: {
+                    style: {
+                      borderBottom: "2px solid #e5e5e5",
                     },
                   },
                   headCells: {
                     style: {
                       backgroundColor: "#f8f9fa",
-                      fontWeight: "600",
-                      fontSize: "14px",
-                      paddingTop: "12px",
-                      paddingBottom: "12px",
+                      fontWeight: "700",
+                      fontSize: "10px",
+                      color: "#343a40",
+                      paddingTop: "14px",
+                      paddingBottom: "14px",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.3px",
+                      borderBottom: "1px solid #dee2e6",
+                      borderRight: "1px solid #e0e0e0",
                     },
                   },
                   cells: {
                     style: {
-                      paddingLeft: "18px",
-                      paddingRight: "18px",
+                      paddingLeft: "20px",
+                      paddingRight: "20px",
+                      fontSize: "10px",
+                      color: "#212529",
+                      lineHeight: "1.5",
+                      borderRight: "1px solid #e0e0e0",
+                    },
+                  },
+                  pagination: {
+                    style: {
+                      borderTop: "1px solid #dee2e6",
+                      padding: "10px 20px",
+                    },
+                    pageButtonsStyle: {
+                      borderRadius: "5px",
+                      height: "35px",
+                      width: "35px",
+                      padding: "6px",
+                      margin: "2px",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                      "&:hover:not(:disabled)": {
+                        backgroundColor: "#46b171",
+                        color: "#fff",
+                      },
+                      "&:focus": {
+                        outline: "none",
+                        backgroundColor: "#46b171",
+                        color: "#fff",
+                      },
+                    },
+                  },
+                  subHeader: {
+                    style: {
+                      backgroundColor: "#ffffff",
+                      borderBottom: "1px solid #f1f1f1",
+                      padding: "10px 15px",
                     },
                   },
                 }}
