@@ -36,10 +36,13 @@ const Personalblock = ({ dataog = {} }) => {
   };
 
   useEffect(() => {
-    setData((prev) => ({
-      ...prev,
-      carrerbreakline: getCareerBreakLine(data),
-    }));
+    const newLine = getCareerBreakLine(data);
+    if (newLine !== data.carrerbreakline) {
+      setData((prev) => ({
+        ...prev,
+        carrerbreakline: newLine,
+      }));
+    }
   }, [data]);
 
   // Define display names for your known fields

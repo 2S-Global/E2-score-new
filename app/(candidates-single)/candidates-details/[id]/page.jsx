@@ -381,6 +381,7 @@ const CandidateSingleDynamicV2 = () => {
                         className="theme-btn btn-style-one me-2"
                         href={Realcandidate?.sidebarDetails?.resumeUrl || "#"}
                         download // 👈 This triggers a download instead of opening
+                        target="_blank"
                       >
                         Download Resume
                       </a>
