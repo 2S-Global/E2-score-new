@@ -222,7 +222,7 @@ const Companytable = ({ setRefresh, refresh }) => {
       );
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", `${name}_Resume.pdf`);
+      link.setAttribute("download", `${name}_Report.pdf`);
       document.body.appendChild(link);
       link.click();
       link.remove();

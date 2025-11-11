@@ -306,7 +306,9 @@ const ResumeBox = () => {
                       style={{ opacity: downloadLoading ? 0.5 : 1 }}
                     >
                       <Download size={16} />
-                      {downloadLoading ? "Downloading..." : "Download Full PDF"}
+                      {downloadLoading
+                        ? "Downloading..."
+                        : "Download Report PDF"}
                     </button>
 
                     <button
@@ -327,7 +329,7 @@ const ResumeBox = () => {
                 style={{ opacity: downloadLoading ? 0.5 : 1 }}
               >
                 <Download size={16} />
-                {downloadLoading ? "Downloading..." : "Download Full PDF"}
+                {downloadLoading ? "Downloading..." : "Download Report PDF"}
               </button>
             )}
 

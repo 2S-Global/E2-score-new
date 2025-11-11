@@ -24,9 +24,11 @@ const PersonalInfoForm = ({
 
   //list
   const [Genders, setGenders] = useState([]);
+
   const [countries, setCountries] = useState([]);
   const [more_info_list, setMore_info_list] = useState([]);
   const [marriageStatusList, setMarriageStatusList] = useState([]);
+  const [withpartnername, setWithpartnername] = useState([]);
   const [categories, setCategories] = useState([]);
   const [UsaVisaList, setUsaVisaList] = useState([]);
 
@@ -155,6 +157,7 @@ const PersonalInfoForm = ({
         );
         const data = await response.json();
         setMarriageStatusList(data.data);
+        setWithpartnername(data.hasPartner);
       } catch (error) {
         console.error("Error fetching marriage status list:", error);
       } finally {
@@ -340,6 +343,30 @@ const PersonalInfoForm = ({
                       ))}
                     </div>
                   </div>
+                  {/* Partnername partner_name */}
+
+                  {Array.isArray(withpartnername) &&
+                    withpartnername.length > 0 &&
+                    withpartnername.includes(formData.marital_status) && (
+                      <div className="mb-3 form-group">
+                        <label className="form-label">
+                          <b>Partner Name</b>
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Partner Name"
+                          name="partner_name"
+                          value={formData.partner_name}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              partner_name: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    )}
 
                   {/* Date of Birth Selection */}
                   <LocalizationProvider dateAdapter={AdapterDateFns}>

@@ -20,6 +20,7 @@ const PersonalModal = ({
     dob: null,
     more_info: [],
     marital_status: "",
+    partner_name: "",
     category: "",
     differently_abled: "",
     disability_type: "",
@@ -49,6 +50,7 @@ const PersonalModal = ({
         ? data.more_info.map(String)
         : [],
       have_usa_visa: data.have_usa_visa,
+      partner_name: data.partner_name || "",
       marital_status: String(data.marital_status || ""),
       category: String(data.category || ""),
       differently_abled: data.differently_abled || "",

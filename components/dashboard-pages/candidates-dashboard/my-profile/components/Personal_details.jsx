@@ -23,6 +23,7 @@ const PersonalSection = () => {
     disabilityType: "",
     disabilityDescription: "",
     workplaceAssistance: "",
+    partner_name: "",
 
     careerBreak: "",
     careerBreakReason: "",
@@ -168,6 +169,15 @@ const PersonalSection = () => {
                         </div>
                       </div>
                     </div>
+                    {/* partner_name */}
+                    {personalDetails.partner_name && (
+                      <div className="col-md-6 mb-4">
+                        <strong>Partner Name</strong>
+                        <div className="typ-14Medium mt-1">
+                          {personalDetails.partner_name || "N/A"}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Career Break */}
                     <div className="col-md-6 mb-4">
