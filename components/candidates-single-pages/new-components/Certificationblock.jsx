@@ -54,8 +54,8 @@ const CertificationBlock = ({ data = [] }) => {
                 )}
 
                 <span>
-                  Valid from: {monthNames[item.validityFrommonth - 1]}{" "}
-                  {item.validityFromyear}
+                  Valid from: {monthNames[item.validityFrommonth - 1]}
+                  {item.validityFrommonth ? " " : ""} {item.validityFromyear}
                   {item.validityFromyear ? "." : ""}
                 </span>
 
