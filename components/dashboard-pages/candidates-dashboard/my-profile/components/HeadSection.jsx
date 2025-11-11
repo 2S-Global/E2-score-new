@@ -93,14 +93,15 @@ const HeadSection = () => {
                     <ProfileCard
                       isIndianNumber={user.isIndianNumber || false}
                       numberVerified={user.numberVerified || false}
-                      name={user.name}
-                      degree={user.degree}
-                      father_name={user.father_name}
+                      name={user.name || "N/A"}
+                      degree={user.degree || "N/A"}
+                      father_name={user.father_name || "N/A"}
+                      mother_name={user.mother_name || "N/A"}
                       /* university="University of Engineering and Management, Jaipur" */
-                      location={user.currentLocation}
-                      phone={user.phone_number}
-                      email={user.email}
-                      gender={user.gender_name}
+                      location={user.currentLocation || "N/A"}
+                      phone={user.phone_number || "N/A"}
+                      email={user.email || "N/A"}
+                      gender={user.gender_name || "N/A"}
                       salary={
                         user.salary
                           ? `${

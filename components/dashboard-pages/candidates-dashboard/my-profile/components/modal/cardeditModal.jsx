@@ -40,6 +40,7 @@ const Cardedit = ({
     currency: salaryCurrencies[0].value,
     experience_months: "",
     experience_years: "",
+    mother_name: "",
   });
 
   useEffect(() => {
@@ -105,6 +106,7 @@ const Cardedit = ({
             currentLocation: response.data.currentLocation || "",
             hometown: response.data.hometown || "",
             father_name: response.data.father_name || "",
+            mother_name: response.data.mother_name || "",
             salary: response.data.salary || "",
             currency: response.data.currency || "INR",
             experience_months: response.data.experience_months || "",
@@ -340,6 +342,21 @@ const Cardedit = ({
                         onChange={handleChange}
                         id="father_name"
                         placeholder="Enter your father's full name"
+                      />
+                    </div>
+
+                    <div className="mb-3 form-group">
+                      <label htmlFor="mother_name" className="form-label">
+                        <b>Mother's Full Name</b>
+                      </label>
+                      <input
+                        name="mother_name"
+                        type="text"
+                        className="form-control"
+                        value={formData.mother_name}
+                        onChange={handleChange}
+                        id="mother_name"
+                        placeholder="Enter your mother's full name"
                       />
                     </div>
                     {/* Gender Selection */}

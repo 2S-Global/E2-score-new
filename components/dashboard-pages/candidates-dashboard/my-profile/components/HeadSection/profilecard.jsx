@@ -18,6 +18,7 @@ const ProfileCard = ({
   degree,
   location,
   father_name,
+  mother_name,
   phone,
   email,
   gender,
@@ -74,12 +75,18 @@ const ProfileCard = ({
             {degree && (
               <div className="fs-6 fw-semibold text-dark">{degree}</div>
             )}
-            {father_name && (
+            {/*  {father_name && (
               <div className="fs-6 text-muted">
                 <span className="fw-semibold">Father's Name:</span>{" "}
                 {father_name}
               </div>
             )}
+            {mother_name && (
+              <div className="fs-6 text-muted">
+                <span className="fw-semibold">Mother's Name:</span>{" "}
+                {mother_name}
+              </div>
+            )} */}
           </div>
 
           {/* Info Section */}
