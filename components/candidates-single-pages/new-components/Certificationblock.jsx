@@ -53,20 +53,24 @@ const CertificationBlock = ({ data = [] }) => {
                   </a>
                 )}
 
-                {item.validityFrommonth && item.validityFromyear && (
-                  <span>
-                    Valid from:{" "}
-                    {`${monthNames[item.validityFrommonth - 1]} ${item.validityFromyear}.`}
-                  </span>
-                )}
-
-                <span className="mx-2">
-                  {item.doesNotExpire
-                    ? "Does not expire."
-                    : item.validityToMonth && item.validityToyear
-                      ? `Valid till: ${monthNames[item.validityToMonth - 1]} ${item.validityToyear}.`
-                      : ""}
+                <span>
+                  Valid from: {monthNames[item.validityFrommonth - 1]}{" "}
+                  {item.validityFromyear}
+                  {item.validityFromyear ? "." : ""}
                 </span>
+
+                {item.doesNotExpire ? (
+                  <>
+                    <span className="mx-2">Does not expire.</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="mx-2">
+                      Valid till: {monthNames[item.validityToMonth - 1]}{" "}
+                      {item.validityToyear}.
+                    </span>
+                  </>
+                )}
               </div>
             ))
           ) : (
