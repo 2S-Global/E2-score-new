@@ -38,6 +38,7 @@ const CandidateSingleDynamicV2 = () => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
   const [loading, setLoading] = useState(false);
+  const [bookmarkLoading, setBookmarkLoading] = useState(false);
   const [Realcandidate, setRealCandidate] = useState({});
 
   const [underdev, setUnderdev] = useState(false);
@@ -69,7 +70,7 @@ const CandidateSingleDynamicV2 = () => {
         localStorage.getItem("candidate_token")
       : null;
   const toggleBookmark = async () => {
-    setLoading(true);
+    setBookmarkLoading(true);
     try {
       const response = await axios.post(
         `${apiurl}/api/candidatebookmark/add_candidate_bookmark`,
@@ -94,7 +95,7 @@ const CandidateSingleDynamicV2 = () => {
     } catch (error) {
       console.error("Error toggling bookmark:", error);
     } finally {
-      setLoading(false);
+      setBookmarkLoading(false);
     }
   };
 
@@ -295,7 +296,7 @@ const CandidateSingleDynamicV2 = () => {
                             <div className="info-box">
                               <h3
                                 style={{
-                                  maxWidth: "80%",
+                                  maxWidth: "60%",
                                 }}
                               >
                                 {item.courseName || item.levelName || ""}
@@ -353,7 +354,7 @@ const CandidateSingleDynamicV2 = () => {
                             <div className="info-box">
                               <h3
                                 style={{
-                                  maxWidth: "80%",
+                                  maxWidth: "70%",
                                 }}
                               >
                                 {item.jobTitle || ""}
@@ -428,6 +429,7 @@ const CandidateSingleDynamicV2 = () => {
                         type="button"
                         onClick={toggleBookmark}
                         aria-label="Toggle bookmark"
+                        disabled={!token && bookmarkLoading}
                         style={{
                           display: "flex",
                           height: "50px",
@@ -448,12 +450,14 @@ const CandidateSingleDynamicV2 = () => {
                           border: "none",
                         }}
                       >
-                        <i
-                          className={`${bookmarked ? "fa-solid" : "fa-regular"} flaticon-bookmark`}
-                          style={{
-                            lineHeight: "50px",
-                          }}
-                        ></i>
+                        {bookmarkLoading ? (
+                          <i className="fa fa-spinner fa-spin"></i>
+                        ) : (
+                          <i
+                            className={`${bookmarked ? "fa-solid" : "fa-regular"} flaticon-bookmark`}
+                            style={{ lineHeight: "50px" }}
+                          ></i>
+                        )}
                       </button>
                     )}
                   </div>
