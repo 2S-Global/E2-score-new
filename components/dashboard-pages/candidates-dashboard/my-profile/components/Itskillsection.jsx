@@ -135,6 +135,7 @@ const ItkeySection = () => {
 
                                 if (!year && !month)
                                   return "No experience mentioned";
+
                                 if (year && !month)
                                   return `${year} Year${year > 1 ? "s" : ""}`;
                                 if (!year && month)
