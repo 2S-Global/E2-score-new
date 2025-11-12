@@ -210,10 +210,13 @@ const CandidateSingleDynamicV2 = () => {
                       </h4>
 
                       <ul className="candidate-info">
-                        <li className="designation">
-                          {Realcandidate?.userInformation?.currentJobTitle ||
-                            ""}
-                        </li>
+                        {Realcandidate?.userInformation?.currentJobTitle && (
+                          <li className="designation">
+                            {Realcandidate?.userInformation?.currentJobTitle ||
+                              ""}
+                          </li>
+                        )}
+
                         {Realcandidate?.userInformation?.currentLocation && (
                           <li>
                             <span className="icon flaticon-map-locator"></span>
@@ -517,7 +520,7 @@ const CandidateSingleDynamicV2 = () => {
                     <div className="widget-content">
                       <ul className="job-overview">
                         <li>
-                          <i className="icon icon-calendar"></i>
+                          <i className="icon fas fa-briefcase text-primary"></i>
                           <h5>Experience:</h5>
                           <span>
                             {(() => {
@@ -538,7 +541,7 @@ const CandidateSingleDynamicV2 = () => {
                         </li>
 
                         <li>
-                          <i className="icon icon-expiry"></i>
+                          <i className="icon fas fa-user-clock text-warning "></i>
                           <h5>Age:</h5>
                           <span>
                             {Realcandidate?.sidebarDetails?.age ||
@@ -547,7 +550,7 @@ const CandidateSingleDynamicV2 = () => {
                         </li>
 
                         <li>
-                          <i className="icon icon-rate"></i>
+                          <i className="icon fas fa-coins text-success"></i>
                           <h5>Current Salary:</h5>
                           <span>
                             {(() => {
@@ -565,7 +568,7 @@ const CandidateSingleDynamicV2 = () => {
                         </li>
 
                         <li>
-                          <i className="icon icon-salary"></i>
+                          <i className="icon fas fa-hand-holding-usd text-info"></i>
                           <h5>Expected Salary:</h5>
                           <span>
                             {" "}
@@ -584,7 +587,13 @@ const CandidateSingleDynamicV2 = () => {
                         </li>
 
                         <li>
-                          <i className="icon icon-user-2"></i>
+                          <i
+                            className="icon fas fa-venus-mars text-primary "
+                            /*  style={{
+                              color: "#3e74d6",
+                            }} */
+                          ></i>{" "}
+                          {/* like this  */}
                           <h5>Gender:</h5>
                           <span>
                             {Realcandidate?.sidebarDetails?.genderName ||
@@ -592,35 +601,63 @@ const CandidateSingleDynamicV2 = () => {
                           </span>
                         </li>
                         <li>
-                          <i className="icon icon-user-2"></i>
+                          <i className="icon fas fa-male text-info"></i>
                           <h5>Fathername:</h5>
-                          <span>
+                          <span
+                            className="truncate-text"
+                            title={Realcandidate?.userInformation?.fatherName}
+                          >
                             {Realcandidate?.userInformation?.fatherName ||
-                              "Not Disclosed"}
-                          </span>
-                        </li>
-                        <li>
-                          <i className="icon icon-user-2"></i>
-                          <h5>Mothername:</h5>
-                          <span>
-                            {Realcandidate?.userInformation?.motherName ||
                               "Not Disclosed"}
                           </span>
                         </li>
 
                         <li>
-                          <i className="icon icon-location"></i>
+                          <i className="icon fas fa-female text-info"></i>
+                          <h5>Mothername:</h5>
+                          <span
+                            className="truncate-text"
+                            title={Realcandidate?.userInformation?.motherName}
+                          >
+                            {Realcandidate?.userInformation?.motherName ||
+                              "Not Disclosed"}
+                          </span>
+                        </li>
+                        {/* partner name */}
+                        <li>
+                          <i className="icon fas fa-heart text-danger"></i>
+                          <h5>Partnername:</h5>
+                          <span
+                            className="truncate-text"
+                            title={
+                              Realcandidate?.candidatePersonalDetails
+                                ?.partner_name
+                            }
+                          >
+                            {Realcandidate?.candidatePersonalDetails
+                              ?.partner_name || "Not Disclosed"}
+                          </span>
+                        </li>
+
+                        <li>
+                          <i className="icon fas fa-map-marker-alt text-secondary"></i>
                           <h5>Home Town:</h5>
-                          <span>
+                          <span
+                            className="truncate-text"
+                            title={Realcandidate?.userInformation?.hometown}
+                          >
                             {Realcandidate?.userInformation?.hometown ||
                               "Not Disclosed"}
                           </span>
                         </li>
 
                         <li>
-                          <i className="icon icon-language"></i>
+                          <i className="icon fas fa-language text-primary"></i>
                           <h5>Language:</h5>
-                          <span>
+                          <span
+                            className="truncate-text"
+                            title={Realcandidate?.sidebarDetails?.languages}
+                          >
                             {Array.isArray(
                               Realcandidate?.sidebarDetails?.languages
                             ) &&
@@ -646,9 +683,14 @@ const CandidateSingleDynamicV2 = () => {
                         </li>
 
                         <li>
-                          <i className="icon icon-degree"></i>
+                          <i className="icon fas fa-graduation-cap text-success"></i>
                           <h5>Education Level:</h5>
-                          <span>
+                          <span
+                            className="truncate-text"
+                            title={
+                              Realcandidate?.sidebarDetails?.highestEducation
+                            }
+                          >
                             {Realcandidate?.sidebarDetails?.highestEducation ||
                               "Not Disclosed"}
                           </span>

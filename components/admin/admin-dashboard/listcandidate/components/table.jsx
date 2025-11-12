@@ -284,7 +284,7 @@ const Companytable = ({ setRefresh, refresh }) => {
     {
       name: "Candidate Status",
       cell: (row) => (
-        <div className="form-check form-switch d-flex justify-content-center ">
+        <div className="form-check form-switch d-flex  ">
           <input
             className="form-check-input"
             type="checkbox"
@@ -321,7 +321,7 @@ const Companytable = ({ setRefresh, refresh }) => {
     {
       name: "Action",
       cell: (row) => (
-        <div className="d-flex justify-content-center gap-3">
+        <div className="d-flex  gap-3">
           <Eye
             color="green"
             style={{ cursor: "pointer" }}
@@ -406,107 +406,105 @@ const Companytable = ({ setRefresh, refresh }) => {
         </div>
       ) : (
         <div className="widget-content">
-          <div className="row">
-            <div className="table-responsive">
-              <DataTable
-                columns={columns}
-                data={filteredCompanies}
-                pagination
-                highlightOnHover
-                dense
-                fixedHeader
-                subHeader
-                subHeaderComponent={
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    className="form-control w-25"
-                    value={searchText}
-                    onChange={(e) => setSearchText(e.target.value)} // ✅ Live filtering
-                  />
-                }
-                customStyles={{
-                  table: {
-                    style: {
-                      borderRadius: "10px",
-                      overflow: "hidden",
-                      border: "1px solid #e5e5e5",
-                      boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+          <div className="table-wrapper">
+            <DataTable
+              columns={columns}
+              data={filteredCompanies}
+              pagination
+              highlightOnHover
+              dense
+              fixedHeader
+              subHeader
+              subHeaderComponent={
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="form-control w-25"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)} // ✅ Live filtering
+                />
+              }
+              customStyles={{
+                table: {
+                  style: {
+                    borderRadius: "10px",
+                    overflow: "hidden",
+                    border: "1px solid #e5e5e5",
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+                  },
+                },
+                rows: {
+                  style: {
+                    minHeight: "58px",
+                    borderBottom: "1px solid #f3f3f3",
+                    transition: "background-color 0.2s ease",
+                    "&:hover": {
+                      backgroundColor: "#f9fafb",
                     },
                   },
-                  rows: {
-                    style: {
-                      minHeight: "58px",
-                      borderBottom: "1px solid #f3f3f3",
-                      transition: "background-color 0.2s ease",
-                      "&:hover": {
-                        backgroundColor: "#f9fafb",
-                      },
+                },
+                head: {
+                  style: {
+                    borderBottom: "2px solid #e5e5e5",
+                  },
+                },
+                headCells: {
+                  style: {
+                    backgroundColor: "#f8f9fa",
+                    fontWeight: "700",
+                    fontSize: "10px",
+                    color: "#343a40",
+                    paddingTop: "14px",
+                    paddingBottom: "14px",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.3px",
+                    borderBottom: "1px solid #dee2e6",
+                    borderRight: "1px solid #e0e0e0",
+                  },
+                },
+                cells: {
+                  style: {
+                    paddingLeft: "20px",
+                    paddingRight: "20px",
+                    fontSize: "10px",
+                    color: "#212529",
+                    lineHeight: "1.5",
+                    borderRight: "1px solid #e0e0e0",
+                  },
+                },
+                pagination: {
+                  style: {
+                    borderTop: "1px solid #dee2e6",
+                    padding: "10px 20px",
+                  },
+                  pageButtonsStyle: {
+                    borderRadius: "5px",
+                    height: "35px",
+                    width: "35px",
+                    padding: "6px",
+                    margin: "2px",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                    "&:hover:not(:disabled)": {
+                      backgroundColor: "#46b171",
+                      color: "#fff",
+                    },
+                    "&:focus": {
+                      outline: "none",
+                      backgroundColor: "#46b171",
+                      color: "#fff",
                     },
                   },
-                  head: {
-                    style: {
-                      borderBottom: "2px solid #e5e5e5",
-                    },
+                },
+                subHeader: {
+                  style: {
+                    backgroundColor: "#ffffff",
+                    borderBottom: "1px solid #f1f1f1",
+                    padding: "10px 15px",
                   },
-                  headCells: {
-                    style: {
-                      backgroundColor: "#f8f9fa",
-                      fontWeight: "700",
-                      fontSize: "10px",
-                      color: "#343a40",
-                      paddingTop: "14px",
-                      paddingBottom: "14px",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.3px",
-                      borderBottom: "1px solid #dee2e6",
-                      borderRight: "1px solid #e0e0e0",
-                    },
-                  },
-                  cells: {
-                    style: {
-                      paddingLeft: "20px",
-                      paddingRight: "20px",
-                      fontSize: "10px",
-                      color: "#212529",
-                      lineHeight: "1.5",
-                      borderRight: "1px solid #e0e0e0",
-                    },
-                  },
-                  pagination: {
-                    style: {
-                      borderTop: "1px solid #dee2e6",
-                      padding: "10px 20px",
-                    },
-                    pageButtonsStyle: {
-                      borderRadius: "5px",
-                      height: "35px",
-                      width: "35px",
-                      padding: "6px",
-                      margin: "2px",
-                      cursor: "pointer",
-                      transition: "all 0.2s ease",
-                      "&:hover:not(:disabled)": {
-                        backgroundColor: "#46b171",
-                        color: "#fff",
-                      },
-                      "&:focus": {
-                        outline: "none",
-                        backgroundColor: "#46b171",
-                        color: "#fff",
-                      },
-                    },
-                  },
-                  subHeader: {
-                    style: {
-                      backgroundColor: "#ffffff",
-                      borderBottom: "1px solid #f1f1f1",
-                      padding: "10px 15px",
-                    },
-                  },
-                }}
-              />
-            </div>
+                },
+              }}
+            />
           </div>
         </div>
       )}

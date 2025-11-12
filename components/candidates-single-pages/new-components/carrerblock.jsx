@@ -33,11 +33,18 @@ const Careerblock = ({ data = {} }) => {
             {fieldsToDisplay.map(([key, label], index) => (
               <div key={index} className="col-lg-6 col-md-6 col-sm-12 mb-2">
                 <div className="info-list d-flex justify-content-between align-items-center border-bottom pb-1">
-                  <span className="title fw-semibold">{label}:</span>
                   <span
-                    className={`value ${
+                    className="title fw-semibold me-1"
+                    style={{ whiteSpace: "nowrap" }}
+                    title={label}
+                  >
+                    {label}:
+                  </span>
+                  <span
+                    className={`text-truncate value ${
                       !data[key] || data[key] === "" ? "text-muted" : ""
                     }`}
+                    title={data[key] ? data[key] : "N/A"}
                   >
                     {data[key] && data[key] !== "" ? data[key] : "N/A"}
                   </span>
