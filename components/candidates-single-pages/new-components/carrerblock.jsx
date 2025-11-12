@@ -39,7 +39,7 @@ const Careerblock = ({ data = {} }) => {
                       !data[key] || data[key] === "" ? "text-muted" : ""
                     }`}
                   >
-                    {data[key] && data[key] !== "" ? data[key] : "Need data"}
+                    {data[key] && data[key] !== "" ? data[key] : "N/A"}
                   </span>
                 </div>
               </div>

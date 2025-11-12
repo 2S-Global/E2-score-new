@@ -237,21 +237,41 @@ const CandidateSingleDynamicV2 = () => {
                           <span className="icon flaticon-email"></span>
                           {Realcandidate?.userInformation?.email || ""}
                         </li>
-
-                        <li>
+                        {/* className="text-muted text-center py-3" */}
+                        {/* <li>
                           <span className="icon flaticon-phone-call"></span>
                           {Realcandidate?.userInformation?.phoneNumber || ""}
+                        </li> */}
+                        <li>
+                          {Realcandidate?.userInformation?.phoneNumber ? (
+                            <>
+                              <span className="icon flaticon-phone-call"></span>
+                              {Realcandidate?.userInformation?.phoneNumber ||
+                                ""}
+                            </>
+                          ) : (
+                            <>
+                              <span className="text-muted text-center "></span>
+                              No phone number given
+                            </>
+                          )}
                         </li>
                       </ul>
 
                       <ul className="post-tags">
-                        {Realcandidate?.userInformation?.skills?.map(
-                          (val, i) => (
+                        {Array.isArray(
+                          Realcandidate?.userInformation?.skills
+                        ) && Realcandidate.userInformation.skills.length > 0 ? (
+                          Realcandidate.userInformation.skills.map((val, i) => (
                             <li key={i} className="m-1">
                               {val?.trim().charAt(0).toUpperCase() +
                                 val?.trim().slice(1)}
                             </li>
-                          )
+                          ))
+                        ) : (
+                          <li className="text-muted text-center ">
+                            No skills given
+                          </li>
                         )}
                       </ul>
                     </div>
@@ -262,12 +282,27 @@ const CandidateSingleDynamicV2 = () => {
                 <KYCBlock kycdata={Realcandidate?.kycResult || {}} />
 
                 <div className="job-detail">
-                  <p className="resume-headline fw-500 ">
+                  <p className="resume-headline fw-500">
                     <strong>
-                      {Realcandidate?.userInformation?.resumeHeadline || ""}
+                      {Realcandidate?.userInformation?.resumeHeadline ? (
+                        Realcandidate.userInformation.resumeHeadline
+                      ) : (
+                        <span className="text-muted text-center py-3">
+                          No Headline Provided
+                        </span>
+                      )}
                     </strong>
                   </p>
-                  <p>{Realcandidate?.userInformation?.profileSummary || ""}</p>
+
+                  <p>
+                    {Realcandidate?.userInformation?.profileSummary ? (
+                      Realcandidate.userInformation.profileSummary
+                    ) : (
+                      <span className="text-muted text-center py-3">
+                        No Summary Provided
+                      </span>
+                    )}
+                  </p>
 
                   <Personalblock
                     dataog={Realcandidate.candidatePersonalDetails || {}}
@@ -287,51 +322,57 @@ const CandidateSingleDynamicV2 = () => {
                       <h4>Education</h4>
                     </div>
 
-                    {/* <!-- Start Resume BLock --> */}
-                    {Realcandidate?.education?.map((item) => (
-                      <div className="resume-block" key={item._id}>
-                        <div className="inner">
-                          <span className="name">{/* item.meta ||  */ ""}</span>
-                          <div className="title-box">
-                            <div className="info-box">
-                              <h3
+                    {Array.isArray(Realcandidate?.education) &&
+                    Realcandidate.education.length > 0 ? (
+                      Realcandidate.education.map((item) => (
+                        <div className="resume-block" key={item._id}>
+                          <div className="inner">
+                            <span className="name">
+                              {/* item.meta || */ ""}
+                            </span>
+                            <div className="title-box">
+                              <div className="info-box">
+                                <h3 style={{ maxWidth: "60%" }}>
+                                  {item.courseName ||
+                                    item.levelName ||
+                                    "Untitled Course"}
+                                </h3>
+                                <span>
+                                  {item.instituteName ||
+                                    item.board ||
+                                    "Institute not specified"}
+                                </span>
+                              </div>
+                              <div
+                                className="edit-box"
                                 style={{
-                                  maxWidth: "60%",
+                                  position: "absolute",
+                                  right: 0,
+                                  top: 0,
                                 }}
                               >
-                                {item.courseName || item.levelName || ""}
-                              </h3>
-                              <span>
-                                {item.instituteName || item.board || ""}
-                              </span>
-                            </div>
-                            <div
-                              className="edit-box"
-                              style={{
-                                position: "absolute",
-                                right: 0,
-                                top: 0,
-                              }}
-                            >
-                              <span
-                                className="year"
-                                style={{
-                                  minWidth: "120px",
-                                  textAlign: "center",
-                                }}
-                              >
-                                {item.from || item.to
-                                  ? `${item.from || ""} - ${item.to || "Present"}`
-                                  : item.year_of_passing}
-                              </span>
+                                <span
+                                  className="year"
+                                  style={{
+                                    minWidth: "120px",
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  {item.from || item.to
+                                    ? `${item.from || ""} - ${item.to || "Present"}`
+                                    : item.year_of_passing ||
+                                      "Year not specified"}
+                                </span>
+                              </div>
                             </div>
                           </div>
-                          {/*    <div className="text">{item.text}</div> */}
                         </div>
-                      </div>
-                    ))}
-
-                    {/* <!-- End Resume BLock --> */}
+                      ))
+                    ) : (
+                      <p className="text-muted text-center py-3">
+                        No education details provided
+                      </p>
+                    )}
                   </div>
 
                   <Workprofileblock data={Realcandidate.workSamples} />
@@ -346,49 +387,59 @@ const CandidateSingleDynamicV2 = () => {
                     <div className="upper-title">
                       <h4>Work & Experience</h4>
                     </div>
-                    {Realcandidate?.employment?.map((item) => (
-                      <div className="resume-block" key={item._id}>
-                        <div className="inner">
-                          <span className="name">{/* item.meta ||  */ ""}</span>
-                          <div className="title-box">
-                            <div className="info-box">
-                              <h3
+
+                    {Array.isArray(Realcandidate?.employment) &&
+                    Realcandidate.employment.length > 0 ? (
+                      Realcandidate.employment.map((item) => (
+                        <div className="resume-block" key={item._id}>
+                          <div className="inner">
+                            <span className="name">
+                              {/* item.meta || */ ""}
+                            </span>
+                            <div className="title-box">
+                              <div className="info-box">
+                                <h3 style={{ maxWidth: "70%" }}>
+                                  {item.jobTitle || "Untitled Role"}
+                                </h3>
+                                <span>
+                                  {item.companyName || "Company not specified"}
+                                </span>
+                              </div>
+                              <div
+                                className="edit-box"
                                 style={{
-                                  maxWidth: "70%",
+                                  position: "absolute",
+                                  right: 0,
+                                  top: 0,
                                 }}
                               >
-                                {item.jobTitle || ""}
-                              </h3>
-                              <span>{item.companyName || ""}</span>
+                                <span
+                                  className="year"
+                                  style={{
+                                    minWidth: "120px",
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  {item.duration || "Duration not specified"}
+                                </span>
+                              </div>
                             </div>
                             <div
-                              className="edit-box"
-                              style={{
-                                position: "absolute",
-                                right: 0,
-                                top: 0,
+                              className="text"
+                              dangerouslySetInnerHTML={{
+                                __html:
+                                  item.jobDescription ||
+                                  "<span style='color:red;'>No job description provided</span>",
                               }}
-                            >
-                              <span
-                                className="year"
-                                style={{
-                                  minWidth: "120px",
-                                  textAlign: "center",
-                                }}
-                              >
-                                {item.duration || ""}
-                              </span>
-                            </div>
+                            ></div>
                           </div>
-                          <div
-                            className="text"
-                            dangerouslySetInnerHTML={{
-                              __html: item.jobDescription || "",
-                            }}
-                          ></div>
                         </div>
-                      </div>
-                    ))}
+                      ))
+                    ) : (
+                      <p className="text-muted text-center py-3">
+                        No work experience details provided
+                      </p>
+                    )}
                   </div>
 
                   <Projectblock data={Realcandidate.candidateProjects} />
@@ -489,7 +540,10 @@ const CandidateSingleDynamicV2 = () => {
                         <li>
                           <i className="icon icon-expiry"></i>
                           <h5>Age:</h5>
-                          <span>{Realcandidate?.sidebarDetails?.age}</span>
+                          <span>
+                            {Realcandidate?.sidebarDetails?.age ||
+                              "Not Disclosed"}
+                          </span>
                         </li>
 
                         <li>
@@ -533,7 +587,8 @@ const CandidateSingleDynamicV2 = () => {
                           <i className="icon icon-user-2"></i>
                           <h5>Gender:</h5>
                           <span>
-                            {Realcandidate?.sidebarDetails?.genderName}
+                            {Realcandidate?.sidebarDetails?.genderName ||
+                              "Not Disclosed"}
                           </span>
                         </li>
                         <li>
@@ -541,14 +596,24 @@ const CandidateSingleDynamicV2 = () => {
                           <h5>Fathername:</h5>
                           <span>
                             {Realcandidate?.userInformation?.fatherName ||
-                              "N/A"}
+                              "Not Disclosed"}
                           </span>
                         </li>
+                        <li>
+                          <i className="icon icon-user-2"></i>
+                          <h5>Mothername:</h5>
+                          <span>
+                            {Realcandidate?.userInformation?.motherName ||
+                              "Not Disclosed"}
+                          </span>
+                        </li>
+
                         <li>
                           <i className="icon icon-location"></i>
                           <h5>Home Town:</h5>
                           <span>
-                            {Realcandidate?.userInformation?.hometown || "N/A"}
+                            {Realcandidate?.userInformation?.hometown ||
+                              "Not Disclosed"}
                           </span>
                         </li>
 
@@ -556,18 +621,26 @@ const CandidateSingleDynamicV2 = () => {
                           <i className="icon icon-language"></i>
                           <h5>Language:</h5>
                           <span>
-                            {Realcandidate?.sidebarDetails?.languages?.map(
-                              (item, i) => (
-                                <span key={i}>
-                                  {item}
-                                  {i !==
-                                  Realcandidate?.sidebarDetails?.languages
-                                    .length -
-                                    1
-                                    ? ", "
-                                    : ""}
-                                </span>
+                            {Array.isArray(
+                              Realcandidate?.sidebarDetails?.languages
+                            ) &&
+                            Realcandidate.sidebarDetails.languages.length >
+                              0 ? (
+                              Realcandidate.sidebarDetails.languages.map(
+                                (item, i) => (
+                                  <span key={i}>
+                                    {item}
+                                    {i !==
+                                    Realcandidate.sidebarDetails.languages
+                                      .length -
+                                      1
+                                      ? ", "
+                                      : ""}
+                                  </span>
+                                )
                               )
+                            ) : (
+                              <span>Not Disclosed</span>
                             )}
                           </span>
                         </li>
@@ -576,61 +649,76 @@ const CandidateSingleDynamicV2 = () => {
                           <i className="icon icon-degree"></i>
                           <h5>Education Level:</h5>
                           <span>
-                            {Realcandidate?.sidebarDetails?.highestEducation}
+                            {Realcandidate?.sidebarDetails?.highestEducation ||
+                              "Not Disclosed"}
                           </span>
                         </li>
                       </ul>
                     </div>
                   </div>
                   {/* End .sidebar-widget conadidate overview */}
-
-                  {Realcandidate?.onlineProfiles?.length > 0 && (
-                    <div className="sidebar-widget social-media-widget">
-                      <h4 className="widget-title">Online Profile</h4>
-                      <div className="widget-content">
-                        <div className="social-links">
-                          <div className="social-links">
-                            {Realcandidate?.onlineProfiles?.map((item) => (
-                              <a
-                                href={item.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                key={item._id}
-                              >
-                                <i className={`fab ${item.icon}`}></i>
-                              </a>
-                            ))}
-                          </div>
-                        </div>
+                  <div className="sidebar-widget social-media-widget">
+                    <h4 className="widget-title">Online Profile</h4>
+                    <div className="widget-content">
+                      <div className="social-links">
+                        {Array.isArray(Realcandidate?.onlineProfiles) &&
+                        Realcandidate.onlineProfiles.length > 0 ? (
+                          Realcandidate.onlineProfiles.map((item) => (
+                            <a
+                              href={item.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              key={item._id}
+                              style={{ marginRight: "8px" }}
+                            >
+                              <i className={`fab ${item.icon}`}></i>
+                            </a>
+                          ))
+                        ) : (
+                          <span>No Online Profile given</span>
+                        )}
                       </div>
                     </div>
-                  )}
+                  </div>
 
                   {/* End .sidebar-widget social-media-widget */}
-                  {Realcandidate?.itSkillNames?.length > 0 && (
-                    <div className="sidebar-widget">
-                      <h4 className="widget-title">IT Skills</h4>
-                      <div className="widget-content">
-                        <ul className="job-skills">
-                          <JobSkills
-                            skills={Realcandidate?.itSkillNames || []}
-                          />
-                        </ul>
+                  {Array.isArray(Realcandidate?.itSkillNames) &&
+                    Realcandidate.itSkillNames.length > 0 && (
+                      <div className="sidebar-widget">
+                        <h4 className="widget-title">IT Skills</h4>
+                        <div className="widget-content">
+                          <ul className="job-skills">
+                            <JobSkills skills={Realcandidate.itSkillNames} />
+                          </ul>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                  {Realcandidate?.nonItSkillNames?.length > 0 && (
-                    <div className="sidebar-widget">
-                      <h4 className="widget-title">Other Skills</h4>
-                      <div className="widget-content">
-                        <ul className="job-skills">
-                          <JobSkills
-                            skills={Realcandidate?.nonItSkillNames || []}
-                          />
-                        </ul>
+                    )}
+
+                  {Array.isArray(Realcandidate?.nonItSkillNames) &&
+                    Realcandidate.nonItSkillNames.length > 0 && (
+                      <div className="sidebar-widget">
+                        <h4 className="widget-title">Other Skills</h4>
+                        <div className="widget-content">
+                          <ul className="job-skills">
+                            <JobSkills skills={Realcandidate.nonItSkillNames} />
+                          </ul>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+
+                  {/* Fallback if no skills are given */}
+                  {(!Array.isArray(Realcandidate?.itSkillNames) ||
+                    Realcandidate.itSkillNames.length === 0) &&
+                    (!Array.isArray(Realcandidate?.nonItSkillNames) ||
+                      Realcandidate.nonItSkillNames.length === 0) && (
+                      <div className="sidebar-widget">
+                        <h4 className="widget-title">Skills</h4>
+                        <div className="widget-content">
+                          <p>No skills provided</p>
+                        </div>
+                      </div>
+                    )}
+
                   {/* End .sidebar-widget skill widget */}
 
                   {/* <div className="sidebar-widget contact-widget">

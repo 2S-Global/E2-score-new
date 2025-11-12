@@ -97,16 +97,16 @@ const FormContent2 = () => {
   return (
     <div className="form-inner p-4">
       <div className="mb-3 d-flex justify-content-center pb-4 ">
-        <Image
+        <img
           alt="brand"
-          src="/images/Logo3.png"
-          width={154}
-          height={60}
-          style={{ height: "60px" }}
-          priority
+          src="/images/Gesil.png"
+          /* width={200}
+          height={60} */
+          /*   style={{ height: "200px" }} */
+          /* priority */
         />
       </div>
-      <h3
+      {/* <h3
         style={{
           textAlign: "center",
         }}
@@ -125,7 +125,7 @@ const FormContent2 = () => {
       </h3>
       <h4 style={{ textAlign: "center", marginBottom: "20px" }}>
         Access. Evaluate. Recruit.
-      </h4>
+      </h4> */}
 
       <MessageComponent
         error={error}

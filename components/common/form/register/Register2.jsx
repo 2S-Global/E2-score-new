@@ -19,22 +19,15 @@ const Register2 = () => {
   return (
     <div className="form-inner p-4">
       <div className="mb-3 d-flex justify-content-center pb-4 pt-4">
-        <Image
+        <img
           alt="brand"
-          src="/images/Logo3.png"
-          width={154}
-          height={60}
-          style={{ height: "60px" }}
-          priority
+          src="/images/Gesil.png"
+          /* width={200}
+          height={60} */
+          /*   style={{ height: "200px" }} */
+          /*  priority */
         />
       </div>
-      <h3
-        style={{
-          textAlign: "center",
-        }}
-      >
-        GLOBAL EMPLOYABILITY INFORMATION SERVICES INDIA LIMITED
-      </h3>
 
       <Tabs>
         <div className="form-group register-dual">
