@@ -72,7 +72,7 @@ const InstituteFormContent = () => {
         errorId={errorId}
         message_id={message_id}
       />
-      <div className="form-group">
+      <div className="form-group mb-1">
         <label>Institute Name</label>
         <input
           type="text"
@@ -84,7 +84,7 @@ const InstituteFormContent = () => {
         />
       </div>
 
-      <div className="form-group">
+      <div className="form-group mb-1">
         <label>Email Address</label>
         <input
           type="email"
@@ -103,7 +103,7 @@ const InstituteFormContent = () => {
 
       {/* Phone */}
 
-      <div className="form-group">
+      <div className="form-group ">
         <label>Password</label>
         <input
           id="password-field"

@@ -74,7 +74,7 @@ const FormContent = () => {
         message_id={message_id}
       />
 
-      <div className="form-group">
+      <div className="form-group mb-1">
         <label>Full Name</label>
         <input
           type="text"
@@ -86,7 +86,7 @@ const FormContent = () => {
         />
       </div>
 
-      <div className="form-group">
+      <div className="form-group mb-1">
         <label>Email Address</label>
         <input
           type="email"
@@ -116,7 +116,7 @@ const FormContent = () => {
       />
       {/* Phone */}
 
-      <div className="form-group">
+      <div className="form-group ">
         <label>Password</label>
         <input
           id="password-field"

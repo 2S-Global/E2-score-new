@@ -108,7 +108,7 @@ const ProfileCard = ({
                 </p>
               )}
               <p
-                className="mb-2 d-flex align-items-center text-secondary"
+                className="mb-2 d-flex align-items-center text-secondary text-nowrap text-truncate "
                 title={phone}
               >
                 <FaPhone className="me-2" />

@@ -5,28 +5,17 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
 import DataTable from "react-data-table-component";
-import {
-  Trash2,
-  Settings,
-  Pencil,
-  PackageOpen,
-  Send,
-  FilePen,
-  Mailbox,
-  ShoppingCart,
-  Eye,
-  FileDown,
-  LoaderCircle,
-} from "lucide-react";
+import { Trash2, Pencil, Eye, FileDown } from "lucide-react";
 import EditfieldModal from "./modals/editfield";
 import EditplanModal from "./modals/planmodal";
 import VerifiedlistModal from "./modals/verifiedlistModal";
-
+import CandidateformModal from "./modals/formmodal";
 import CircularProgress from "@mui/material/CircularProgress";
+import { se } from "date-fns/locale/se";
+import { set } from "date-fns/set";
 
 const Companytable = ({ setRefresh, refresh }) => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
-  const router = useRouter();
 
   const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
@@ -44,24 +33,12 @@ const Companytable = ({ setRefresh, refresh }) => {
   const [message_id, setMessage_id] = useState(null);
   const [errorId, setErrorId] = useState(null);
 
-  const [emailloading, setEmailloading] = useState(false);
   const openModalRH = (companydetails) => {
     setEditcompany(companydetails);
     setIsModalOpen(true);
     document.body.style.overflow = "hidden"; // Disable background scrolling
   };
-  const openModalPlanRH = (companydetails) => {
-    setEditcompany(companydetails);
-    setIsModalplanOpen(true);
-    document.body.style.overflow = "hidden"; // Disable background scrolling
-    console.log("open modal plan");
-  };
-  const openModalVL = (companydetails) => {
-    setEditcompany(companydetails);
-    setIsModalvlOpen(true);
-    document.body.style.overflow = "hidden"; // Disable background scrolling
-    console.log("open modal verified list");
-  };
+
   const closeModalVL = () => {
     setIsModalvlOpen(false);
     document.body.style.overflow = "auto"; // Re-enable background scrolling
@@ -77,9 +54,6 @@ const Companytable = ({ setRefresh, refresh }) => {
     setIsModalplanOpen(false);
     document.body.style.overflow = "auto"; // Re-enable background scrolling
     console.log("close modal plan");
-  };
-  const handlecart = (company) => {
-    router.push(`/admin/cart?id=${company._id}`);
   };
 
   useEffect(() => {
@@ -97,6 +71,7 @@ const Companytable = ({ setRefresh, refresh }) => {
     const token = localStorage.getItem("Super_token");
     if (!token) {
       setError("Token not found. Please log in again.");
+      setErrorId(Date.now());
       return;
     }
 
@@ -115,11 +90,14 @@ const Companytable = ({ setRefresh, refresh }) => {
       if (response.data.success) {
         setCompanies(response.data.data);
         setSuccess(response.data.message);
+        setMessage_id(Date.now());
       } else {
         setError(response.data.message);
+        setErrorId(Date.now());
       }
     } catch (err) {
       setError("Error fetching companies. Please try again.");
+      setErrorId(Date.now());
     } finally {
       setLoading(false);
     }
@@ -129,6 +107,7 @@ const Companytable = ({ setRefresh, refresh }) => {
     const token = localStorage.getItem("Super_token");
     if (!token) {
       setError("Token not found. Please log in again.");
+      setErrorId(Date.now());
       return;
     }
 
@@ -147,11 +126,14 @@ const Companytable = ({ setRefresh, refresh }) => {
         // setCompanies((prev) => prev.filter((company) => company._id !== id));
         setRefresh(true);
         setSuccess(response.data.message);
+        setMessage_id(Date.now());
       } else {
         setError(response.data.message);
+        setErrorId(Date.now());
       }
     } catch (err) {
       setError("Error deleting company. Please try again.");
+      setErrorId(Date.now());
     }
   };
 
@@ -164,6 +146,7 @@ const Companytable = ({ setRefresh, refresh }) => {
 
     if (!token) {
       setError("Token not found. Please log in again.");
+      setErrorId(Date.now());
       return;
     }
 
@@ -189,11 +172,14 @@ const Companytable = ({ setRefresh, refresh }) => {
           )
         );
         setSuccess(response.data.message);
+        setMessage_id(Date.now());
       } else {
         setError("Failed to toggle status.");
+        setErrorId(Date.now());
       }
     } catch (error) {
       setError("Something went wrong while toggling status.");
+      setErrorId(Date.now());
     }
   };
 
@@ -204,6 +190,7 @@ const Companytable = ({ setRefresh, refresh }) => {
       const token = localStorage.getItem("Super_token");
       if (!token) {
         setError("Token not found. Please log in again.");
+        setErrorId(Date.now());
         return;
       }
 
@@ -234,12 +221,15 @@ const Companytable = ({ setRefresh, refresh }) => {
         setError(
           `Download failed: ${error.response.data.message || "Server error"}`
         );
+        setErrorId(Date.now());
       } else if (error.request) {
         // Request made but no response received
         setError("No response from server. Please try again later.");
+        setErrorId(Date.now());
       } else {
         // Something else happened
         setError("An unexpected error occurred. Please try again.");
+        setErrorId(Date.now());
       }
     } finally {
       setDownloading(false);
@@ -265,7 +255,7 @@ const Companytable = ({ setRefresh, refresh }) => {
     {
       name: "S/N",
       selector: (row, index) => index + 1,
-      width: "80px",
+      width: "55px",
       center: true,
       sortable: false,
     },
@@ -273,16 +263,31 @@ const Companytable = ({ setRefresh, refresh }) => {
       name: "Candidate Name",
       selector: (row) => row.name,
       sortable: true,
+      width: "150px",
       center: true,
     },
     {
       name: "Candidate Email",
       selector: (row) => row.email,
       sortable: true,
+      width: "150px",
       center: true,
+      cell: (row) => (
+        <div
+          title={row.email} // ✅ native tooltip on hover
+          style={{
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            maxWidth: "140px",
+          }}
+        >
+          {row.email}
+        </div>
+      ),
     },
     {
-      name: "Candidate Status",
+      name: "Status",
       cell: (row) => (
         <div className="form-check form-switch d-flex  ">
           <input
@@ -317,6 +322,7 @@ const Companytable = ({ setRefresh, refresh }) => {
         }),
       sortable: true,
       center: true,
+      width: "150px",
     },
     {
       name: "Action",
@@ -387,6 +393,7 @@ const Companytable = ({ setRefresh, refresh }) => {
         </div>
       ),
       center: true,
+      width: "150px",
     },
   ];
 
@@ -427,7 +434,7 @@ const Companytable = ({ setRefresh, refresh }) => {
               customStyles={{
                 table: {
                   style: {
-                    borderRadius: "10px",
+                    borderRadius: "5px",
                     overflow: "hidden",
                     border: "1px solid #e5e5e5",
                     boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
@@ -464,8 +471,8 @@ const Companytable = ({ setRefresh, refresh }) => {
                 },
                 cells: {
                   style: {
-                    paddingLeft: "20px",
-                    paddingRight: "20px",
+                    paddingLeft: "10px",
+                    paddingRight: "10px",
                     fontSize: "10px",
                     color: "#212529",
                     lineHeight: "1.5",
@@ -510,12 +517,20 @@ const Companytable = ({ setRefresh, refresh }) => {
       )}
 
       {isModalOpen && (
-        <EditfieldModal
+        /*   <EditfieldModal
           show={isModalOpen}
           onClose={closeModalRH}
           field={editcompany}
           refresh={refresh}
           setRefresh={setRefresh}
+        /> */
+        <CandidateformModal
+          show={isModalOpen}
+          onClose={closeModalRH}
+          field={editcompany}
+          refresh={refresh}
+          setRefresh={setRefresh}
+          data={editcompany}
         />
       )}
 

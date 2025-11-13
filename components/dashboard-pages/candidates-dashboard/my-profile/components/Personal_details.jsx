@@ -173,7 +173,10 @@ const PersonalSection = () => {
                     {personalDetails.partner_name && (
                       <div className="col-md-6 mb-4">
                         <strong>Partner Name</strong>
-                        <div className="typ-14Medium mt-1">
+                        <div
+                          className="text-truncate typ-14Medium mt-1"
+                          title={personalDetails.partner_name || ""}
+                        >
                           {personalDetails.partner_name || "N/A"}
                         </div>
                       </div>

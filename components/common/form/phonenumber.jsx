@@ -52,7 +52,7 @@ const AutoDetectPhoneInput = ({
   };
 
   return (
-    <div className="form-group w-100">
+    <div className="form-group w-100 mb-1">
       <label>Phone Number</label>
 
       <PhoneInput

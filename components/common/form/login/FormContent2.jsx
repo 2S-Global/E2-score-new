@@ -96,7 +96,7 @@ const FormContent2 = () => {
 
   return (
     <div className="form-inner p-4">
-      <div className="mb-3 d-flex justify-content-center pb-4 ">
+      <div className="mb-3 d-flex justify-content-center pb-4 pt-4 ">
         <img
           alt="brand"
           src="/images/Gesil.png"
@@ -135,7 +135,7 @@ const FormContent2 = () => {
       />
       {/* <!--Login Form--> */}
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
+        <div className="form-group mb-1">
           <label>Email Address</label>
           <input
             type="email"
@@ -148,7 +148,7 @@ const FormContent2 = () => {
         </div>
         {/* name */}
 
-        <div className="form-group">
+        <div className="form-group mb-1">
           <label>Password</label>
           <input
             id="password-field"
@@ -162,9 +162,9 @@ const FormContent2 = () => {
         </div>
         {/* password */}
 
-        <div className="form-group">
-          <div className="field-outer">
-            <div className="input-group checkboxes square">
+        <div className="form-group  mb-1">
+          <div className="field-outer mt-1">
+            <div className="input-group checkboxes square mb-2">
               {/*    <input type="checkbox" name="remember-me" id="remember" /> */}
               {/* <label htmlFor="remember" className="remember">
                 <span className="custom-checkbox"></span> Remember me
@@ -177,9 +177,9 @@ const FormContent2 = () => {
         </div>
         {/* forgot password */}
 
-        <div className="form-group">
+        <div className="form-group mt-0  mb-1">
           <button
-            className="theme-btn btn-style-one"
+            className="theme-btn btn-style-one mt-0 mb-0"
             type="submit"
             disabled={loading}
           >
@@ -190,7 +190,7 @@ const FormContent2 = () => {
       </form>
       {/* End form */}
 
-      <div className="bottom-box">
+      <div className="bottom-box mt-1">
         <div className="text">
           Don&apos;t have an account?{" "}
           <Link href="/register" style={{ color: "blue" }}>
@@ -206,7 +206,7 @@ const FormContent2 = () => {
       </div>
       {/* End bottom-box LoginWithSocial */}
 
-      <div className="mt-5 text-center">
+      <div className="mt-2 text-center">
         <p className="text-muted small">
           Developed and maintained by{" "}
           <strong
@@ -219,7 +219,7 @@ const FormContent2 = () => {
         </p>
       </div>
 
-      <div className="d-flex justify-content-center gap-3 mt-3">
+      <div className="d-flex justify-content-center gap-3 mt-2">
         <button
           onClick={() =>
             handleExternalLink(

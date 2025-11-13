@@ -57,7 +57,7 @@ const Index = () => {
         >
           <div
             className="login-form default-form"
-            style={{ backgroundColor: "#FFFFFF" }}
+            style={{ backgroundColor: "#FFFFFF", maxWidth: "600px" }}
           >
             <FormContent2 />
           </div>

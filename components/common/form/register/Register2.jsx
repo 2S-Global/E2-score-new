@@ -68,7 +68,7 @@ const Register2 = () => {
       </Tabs>
       {/* End form-group */}
 
-      <div className="bottom-box">
+      <div className="bottom-box mt-1">
         <div className="text">
           Already have an account?{" "}
           <Link
@@ -86,7 +86,7 @@ const Register2 = () => {
       </div>
       {/* End bottom-box LoginWithSocial */}
 
-      <div className="mt-5 text-center">
+      <div className="mt-2 text-center">
         <p className="text-muted small">
           Developed and maintained by{" "}
           <strong
@@ -99,7 +99,7 @@ const Register2 = () => {
         </p>
       </div>
 
-      <div className="d-flex justify-content-center gap-3 mt-3">
+      <div className="d-flex justify-content-center gap-3 mt-2">
         <button
           onClick={() =>
             handleExternalLink(

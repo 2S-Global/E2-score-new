@@ -122,7 +122,7 @@ const FormContentcom = () => {
         message_id={message_id}
       />
 
-      <div className="form-group">
+      <div className="form-group mb-1">
         <label>Company CIN Number </label>
         <span className="text-danger ms-2">*</span>
         <div className="d-flex align-items-stretch gap-2">
@@ -146,7 +146,7 @@ const FormContentcom = () => {
         </div>
       </div>
 
-      <div className="form-group">
+      <div className="form-group mb-1">
         <label>Company Name</label>
         <span className="text-danger ms-2">*</span>
         <input
@@ -159,7 +159,7 @@ const FormContentcom = () => {
         />
       </div>
       {/* name */}
-      <div className="form-group">
+      <div className="form-group mb-1">
         <label>Official Email Address</label>
         <span className="text-danger ms-2">*</span>
         <input
@@ -181,7 +181,7 @@ const FormContentcom = () => {
       />
       {/* Phone */}
 
-      <div className="form-group">
+      <div className="form-group ">
         <label>Password</label>
         <span className="text-danger ms-2">*</span>
         <input

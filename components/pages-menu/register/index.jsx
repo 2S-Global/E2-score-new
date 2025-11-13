@@ -31,7 +31,7 @@ const index = () => {
           {/* <!-- Login Form --> */}
           <div
             className="login-form default-form"
-            style={{ backgroundColor: "#FFFFFF" }}
+            style={{ backgroundColor: "#FFFFFF", maxWidth: "600px" }}
           >
             <Register2 />
           </div>

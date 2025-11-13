@@ -6,7 +6,7 @@ import CopyrightFooter from "../../CopyrightFooter";
 
 import Candidatetable from "./components/table";
 
-import AddCompanyModal from "./components/modals/addinstitute";
+import CandidateformModal from "./components/modals/formmodal";
 import AddCsvModal from "./components/modals/csv";
 import { useState } from "react";
 // import { display } from "html2canvas/dist/types/css/property-descriptors/display";
@@ -86,7 +86,7 @@ const Index = () => {
                           fontSize: "16px",
                         }}
                       >
-                        Import CSV
+                        Import From Excel
                       </span>
                     </div>
                   </div>
@@ -104,7 +104,7 @@ const Index = () => {
       </div>
       {/* Render Modal if isModalOpen is true */}
       {isModalOpen && (
-        <AddCompanyModal
+        <CandidateformModal
           show={isModalOpen}
           onClose={closeModalRH}
           setRefresh={setRefresh}
@@ -113,7 +113,11 @@ const Index = () => {
       )}
 
       {isCsvModalOpen && (
-        <AddCsvModal show={openCsvModal} onClose={closeModalCsv} />
+        <AddCsvModal
+          show={openCsvModal}
+          onClose={closeModalCsv}
+          setRefresh={setRefresh}
+        />
       )}
     </>
   );
