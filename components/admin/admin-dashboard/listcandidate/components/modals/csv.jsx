@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
+import AuditReport from "../audit";
 
 const AddCsvModal = ({ show, onClose, setRefresh = () => {} }) => {
   const [csvFile, setCsvFile] = useState(null);
@@ -12,6 +13,8 @@ const AddCsvModal = ({ show, onClose, setRefresh = () => {} }) => {
   const [message_id, setMessage_id] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const [audit, setAudit] = useState([]);
 
   const router = useRouter();
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
@@ -69,7 +72,7 @@ const AddCsvModal = ({ show, onClose, setRefresh = () => {} }) => {
 
     try {
       const response = await axios.post(
-        `${apiurl}/api/import-candidate`,
+        `${apiurl}/api/useradmin/import_user`,
         formPayload,
         {
           headers: {
@@ -84,10 +87,14 @@ const AddCsvModal = ({ show, onClose, setRefresh = () => {} }) => {
       setSuccess(response.data.message);
       setMessage_id(Date.now());
 
-      setTimeout(() => {
-        setRefresh(true);
-        //router.push("/admin/listcandidate");
-      }, 1000);
+      if (response.data.total === response.data.created) {
+        setTimeout(() => {
+          setRefresh(true);
+          //router.push("/admin/listcandidate");
+        }, 1000);
+      } else if (response.data.audit) {
+        setAudit(response.data.audit);
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Import failed. Try again.");
       setErrorId(Date.now());
@@ -132,6 +139,8 @@ const AddCsvModal = ({ show, onClose, setRefresh = () => {} }) => {
 
           {/* Body */}
           <div className="modal-body">
+            {audit.length > 0 && <AuditReport audit={audit} />}
+
             <form onSubmit={handleSubmit}>
               <MessageComponent
                 error={error}

@@ -86,9 +86,11 @@ const CandidateformModal = ({
       return;
     }
 
-    // Validate before submit
+    // -------------------------
+    // Validate fields
+    // -------------------------
     const validationErrors = {};
-    Object.keys(formData).forEach((key) => {
+    ["name", "email", "phone_number"].forEach((key) => {
       validationErrors[key] = validateField(key, formData[key]);
     });
 
@@ -105,19 +107,40 @@ const CandidateformModal = ({
     }
 
     try {
-      const response = await axios.post(
-        `${apiurl}/api/companyRoutes/register123`,
-        { ...formData, role: 1 },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const isUpdate = Boolean(formData._id);
 
-      if (!response.data.success) throw new Error(response.data.message);
+      const url = isUpdate
+        ? `${apiurl}/api/useradmin/update_user`
+        : `${apiurl}/api/useradmin/add_user`;
+
+      const payload = {
+        ...formData,
+        ...(isUpdate ? {} : { role: 1 }),
+      };
+
+      const method = isUpdate ? "put" : "post";
+
+      const response = await axios({
+        method,
+        url,
+        data: payload,
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Backend does not return success: true
+      if (response.status !== 200 && response.status !== 201) {
+        throw new Error(response.data?.message || "Operation failed");
+      }
 
       setSuccess(response.data.message);
       setRefresh(true);
+
+      setTimeout(() => {
+        onClose();
+      }, 1500);
     } catch (err) {
       setError(
-        err.response?.data?.message || "Registration failed. Try again."
+        err.response?.data?.message || "Request failed. Please try again."
       );
     } finally {
       setLoading(false);
