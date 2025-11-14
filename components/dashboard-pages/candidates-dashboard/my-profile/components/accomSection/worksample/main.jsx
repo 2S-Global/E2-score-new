@@ -76,7 +76,13 @@ const Workmain = ({ setReload, list = [], setError, setSuccess }) => {
 
               <span className="text-muted">
                 Duration: {item.durationFrom.month} {item.durationFrom.year} -{" "}
-                {item.durationTo.month} {item.durationTo.year}
+                {item.currentlyWorking === true ? (
+                  "Present"
+                ) : (
+                  <>
+                    {item.durationTo.month} {item.durationTo.year}
+                  </>
+                )}
               </span>
               <br />
 
