@@ -465,8 +465,9 @@ const CertificateModal = ({
                               }
                             >
                               <option value="">Select Year</option>
-                              {Array.from({ length: 30 }, (_, i) => {
-                                const year = currentYear - i;
+                              {Array.from({ length: 51 }, (_, i) => {
+                                const year =
+                                  Number(formData.validityFromyear || 2000) + i;
                                 return (
                                   <option key={year} value={year}>
                                     {year}
@@ -487,9 +488,11 @@ const CertificateModal = ({
                               }
                             >
                               <option value="">Select month</option>
-                              {generateMonthOptions(
-                                parseInt(formData.validityToyear)
-                              )}
+                              {monthNames.map((month, index) => (
+                                <option key={index + 1} value={index + 1}>
+                                  {month}
+                                </option>
+                              ))}
                             </select>
                           </div>
                         </div>

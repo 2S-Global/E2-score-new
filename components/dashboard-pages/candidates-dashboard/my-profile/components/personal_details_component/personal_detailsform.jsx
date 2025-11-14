@@ -343,30 +343,28 @@ const PersonalInfoForm = ({
                       ))}
                     </div>
                   </div>
-                  {/* Partnername partner_name */}
 
-                  {Array.isArray(withpartnername) &&
-                    withpartnername.length > 0 &&
-                    withpartnername.includes(formData.marital_status) && (
-                      <div className="mb-3 form-group">
-                        <label className="form-label">
-                          <b>Partner Name</b>
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Partner Name"
-                          name="partner_name"
-                          value={formData.partner_name}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              partner_name: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                    )}
+                  {(withpartnername?.includes(formData.marital_status) ||
+                    Boolean(formData.partner_name)) && (
+                    <div className="mb-3 form-group">
+                      <label className="form-label">
+                        <b>Partner Name</b>
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Partner Name"
+                        name="partner_name"
+                        value={formData.partner_name || ""}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            partner_name: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                  )}
 
                   {/* Date of Birth Selection */}
                   <LocalizationProvider dateAdapter={AdapterDateFns}>

@@ -1,4 +1,4 @@
-import React, { use, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
@@ -11,14 +11,11 @@ const CandidateformModal = ({
   setRefresh = () => {},
 }) => {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone_number: "",
+    _id: data._id || "",
+    name: data.name || "",
+    email: data.email || "",
+    phone_number: data.phone_number || "",
   });
-
-  useEffect(() => {
-    setFormData(data);
-  }, [data]);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -29,7 +26,6 @@ const CandidateformModal = ({
   const [disableSubmit, setDisableSubmit] = useState(false);
 
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
-  const router = useRouter();
 
   if (!show) return null;
 
@@ -42,11 +38,6 @@ const CandidateformModal = ({
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
           ? ""
           : "Please enter a valid email.";
-
-      case "phone_number":
-        if (!value) return "Phone number is required.";
-        if (value.length !== 10) return "Phone number must be 10 digits.";
-        return "";
 
       case "name":
         return value ? "" : "Name is required.";
@@ -63,9 +54,6 @@ const CandidateformModal = ({
     const { name, value } = e.target;
 
     let newValue = value;
-    if (name === "phone_number") {
-      newValue = value.replace(/\D/g, "").slice(0, 10);
-    }
 
     setFormData((prev) => ({ ...prev, [name]: newValue }));
     setFormErrors((prev) => ({
@@ -118,7 +106,7 @@ const CandidateformModal = ({
 
     try {
       const response = await axios.post(
-        `${apiurl}/api/companyRoutes/register`,
+        `${apiurl}/api/companyRoutes/register123`,
         { ...formData, role: 1 },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -149,7 +137,9 @@ const CandidateformModal = ({
         <div className="modal-content">
           {/* Header */}
           <div className="modal-header">
-            <h5 className="modal-title">Add New Candidate</h5>
+            <h5 className="modal-title">
+              {formData._id ? "Update Candidate" : "Add New Candidate"}
+            </h5>
             <button
               type="button"
               className="btn-close"
@@ -173,7 +163,7 @@ const CandidateformModal = ({
                       touched.name && formErrors.name ? "is-invalid" : ""
                     }`}
                     placeholder="Candidate Name"
-                    value={formData.name}
+                    value={formData.name || ""}
                     onChange={handleChange}
                     onBlur={() =>
                       setTouched((prev) => ({ ...prev, name: true }))
@@ -194,7 +184,7 @@ const CandidateformModal = ({
                       touched.email && formErrors.email ? "is-invalid" : ""
                     }`}
                     placeholder="Email Address"
-                    value={formData.email}
+                    value={formData.email || ""}
                     onChange={handleChange}
                     onBlur={() =>
                       setTouched((prev) => ({ ...prev, email: true }))
@@ -224,8 +214,16 @@ const CandidateformModal = ({
                 type="submit"
                 className="btn btn-primary w-100"
                 disabled={loading || disableSubmit}
+                style={{
+                  pointerEvents: loading || disableSubmit ? "none" : "auto",
+                  opacity: loading || disableSubmit ? 0.5 : 1,
+                }}
               >
-                {loading ? "Registering..." : "Register"}
+                {loading ? (
+                  <>{formData._id ? "Updating" : "Registering"}</>
+                ) : (
+                  <>{formData._id ? "Update" : "Register"}</>
+                )}
               </button>
             </form>
           </div>

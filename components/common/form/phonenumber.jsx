@@ -57,7 +57,7 @@ const AutoDetectPhoneInput = ({
 
       <PhoneInput
         country="in" // default India
-        value={phone}
+        value={phone || ""}
         onChange={handleChange}
         placeholder="Phone Number"
         inputProps={{

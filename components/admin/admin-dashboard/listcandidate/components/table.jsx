@@ -263,14 +263,14 @@ const Companytable = ({ setRefresh, refresh }) => {
       name: "Candidate Name",
       selector: (row) => row.name,
       sortable: true,
-      width: "150px",
+      width: "",
       center: true,
     },
     {
       name: "Candidate Email",
       selector: (row) => row.email,
       sortable: true,
-      width: "150px",
+      width: "",
       center: true,
       cell: (row) => (
         <div
@@ -289,7 +289,7 @@ const Companytable = ({ setRefresh, refresh }) => {
     {
       name: "Status",
       cell: (row) => (
-        <div className="form-check form-switch d-flex  ">
+        <div className="form-check form-switch d-flex mt-2 ">
           <input
             className="form-check-input"
             type="checkbox"
@@ -307,6 +307,7 @@ const Companytable = ({ setRefresh, refresh }) => {
         </div>
       ),
       center: true,
+      width: "100px",
     },
     {
       name: "Created Date",
