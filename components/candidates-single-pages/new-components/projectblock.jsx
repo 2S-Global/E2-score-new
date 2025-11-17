@@ -3,13 +3,15 @@ import React from "react";
 
 const Projectblock = ({ data = [] }) => {
   return (
-    <div className="ls-widget">
-      <div className="tabs-box">
-        <div className="widget-title">
-          <h4>Projects</h4>
+    <div className="ls-widget m-0 p-0">
+      <div className="tabs-box m-0 p-0">
+        {/* Title Bar */}
+        <div className="widget-titlesp m-0 p-0 border-bottom pb-1">
+          <h4 className="m-0 p-0">Projects</h4>
         </div>
 
-        <div className="widget-content">
+        {/* Content */}
+        <div className="widget-content m-0 p-0">
           {data.length > 0 ? (
             data.map((item) => (
               <div
@@ -47,11 +49,7 @@ const Projectblock = ({ data = [] }) => {
                 </span>
 
                 {item.description && (
-                  <div
-                    className="mt-1"
-                    style={{ textAlign: "justify" }}
-                    /*  dangerouslySetInnerHTML={{ __html: item.description }} */
-                  >
+                  <div className="mt-1" style={{ textAlign: "justify" }}>
                     {item.description}
                   </div>
                 )}

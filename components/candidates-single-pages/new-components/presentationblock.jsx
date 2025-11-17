@@ -3,21 +3,21 @@ import React from "react";
 
 const PresentationBlock = ({ data = [] }) => {
   return (
-    <div className="ls-widget">
-      <div className="tabs-box">
-        <div className="widget-title">
-          <h4>Presentation</h4>
+    <div className="ls-widget m-0 p-0">
+      <div className="tabs-box m-0 p-0">
+        <div className="widget-titlesp m-0 p-0 border-bottom pb-1">
+          <h4 className="m-0 p-0">Presentation</h4>
         </div>
 
-        <div className="widget-content">
+        <div className="widget-content m-0 p-0">
           {Array.isArray(data) && data.length > 0 ? (
             data.map((item) => (
               <div
                 key={item._id}
-                className="mb-2"
+                className="m-0 p-0 mb-2"
                 style={{ lineHeight: "1.4" }}
               >
-                <div className="d-flex justify-content-between align-items-center mb-1">
+                <div className="d-flex justify-content-between align-items-center mb-1 m-0 p-0">
                   <span style={{ fontWeight: "bold", color: "#000" }}>
                     {item.title || "N/A"}
                   </span>
@@ -28,6 +28,7 @@ const PresentationBlock = ({ data = [] }) => {
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="m-0 p-0"
                     style={{
                       display: "block",
                       color: "#275df5",
@@ -41,7 +42,7 @@ const PresentationBlock = ({ data = [] }) => {
 
                 {item.description && (
                   <div
-                    className="mt-1"
+                    className="mt-1 m-0 p-0"
                     style={{ textAlign: "justify" }}
                     dangerouslySetInnerHTML={{ __html: item.description }}
                   ></div>
@@ -49,7 +50,7 @@ const PresentationBlock = ({ data = [] }) => {
               </div>
             ))
           ) : (
-            <div className="text-muted text-center py-3">
+            <div className="text-muted text-center m-0 p-0">
               No Presentation data available.
             </div>
           )}

@@ -328,13 +328,25 @@ const Companytable = ({ setRefresh, refresh }) => {
     {
       name: "Action",
       cell: (row) => (
-        <div className="d-flex  gap-3">
+        <div className="d-flex  gap-2">
           <Eye
             color="green"
             style={{ cursor: "pointer" }}
             onClick={() =>
               window.open(
                 `/candidates-details/${row._id}`,
+                "_blank",
+                "noopener,noreferrer"
+              )
+            }
+            size={20}
+          />
+          <Eye
+            color="yellow"
+            style={{ cursor: "pointer" }}
+            onClick={() =>
+              window.open(
+                `/candidates-detailsv2/${row._id}`,
                 "_blank",
                 "noopener,noreferrer"
               )

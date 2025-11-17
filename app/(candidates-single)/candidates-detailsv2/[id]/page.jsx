@@ -30,16 +30,20 @@ import CertificationBlock from "@/components/candidates-single-pages/new-compone
 import Careerblock from "@/components/candidates-single-pages/new-components/carrerblock";
 import Projectblock from "@/components/candidates-single-pages/new-components/projectblock";
 
+//new original
+import Candidatedetails from "@/components/candidates-single-pages/detailspagev2";
+
 const CandidateSingleDynamicV2 = () => {
   // const params = useParams();
   const { id } = useParams();
-  const candidate = candidates.find((item) => item.id == id) || candidates[0];
+  //const candidate = candidates.find((item) => item.id == id) || candidates[0];
 
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
   const [loading, setLoading] = useState(false);
   const [bookmarkLoading, setBookmarkLoading] = useState(false);
   const [Realcandidate, setRealCandidate] = useState({});
+  const [Realcandidatev2, setRealCandidatev2] = useState({});
 
   const [underdev, setUnderdev] = useState(false);
   useEffect(() => {
@@ -175,11 +179,20 @@ const CandidateSingleDynamicV2 = () => {
       {/* End MobileMenu */}
 
       {/* <!-- Job Detail Section --> */}
-      <section className="candidate-detail-section">
+      <section
+        className="candidate-detail-section"
+        style={{
+          backgroundColor: "#f5f7fc",
+        }}
+      >
         <div className="candidate-detail-outer">
           <div className="auto-container">
             <div className="row">
               <div className="content-column col-lg-8 col-md-12 col-sm-12">
+                {/* real UI */}
+                <Candidatedetails Newdata={Realcandidatev2} />
+
+                {/* end of real UI */}
                 <div className="candidate-block-five">
                   <div className="inner-box">
                     <div className="content">
@@ -460,7 +473,12 @@ const CandidateSingleDynamicV2 = () => {
               </div>
               {/* End .content-column */}
 
-              <div className="sidebar-column col-lg-4 col-md-12 col-sm-12">
+              <div
+                className="sidebar-column col-lg-4 col-md-12 col-sm-12 "
+                style={{
+                  backgroundColor: "#ffffff",
+                }}
+              >
                 <aside className="sidebar">
                   <div className="btn-box">
                     {Realcandidate?.sidebarDetails?.resumeUrl && (
@@ -470,7 +488,7 @@ const CandidateSingleDynamicV2 = () => {
                         download // 👈 This triggers a download instead of opening
                         target="_blank"
                       >
-                        Download Resume
+                        Download Resume (v2)
                       </a>
                     )}
 
