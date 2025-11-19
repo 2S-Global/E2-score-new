@@ -44,7 +44,7 @@ const HeaderNavContent = () => {
               } dropdown has-mega-menu`}
               id="has-mega-menu"
             >
-              <Link href="/job-list">Find Jobs</Link>
+              <Link href="/job-list">Jobs</Link>
             </li>
           )}
           {/* End findjobs menu items */}

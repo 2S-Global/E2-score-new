@@ -278,20 +278,20 @@ const DegreeForm = ({
         ) : null}
 
         <div className="form-group col-lg-6">
-          <label>Transcript</label>
+          <label>Transcript (PNG / JPEG / PDF)</label>
           <UploadButton
             label="Upload"
             id="transcript"
             name="transcript"
             file={formData.transcript}
             onChange={handleTranscriptChange}
-            accept="image/*, .pdf"
+            accept="image/png, image/jpeg, application/pdf"
             width="200px"
             image={formData.transcriptPreview}
           />
         </div>
         <div className="form-group col-lg-6">
-          <label>Certificate</label>
+          <label>Certificate (PNG / JPEG / PDF)</label>
           <UploadButton
             label="Upload"
             id="certificate"
@@ -299,7 +299,7 @@ const DegreeForm = ({
             width="200px"
             file={formData.certificate}
             onChange={handleCertificateChange}
-            accept="image/*, .pdf"
+            accept="image/png, image/jpeg, application/pdf"
             image={formData.certificatePreview}
           />
         </div>
