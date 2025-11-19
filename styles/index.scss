@@ -271,3 +271,68 @@ img.rounded-circle {
   text-overflow: ellipsis;
   vertical-align: middle;
 }
+
+/* LinkedIn */
+.text-linkedin {
+  color: #0a66c2 !important;
+}
+.text-linkedin:hover {
+  color: #004182 !important; /* darker LinkedIn blue */
+}
+
+/* Facebook */
+.text-facebook {
+  color: #1877f2 !important;
+}
+.text-facebook:hover {
+  color: #0e5aaf !important; /* darker FB blue */
+}
+
+/* Instagram (solid fallback color) */
+.text-instagram {
+  color: #e1306c !important;
+}
+.text-instagram:hover {
+  color: #b82556 !important; /* deeper tone */
+}
+
+/* GitHub */
+.text-github {
+  color: #181717 !important;
+}
+.text-github:hover {
+  color: #000000 !important; /* black on hover */
+}
+
+/* Twitter (classic blue) */
+.text-twitter {
+  color: #1da1f2 !important;
+}
+.text-twitter:hover {
+  color: #0d8ddc !important; /* darker twitter blue */
+}
+
+/* Reddit */
+.text-reddit {
+  color: #ff4500 !important;
+}
+.text-reddit:hover {
+  color: #cc3700 !important; /* darker reddit orange */
+}
+
+.text-instagram-gradient {
+  background: linear-gradient(
+    45deg,
+    #f58529,
+    #feda77,
+    #dd2a7b,
+    #8134af,
+    #515bd4
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-instagram-gradient:hover {
+  filter: brightness(0.85);
+}

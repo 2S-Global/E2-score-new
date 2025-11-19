@@ -20,15 +20,6 @@ import { useEffect, useState } from "react";
 import CustomizedProgressBars from "@/components/common/loader";
 import Underdev from "@/components/common/underdev";
 ///additional imports
-import KYCBlock from "@/components/candidates-single-pages/new-components/kycblock";
-import Personalblock from "@/components/candidates-single-pages/new-components/personalblock";
-import Workprofileblock from "@/components/candidates-single-pages/new-components/workprofileblock";
-import ReseachBlock from "@/components/candidates-single-pages/new-components/researchblock";
-import PresentationBlock from "@/components/candidates-single-pages/new-components/presentationblock";
-import PatentBlock from "@/components/candidates-single-pages/new-components/pretentblock";
-import CertificationBlock from "@/components/candidates-single-pages/new-components/Certificationblock";
-import Careerblock from "@/components/candidates-single-pages/new-components/carrerblock";
-import Projectblock from "@/components/candidates-single-pages/new-components/projectblock";
 
 //new original
 import Candidatedetails from "@/components/candidates-single-pages/detailspagev2";
@@ -490,7 +481,7 @@ const CandidateSingleDynamicV2 = () => {
                               target="_blank"
                               rel="noopener noreferrer"
                               key={item._id}
-                              style={{ marginRight: "8px" }}
+                              style={{ marginRight: "4px" }}
                             >
                               <i className={`fab ${item.icon}`}></i>
                             </a>

@@ -423,7 +423,7 @@ const Candidatedetails = ({ Newdata }) => {
       <CareerSection data={carrer} />
       {/* employment */}
       <div className="ls-widget">
-        <div className="tabs-box">
+        <div className="tabs-box resume-outer theme-blue">
           <div className="widget-title">
             <h4>Employment </h4>
           </div>
@@ -437,109 +437,143 @@ const Candidatedetails = ({ Newdata }) => {
                 )}
 
                 {employment.map((row, index) => (
-                  <div key={index} className="resume-item emp-list pb-3">
-                    {/* Job Title and Edit Icon */}
-                    <div className="item title typ-14Bold">
-                      <span className="truncate emp-desg" title={row.job_title}>
-                        <strong className="me-2">{row.job_title}</strong>
-                        {row.designationVerified ? (
-                          <>
-                            <BadgeCheck size={20} color="green" />
-                          </>
-                        ) : (
-                          <>
-                            <BadgeAlert size={20} color="orange" />
-                          </>
-                        )}
-                      </span>{" "}
-                      {row.isVerified ? (
-                        <>
-                          <span
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="top"
-                            title={row.remarks || "No remarks"}
-                            style={{ cursor: "pointer" }}
+                  <>
+                    <div className="resume-block" key={row._id}>
+                      <div className="inner">
+                        <span className="name">{/* item.meta || */ ""}</span>
+                        <div className="title-box">
+                          <div className="info-box">
+                            <h3 style={{ maxWidth: "70%" }}>
+                              {row.job_title || "Untitled Role"}
+                              {row.designationVerified ? (
+                                <>
+                                  <BadgeCheck
+                                    size={14}
+                                    color="green"
+                                    className="ms-2"
+                                  />
+                                </>
+                              ) : (
+                                <>
+                                  <BadgeAlert
+                                    size={14}
+                                    color="orange"
+                                    className="ms-2"
+                                  />
+                                </>
+                              )}
+                              {row.isVerified ? (
+                                <>
+                                  <span
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title={row.remarks || "No remarks"}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    <Info
+                                      size={14}
+                                      color="green"
+                                      className="ms-2"
+                                    />
+                                  </span>
+                                </>
+                              ) : (
+                                <></>
+                              )}
+                            </h3>
+                            <span>
+                              {row.company_name || "Company not specified"}
+                              <img
+                                src={
+                                  row.isVerified
+                                    ? "/images/resource/verified.png"
+                                    : "/images/resource/unverified.png"
+                                }
+                                alt={
+                                  row.isVerified ? "Verified" : "Not Verified"
+                                }
+                                style={{ width: "100px", height: "20px" }}
+                                className="ms-2"
+                              />
+                            </span>
+                            <br />
+                            <span>
+                              {row.employmenttype?.charAt(0).toUpperCase() +
+                                row.employmenttype?.slice(1).toLowerCase()}{" "}
+                              {row.jobTypeVerified ? (
+                                <>
+                                  <BadgeCheck
+                                    size={14}
+                                    color="green"
+                                    className="ms-2"
+                                  />
+                                </>
+                              ) : (
+                                <>
+                                  <BadgeAlert size={14} className="ms-2" />
+                                </>
+                              )}
+                            </span>
+                            <br />
+                            {row.notice_period && (
+                              <span>
+                                Notice Period : {row.notice_period_name}
+                              </span>
+                            )}
+                            <span
+                              style={{ textAlign: "justify" }}
+                              dangerouslySetInnerHTML={{
+                                __html: row.description || "",
+                              }}
+                            ></span>
+                          </div>
+                          <div
+                            className="edit-box"
+                            style={{
+                              position: "absolute",
+                              right: 0,
+                              top: 0,
+                            }}
                           >
-                            <Info size={20} color="green" className="ms-2" />
-                          </span>
-                        </>
-                      ) : (
-                        <></>
-                      )}
-                    </div>
-
-                    {/* Company Name */}
-                    <div className="item">
-                      <span
-                        className="truncate typ-14Medium emp-org"
-                        title={row.company_name}
-                      >
-                        <strong>{row.company_name}</strong>
-                      </span>
-                      {/* Show verified/unverified image */}
-                      <img
-                        src={
-                          row.isVerified
-                            ? "/images/resource/verified.png"
-                            : "/images/resource/unverified.png"
-                        }
-                        alt={row.isVerified ? "Verified" : "Not Verified"}
-                        style={{ width: "100px", height: "20px" }}
-                        className="ms-2"
-                      />
-                    </div>
-
-                    {/* Job Type and Duration */}
-                    <div className="item experienceType typ-14Regular">
-                      <span className="truncate expType">
-                        {row.employmenttype?.charAt(0).toUpperCase() +
-                          row.employmenttype?.slice(1).toLowerCase()}{" "}
-                        {row.jobTypeVerified ? (
-                          <>
-                            <BadgeCheck size={20} color="green" />
-                          </>
-                        ) : (
-                          <>
-                            <BadgeAlert size={20} color="orange" />
-                          </>
-                        )}
-                      </span>
-                      <br />
-                      <span className="truncate">
-                        {row.joining_month_name} {row.joining_year} to{" "}
-                        {row.currentlyWorking ? (
-                          "Present"
-                        ) : (
-                          <>
-                            {" "}
-                            {row.leaving_month_name} {row.leaving_year}
-                          </>
-                        )}{" "}
-                        {row.jobDurationVerified ? (
-                          <>
-                            <BadgeCheck size={20} color="green" />
-                          </>
-                        ) : (
-                          <>
-                            <BadgeAlert size={20} color="orange" />
-                          </>
-                        )}
-                      </span>
-                    </div>
-
-                    {/* Notice Period (Only if exists) */}
-                    {row.notice_period && (
-                      <div className="item emp-notice-prd typ-14Medium">
-                        Notice Period : {row.notice_period_name}
+                            <span
+                              className="year"
+                              style={{
+                                minWidth: "120px",
+                                textAlign: "center",
+                              }}
+                            >
+                              {row.joining_month_name} {row.joining_year} to{" "}
+                              {row.currentlyWorking ? (
+                                "Present"
+                              ) : (
+                                <>
+                                  {" "}
+                                  {row.leaving_month_name} {row.leaving_year}
+                                </>
+                              )}{" "}
+                              {row.jobDurationVerified ? (
+                                <>
+                                  <BadgeCheck
+                                    size={14}
+                                    color="green"
+                                    className="ms-2"
+                                  />
+                                </>
+                              ) : (
+                                <>
+                                  <BadgeAlert
+                                    size={14}
+                                    color="orange"
+                                    className="ms-2"
+                                  />
+                                </>
+                              )}
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                    )}
-
-                    {/* Job Description with Read More Toggle */}
-                    <span
-                      style={{ textAlign: "justify" }}
-                      dangerouslySetInnerHTML={{ __html: row.description }}
-                    ></span>
-                  </div>
+                    </div>
+                  </>
                 ))}
               </div>
             </div>
@@ -571,12 +605,6 @@ const Candidatedetails = ({ Newdata }) => {
                         }}
                       >
                         {item.title}
-
-                        <i
-                          onClick={() => openModalRH(item)}
-                          className="la la-pencil-alt ms-2"
-                          style={{ cursor: "pointer" }}
-                        ></i>
                       </span>
                       <br />
 
