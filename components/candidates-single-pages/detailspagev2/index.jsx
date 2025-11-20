@@ -437,143 +437,139 @@ const Candidatedetails = ({ Newdata }) => {
                 )}
 
                 {employment.map((row, index) => (
-                  <>
-                    <div className="resume-block" key={row._id}>
-                      <div className="inner">
-                        <span className="name">{/* item.meta || */ ""}</span>
-                        <div className="title-box">
-                          <div className="info-box">
-                            <h3 style={{ maxWidth: "70%" }}>
-                              {row.job_title || "Untitled Role"}
-                              {row.designationVerified ? (
-                                <>
-                                  <BadgeCheck
-                                    size={14}
-                                    color="green"
-                                    className="ms-2"
-                                  />
-                                </>
-                              ) : (
-                                <>
-                                  <BadgeAlert
-                                    size={14}
-                                    color="orange"
-                                    className="ms-2"
-                                  />
-                                </>
-                              )}
-                              {row.isVerified ? (
-                                <>
-                                  <span
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title={row.remarks || "No remarks"}
-                                    style={{ cursor: "pointer" }}
-                                  >
-                                    <Info
-                                      size={14}
-                                      color="green"
-                                      className="ms-2"
-                                    />
-                                  </span>
-                                </>
-                              ) : (
-                                <></>
-                              )}
-                            </h3>
-                            <span>
-                              {row.company_name || "Company not specified"}
-                              <img
-                                src={
-                                  row.isVerified
-                                    ? "/images/resource/verified.png"
-                                    : "/images/resource/unverified.png"
-                                }
-                                alt={
-                                  row.isVerified ? "Verified" : "Not Verified"
-                                }
-                                style={{ width: "100px", height: "20px" }}
-                                className="ms-2"
-                              />
-                            </span>
-                            <br />
-                            <span>
-                              {row.employmenttype?.charAt(0).toUpperCase() +
-                                row.employmenttype?.slice(1).toLowerCase()}{" "}
-                              {row.jobTypeVerified ? (
-                                <>
-                                  <BadgeCheck
-                                    size={14}
-                                    color="green"
-                                    className="ms-2"
-                                  />
-                                </>
-                              ) : (
-                                <>
-                                  <BadgeAlert size={14} className="ms-2" />
-                                </>
-                              )}
-                            </span>
-                            <br />
-                            {row.notice_period && (
-                              <span>
-                                Notice Period : {row.notice_period_name}
-                              </span>
+                  <div className="resume-block" key={row._id}>
+                    <div className="inner">
+                      <span className="name">{/* item.meta || */ ""}</span>
+                      <div className="title-box">
+                        <div className="info-box">
+                          <h3 style={{ maxWidth: "70%" }}>
+                            {row.job_title || "Untitled Role"}
+                            {row.designationVerified ? (
+                              <>
+                                <BadgeCheck
+                                  size={14}
+                                  color="green"
+                                  className="ms-2"
+                                />
+                              </>
+                            ) : (
+                              <>
+                                <BadgeAlert
+                                  size={14}
+                                  color="orange"
+                                  className="ms-2"
+                                />
+                              </>
                             )}
-                            <span
-                              style={{ textAlign: "justify" }}
-                              dangerouslySetInnerHTML={{
-                                __html: row.description || "",
-                              }}
-                            ></span>
-                          </div>
-                          <div
-                            className="edit-box"
+                            {row.isVerified ? (
+                              <>
+                                <span
+                                  data-bs-toggle="tooltip"
+                                  data-bs-placement="top"
+                                  title={row.remarks || "No remarks"}
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  <Info
+                                    size={14}
+                                    color="green"
+                                    className="ms-2"
+                                  />
+                                </span>
+                              </>
+                            ) : (
+                              <></>
+                            )}
+                          </h3>
+                          <span>
+                            {row.company_name || "Company not specified"}
+                            <img
+                              src={
+                                row.isVerified
+                                  ? "/images/resource/verified.png"
+                                  : "/images/resource/unverified.png"
+                              }
+                              alt={row.isVerified ? "Verified" : "Not Verified"}
+                              style={{ width: "100px", height: "20px" }}
+                              className="ms-2"
+                            />
+                          </span>
+                          <br />
+                          <span>
+                            {row.employmenttype?.charAt(0).toUpperCase() +
+                              row.employmenttype?.slice(1).toLowerCase()}{" "}
+                            {row.jobTypeVerified ? (
+                              <>
+                                <BadgeCheck
+                                  size={14}
+                                  color="green"
+                                  className="ms-2"
+                                />
+                              </>
+                            ) : (
+                              <>
+                                <BadgeAlert size={14} className="ms-2" />
+                              </>
+                            )}
+                          </span>
+                          <br />
+                          {row.notice_period && (
+                            <span>
+                              Notice Period : {row.notice_period_name}
+                            </span>
+                          )}
+                          <span
+                            style={{ textAlign: "justify" }}
+                            dangerouslySetInnerHTML={{
+                              __html: row.description || "",
+                            }}
+                          ></span>
+                        </div>
+                        <div
+                          className="edit-box"
+                          style={{
+                            position: "absolute",
+                            right: 0,
+                            top: 0,
+                          }}
+                        >
+                          <span
+                            className="year"
                             style={{
-                              position: "absolute",
-                              right: 0,
-                              top: 0,
+                              minWidth: "120px",
+                              textAlign: "center",
                             }}
                           >
-                            <span
-                              className="year"
-                              style={{
-                                minWidth: "120px",
-                                textAlign: "center",
-                              }}
-                            >
-                              {row.joining_month_name} {row.joining_year} to{" "}
-                              {row.currentlyWorking ? (
-                                "Present"
-                              ) : (
-                                <>
-                                  {" "}
-                                  {row.leaving_month_name} {row.leaving_year}
-                                </>
-                              )}{" "}
-                              {row.jobDurationVerified ? (
-                                <>
-                                  <BadgeCheck
-                                    size={14}
-                                    color="green"
-                                    className="ms-2"
-                                  />
-                                </>
-                              ) : (
-                                <>
-                                  <BadgeAlert
-                                    size={14}
-                                    color="orange"
-                                    className="ms-2"
-                                  />
-                                </>
-                              )}
-                            </span>
-                          </div>
+                            {row.joining_month_name} {row.joining_year} to{" "}
+                            {row.currentlyWorking ? (
+                              "Present"
+                            ) : (
+                              <>
+                                {" "}
+                                {row.leaving_month_name} {row.leaving_year}
+                              </>
+                            )}{" "}
+                            {row.jobDurationVerified ? (
+                              <>
+                                <BadgeCheck
+                                  size={14}
+                                  color="green"
+                                  className="ms-2"
+                                />
+                              </>
+                            ) : (
+                              <>
+                                <BadgeAlert
+                                  size={14}
+                                  color="orange"
+                                  className="ms-2"
+                                />
+                              </>
+                            )}
+                          </span>
                         </div>
                       </div>
                     </div>
-                  </>
+                  </div>
                 ))}
               </div>
             </div>

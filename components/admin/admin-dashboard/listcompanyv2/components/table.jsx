@@ -79,7 +79,7 @@ const Companytable = ({ setRefresh, refresh }) => {
       setLoading(true);
       const response = await axios.post(
         `${apiurl}/api/companyRoutes/list-companies`,
-        { role: 1 },
+        { role: 2 },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -114,7 +114,7 @@ const Companytable = ({ setRefresh, refresh }) => {
     try {
       const response = await axios.post(
         `${apiurl}/api/companyRoutes/delete-companies`,
-        { companyId: id, role: 1 },
+        { companyId: id, role: 2 },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -156,7 +156,7 @@ const Companytable = ({ setRefresh, refresh }) => {
         {
           companyId: id,
           status: !currentStatus,
-          role: 1,
+          role: 2,
         },
         {
           headers: {
@@ -260,14 +260,14 @@ const Companytable = ({ setRefresh, refresh }) => {
       sortable: false,
     },
     {
-      name: "Candidate Name",
+      name: "Company Name",
       selector: (row) => row.name,
       sortable: true,
       width: "",
       center: true,
     },
     {
-      name: "Candidate Email",
+      name: "Company Email",
       selector: (row) => row.email,
       sortable: true,
       width: "",
@@ -329,7 +329,7 @@ const Companytable = ({ setRefresh, refresh }) => {
       name: "Action",
       cell: (row) => (
         <div className="d-flex  gap-2">
-          <Eye
+          {/* <Eye
             color="green"
             style={{ cursor: "pointer" }}
             onClick={() =>
@@ -340,51 +340,7 @@ const Companytable = ({ setRefresh, refresh }) => {
               )
             }
             size={20}
-          />
-          {/*  <Eye
-            color="yellow"
-            style={{ cursor: "pointer" }}
-            onClick={() =>
-              window.open(
-                `/candidates-detailsv2/${row._id}`,
-                "_blank",
-                "noopener,noreferrer"
-              )
-            }
-            size={20}
           /> */}
-          {downloading && downloadingid === row._id ? (
-            <>
-              <>
-                <svg width="0" height="0" style={{ position: "absolute" }}>
-                  <defs>
-                    <linearGradient
-                      id="my_gradient"
-                      x1="0%"
-                      y1="0%"
-                      x2="0%"
-                      y2="100%"
-                    >
-                      <stop offset="0%" stopColor="#e01cd5" />
-                      <stop offset="100%" stopColor="#1CB5E0" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-
-                <CircularProgress
-                  size={20}
-                  sx={{ "svg circle": { stroke: "url(#my_gradient)" } }}
-                />
-              </>
-            </>
-          ) : (
-            <FileDown
-              className="text-primary"
-              style={{ cursor: "pointer" }}
-              onClick={() => handleDownload(row._id, row.name)}
-              size={20}
-            />
-          )}
 
           <Pencil
             className="text-primary"
@@ -406,7 +362,7 @@ const Companytable = ({ setRefresh, refresh }) => {
         </div>
       ),
       center: true,
-      width: "150px",
+      width: "80px",
     },
   ];
 

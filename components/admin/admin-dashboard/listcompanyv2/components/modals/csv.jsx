@@ -67,7 +67,7 @@ const AddCsvModal = ({ show, onClose, setRefresh = () => {} }) => {
     }
 
     const formPayload = new FormData();
-    formPayload.append("role", 1);
+    formPayload.append("role", 2);
     formPayload.append("file", csvFile);
 
     try {
@@ -118,11 +118,11 @@ const AddCsvModal = ({ show, onClose, setRefresh = () => {} }) => {
           {/* Header */}
           <div className="modal-header d-flex justify-content-between align-items-center">
             <div className="d-flex align-items-center gap-3">
-              <h5 className="modal-title mb-0">Import New Candidate</h5>
+              <h5 className="modal-title mb-0">Import New Company</h5>
 
               {/* Download Template */}
               <a
-                href="/candidate-excel-template.xlsx"
+                href="/company-excel-template.xlsx"
                 download
                 className="btn btn-sm btn-outline-primary"
               >

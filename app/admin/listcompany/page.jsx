@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import ListCompany from "@/components/admin/admin-dashboard/listcompany";
+import ListCompany from "@/components/admin/admin-dashboard/listcompanyv2";
 
 const index = () => {
   return (

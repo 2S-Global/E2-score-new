@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import ListInstitute from "@/components/admin/admin-dashboard/listInstitute";
+import ListInstitute from "@/components/admin/admin-dashboard/listinstitutev2";
 
 const index = () => {
   return (

@@ -20,53 +20,31 @@ import { useEffect, useState } from "react";
 import CustomizedProgressBars from "@/components/common/loader";
 import Underdev from "@/components/common/underdev";
 ///additional imports
-
-//new original
-import Candidatedetails from "@/components/candidates-single-pages/detailspagev2";
+import KYCBlock from "@/components/candidates-single-pages/new-components/kycblock";
+import Personalblock from "@/components/candidates-single-pages/new-components/personalblock";
+import Workprofileblock from "@/components/candidates-single-pages/new-components/workprofileblock";
+import ReseachBlock from "@/components/candidates-single-pages/new-components/researchblock";
+import PresentationBlock from "@/components/candidates-single-pages/new-components/presentationblock";
+import PatentBlock from "@/components/candidates-single-pages/new-components/pretentblock";
+import CertificationBlock from "@/components/candidates-single-pages/new-components/Certificationblock";
+import Careerblock from "@/components/candidates-single-pages/new-components/carrerblock";
+import Projectblock from "@/components/candidates-single-pages/new-components/projectblock";
 
 const CandidateSingleDynamicV2 = () => {
   // const params = useParams();
   const { id } = useParams();
-  //const candidate = candidates.find((item) => item.id == id) || candidates[0];
+  const candidate = candidates.find((item) => item.id == id) || candidates[0];
 
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
   const [loading, setLoading] = useState(false);
   const [bookmarkLoading, setBookmarkLoading] = useState(false);
   const [Realcandidate, setRealCandidate] = useState({});
-  const [Realcandidatev2, setRealCandidatev2] = useState({});
 
   const [underdev, setUnderdev] = useState(false);
   useEffect(() => {
-    loadData();
+    fetchCandidate();
   }, [id]);
-
-  const loadData = async () => {
-    setLoading(true);
-
-    console.time("loadData");
-
-    try {
-      await Promise.all([
-        (async () => {
-          console.time("fetchCandidate");
-          await fetchCandidate();
-          console.timeEnd("fetchCandidate");
-        })(),
-
-        (async () => {
-          console.time("fetchCandidatev2");
-          await fetchCandidatev2();
-          console.timeEnd("fetchCandidatev2");
-        })(),
-      ]);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      console.timeEnd("loadData");
-      setLoading(false);
-    }
-  };
 
   const fetchCandidate = async () => {
     try {
@@ -81,18 +59,6 @@ const CandidateSingleDynamicV2 = () => {
       console.error(error);
     }
     setLoading(false);
-  };
-  const fetchCandidatev2 = async () => {
-    try {
-      const response = await axios.get(
-        `${apiurl}/api/candidate/candidateDetails/get_candidate_details_v2?candidateId=${id}`
-      );
-      if (response.data.success) {
-        setRealCandidatev2(response.data.data);
-      }
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   const [bookmarked, setBookmarked] = useState(false);
@@ -209,29 +175,294 @@ const CandidateSingleDynamicV2 = () => {
       {/* End MobileMenu */}
 
       {/* <!-- Job Detail Section --> */}
-      <section
-        className="candidate-detail-section"
-        style={{
-          backgroundColor: "#f5f7fc",
-        }}
-      >
+      <section className="candidate-detail-section">
         <div className="candidate-detail-outer">
           <div className="auto-container">
             <div className="row">
               <div className="content-column col-lg-8 col-md-12 col-sm-12">
-                {/* real UI */}
-                <Candidatedetails Newdata={Realcandidatev2 || []} />
+                <div className="candidate-block-five">
+                  <div className="inner-box">
+                    <div className="content">
+                      {/*  <figure className="image">
+                        <img
+                          width={100}
+                          height={100}
+                          src={
+                            Realcandidate?.userInformation?.profilePicture ||
+                            "/images/resource/no_user.png"
+                          }
+                          alt="avatar"
+                        />
+                      </figure> */}
+                      <figure className="image  mx-auto">
+                        <img
+                          className="w-100 h-100"
+                          src={
+                            Realcandidate?.userInformation?.profilePicture ||
+                            "/images/resource/no_user.png"
+                          }
+                          alt="avatar"
+                          style={{ objectFit: "cover" }}
+                        />
+                      </figure>
+                      <h4 className="name">
+                        {Realcandidate?.userInformation?.fullName || ""}
+                      </h4>
+
+                      <ul className="candidate-info">
+                        {Realcandidate?.userInformation?.currentJobTitle && (
+                          <li className="designation">
+                            {Realcandidate?.userInformation?.currentJobTitle ||
+                              ""}
+                          </li>
+                        )}
+
+                        {Realcandidate?.userInformation?.currentLocation && (
+                          <li>
+                            <span className="icon flaticon-map-locator"></span>
+                            {Realcandidate?.userInformation?.currentLocation ||
+                              ""}
+                          </li>
+                        )}
+                        <li>
+                          <span className="icon flaticon-clock"></span>Member
+                          Since,{" "}
+                          {new Date(
+                            Realcandidate?.userInformation?.createdAt
+                          ).toLocaleDateString("en-IN", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          }) || ""}
+                        </li>
+
+                        <li>
+                          <span className="icon flaticon-email"></span>
+                          {Realcandidate?.userInformation?.email || ""}
+                        </li>
+                        {/* className="text-muted text-center py-3" */}
+                        {/* <li>
+                          <span className="icon flaticon-phone-call"></span>
+                          {Realcandidate?.userInformation?.phoneNumber || ""}
+                        </li> */}
+                        <li>
+                          {Realcandidate?.userInformation?.phoneNumber ? (
+                            <>
+                              <span className="icon flaticon-phone-call"></span>
+                              {Realcandidate?.userInformation?.phoneNumber ||
+                                ""}
+                            </>
+                          ) : (
+                            <>
+                              <span className="text-muted text-center "></span>
+                              No phone number given
+                            </>
+                          )}
+                        </li>
+                      </ul>
+
+                      <ul className="post-tags">
+                        {Array.isArray(
+                          Realcandidate?.userInformation?.skills
+                        ) && Realcandidate.userInformation.skills.length > 0 ? (
+                          Realcandidate.userInformation.skills.map((val, i) => (
+                            <li key={i} className="m-1">
+                              {val?.trim().charAt(0).toUpperCase() +
+                                val?.trim().slice(1)}
+                            </li>
+                          ))
+                        ) : (
+                          <li className="text-muted text-center ">
+                            No skills given
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                {/*  <!-- Candidate block Five --> */}
+                {/* kyc information */}
+                <KYCBlock kycdata={Realcandidate?.kycResult || {}} />
+
+                <div className="job-detail">
+                  <p className="resume-headline fw-500">
+                    <strong>
+                      {Realcandidate?.userInformation?.resumeHeadline ? (
+                        Realcandidate.userInformation.resumeHeadline
+                      ) : (
+                        <span className="text-muted text-center py-3">
+                          No Headline Provided
+                        </span>
+                      )}
+                    </strong>
+                  </p>
+
+                  <p>
+                    {Realcandidate?.userInformation?.profileSummary ? (
+                      Realcandidate.userInformation.profileSummary
+                    ) : (
+                      <span className="text-muted text-center py-3">
+                        No Summary Provided
+                      </span>
+                    )}
+                  </p>
+
+                  <Personalblock
+                    dataog={Realcandidate.candidatePersonalDetails || {}}
+                  />
+
+                  {/*   <div className="video-outer">
+                    <h4>Candidates About</h4>
+                    <AboutVideo />
+                  </div> */}
+                  {/* <!-- About Video Box --> */}
+
+                  {/* <!-- Candidate Resume Start --> */}
+
+                  {/* Education */}
+                  <div className={`resume-outer theme-red`}>
+                    <div className="upper-title">
+                      <h4>Education</h4>
+                    </div>
+
+                    {Array.isArray(Realcandidate?.education) &&
+                    Realcandidate.education.length > 0 ? (
+                      Realcandidate.education.map((item) => (
+                        <div className="resume-block" key={item._id}>
+                          <div className="inner">
+                            <span className="name">
+                              {/* item.meta || */ ""}
+                            </span>
+                            <div className="title-box">
+                              <div className="info-box">
+                                <h3 style={{ maxWidth: "60%" }}>
+                                  {item.courseName ||
+                                    item.levelName ||
+                                    "Untitled Course"}
+                                </h3>
+                                <span>
+                                  {item.instituteName ||
+                                    item.board ||
+                                    "Institute not specified"}
+                                </span>
+                              </div>
+                              <div
+                                className="edit-box"
+                                style={{
+                                  position: "absolute",
+                                  right: 0,
+                                  top: 0,
+                                }}
+                              >
+                                <span
+                                  className="year"
+                                  style={{
+                                    minWidth: "120px",
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  {item.from || item.to
+                                    ? `${item.from || ""} - ${item.to || "Present"}`
+                                    : item.year_of_passing ||
+                                      "Year not specified"}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-muted text-center py-3">
+                        No education details provided
+                      </p>
+                    )}
+                  </div>
+
+                  <Workprofileblock data={Realcandidate.workSamples} />
+                  <ReseachBlock data={Realcandidate.researchPublications} />
+                  <PresentationBlock data={Realcandidate.userPresentations} />
+                  <PatentBlock data={Realcandidate.userPatents} />
+                  <CertificationBlock data={Realcandidate.userCertifications} />
+                  <Careerblock data={Realcandidate.candidateCareerProfile} />
+
+                  {/* Work & Experience */}
+                  <div className={`resume-outer theme-blue`}>
+                    <div className="upper-title">
+                      <h4>Work & Experience</h4>
+                    </div>
+
+                    {Array.isArray(Realcandidate?.employment) &&
+                    Realcandidate.employment.length > 0 ? (
+                      Realcandidate.employment.map((item) => (
+                        <div className="resume-block" key={item._id}>
+                          <div className="inner">
+                            <span className="name">
+                              {/* item.meta || */ ""}
+                            </span>
+                            <div className="title-box">
+                              <div className="info-box">
+                                <h3 style={{ maxWidth: "70%" }}>
+                                  {item.jobTitle || "Untitled Role"}
+                                </h3>
+                                <span>
+                                  {item.companyName || "Company not specified"}
+                                </span>
+                              </div>
+                              <div
+                                className="edit-box"
+                                style={{
+                                  position: "absolute",
+                                  right: 0,
+                                  top: 0,
+                                }}
+                              >
+                                <span
+                                  className="year"
+                                  style={{
+                                    minWidth: "120px",
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  {item.duration || "Duration not specified"}
+                                </span>
+                              </div>
+                            </div>
+                            <div
+                              className="text"
+                              dangerouslySetInnerHTML={{
+                                __html:
+                                  item.jobDescription ||
+                                  "<span style='color:red;'>No job description provided</span>",
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-muted text-center py-3">
+                        No work experience details provided
+                      </p>
+                    )}
+                  </div>
+
+                  <Projectblock data={Realcandidate.candidateProjects} />
+
+                  {/* <!-- Candidate Resume End --> */}
+
+                  {/*  <div className="portfolio-outer">
+                    <div className="row">
+                      <GalleryBox />
+                    </div>
+                  </div> */}
+                  {/* <!-- Portfolio --> */}
+                </div>
+                {/* End job-details */}
               </div>
               {/* End .content-column */}
 
-              <div
-                className="sidebar-column col-lg-4 col-md-12 col-sm-12 "
-                style={{
-                  backgroundColor: "#ffffff",
-                }}
-              >
+              <div className="sidebar-column col-lg-4 col-md-12 col-sm-12">
                 <aside className="sidebar">
-                  <div className="btn-box mt-2">
+                  <div className="btn-box">
                     {Realcandidate?.sidebarDetails?.resumeUrl && (
                       <a
                         className="theme-btn btn-style-one me-2"
@@ -239,7 +470,7 @@ const CandidateSingleDynamicV2 = () => {
                         download // 👈 This triggers a download instead of opening
                         target="_blank"
                       >
-                        Download Resume (v2)
+                        Download Resume
                       </a>
                     )}
 
@@ -291,7 +522,6 @@ const CandidateSingleDynamicV2 = () => {
                         <li>
                           <i className="icon fas fa-briefcase text-primary"></i>
                           <h5>Experience:</h5>
-
                           <span>
                             {(() => {
                               const exp =
@@ -481,7 +711,7 @@ const CandidateSingleDynamicV2 = () => {
                               target="_blank"
                               rel="noopener noreferrer"
                               key={item._id}
-                              style={{ marginRight: "4px" }}
+                              style={{ marginRight: "8px" }}
                             >
                               <i className={`fab ${item.icon}`}></i>
                             </a>
