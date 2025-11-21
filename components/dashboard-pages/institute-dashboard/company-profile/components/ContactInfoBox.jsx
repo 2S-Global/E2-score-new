@@ -107,7 +107,7 @@ const ContactInfoBox = ({ setActiveTab }) => {
         FetchDetails();
 
         setTimeout(() => {
-          setActiveTab("kyc");
+          setActiveTab("social");
         }, 2000);
       } else {
         setError(response.data.message || "Something went wrong.");

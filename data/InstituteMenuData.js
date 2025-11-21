@@ -22,9 +22,9 @@ module.exports = [
   },
   {
     id: 4,
-    name: "Student List",
+    name: "All Student List",
     icon: "la-paper-plane",
-    routePath: "#",
+    routePath: "/institute-dashboard/all-student-list",
     active: "",
   },
   // {
