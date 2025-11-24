@@ -163,7 +163,7 @@ const FormInfoBox = ({ setActiveTab }) => {
 
     try {
       const response = await axios.delete(
-        `${apiurl}/api/companyprofile/delete_cover_photo`,
+        `${apiurl}/api/instituteprofile/delete_cover_photo`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
