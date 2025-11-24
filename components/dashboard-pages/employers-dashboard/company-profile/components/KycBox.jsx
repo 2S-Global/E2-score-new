@@ -1,182 +1,284 @@
 "use client";
-
-import { useState } from "react";
-
+import React from "react";
+import { FaCheckCircle } from "react-icons/fa";
+import { FaRegCircleXmark } from "react-icons/fa6";
+import { useState, useEffect } from "react";
+import MessageComponent from "@/components/common/ResponseMsg";
+import CustomizedProgressBars from "@/components/common/loader";
+import KycModal from "./madals/kycmodal";
+import axios from "axios";
+import RazorpayPayment from "./Razorpay";
 const KycBox = () => {
-  const [uploadedFiles, setUploadedFiles] = useState({});
-  const [verifiedDocs, setVerifiedDocs] = useState({});
-  const [loadingDocs, setLoadingDocs] = useState({});
-  const [existingDocs, setExistingDocs] = useState({
-    pan: { number: "ABCDE1234F", name: "ABC Company", verified: true },
-  });
+  const [companyData, setCompanyData] = useState(null);
+  const [focusSection, setFocusSection] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [error, setError] = useState(null);
+  const [errorId, setErrorId] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [message_id, setMessageId] = useState(null);
+  const [reload, setReload] = useState(false);
+  const [sectionloading, setSectionloading] = useState(true);
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const token = localStorage.getItem("employer_token");
 
-  const handleFileUpload = (event, docType) => {
-    setUploadedFiles((prev) => ({
-      ...prev,
-      [docType]: event.target.files[0]?.name || "",
-    }));
-  };
+  useEffect(() => {
+    FetchData();
+  }, [token]);
 
-  const handleVerify = async (docType, apiLink) => {
-    if (!uploadedFiles[docType]) return;
+  useEffect(() => {
+    if (reload) {
+      FetchData();
+      setReload(false);
+    }
+  }, [reload]);
 
-    setLoadingDocs((prev) => ({ ...prev, [docType]: true }));
-
+  const FetchData = async () => {
+    setSectionloading(true);
     try {
-      const response = await fetch(apiLink, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ document: uploadedFiles[docType] }),
+      const response = await axios.get(`${apiurl}/api/companykyc/kyc`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
-      if (response.ok) {
-        setVerifiedDocs((prev) => ({ ...prev, [docType]: true }));
-      } else {
-        throw new Error("Verification failed");
+      if (response.data.success) {
+        setCompanyData(response.data.kyc);
       }
     } catch (error) {
-      console.error("Verification failed", error);
+      console.error(error);
     } finally {
-      setLoadingDocs((prev) => ({ ...prev, [docType]: false }));
+      setSectionloading(false);
     }
   };
 
-  const documents = [
-    {
-      id: "cin",
-      title: "CIN",
-      fields: ["CIN Number", "Name on CIN"],
-      api_link: "https://demo.com/api/pan",
-    },
-    {
-      id: "gst",
-      title: "GST",
-      fields: ["GST Number", "Name on GST"],
-      api_link: "https://demo.com/api/aadhaar",
-    },
-    {
-      id: "pan",
-      title: "PAN Card",
-      fields: ["PAN Number", "Name on PAN Card"],
-      api_link: "https://demo.com/api/dl",
-    },
-  ];
+  const openModalRH = (type) => {
+    setFocusSection(type);
+    setIsModalOpen(true);
+    document.body.style.overflow = "hidden"; // Disable background scrolling
+  };
 
+  const closeModalRH = () => {
+    setIsModalOpen(false);
+    document.body.style.overflow = "auto"; // Re-enable background scrolling
+  };
+  const handelpaymentsuccess = async (response) => {
+    setSectionloading(true);
+    try {
+      const res = await axios.post(
+        `${apiurl}/api/companykyc/verify-order`,
+        {
+          razorpay_payment_id: response.razorpay_payment_id,
+          razorpay_order_id: response.razorpay_order_id,
+          razorpay_signature: response.razorpay_signature,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.data.success) {
+        setError(null);
+        setErrorId(null);
+        setSuccess(res.data.verificationResult?.message || res.data.message);
+        setMessageId(Date.now());
+        setReload(true);
+
+        console.log("✅ Verified Order:", res.data.order);
+      } else {
+        setError(res.data.message);
+        setErrorId(Date.now());
+      }
+    } catch (error) {
+      console.error("❌ Verification API Error:", error);
+      setError("Failed to update KYC. Try again later.");
+      setErrorId(Date.now());
+    } finally {
+      setSectionloading(false);
+    }
+  };
   return (
-    <div className="ls-widget">
-      <div className="tabs-box">
-        <div className="widget-content">
-          <form className="default-form">
-            {documents.map((doc) => (
-              <div
-                key={doc.id}
-                className="row"
-                style={{ padding: "25px 0", borderBottom: "1px solid #ddd" }}
-              >
-                <h3 className="text-center pb-2">{doc.title}</h3>
-
-                {/* Show Existing Data If Present */}
-                {existingDocs[doc.id]?.verified ? (
-                  <div className="form-group col-lg-6 col-md-12">
-                    <p style={{ marginBottom: "5px" }}>
-                      <strong>{doc.fields[0]}:</strong>{" "}
-                      {existingDocs[doc.id].number}
-                    </p>
-                    <p style={{ marginBottom: "5px" }}>
-                      <strong>{doc.fields[1]}:</strong>{" "}
-                      {existingDocs[doc.id].name}
-                    </p>
-                    <p className="text-success" style={{ marginBottom: "0px" }}>
-                      <strong>Status:</strong> Verified ✅
-                    </p>
-                  </div>
-                ) : (
+    <>
+      <MessageComponent
+        error={error}
+        success={success}
+        errorId={errorId}
+        message_id={message_id}
+      />
+      {sectionloading ? (
+        <CustomizedProgressBars />
+      ) : (
+        <>
+          <div className="widget-title">
+            <h4>KYC</h4>
+            <i
+              className="la la-pencil-alt"
+              onClick={() => openModalRH("all")}
+              style={{ cursor: "pointer" }}
+            ></i>
+          </div>
+          <div className="widget-content">
+            <div className="row">
+              <div className="col-md-6 mb-4">
+                {" "}
+                <strong>Company CIN</strong>
+                {companyData?.cin_number && (
                   <>
-                    {doc.fields.map((field, index) => (
-                      <div
-                        className="form-group col-lg-4 col-md-12"
-                        key={index}
-                      >
-                        <label htmlFor={`${doc.id}-${index}`}>{field}</label>
-                        <input
-                          type="text"
-                          id={`${doc.id}-${index}`}
-                          name={`${doc.id}-${field.replace(/\s+/g, "")}`}
-                          placeholder={`Enter ${field}`}
+                    {companyData?.cin_verified ? (
+                      <FaCheckCircle className="ms-2 text-success" />
+                    ) : (
+                      <>
+                        {" "}
+                        <FaRegCircleXmark className="ms-2 text-danger" />{" "}
+                        <RazorpayPayment
+                          onSuccess={handelpaymentsuccess}
+                          documentType="cin"
                         />
-                      </div>
-                    ))}
-
-                    {/* File Upload & Verify Button */}
-                    <div className="form-group col-lg-4 col-md-12">
-                      <label htmlFor={`upload-${doc.id}`}>
-                        Upload {doc.title}
-                      </label>
-                      <div className="uploadButton d-flex align-items-center">
-                        <input
-                          className="uploadButton-input"
-                          type="file"
-                          name={`${doc.id}-attachment`}
-                          accept="image/*"
-                          id={`upload-${doc.id}`}
-                          required
-                          onChange={(e) => handleFileUpload(e, doc.id)}
-                        />
-                        <label
-                          className="uploadButton-button ripple-effect"
-                          htmlFor={`upload-${doc.id}`}
-                        >
-                          {uploadedFiles[doc.id] || `Browse ${doc.title}..`}
-                        </label>
-                        <button
-                          type="button"
-                          className={`theme-btn btn-style-two ml-2 ${
-                            verifiedDocs[doc.id] ? "btn-success" : "btn-primary"
-                          }`}
-                          onClick={() => handleVerify(doc.id, doc.api_link)}
-                          disabled={
-                            !uploadedFiles[doc.id] || loadingDocs[doc.id]
-                          }
-                          style={{
-                            marginLeft: "10px",
-                            backgroundColor: verifiedDocs[doc.id]
-                              ? "#28a745"
-                              : "#007bff",
-                            color: "#fff",
-                            border: "none",
-                            padding: "8px 12px",
-                            borderRadius: "5px",
-                            cursor: verifiedDocs[doc.id]
-                              ? "default"
-                              : "pointer",
-                          }}
-                        >
-                          {loadingDocs[doc.id]
-                            ? "Verifying..."
-                            : verifiedDocs[doc.id]
-                              ? "Verified ✅"
-                              : "Verify"}
-                        </button>
-                      </div>
-                    </div>
+                      </>
+                    )}
                   </>
                 )}
+                <div>
+                  <div className="mt-2">
+                    {companyData?.cin_number ? (
+                      <div
+                        className="text-secondary"
+                        style={{ lineHeight: 1.5 }}
+                      >
+                        <div>
+                          <span className="fw-semibold">Name :</span>{" "}
+                          {companyData?.cin_name || "N/A"}
+                        </div>
+                        <div>
+                          <span className="fw-semibold">CIN Number:</span>{" "}
+                          {companyData?.cin_number || "N/A"}
+                        </div>
+                      </div>
+                    ) : (
+                      <span
+                        className="text-primary fw-bold"
+                        style={{ cursor: "pointer", fontSize: "1rem" }}
+                        onClick={() => openModalRH("cin")}
+                      >
+                        Add CIN info
+                      </span>
+                    )}
+                  </div>
+                </div>{" "}
               </div>
-            ))}
-
-            {/* Save All Button (Centered) */}
-            <div
-              className="form-group d-flex justify-content-center"
-              style={{ paddingTop: "20px" }}
-            >
-              <button type="submit" className="theme-btn btn-style-one">
-                Save All
-              </button>
+              <div className="col-md-6 mb-4">
+                {" "}
+                <strong>Company GSTIN</strong>
+                {companyData?.gstin_number && (
+                  <>
+                    {companyData?.gstin_verified ? (
+                      <FaCheckCircle className="ms-2 text-success" />
+                    ) : (
+                      <>
+                        {" "}
+                        <FaRegCircleXmark className="ms-2 text-danger" />{" "}
+                        <RazorpayPayment
+                          onSuccess={handelpaymentsuccess}
+                          documentType="gstin"
+                        />
+                      </>
+                    )}
+                  </>
+                )}
+                <div>
+                  <div className="mt-2">
+                    {companyData?.gstin_number ? (
+                      <div
+                        className="text-secondary"
+                        style={{ lineHeight: 1.5 }}
+                      >
+                        <div>
+                          <span className="fw-semibold">Name :</span>{" "}
+                          {companyData?.gstin_name || "N/A"}
+                        </div>
+                        <div>
+                          <span className="fw-semibold">GSTIN Number:</span>{" "}
+                          {companyData?.gstin_number || "N/A"}
+                        </div>
+                      </div>
+                    ) : (
+                      <span
+                        className="text-primary fw-bold"
+                        style={{ cursor: "pointer", fontSize: "1rem" }}
+                        onClick={() => openModalRH("gstin")}
+                      >
+                        Add GSTIN info
+                      </span>
+                    )}
+                  </div>
+                </div>{" "}
+              </div>
+              <div className="col-md-6 mb-4">
+                {" "}
+                <strong>Company PAN</strong>
+                {companyData?.pan_number && (
+                  <>
+                    {companyData?.pan_verified ? (
+                      <FaCheckCircle className="ms-2 text-success" />
+                    ) : (
+                      <>
+                        {" "}
+                        <FaRegCircleXmark className="ms-2 text-danger" />{" "}
+                        <RazorpayPayment
+                          onSuccess={handelpaymentsuccess}
+                          documentType="pan"
+                        />
+                      </>
+                    )}
+                  </>
+                )}
+                <div>
+                  <div className="mt-2">
+                    {companyData?.pan_number ? (
+                      <div
+                        className="text-secondary"
+                        style={{ lineHeight: 1.5 }}
+                      >
+                        <div>
+                          <span className="fw-semibold">Name :</span>{" "}
+                          {companyData?.pan_name || "N/A"}
+                        </div>
+                        <div>
+                          <span className="fw-semibold">PAN Number:</span>{" "}
+                          {companyData?.pan_number || "N/A"}
+                        </div>
+                      </div>
+                    ) : (
+                      <span
+                        className="text-primary fw-bold"
+                        style={{ cursor: "pointer", fontSize: "1rem" }}
+                        onClick={() => openModalRH("pan")}
+                      >
+                        Add PAN info
+                      </span>
+                    )}
+                  </div>
+                </div>{" "}
+              </div>
             </div>
-          </form>
-        </div>
-      </div>
-    </div>
+          </div>
+        </>
+      )}
+      {isModalOpen && (
+        <KycModal
+          show={isModalOpen}
+          onClose={closeModalRH}
+          setError={setError}
+          setSuccess={setSuccess}
+          setMessageId={setMessageId}
+          setErrorId={setErrorId}
+          setReload={setReload}
+          focusSection={focusSection}
+          data={companyData}
+        />
+      )}
+    </>
   );
 };
 

@@ -34,7 +34,7 @@ const Index = () => {
             <div className="col-lg-12">
               {/* Employees Widget */}
               <div className="applicants-widget ls-widget">
-                <div className="widget-title"></div>
+                {/* <div className="widget-title"></div> */}
 
                 <div className="widget-content">
                   <Companytable />
