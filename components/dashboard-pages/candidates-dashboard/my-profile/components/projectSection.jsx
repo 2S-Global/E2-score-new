@@ -90,7 +90,7 @@ const ProjectSection = () => {
           <div className="widget-title">
             <h4>Projects</h4>
             {/* Open modal using an onClick function */}
-            <span
+            {/* <span
               onClick={() => openModalRH()}
               style={{
                 cursor: "pointer",
@@ -101,7 +101,12 @@ const ProjectSection = () => {
               }}
             >
               Add
-            </span>
+            </span> */}
+            <i
+              className="la la-pencil-alt"
+              onClick={() => openModalRH()}
+              style={{ cursor: "pointer", float: "right" }}
+            ></i>
           </div>
           {loading ? (
             <CustomizedProgressBars />

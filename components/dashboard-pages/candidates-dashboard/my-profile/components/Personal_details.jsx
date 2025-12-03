@@ -340,7 +340,7 @@ const PersonalSection = () => {
                 {/* Languages Section */}
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <h5 className="fw-bold mb-0">Languages</h5>
-                  <span
+                  {/*  <span
                     onClick={() => openModalRH("languages")}
                     style={{
                       cursor: "pointer",
@@ -350,7 +350,12 @@ const PersonalSection = () => {
                     }}
                   >
                     {personalDetails.languages.length > 0 ? "Edit" : "Add"}
-                  </span>
+                  </span> */}
+                  <i
+                    className="la la-pencil-alt"
+                    onClick={() => openModalRH("languages")}
+                    style={{ cursor: "pointer" }}
+                  ></i>
                 </div>
 
                 {/* Language Table */}

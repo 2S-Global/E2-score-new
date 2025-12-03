@@ -11,18 +11,18 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useParams, useSearchParams } from "next/navigation";
 import { validateDocuments } from "./validatePostJobDocuments";
 import MessageComponent from "@/components/common/ResponseMsg";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 import React, { useRef } from "react";
-import 'react-quill-new/dist/quill.snow.css';
+import "react-quill-new/dist/quill.snow.css";
 
 // Dynamically import ReactQuill to avoid SSR issues
-const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 const PostBoxForm = () => {
-  const params = useParams();  // for dynamic route parts like [jobId]
+  const params = useParams(); // for dynamic route parts like [jobId]
   const searchParams = useSearchParams(); // for query params like ?type=jobTitle
-  const id = params.jobId;   // from route /edit/[jobId]
-  const type = searchParams.get("type");        // from query string ?type=jobTitle
+  const id = params.jobId; // from route /edit/[jobId]
+  const type = searchParams.get("type"); // from query string ?type=jobTitle
 
   const [showBy, setShowBy] = useState("fixed"); // Track dropdown selection
   const [selectedJobTypes, setSelectedJobTypes] = useState([]);
@@ -138,7 +138,7 @@ const PostBoxForm = () => {
     advertiseCity: "",
     advertiseCityName: "",
     resumeRequired: false,
-    jobSkills: []
+    jobSkills: [],
   });
 
   useEffect(() => {
@@ -160,19 +160,21 @@ const PostBoxForm = () => {
     return () => clearTimeout(timeout);
   }, [type, formData.jobLocationType]);
 
-
   useEffect(() => {
     if (id) {
       const fetchData = async () => {
         try {
-          const response = await axios.get(`${apiurl}/api/jobposting/get_job_posting_details`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            params: {
-              jobId: id,
-            },
-          });
+          const response = await axios.get(
+            `${apiurl}/api/jobposting/get_job_posting_details`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              params: {
+                jobId: id,
+              },
+            }
+          );
 
           if (response.data.success && response.status === 200) {
             const job = response.data.data;
@@ -225,10 +227,11 @@ const PostBoxForm = () => {
               advertiseCityName: job.advertiseCityName || "",
               resumeRequired: job.resumeRequired || false,
               // jobSkills: job.jobSkills?.map((s) => s.Skill) || [],
-              jobSkills: job.jobSkills?.map((s) => ({
-                value: s.Skill,
-                label: s.Skill,
-              })) || [],
+              jobSkills:
+                job.jobSkills?.map((s) => ({
+                  value: s.Skill,
+                  label: s.Skill,
+                })) || [],
             });
           }
         } catch (error) {
@@ -266,9 +269,7 @@ const PostBoxForm = () => {
         console.log("Here is my all random skills::::'''''", data);
         setJobSkills(
           Array.from(
-            new Set(
-              data.filter(Boolean).map((s) => s.trim().toLowerCase())
-            )
+            new Set(data.filter(Boolean).map((s) => s.trim().toLowerCase()))
           ).map((skill) => ({
             label: skill.charAt(0).toUpperCase() + skill.slice(1),
             value: skill,
@@ -283,9 +284,6 @@ const PostBoxForm = () => {
     fetchRandomSkills();
   }, [apiurl]);
 
-
-
-
   const fetchSkills = async (inputValue) => {
     if (!inputValue || inputValue.length < 2) return; // avoid too frequent calls
     setLoading(true);
@@ -293,16 +291,25 @@ const PostBoxForm = () => {
       const token = localStorage.getItem("candidate_token");
 
       const response = await queueRequest(() =>
-        axios.get(`${apiurl}/api/sql/dropdown/matching_Skill?skill_name=${inputValue}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
+        axios.get(
+          `${apiurl}/api/sql/dropdown/matching_Skill?skill_name=${inputValue}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
       );
 
-      console.log("Data is coming successfully in the fontend:  ---tiktik outside //", response.data);
+      console.log(
+        "Data is coming successfully in the fontend:  ---tiktik outside //",
+        response.data
+      );
 
       if (response.status === 200 && Array.isArray(response.data.data)) {
         // convert API response to react-select format
-        console.log("Data is coming successfully in the fontend:  ---tiktik //", response.data);
+        console.log(
+          "Data is coming successfully in the fontend:  ---tiktik //",
+          response.data
+        );
 
         // const formattedOptions = response.data.data.map((skill) => ({
         //   label: skill.charAt(0).toUpperCase() + skill.slice(1),
@@ -327,11 +334,7 @@ const PostBoxForm = () => {
 
         // Normalize and remove duplicates
         const normalizedFetched = Array.from(
-          new Set(
-            fetched
-              .filter(Boolean)
-              .map((s) => s.trim().toLowerCase())
-          )
+          new Set(fetched.filter(Boolean).map((s) => s.trim().toLowerCase()))
         ).map((skill) => ({
           label: skill.charAt(0).toUpperCase() + skill.slice(1),
           value: skill,
@@ -352,7 +355,6 @@ const PostBoxForm = () => {
         ];
 
         setJobSkills(merged);
-
       }
     } catch (error) {
       console.error("Error fetching skills:", error);
@@ -383,9 +385,13 @@ const PostBoxForm = () => {
     const fetchSpecialization = async () => {
       // setLoading(true);
       try {
-        const response = await fetch(`${apiurl}/api/jobposting/all_job_specializations`);
+        const response = await fetch(
+          `${apiurl}/api/jobposting/all_job_specializations`
+        );
         const data = await response.json();
-        setSpecialization(data.data.map((item) => ({ label: item.name, value: item._id })));
+        setSpecialization(
+          data.data.map((item) => ({ label: item.name, value: item._id }))
+        );
       } catch (error) {
         console.error("Error fetching genders:", error);
       } finally {
@@ -393,15 +399,14 @@ const PostBoxForm = () => {
       }
     };
 
-
     const fetchJobType = async () => {
       // setLoading(true);
       try {
-        const response = await fetch(
-          `${apiurl}/api/jobposting/all_job_types`
-        );
+        const response = await fetch(`${apiurl}/api/jobposting/all_job_types`);
         const data = await response.json();
-        setJobType(data.data.map((item) => ({ label: item.name, value: item._id })));
+        setJobType(
+          data.data.map((item) => ({ label: item.name, value: item._id }))
+        );
       } catch (error) {
         console.error("Error fetching more info list:", error);
       } finally {
@@ -416,7 +421,9 @@ const PostBoxForm = () => {
           `${apiurl}/api/jobposting/all_job_benefits`
         );
         const data = await response.json();
-        setBenefits(data.data.map((item) => ({ label: item.name, value: item._id })));
+        setBenefits(
+          data.data.map((item) => ({ label: item.name, value: item._id }))
+        );
       } catch (error) {
         console.error("Error fetching marriage status list:", error);
       } finally {
@@ -444,7 +451,9 @@ const PostBoxForm = () => {
     const fetchExperienceLevel = async () => {
       // setLoading(true);
       try {
-        const response = await fetch(`${apiurl}/api/jobposting/all_job_experience_levels`);
+        const response = await fetch(
+          `${apiurl}/api/jobposting/all_job_experience_levels`
+        );
         const data = await response.json();
         setExperienceLevel(data.data);
       } catch (error) {
@@ -488,9 +497,13 @@ const PostBoxForm = () => {
     const fetchQualification = async () => {
       //  setLoading(true);
       try {
-        const response = await fetch(`${apiurl}/api/jobposting/all_job_qualifications`);
+        const response = await fetch(
+          `${apiurl}/api/jobposting/all_job_qualifications`
+        );
         const data = await response.json();
-        setQualification(data.data.map((item) => ({ label: item.name, value: item._id })));
+        setQualification(
+          data.data.map((item) => ({ label: item.name, value: item._id }))
+        );
       } catch (error) {
         console.error("Error fetching countries:", error);
       } finally {
@@ -514,7 +527,9 @@ const PostBoxForm = () => {
     const fetchCity = async () => {
       //  setLoading(true);
       try {
-        const response = await fetch(`${apiurl}/api/sql/dropdown/get_india_cities`);
+        const response = await fetch(
+          `${apiurl}/api/sql/dropdown/get_india_cities`
+        );
         const data = await response.json();
         setCity(data.data);
       } catch (error) {
@@ -535,7 +550,10 @@ const PostBoxForm = () => {
             },
           }
         );
-        console.log("Branches Data by mee should only data :) :", response.data.data);
+        console.log(
+          "Branches Data by mee should only data :) :",
+          response.data.data
+        );
         if (response.status === 200) {
           console.log("All Company Branches fetched successfully");
           setBranch(response.data.data);
@@ -582,10 +600,15 @@ const PostBoxForm = () => {
     { value: "week(s)", label: "week(s)" },
     { value: "day(s)", label: "day(s)" },
   ];
-
+  const [showError, setShowError] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault(); // prevent page reload
     console.log("Form Data Submitted:", formData);
+
+    if (formData.jobSkills.length === 0) {
+      setShowError(true);
+      return; // prevent submission
+    }
 
     const errorMsg = validateDocuments(formData);
     if (errorMsg) {
@@ -619,7 +642,6 @@ const PostBoxForm = () => {
 
         // console.log("Here is my actual el---dang dang", el);
 
-
         // el.classList?.add("error-highlight");
         // setTimeout(() => el.classList?.remove("error-highlight"), 2000);
       }
@@ -645,7 +667,7 @@ const PostBoxForm = () => {
             params: {
               jobId: id,
             },
-          },
+          }
         );
 
         if (!response.data.success) {
@@ -655,8 +677,6 @@ const PostBoxForm = () => {
         }
 
         setSuccess("Job post updated successfully!");
-
-
       } else {
         response = await axios.post(
           `${apiurl}/api/jobposting/add_job_posting_details`,
@@ -678,9 +698,11 @@ const PostBoxForm = () => {
         setSuccess("Candidate added successfully!");
       }
 
-
       if (response.data.success) {
-        console.log("✅ Job posting data is saved successfully:", response.data.data);
+        console.log(
+          "✅ Job posting data is saved successfully:",
+          response.data.data
+        );
 
         // ✅ Redirect to review page with returned jobId
         const jobId = response.data.jobId; // API returns saved job object
@@ -690,7 +712,6 @@ const PostBoxForm = () => {
         router.push(`/employers-dashboard/post-jobs/review-jobs/${jobId}`);
         // router.push(`/employers-dashboard/post-jobs/review-jobs`);
         // OR if you want to pass as query: /review-job?jobId=...&status=...
-
       } else {
         throw new Error(response.data.message || "An error occurred");
       }
@@ -698,13 +719,11 @@ const PostBoxForm = () => {
       if (!response.data.success) {
         throw new Error(response.data.message || "An error occurred");
       }
-
     } catch (error) {
       console.error("Upload failed:", error);
 
       setError("Failed. Try again.");
       setErrorId(Date.now());
-
     } finally {
       // setLoading(false);
     }
@@ -713,19 +732,26 @@ const PostBoxForm = () => {
   return (
     <>
       <form className="default-form" onSubmit={handleSubmit}>
-        <MessageComponent
-          error={error}
-          success={success}
-          errorId={errorId}
-        />
+        <MessageComponent error={error} success={success} errorId={errorId} />
         <div className="row">
           {/* <!-- Input --> */}
-          <div className="form-group col-lg-12 col-md-12 mt-2" id="jobTitleBlock">
+          <div
+            className="form-group col-lg-12 col-md-12 mt-2"
+            id="jobTitleBlock"
+          >
             <label htmlFor="jobTitleInput">
-              <b>Job Title{" "}</b>
+              <b>Job Title </b>
               <span style={{ color: "red" }}>*</span>
             </label>
-            <input type="text" name="jobTitle" ref={jobTitleRef} value={formData.jobTitle} onChange={handleChange} id="jobTitleInput" placeholder="Title" />
+            <input
+              type="text"
+              name="jobTitle"
+              ref={jobTitleRef}
+              value={formData.jobTitle}
+              onChange={handleChange}
+              id="jobTitleInput"
+              placeholder="Title"
+            />
             {/* {errorField === "jobTitle" && error && (
               <span className="text-danger" style={{ fontSize: "0.9rem" }}>
                 {error}
@@ -742,9 +768,12 @@ const PostBoxForm = () => {
             <textarea placeholder="Spent several years working on sheep on Wall Street. Had moderate success investing in Yugo's on Wall Street. Managed a small team buying and selling Pogo sticks for farmers. Spent several years licensing licorice in West Palm Beach, FL. Developed several new methods for working it banjos in the aftermarket. Spent a weekend importing banjos in West Palm Beach, FL.In this position, the Software Engineer collaborates with Evention's Development team to continuously enhance our current software solutions as well as create new solutions to eliminate the back-office operations and management challenges present" name="jobDescription" value={formData.jobDescription} ref={jobDescriptionRef} onChange={handleChange} id="jobDescription"></textarea>
           </div> */}
 
-          <div className="form-group col-lg-12 col-md-12" id="jobDescriptionBlock">
+          <div
+            className="form-group col-lg-12 col-md-12"
+            id="jobDescriptionBlock"
+          >
             <label htmlFor="jobDescription">
-              <b>Job Description{" "}</b>
+              <b>Job Description </b>
               <span style={{ color: "red" }}>*</span>
             </label>
             <ReactQuill
@@ -757,7 +786,7 @@ const PostBoxForm = () => {
                 setFormData((prev) => ({ ...prev, jobDescription: content }))
               }
               placeholder="Write detailed job description here..."
-              style={{ height: '250px', marginBottom: '40px' }}
+              style={{ height: "250px", marginBottom: "40px" }}
               className="form-group"
             />
           </div>
@@ -765,22 +794,33 @@ const PostBoxForm = () => {
           {/* <!-- Input --> */}
           <div className="form-group col-lg-6 col-md-12" id="mailBlock">
             <label htmlFor="getApplicationUpdateEmail">
-              <b>Get application updates{" "}</b>
+              <b>Get application updates </b>
               <span style={{ color: "red" }}>*</span>
             </label>
-            <input type="text" name="getApplicationUpdateEmail" ref={getApplicationUpdateEmailRef} id="getApplicationUpdateEmail" value={formData.getApplicationUpdateEmail} onChange={handleChange} placeholder="testing@gmail.com" />
+            <input
+              type="text"
+              name="getApplicationUpdateEmail"
+              ref={getApplicationUpdateEmailRef}
+              id="getApplicationUpdateEmail"
+              value={formData.getApplicationUpdateEmail}
+              onChange={handleChange}
+              placeholder="testing@gmail.com"
+            />
           </div>
 
           {/* <!-- Search Select --> */}
-          <div className="form-group col-lg-6 col-md-12" id="specializationBlock">
-            <label >Specialization </label>
+          <div
+            className="form-group col-lg-6 col-md-12"
+            id="specializationBlock"
+          >
+            <label>Specialization </label>
             <Select
               isMulti
               name="specialization"
               options={specialization}
               className="basic-multi-select"
               classNamePrefix="select"
-              value={specialization.filter(option =>
+              value={specialization.filter((option) =>
                 formData.specialization.includes(option.value)
               )}
               onChange={(selectedOptions) =>
@@ -795,31 +835,17 @@ const PostBoxForm = () => {
           </div>
 
           {/* <!-- Search Select for Skill Field --> */}
-          <div className="form-group col-lg-6 col-md-12" id="specializationBlock">
-            <label >Skills </label>
-            {/* <Select
-              isMulti
-              name="jobSkills"
-              options={jobSkills}
-              className="basic-multi-select"
-              classNamePrefix="select"
-              value={jobSkills.filter(option =>
-                formData.jobSkills.includes(option.value)
-              )}
-              onChange={(selectedOptions) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  jobSkills: selectedOptions
-                    ? selectedOptions.map((opt) => opt.value)
-                    : [],
-                }))
-              }
-            /> */}
+          <div
+            className="form-group col-lg-6 col-md-12"
+            id="specializationBlock"
+          >
+            <label>
+              Skills <span style={{ color: "red" }}>*</span>
+            </label>
             <Select
               isMulti
               name="jobSkills"
               options={jobSkills}
-              // isLoading={loading}
               className="basic-multi-select"
               classNamePrefix="select"
               placeholder="Type to search skills..."
@@ -836,14 +862,32 @@ const PostBoxForm = () => {
                 }))
               }
             />
+            {formData.jobSkills.length === 0 && showError && (
+              <div style={{ color: "red", marginTop: "5px" }}>
+                Please select at least one skill.
+              </div>
+            )}
           </div>
 
-          <div className="form-group col-lg-6 col-md-12" id="numberOfPositionAvaiable">
+          <div
+            className="form-group col-lg-6 col-md-12"
+            id="numberOfPositionAvaiable"
+          >
             <label htmlFor="positionAvaiable">
-              <b>Number of Positions Available{" "}</b>
+              <b>Number of Positions Available </b>
               <span style={{ color: "red" }}>*</span>
             </label>
-            <input type="number" name="positionAvailable" id="positionAvaiable" value={formData.positionAvailable} ref={positionAvailableRef} onChange={handleChange} min={1} placeholder="1" className="form-control" />
+            <input
+              type="number"
+              name="positionAvailable"
+              id="positionAvaiable"
+              value={formData.positionAvailable}
+              ref={positionAvailableRef}
+              onChange={handleChange}
+              min={1}
+              placeholder="1"
+              className="form-control"
+            />
           </div>
 
           {/* Job Type Block started from here -------    */}
@@ -860,7 +904,7 @@ const PostBoxForm = () => {
               // className={`basic-multi-select ${errorField === "jobType" ? "error-highlight" : ""}`}
               className="basic-multi-select"
               classNamePrefix="select"
-              value={jobType.filter(option =>
+              value={jobType.filter((option) =>
                 formData.jobType.includes(option.value)
               )}
               onChange={(selectedOptions) => {
@@ -874,13 +918,23 @@ const PostBoxForm = () => {
 
                 const isPartTimeSelected = selectedLabels.includes("Part-time");
 
-                console.log("print isPartTimeSelected is present or not---", isPartTimeSelected);
-
-                const isInternLikeSelected = selectedValues.some((v) =>
-                  ["Internship", "Contractual / Temporary", "Freelance"].includes(v)
+                console.log(
+                  "print isPartTimeSelected is present or not---",
+                  isPartTimeSelected
                 );
 
-                console.log("print isInternLikeSelected is present or not---", isInternLikeSelected);
+                const isInternLikeSelected = selectedValues.some((v) =>
+                  [
+                    "Internship",
+                    "Contractual / Temporary",
+                    "Freelance",
+                  ].includes(v)
+                );
+
+                console.log(
+                  "print isInternLikeSelected is present or not---",
+                  isInternLikeSelected
+                );
 
                 setFormData((prev) => ({
                   ...prev,
@@ -891,36 +945,48 @@ const PostBoxForm = () => {
                   toHours: isPartTimeSelected ? prev.toHours : "",
                   showBy: isPartTimeSelected ? prev.showBy : "",
                   // reset Intern/Contract fields if deselected
-                  contractLength: isInternLikeSelected ? prev.contractLength : "",
-                  contractPeriod: isInternLikeSelected ? prev.contractPeriod : "",
+                  contractLength: isInternLikeSelected
+                    ? prev.contractLength
+                    : "",
+                  contractPeriod: isInternLikeSelected
+                    ? prev.contractPeriod
+                    : "",
                 }));
               }}
             />
           </div>
           {/* Job Type Block ended here --*/}
 
-
           {/* Part-time => Expected hours */}
           {/* Fixed Timing for Part Time */}
 
           {isPartTime && (
-            <div className="form-group col-lg-12 col-md-12" id="expectedHoursBlock">
+            <div
+              className="form-group col-lg-12 col-md-12"
+              id="expectedHoursBlock"
+            >
               <label>Expected hours</label>
               <div className="d-flex gap-3">
                 {/* Show pay by Dropdown */}
                 <div className="flex-fill">
                   <label className="form-label small">Show by</label>
-                  <select className="form-select" value={formData.showBy || ""} onChange={(e) => {
-                    console.log("Show by value selected -- Chandra Sarkar : ", e.target.value);
-                    setFormData((prev) => ({
-                      ...prev,
-                      showBy: e.target.value,
-                      expectedHours: "",
-                      fromHours: "",
-                      toHours: "",
-                    }))
-                  }
-                  }>
+                  <select
+                    className="form-select"
+                    value={formData.showBy || ""}
+                    onChange={(e) => {
+                      console.log(
+                        "Show by value selected -- Chandra Sarkar : ",
+                        e.target.value
+                      );
+                      setFormData((prev) => ({
+                        ...prev,
+                        showBy: e.target.value,
+                        expectedHours: "",
+                        fromHours: "",
+                        toHours: "",
+                      }));
+                    }}
+                  >
                     {/* <option value="">Select</option> */}
                     <option value="">Select</option>
                     <option value="fixed">Fixed hours</option>
@@ -934,7 +1000,9 @@ const PostBoxForm = () => {
                 {/* Minimum Salary Textfield*/}
                 {formData.showBy && formData.showBy !== "range" && (
                   <div className="flex-fill">
-                    <label className="form-label small">{labelMap[formData.showBy]}</label>
+                    <label className="form-label small">
+                      {labelMap[formData.showBy]}
+                    </label>
                     <input
                       type="text"
                       name="expectedHours"
@@ -949,8 +1017,7 @@ const PostBoxForm = () => {
                           fromHours: "",
                           toHours: "",
                         }));
-                      }
-                      }
+                      }}
                     />
                   </div>
                 )}
@@ -1001,7 +1068,6 @@ const PostBoxForm = () => {
                 <div style={{ marginTop: "50px" }}>
                   <span className="form-label small mb-0">Hours per week</span>
                 </div>
-
               </div>
             </div>
           )}
@@ -1014,41 +1080,55 @@ const PostBoxForm = () => {
                 {/* Show pay by Dropdown */}
                 <div className="flex-fill">
                   <label className="form-label small">Length</label>
-                  <input type="number" name="contractLength" placeholder="" min={1} value={formData.contractLength ?? ""}
+                  <input
+                    type="number"
+                    name="contractLength"
+                    placeholder=""
+                    min={1}
+                    value={formData.contractLength ?? ""}
                     onChange={(e) => {
-                      console.log("Contract Length selected value -- Chandra Sarkar : ", e.target.value);
+                      console.log(
+                        "Contract Length selected value -- Chandra Sarkar : ",
+                        e.target.value
+                      );
                       setFormData((prev) => ({
                         ...prev,
                         contractLength: e.target.value,
-                      }))
-                    }
-                    } />
+                      }));
+                    }}
+                  />
                 </div>
 
                 {/* Single input for Fixed/Maximum/Minimum */}
                 {/* Minimum Salary Textfield*/}
                 <div className="flex-fill">
                   <label className="form-label small">Period</label>
-                  <select className="form-select" name="contractPeriod" value={formData.contractPeriod ?? ""}
+                  <select
+                    className="form-select"
+                    name="contractPeriod"
+                    value={formData.contractPeriod ?? ""}
                     onChange={(e) => {
-                      console.log("Contract Period selected value -- Chandra Sarkar : ", e.target.value);
+                      console.log(
+                        "Contract Period selected value -- Chandra Sarkar : ",
+                        e.target.value
+                      );
                       setFormData((prev) => ({
                         ...prev,
                         contractPeriod: e.target.value,
-                      }))
-                    }
-                    }>
-                    <option value="" disabled>Select period</option>
+                      }));
+                    }}
+                  >
+                    <option value="" disabled>
+                      Select period
+                    </option>
                     <option value="month">month(s)</option>
                     <option value="week">week(s)</option>
                     <option value="day">day(s)</option>
                   </select>
                 </div>
-
               </div>
             </div>
           )}
-
 
           {/* <!-- Job Expiry Date Previous Format --> */}
           {/*
@@ -1100,24 +1180,35 @@ const PostBoxForm = () => {
           </div>
         </div>  */}
 
-
           {/* Date Picker added by me --Chandra Sarkar -- starts from here */}
 
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             {/* form-group col-lg-6 col-md-12  -- For Testing */}
             {/* mb-3 form-group   -- Actual */}
-            <div className="form-group col-lg-6 col-md-12" id="jobExpiryDateBlock">
+            <div
+              className="form-group col-lg-6 col-md-12"
+              id="jobExpiryDateBlock"
+            >
               <label htmlFor="jobExpiryDate" className="form-label">
                 <b>
-                  Job Expiry Date{" "}
-                  <span style={{ color: "red" }}>*</span>
+                  Job Expiry Date <span style={{ color: "red" }}>*</span>
                 </b>
               </label>
               <DatePicker
-                value={formData.jobExpiryDate ? new Date(formData.jobExpiryDate) : null}
+                value={
+                  formData.jobExpiryDate
+                    ? new Date(formData.jobExpiryDate)
+                    : null
+                }
                 onChange={handleDateChange}
                 minDate={new Date()}
-                maxDate={new Date(today.getFullYear() + 1, today.getMonth(), today.getDate())}
+                maxDate={
+                  new Date(
+                    today.getFullYear() + 1,
+                    today.getMonth(),
+                    today.getDate()
+                  )
+                }
                 format="dd/MM/yyyy"
                 slotProps={{
                   textField: {
@@ -1145,14 +1236,17 @@ const PostBoxForm = () => {
 
           <div className="form-group col-lg-12 col-md-12" id="salaryBlock">
             <label>
-              <b>Salary{" "}</b>
+              <b>Salary </b>
               <span style={{ color: "red" }}>*</span>
             </label>
             <div className="d-flex gap-3">
               {/* Show pay by Dropdown */}
               <div className="flex-fill">
                 <label className="form-label small">Show pay by</label>
-                <select className="form-select" value={formData.salary.structure} ref={salaryStructureRef}
+                <select
+                  className="form-select"
+                  value={formData.salary.structure}
+                  ref={salaryStructureRef}
                   onChange={(e) => {
                     const structure = e.target.value;
 
@@ -1166,7 +1260,7 @@ const PostBoxForm = () => {
                         newSalary.amount = null;
                         break;
                       case "starting amount":
-                        newSalary.min = null;  // only starting amount relevant
+                        newSalary.min = null; // only starting amount relevant
                         newSalary.max = null;
                         newSalary.amount = null;
                         break;
@@ -1185,7 +1279,8 @@ const PostBoxForm = () => {
                     }
 
                     setFormData({ ...formData, salary: newSalary });
-                  }} >
+                  }}
+                >
                   <option value="range">Range</option>
                   <option value="starting amount">Starting amount</option>
                   <option value="maximum amount">Maximum amount</option>
@@ -1196,12 +1291,16 @@ const PostBoxForm = () => {
               {/* Currency Dropdown */}
               <div className="flex-fill">
                 <label className="form-label small">Currency</label>
-                <select className="form-select" value={formData.salary.currency} onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    salary: { ...formData.salary, currency: e.target.value },
-                  })
-                }>
+                <select
+                  className="form-select"
+                  value={formData.salary.currency}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      salary: { ...formData.salary, currency: e.target.value },
+                    })
+                  }
+                >
                   <option value="₹">₹</option>
                   <option value="$">$</option>
                   <option value="€">€</option>
@@ -1210,7 +1309,7 @@ const PostBoxForm = () => {
               </div>
 
               {/* Minimum Salary Textfield*/}
-              {(formData.salary.structure === "range") && (
+              {formData.salary.structure === "range" && (
                 <div className="flex-fill">
                   <label className="form-label small">Minimum</label>
                   <input
@@ -1229,7 +1328,9 @@ const PostBoxForm = () => {
               )}
               {/* Maximum Salary Textfield*/}
               <div className="flex-fill">
-                <label className="form-label small">{formData.salary.structure === "range" ? "Maximum" : "Amount"}</label>
+                <label className="form-label small">
+                  {formData.salary.structure === "range" ? "Maximum" : "Amount"}
+                </label>
                 <input
                   type="text"
                   value={
@@ -1253,24 +1354,27 @@ const PostBoxForm = () => {
                   }}
                   className="form-control"
                   placeholder={
-                    formData.salary.structure === "range" || formData.salary.structure === "maximum amount"
+                    formData.salary.structure === "range" ||
+                    formData.salary.structure === "maximum amount"
                       ? "800000"
                       : "400000"
                   }
                 />
               </div>
 
-
               {/* Rate Dropdown */}
               <div className="flex-fill">
                 <label className="form-label small">Rate</label>
-                <select className="form-select" value={formData.salary.rate}
+                <select
+                  className="form-select"
+                  value={formData.salary.rate}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
                       salary: { ...formData.salary, rate: e.target.value },
                     })
-                  }>
+                  }
+                >
                   <option value="per hour">per hour</option>
                   <option value="per day">per day</option>
                   <option value="per week">per week</option>
@@ -1300,7 +1404,7 @@ const PostBoxForm = () => {
               //     benefits: selectedOptions || [],
               //   }))
               // }
-              value={benefits.filter(option =>
+              value={benefits.filter((option) =>
                 formData.benefits.includes(option.value)
               )} // ensure proper value binding
               onChange={(selectedOptions) =>
@@ -1318,16 +1422,20 @@ const PostBoxForm = () => {
           <div className="form-group col-lg-6 col-md-12" id="careerLevelBlock">
             <label>
               <b>
-                Career Level{" "}
-                <span style={{ color: "red" }}>*</span>
+                Career Level <span style={{ color: "red" }}>*</span>
               </b>
             </label>
-            <select className="form-select" value={formData.careerLevel} onChange={(e) => {
-              setFormData((prev) => ({
-                ...prev,
-                careerLevel: e.target.value,
-              }));
-            }} ref={careerLevelRef}>
+            <select
+              className="form-select"
+              value={formData.careerLevel}
+              onChange={(e) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  careerLevel: e.target.value,
+                }));
+              }}
+              ref={careerLevelRef}
+            >
               <option value="">Select</option>
               {careerLevel.map((level) => (
                 <option key={level._id} value={level._id}>
@@ -1337,19 +1445,26 @@ const PostBoxForm = () => {
             </select>
           </div>
 
-          <div className="form-group col-lg-6 col-md-12" id="experienceLevelBlock">
+          <div
+            className="form-group col-lg-6 col-md-12"
+            id="experienceLevelBlock"
+          >
             <label>
               <b>
-                Experience Level{" "}
-                <span style={{ color: "red" }}>*</span>
+                Experience Level <span style={{ color: "red" }}>*</span>
               </b>
             </label>
-            <select className="chosen-single form-select" value={formData.experienceLevel} onChange={(e) => {
-              setFormData((prev) => ({
-                ...prev,
-                experienceLevel: e.target.value,
-              }));
-            }} ref={experienceLevelRef}>
+            <select
+              className="chosen-single form-select"
+              value={formData.experienceLevel}
+              onChange={(e) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  experienceLevel: e.target.value,
+                }));
+              }}
+              ref={experienceLevelRef}
+            >
               <option value="">Select</option>
               {experienceLevel.map((level) => (
                 <option key={level._id} value={level._id}>
@@ -1375,7 +1490,7 @@ const PostBoxForm = () => {
               //   }))
               // }
               // }
-              value={gender.filter(option =>
+              value={gender.filter((option) =>
                 formData.gender.includes(option.value)
               )} // ensure proper value binding
               onChange={(selectedOptions) =>
@@ -1392,13 +1507,17 @@ const PostBoxForm = () => {
           <div className="form-group col-lg-6 col-md-12" id="industryBlock">
             <label>
               <b>
-                Industry{" "}
-                <span style={{ color: "red" }}>*</span>
+                Industry <span style={{ color: "red" }}>*</span>
               </b>
             </label>
-            <select className="chosen-single form-select" value={formData.industry} onChange={(e) => {
-              setFormData((prev) => ({ ...prev, industry: e.target.value }))
-            }} ref={industryRef}>
+            <select
+              className="chosen-single form-select"
+              value={formData.industry}
+              onChange={(e) => {
+                setFormData((prev) => ({ ...prev, industry: e.target.value }));
+              }}
+              ref={industryRef}
+            >
               <option value="">Select</option>
               {industry.map((level) => (
                 <option key={level.id} value={level.id}>
@@ -1408,11 +1527,13 @@ const PostBoxForm = () => {
             </select>
           </div>
 
-          <div className="form-group col-lg-6 col-md-12" id="qualificationBlock">
+          <div
+            className="form-group col-lg-6 col-md-12"
+            id="qualificationBlock"
+          >
             <label>
               <b>
-                Qualification{" "}
-                <span style={{ color: "red" }}>*</span>
+                Qualification <span style={{ color: "red" }}>*</span>
               </b>
             </label>
             <Select
@@ -1429,7 +1550,7 @@ const PostBoxForm = () => {
               //     qualification: selectedOptions || [],
               //   }))
               // }
-              value={qualification.filter(option =>
+              value={qualification.filter((option) =>
                 formData.qualification.includes(option.value)
               )} // ensure proper value binding
               onChange={(selectedOptions) =>
@@ -1446,15 +1567,20 @@ const PostBoxForm = () => {
           {/* Job Location- Remote or On-site */}
           <div className="form-group col-lg-6 col-md-12">
             <label>
-              <b>Which option best describes this job's location?{" "}</b>
+              <b>Which option best describes this job's location? </b>
               <span style={{ color: "red" }}>*</span>
             </label>
-            <select className="chosen-single form-select" value={formData.jobLocationType} ref={jobLocationTypeRef} onChange={(e) => {
-              setFormData((prev) => ({
-                ...prev,
-                jobLocationType: e.target.value,
-              }));
-            }}>
+            <select
+              className="chosen-single form-select"
+              value={formData.jobLocationType}
+              ref={jobLocationTypeRef}
+              onChange={(e) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  jobLocationType: e.target.value,
+                }));
+              }}
+            >
               <option value="">Select</option>
               <option value="remote">Remote</option>
               <option value="on-site">On-site</option>
@@ -1467,18 +1593,24 @@ const PostBoxForm = () => {
             <>
               <div className="form-group col-lg-6 col-md-12" id="countryBlock">
                 <label>
-                  <b>Country{" "}</b>
+                  <b>Country </b>
                   <span style={{ color: "red" }}>*</span>
                 </label>
-                <select className="chosen-single form-select" value={formData.country}
+                <select
+                  className="chosen-single form-select"
+                  value={formData.country}
                   onChange={(e) => {
-                    console.log("Country selected value -- Chandra Sarkar : ", e.target.value);
+                    console.log(
+                      "Country selected value -- Chandra Sarkar : ",
+                      e.target.value
+                    );
                     setFormData((prev) => ({
                       ...prev,
                       country: e.target.value,
-                    }))
-                  }
-                  } ref={countryRef}>
+                    }));
+                  }}
+                  ref={countryRef}
+                >
                   <option value="">Select</option>
                   {country.map((level) => (
                     <option key={level.id} value={level.id}>
@@ -1491,18 +1623,24 @@ const PostBoxForm = () => {
               {/* <!-- Input --> */}
               <div className="form-group col-lg-6 col-md-12" id="cityBlock">
                 <label>
-                  <b>City{" "}</b>
+                  <b>City </b>
                   <span style={{ color: "red" }}>*</span>
                 </label>
-                <select className="chosen-single form-select" value={formData.city}
+                <select
+                  className="chosen-single form-select"
+                  value={formData.city}
                   onChange={(e) => {
-                    console.log("City selected value -- Chandra Sarkar : ", e.target.value);
+                    console.log(
+                      "City selected value -- Chandra Sarkar : ",
+                      e.target.value
+                    );
                     setFormData((prev) => ({
                       ...prev,
                       city: e.target.value,
-                    }))
-                  }
-                  } ref={cityRef}>
+                    }));
+                  }}
+                  ref={cityRef}
+                >
                   <option value="">Select</option>
                   {city.map((level) => (
                     <option key={level.id} value={level.id}>
@@ -1515,18 +1653,24 @@ const PostBoxForm = () => {
               {/* brance dropdown */}
               <div className="form-group col-lg-6 col-md-12" id="branchBlock">
                 <label>
-                  <b>Branch{" "}</b>
+                  <b>Branch </b>
                   <span style={{ color: "red" }}>*</span>
                 </label>
-                <select className="chosen-single form-select" value={formData.branch}
+                <select
+                  className="chosen-single form-select"
+                  value={formData.branch}
                   onChange={(e) => {
-                    console.log("Branch selected value -- Chandra Sarkar : ", e.target.value);
+                    console.log(
+                      "Branch selected value -- Chandra Sarkar : ",
+                      e.target.value
+                    );
                     setFormData((prev) => ({
                       ...prev,
                       branch: e.target.value,
-                    }))
-                  }
-                  } ref={branchRef}>
+                    }));
+                  }}
+                  ref={branchRef}
+                >
                   <option value="">Select</option>
                   {branch.map((level) => (
                     <option key={level._id} value={level._id}>
@@ -1537,9 +1681,12 @@ const PostBoxForm = () => {
               </div>
 
               {/* <!-- Input --> */}
-              <div className="form-group col-lg-12 col-md-12" id="completeAddressBlock">
+              <div
+                className="form-group col-lg-12 col-md-12"
+                id="completeAddressBlock"
+              >
                 <label>
-                  <b>Complete Address{" "}</b>
+                  <b>Complete Address </b>
                   <span style={{ color: "red" }}>*</span>
                 </label>
                 <input
@@ -1549,28 +1696,31 @@ const PostBoxForm = () => {
                   placeholder="329 Queensberry Street, North Melbourne VIC 3051, Australia."
                   value={formData.address}
                   onChange={(e) => {
-                    console.log("Complete Address selected value -- Chandra Sarkar : ", e.target.value);
+                    console.log(
+                      "Complete Address selected value -- Chandra Sarkar : ",
+                      e.target.value
+                    );
                     setFormData((prev) => ({
                       ...prev,
                       address: e.target.value,
-                    }))
-                  }
-                  }
+                    }));
+                  }}
                 />
               </div>
             </>
           )}
 
-
           {/* Show when Remote */}
           {formData.jobLocationType === "remote" && (
-            <div className="form-group col-lg-12 col-md-12" ref={advertiseCityRef}>
+            <div
+              className="form-group col-lg-12 col-md-12"
+              ref={advertiseCityRef}
+            >
               <label className="form-label">
-                <b>Do you want to advertise your job in a specific city?{" "}</b>
+                <b>Do you want to advertise your job in a specific city? </b>
                 <span style={{ color: "red" }}>*</span>
               </label>
               <div className="d-flex gap-3">
-
                 {/* No Option */}
                 <label className="form-check-label">
                   <input
@@ -1583,9 +1733,8 @@ const PostBoxForm = () => {
                         ...prev,
                         advertiseCity: e.target.value,
                         advertiseCityName: "",
-                      }))
-                    }
-                    }
+                      }));
+                    }}
                     className="form-check-input me-2"
                   />
                   No (Anywhere in India)
@@ -1599,32 +1748,41 @@ const PostBoxForm = () => {
                     value="Yes"
                     checked={formData.advertiseCity === "Yes"}
                     onChange={(e) => {
-                      console.log("Advertise City for Yes Option -- Chandra Sarkar : ", e.target);
+                      console.log(
+                        "Advertise City for Yes Option -- Chandra Sarkar : ",
+                        e.target
+                      );
                       setFormData((prev) => ({
                         ...prev,
                         advertiseCity: e.target.value,
-                      }))
-                    }
-                    }
+                      }));
+                    }}
                     className="form-check-input me-2"
                   />
                   Yes
                 </label>
-
               </div>
             </div>
           )}
           {/* <!-- Input --> */}
           {/* Show when Remote + Yes */}
-          {formData.jobLocationType === "remote" && formData.advertiseCity === "Yes" && (
-            <div className="form-group col-lg-6 col-md-12">
-              <label>
-                <b>Where do you want to advertise this job?{" "}</b>
-                <span style={{ color: "red" }}>*</span>
-              </label>
-              <input type="text" name="advertiseCityName" value={formData.advertiseCityName} onChange={handleChange} placeholder="" ref={advertiseCityNameRef} />
-            </div>
-          )}
+          {formData.jobLocationType === "remote" &&
+            formData.advertiseCity === "Yes" && (
+              <div className="form-group col-lg-6 col-md-12">
+                <label>
+                  <b>Where do you want to advertise this job? </b>
+                  <span style={{ color: "red" }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="advertiseCityName"
+                  value={formData.advertiseCityName}
+                  onChange={handleChange}
+                  placeholder=""
+                  ref={advertiseCityNameRef}
+                />
+              </div>
+            )}
 
           {/* ckeckbox */}
           <div className="mb-3 form-group" id="requireRemumeBlock">
@@ -1638,14 +1796,10 @@ const PostBoxForm = () => {
                   setFormData((prev) => ({
                     ...prev,
                     resumeRequired: e.target.checked,
-                  }))
-                }
-                }
+                  }));
+                }}
               />
-              <label
-                className="form-check-label"
-                htmlFor="rememberMe"
-              >
+              <label className="form-check-label" htmlFor="rememberMe">
                 Resume is required
               </label>
             </div>
@@ -1662,15 +1816,15 @@ const PostBoxForm = () => {
             }}>Hello Print</button>
           </div> */}
         </div>
-      </form >
+      </form>
       <style jsx>{`
-      .highlight {
-        background-color: #fff89a;
-        border-radius: 8px;
-        padding: 12px;
-        transition: background-color 0.3s ease;
-      }
-    `}</style>
+        .highlight {
+          background-color: #fff89a;
+          border-radius: 8px;
+          padding: 12px;
+          transition: background-color 0.3s ease;
+        }
+      `}</style>
     </>
   );
 };

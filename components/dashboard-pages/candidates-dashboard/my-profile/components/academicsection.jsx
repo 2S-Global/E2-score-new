@@ -148,7 +148,7 @@ const Academysection = () => {
             <div className="tabs-box">
               <div className="widget-title">
                 <h4>Academics</h4>
-                <span
+                {/* <span
                   onClick={() => openModalRH()}
                   style={{
                     cursor: "pointer",
@@ -159,7 +159,12 @@ const Academysection = () => {
                   }}
                 >
                   Add
-                </span>
+                </span> */}
+                <i
+                  className="la la-pencil-alt"
+                  onClick={() => openModalRH()}
+                  style={{ cursor: "pointer" }}
+                ></i>
               </div>
               <CustomizedProgressBars />
             </div>
@@ -171,7 +176,7 @@ const Academysection = () => {
             <div className="tabs-box">
               <div className="widget-title">
                 <h4>Academics</h4>
-                <span
+                {/* <span
                   onClick={() => openModalRH()}
                   style={{
                     cursor: "pointer",
@@ -182,7 +187,12 @@ const Academysection = () => {
                   }}
                 >
                   Add
-                </span>
+                </span> */}
+                <i
+                  className="la la-pencil-alt"
+                  onClick={() => openModalRH()}
+                  style={{ cursor: "pointer" }}
+                ></i>
               </div>
 
               {/* Display Resume Headline */}

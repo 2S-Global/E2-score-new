@@ -92,7 +92,7 @@ const Employsectionmain = () => {
         <div className="tabs-box">
           <div className="widget-title">
             <h4>Employment </h4>
-            <span
+            {/* <span
               onClick={openModalRH}
               style={{
                 cursor: "pointer",
@@ -103,7 +103,12 @@ const Employsectionmain = () => {
               }}
             >
               Add
-            </span>
+            </span> */}
+            <i
+              className="la la-pencil-alt"
+              onClick={openModalRH}
+              style={{ cursor: "pointer", float: "right" }}
+            ></i>
           </div>
           {loading ? (
             <CustomizedProgressBars />

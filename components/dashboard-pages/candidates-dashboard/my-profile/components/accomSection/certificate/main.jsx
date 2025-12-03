@@ -39,7 +39,7 @@ const CertificateMain = ({ setReload, list = [], setError, setSuccess }) => {
       <div className="pt-4">
         <h5>
           Certification
-          <span
+          {/*  <span
             onClick={() => openModal()}
             style={{
               cursor: "pointer",
@@ -50,7 +50,12 @@ const CertificateMain = ({ setReload, list = [], setError, setSuccess }) => {
             }}
           >
             Add
-          </span>
+          </span> */}
+          <i
+            className="la la-pencil-alt"
+            onClick={() => openModal()}
+            style={{ cursor: "pointer", float: "right" }}
+          ></i>
         </h5>
         <span className="text-muted mb-2 mt-1">
           Add details of certifications you have completed

@@ -68,7 +68,7 @@ const ProfilesumerySection = () => {
           <div className="widget-title">
             <h4>Profile summary</h4>
             {/* Open modal using an onClick function */}
-            <span
+            {/* <span
               onClick={openModalRH}
               style={{
                 cursor: "pointer",
@@ -79,7 +79,12 @@ const ProfilesumerySection = () => {
               }}
             >
               {profilesummary?.trim() ? "Edit" : "Add"}
-            </span>
+            </span> */}
+            <i
+              className="la la-pencil-alt"
+              onClick={openModalRH}
+              style={{ cursor: "pointer" }}
+            ></i>
           </div>
           {/* Display Resume Headline */}
 

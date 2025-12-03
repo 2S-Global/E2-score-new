@@ -73,7 +73,7 @@ const OtherskillSection = () => {
 
   useEffect(() => {
     if (reload) {
-       fetchSkills();
+      fetchSkills();
       setReload(false);
     }
   }, [reload]);
@@ -91,7 +91,7 @@ const OtherskillSection = () => {
         <div className="tabs-box">
           <div className="widget-title">
             <h4>Other Skills</h4>
-            <span
+            {/* <span
               onClick={() => openModalRH()}
               style={{
                 cursor: "pointer",
@@ -102,7 +102,12 @@ const OtherskillSection = () => {
               }}
             >
               Add
-            </span>
+            </span> */}
+            <i
+              className="la la-pencil-alt"
+              onClick={() => openModalRH()}
+              style={{ cursor: "pointer", float: "right" }}
+            ></i>
           </div>
 
           <div className="widget-content">

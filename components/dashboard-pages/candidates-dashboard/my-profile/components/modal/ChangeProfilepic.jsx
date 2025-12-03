@@ -135,7 +135,7 @@ const Profilepic = ({
               <button
                 className="btn btn-danger"
                 onClick={() => {
-                  setSelectedImage("/default-profile.png");
+                  setSelectedImage("/images/resource/no_user.png");
                   setFile(null);
                 }}
               >

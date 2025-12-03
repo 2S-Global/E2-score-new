@@ -39,7 +39,7 @@ const PatentMain = ({ setReload, list = [], setError, setSuccess }) => {
       <div className="pt-4">
         <h5>
           Patent
-          <span
+          {/* <span
             onClick={() => openModal()}
             style={{
               cursor: "pointer",
@@ -50,7 +50,12 @@ const PatentMain = ({ setReload, list = [], setError, setSuccess }) => {
             }}
           >
             Add
-          </span>
+          </span> */}
+          <i
+            className="la la-pencil-alt"
+            onClick={() => openModal()}
+            style={{ cursor: "pointer", float: "right" }}
+          ></i>
         </h5>
         <span className="text-muted mb-2 mt-1">
           Add details of patents you have filed
@@ -107,7 +112,7 @@ const PatentMain = ({ setReload, list = [], setError, setSuccess }) => {
 
               <br />
               <span
-                style={{ textAlign: "justify" }}
+                style={{ textAlign: "justify", display: "inline-block" }}
                 dangerouslySetInnerHTML={{ __html: item.description }}
               ></span>
             </div>

@@ -91,7 +91,7 @@ const ItkeySection = () => {
         <div className="tabs-box">
           <div className="widget-title">
             <h4>IT Skills</h4>
-            <span
+            {/*  <span
               onClick={() => openModalRH()}
               style={{
                 cursor: "pointer",
@@ -102,7 +102,12 @@ const ItkeySection = () => {
               }}
             >
               Add
-            </span>
+            </span> */}
+            <i
+              className="la la-pencil-alt"
+              onClick={() => openModalRH()}
+              style={{ cursor: "pointer", float: "right" }}
+            ></i>
           </div>
 
           <div className="widget-content">

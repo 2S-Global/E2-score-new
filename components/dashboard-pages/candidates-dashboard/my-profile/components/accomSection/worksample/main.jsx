@@ -24,7 +24,7 @@ const Workmain = ({ setReload, list = [], setError, setSuccess }) => {
       <div className="pt-4">
         <h5>
           Work Profile
-          <span
+          {/* <span
             onClick={() => openModal()}
             style={{
               cursor: "pointer",
@@ -35,7 +35,12 @@ const Workmain = ({ setReload, list = [], setError, setSuccess }) => {
             }}
           >
             Add
-          </span>
+          </span> */}
+          <i
+            className=" la la-pencil-alt"
+            onClick={() => openModal()}
+            style={{ cursor: "pointer", float: "right" }}
+          ></i>
         </h5>
         <span className="text-muted mb-2 mt-1">
           Link relevant work Profile (e.g. GitHub, Behance)
@@ -87,7 +92,7 @@ const Workmain = ({ setReload, list = [], setError, setSuccess }) => {
               <br />
 
               <span
-                style={{ textAlign: "justify" }}
+                style={{ textAlign: "justify", display: "inline-block" }}
                 dangerouslySetInnerHTML={{ __html: item.description }}
               ></span>
             </div>
