@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "Quikchek - Refund",
-  description: "Quikchek",
+  title: "GEISIL - Refund",
+  description: "GEISIL - Refund",
 };
 
 export default function Layout({ children }) {
