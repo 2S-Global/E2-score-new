@@ -6,12 +6,7 @@ const Address = () => {
       id: 1,
       iconName: "placeholder",
       title: "Address",
-      text: (
-        <>
-          329 Queensberry Street, North
-          <br /> Melbourne VIC 3051, Australia.
-        </>
-      ),
+      text: <> Kolkata | INDIA</>,
     },
     {
       id: 2,
@@ -19,8 +14,8 @@ const Address = () => {
       title: "Call Us",
       text: (
         <>
-          <a href="tel:+4733378901" className="phone">
-            123 456 7890
+          <a href="tel:+9831823898" className="phone">
+            9831823898
           </a>
         </>
       ),
@@ -32,7 +27,7 @@ const Address = () => {
       text: (
         <>
           {" "}
-          <a href="#">support@e2score.com</a>
+          <a href="mailto:info@geisil.com">info@geisil.com</a>
         </>
       ),
     },
@@ -44,7 +39,7 @@ const Address = () => {
           className="contact-block col-lg-4 col-md-6 col-sm-12"
           key={item.id}
         >
-          <div className="inner-box">
+          <div className="inner-box text-center">
             <span className="icon">
               <Image
                 width={51}
