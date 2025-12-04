@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "GEISIL - About",
-  description: "GEISIL Job portal",
+  title: "GEISIL - Refund",
+  description: "GEISIL - Refund",
 };
 
 export default function Layout({ children }) {
