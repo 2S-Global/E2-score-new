@@ -77,9 +77,9 @@ const RazorpayPayment = ({ onSuccess, documentType }) => {
           if (onSuccess) onSuccess(paymentResponse);
         },
         prefill: {
-          name: "User Name",
-          email: "user@example.com",
-          contact: "9999999999",
+          name: "",
+          email: "",
+          contact: "",
         },
         theme: { color: "#3399cc" },
       };

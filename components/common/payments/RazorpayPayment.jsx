@@ -54,9 +54,9 @@ const RazorpayPayment = ({ amount, razorpayKey, onSuccess, paymentIds }) => {
           if (onSuccess) onSuccess(response, pay, pids);
         },
         prefill: {
-          name: "User Name",
-          email: "user@example.com",
-          contact: "9999999999",
+          name: "",
+          email: "",
+          contact: "",
         },
         theme: {
           color: "#3399cc",

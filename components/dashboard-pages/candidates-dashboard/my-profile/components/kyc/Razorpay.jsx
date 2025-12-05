@@ -69,7 +69,7 @@ const RazorpayPayment = ({ onSuccess, documentType }) => {
         key: razorpayKey,
         amount: order.amount, // amount in paise from backend
         currency: "INR",
-        name: "Quikchek",
+        name: "GEISIL",
         description: "Payment for Verification",
         order_id: order.id,
         handler: function (paymentResponse) {
@@ -77,9 +77,9 @@ const RazorpayPayment = ({ onSuccess, documentType }) => {
           if (onSuccess) onSuccess(paymentResponse);
         },
         prefill: {
-          name: "User Name",
-          email: "user@example.com",
-          contact: "9999999999",
+          name: "",
+          email: "",
+          contact: "",
         },
         theme: { color: "#3399cc" },
       };
