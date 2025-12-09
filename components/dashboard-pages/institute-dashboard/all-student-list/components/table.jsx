@@ -58,8 +58,8 @@ const Companytable = ({ setRefresh, refresh }) => {
         setErrorId(Date.now());
       }
     } catch (err) {
-      setError("Error fetching companies. Please try again.");
-      setErrorId(Date.now());
+      //setError("Error fetching companies. Please try again.");
+      // setErrorId(Date.now());
     } finally {
       setLoading(false);
     }
