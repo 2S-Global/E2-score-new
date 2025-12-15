@@ -336,3 +336,22 @@ img.rounded-circle {
 .text-instagram-gradient:hover {
   filter: brightness(0.85);
 }
+
+.feature-card {
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.bg-blue-soft {
+  background: linear-gradient(135deg, #eef6ff, #ffffff);
+}
+.bg-saas {
+  background: linear-gradient(135deg, #f7f2ff, #ffffff);
+}
+.bg-crypto {
+  background: linear-gradient(135deg, #fff7f0, #ffffff);
+}
