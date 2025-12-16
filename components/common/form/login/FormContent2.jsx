@@ -71,7 +71,13 @@ const FormContent2 = () => {
         router.push("/candidates-dashboard/dashboard");
       } else if (role == "2") {
         localStorage.setItem("employer_token", token);
-        router.push("/employers-dashboard/dashboard");
+        if (response.data.not_dashboard == true) {
+          router.push(
+            "/employers-dashboard/company-profile?c9b1e5a4-1d5f-4b9e-9c32-8c0f4a9e1d3b=true"
+          );
+        } else {
+          router.push("/employers-dashboard/dashboard");
+        }
       } else if (role == "3") {
         localStorage.setItem("Institute_token", token);
         router.push("/institute-dashboard/dashboard");

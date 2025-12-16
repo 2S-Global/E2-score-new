@@ -11,6 +11,7 @@ import MessageComponent from "@/components/common/ResponseMsg";
 import axios from "axios";
 
 import { Search } from "lucide-react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 const FormInfoBox = ({ setActiveTab }) => {
   const [industries, setIndustry] = useState([]);
@@ -24,6 +25,23 @@ const FormInfoBox = ({ setActiveTab }) => {
   const [message_id, setMessageId] = useState(null);
   const [success, setSuccess] = useState(null);
   const token = localStorage.getItem("employer_token");
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const showmessage =
+    searchParams.get("c9b1e5a4-1d5f-4b9e-9c32-8c0f4a9e1d3b") === "true";
+
+  useEffect(() => {
+    if (showmessage) {
+      setSuccess("Please Update Your CIN Number");
+      setMessageId(Date.now());
+
+      // Remove all query params
+      router.replace(pathname);
+    }
+  }, [showmessage]);
 
   useEffect(() => {
     fetchindustries();
