@@ -184,6 +184,14 @@ const FormInfoBox = ({ setActiveTab }) => {
     setErrorId(null);
     setSuccess(null);
     setMessageId(null);
+
+    if (formdata.company_type === "") {
+      setError("Please Select Company Type");
+      setErrorId(Date.now());
+      setLoading(false);
+      setSubmitting(false);
+      return;
+    }
     try {
       const payload = new FormData();
       for (const key in formdata) {
@@ -335,7 +343,7 @@ const FormInfoBox = ({ setActiveTab }) => {
         method="post"
       >
         {/* Radio button company_type_list */}
-        <div className="form-group">
+        <div className="form-group" id="company_type">
           <label className="mb-1">Company Type</label>
           <span className="text-danger ms-1">*</span>
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 //new component
@@ -7,6 +7,7 @@ import { Search } from "lucide-react";
 import AutoDetectPhoneInput from "../phonenumber";
 const FormContentcom = () => {
   const [formData, setFormData] = useState({
+    company_type: "",
     cin_id: "",
     cin: "",
     name: "",
@@ -19,6 +20,7 @@ const FormContentcom = () => {
   const [errorId, setErrorId] = useState(null);
   const [success, setSuccess] = useState(null);
   const [message_id, setMessageId] = useState(null);
+  const [company_type_list, setCompanyTypeList] = useState([]);
   const router = useRouter();
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -35,6 +37,16 @@ const FormContentcom = () => {
 
     setErrorId(null);
     setMessageId(null);
+
+    if (formData.company_type == "") {
+      setError("Please Select Company Type");
+      setErrorId(Date.now());
+      setLoading(false);
+
+      window.location.href = "#company_type";
+
+      return;
+    }
 
     try {
       const response = await axios.post(
@@ -61,6 +73,13 @@ const FormContentcom = () => {
   };
 
   const handelcinsubmit = async () => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setErrorId(null);
+    setSuccess(null);
+    setMessageId(null);
+
     const regex =
       /^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$/;
     if (regex.test(formData.cin)) {
@@ -111,7 +130,35 @@ const FormContentcom = () => {
     setFormData({ ...formData, phone_number: phone });
   };
 
+  const fetchcompanylist = async () => {
+    try {
+      const response = await axios.get(
+        `${apiurl}/api/companyprofile/get_company_types`
+      );
+      if (response.data.success) {
+        setCompanyTypeList(response.data.data);
+      }
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    fetchcompanylist();
+  }, [apiurl]);
+
   const [disablesubmit, setDisableSubmit] = useState(false);
+  const [needcin, setNeedcin] = useState(false);
+  useEffect(() => {
+    if (formData.company_type) {
+      setNeedcin(Cincheck(formData.company_type));
+    } else {
+      setNeedcin(false);
+    }
+  }, [formData.company_type]);
+
+  const Cincheck = (type_id) => {
+    const item = company_type_list.find((item) => item._id === type_id);
+    return item ? item.Has_CIN : false;
+  };
   return (
     <form onSubmit={handleSubmit}>
       {/* display error */}
@@ -122,30 +169,62 @@ const FormContentcom = () => {
         message_id={message_id}
       />
 
-      <div className="form-group mb-1">
-        <label>Company CIN Number </label>
-        <span className="text-danger ms-2">*</span>
-        <div className="d-flex align-items-stretch gap-2">
-          <input
-            type="text"
-            name="cin"
-            placeholder="Enter company CIN"
-            required
-            value={formData.cin}
-            onChange={handleChange}
-            className="form-control"
-            pattern="^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$"
-          />
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={() => handelcinsubmit()}
-          >
-            <Search />
-          </button>
+      <div className="form-group" id="company_type">
+        <label className="mb-1">Company Type</label>
+        <span className="text-danger ms-1">*</span>
+
+        <div className="d-flex align-items-stretch gap-2 flex-wrap">
+          {company_type_list?.map((item) => (
+            <div className="form-check" key={item._id}>
+              <input
+                className="form-check-input"
+                type="radio"
+                name="company_type"
+                id={`company-${item._id}`}
+                value={item._id}
+                checked={formData.company_type === item._id}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    company_type: e.target.value,
+                  })
+                }
+              />
+
+              <label
+                className="form-check-label"
+                htmlFor={`company-${item._id}`}
+              >
+                {item.Legal_Structure}
+              </label>
+            </div>
+          ))}
         </div>
       </div>
+      {/* {needcin && (
+        <div className="form-group mb-1">
+          <label>Company CIN Number </label>
 
+          <div className="d-flex align-items-stretch gap-2">
+            <input
+              type="text"
+              name="cin"
+              placeholder="Enter company CIN"
+              value={formData.cin}
+              onChange={handleChange}
+              className="form-control"
+              pattern="^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$"
+            />
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => handelcinsubmit()}
+            >
+              <Search />
+            </button>
+          </div>
+        </div>
+      )} */}
       <div className="form-group mb-1">
         <label>Company Name</label>
         <span className="text-danger ms-2">*</span>
