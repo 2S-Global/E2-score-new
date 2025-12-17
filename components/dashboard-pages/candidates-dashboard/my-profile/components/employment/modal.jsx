@@ -281,10 +281,10 @@ const EmploymentModal = ({
       );
 
       if (response.data.success) {
-        //setSaving(false);
-        onClose();
+        setSaving(false);
         setReload(true);
         setSuccess(response.data.message);
+        onClose();
       }
     } catch (error) {
       console.error("Error deleting education record:", error);
