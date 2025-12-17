@@ -455,7 +455,7 @@ const Cardedit = ({
 
                     <div className="my-3 form-group">
                       <label className="form-label">
-                        <b>Current salary</b>
+                        <b>Current Monthly Salary</b>
                       </label>
                       <div
                         style={{
