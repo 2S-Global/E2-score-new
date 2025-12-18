@@ -31,8 +31,16 @@ const HeadSection = () => {
 
   const [sectionloading, setSectionloading] = useState(true);
 
+  const [gesilscore , Setgesilscore ] = useState(0);
+  const [cibilscore, Setcibilscore ] = useState(0)
+
   useEffect(() => {
-    const fetchProfilePic = async () => {
+ 
+
+    fetchProfilePic();
+    fetchscore();
+  }, [reload]);
+     const fetchProfilePic = async () => {
       try {
         setReload(false);
         setSectionloading(true);
@@ -60,8 +68,31 @@ const HeadSection = () => {
       }
     };
 
-    fetchProfilePic();
-  }, [reload]);
+       const fetchscore = async () => {
+      try {
+        setReload(false);
+        setSectionloading(true);
+        const token = localStorage.getItem("candidate_token");
+        const response = await queueRequest(() =>
+          axios.get(`${apiurl}/api/userdata/getscore`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+        );
+        if (response.data?.success) {
+          Setgesilscore(response.data?.GeisilScore || 0);
+          Setcibilscore(response.data?.CibilScore || 0);
+        }
+
+      } catch (error) {
+        console.error("Error fetching profile pic:", error);
+      } finally {
+        setSectionloading(false);
+      }
+    };
+
+
   const salaryCurrencies = [
     { label: "₹", value: "INR" },
     { label: "$", value: "USD" },
@@ -141,7 +172,7 @@ const HeadSection = () => {
   />
 
   {/* Gauge */}
-   <CreditScoreGauge minScore= {0} maxScore={100}  score = {80} size={200}/>
+   <CreditScoreGauge minScore= {0} maxScore={100}  score = {gesilscore} size={200}/>
 </div>
 
                     <div className="col-lg-3 d-flex flex-column justify-content-center align-items-center p-2">
@@ -153,7 +184,7 @@ const HeadSection = () => {
   />
 
   {/* Gauge */}
-  <CreditScoreGauge minScore= {0} maxScore={100}  score = {80} size={200}/>
+  <CreditScoreGauge minScore= {0} maxScore={100}  score = {cibilscore} size={200}/>
 </div>
                 
                 </div>
