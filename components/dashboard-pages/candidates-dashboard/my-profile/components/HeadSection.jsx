@@ -8,6 +8,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
+
+import { CreditScoreGauge } from "@/components/common/Gauge";
+
+import dynamic from "next/dynamic";
+
+const GaugeChart = dynamic(() => import("react-gauge-chart"), {
+  ssr: false,
+});
 const HeadSection = () => {
   const [profile_pic, setProfile_pic] = useState(
     "/images/resource/no_user.png"
@@ -124,33 +132,30 @@ const HeadSection = () => {
                   </div>
 
                   {/* Right Section - Image */}
-                  <div className="col-lg-2 d-flex justify-content-center align-items-center p-2">
-                    {/*<EscoreSection score_og={score} label_og={label} /> */}
-                    <img
-                      src="/images/resource/nextUpdate.png"
-                      alt="Profile"
-                      className="img-fluid object-cover"
-                      style={{ width: "150px", height: "180px" }}
-                    />
-                  </div>
-                  <div className="col-lg-2 d-flex justify-content-center align-items-center p-2">
-                    {/*                 <EscoreSection score_og={score} label_og={label} /> */}
-                    <img
-                      src="/images/resource/cibil.png"
-                      alt="Profile"
-                      className="img-fluid object-cover"
-                      style={{ width: "150px", height: "180px" }}
-                    />
-                  </div>
-                  <div className="col-lg-2 d-flex justify-content-center align-items-center p-2">
-                    {/*                 <EscoreSection score_og={score} label_og={label} /> */}
-                    <img
-                      src="/images/resource/experian.png"
-                      alt="Profile"
-                      className="img-fluid object-cover"
-                      style={{ width: "150px", height: "180px" }}
-                    />
-                  </div>
+                  <div className="col-lg-3 d-flex flex-column justify-content-center align-items-center p-2">
+  {/* Logo */}
+  <img
+    src="/images/resource/Eisil Score Logo.png"
+    alt="Profile"
+    style={{ width: "150px", height: "50px",marginBottom: "-20px" }}
+  />
+
+  {/* Gauge */}
+   <CreditScoreGauge minScore= {0} maxScore={100}  score = {80} size={200}/>
+</div>
+
+                    <div className="col-lg-3 d-flex flex-column justify-content-center align-items-center p-2">
+  {/* Logo */}
+  <img
+    src="/images/resource/Cibil Logo.png"
+    alt="Profile"
+    style={{ width: "150px", height: "50px", marginBottom: "-20px" }}
+  />
+
+  {/* Gauge */}
+  <CreditScoreGauge minScore= {0} maxScore={100}  score = {80} size={200}/>
+</div>
+                
                 </div>
               </div>
             </>
