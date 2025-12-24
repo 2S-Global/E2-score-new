@@ -1,19 +1,24 @@
 "use client";
 import React, { useState, useEffect } from "react";
-
 import { FaPhone, FaEnvelope } from "react-icons/fa";
 import axios from "axios";
 import CustomizedProgressBars from "@/components/common/loader";
+import { CreditScoreGauge } from "@/components/common/Gauge";
 
 const ScoreSection = () => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
-  const token = localStorage.getItem("candidate_token");
+  const token =
+    typeof window !== "undefined"
+      ? localStorage.getItem("candidate_token")
+      : null;
+
   const [loading, setLoading] = useState(true);
   const [userdata, setUserdata] = useState({});
+  const [gesilscore, setGesilScore] = useState(0);
+  const [cibilscore, setCibilScore] = useState(0);
 
-  /* /api/userdata/get_candidate_info */
+  /* Fetch candidate info */
   const fetchData = async () => {
-    setLoading(true);
     try {
       const response = await axios.get(
         `${apiurl}/api/userdata/get_candidate_info`,
@@ -23,87 +28,110 @@ const ScoreSection = () => {
           },
         }
       );
-      if (response.data.success) {
+
+      if (response.data?.success) {
         setUserdata(response.data.data);
       }
     } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
+      console.error("Candidate info error:", error);
+    }
+  };
+
+  /* Fetch scores (GEISIL & CIBIL) */
+  const fetchScores = async () => {
+    try {
+      const response = await axios.get(`${apiurl}/api/userdata/getscore`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data?.success) {
+        setGesilScore(response.data?.GeisilScore || 0);
+        setCibilScore(response.data?.CibilScore || 0);
+      }
+    } catch (error) {
+      console.error("Score fetch error:", error);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    const init = async () => {
+      setLoading(true);
+      await Promise.all([fetchData(), fetchScores()]);
+      setLoading(false);
+    };
+
+    if (token) init();
   }, [token]);
 
   return (
-    <>
-      <div className="ls-widget">
-        <div className="tabs-box">
-          <div className="widget-content">
-            {loading ? (
-              <CustomizedProgressBars />
-            ) : (
-              <>
-                {/* main code start here */}
-                <div className="row">
-                  <div className="col-md-6 d-flex justify-content-start align-items-center p-4">
-                    <div className="p-4">
-                      {/* Name & Degree Section */}
-                      <div className="mb-3">
-                        <h4 className="fw-bold mb-1 d-flex align-items-center">
-                          {userdata.name} &nbsp;
-                        </h4>
-                        <p className="mb-2" title={userdata.phone_number}>
-                          <FaPhone className="text-secondary me-2" />
-                          {userdata.phone_number?.length > 15
-                            ? userdata.phone_number.substring(0, 15) + "..."
-                            : userdata.phone_number}
-                        </p>
-                        <p className="mb-2" title={userdata.email}>
-                          <FaEnvelope className="text-secondary me-2" />
-                          {userdata.email?.length > 15
-                            ? userdata.email.substring(0, 15) + "..."
-                            : userdata.email}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+    <div className="ls-widget">
+      <div className="tabs-box">
+        <div className="widget-content">
+          {loading ? (
+            <CustomizedProgressBars />
+          ) : (
+            <div className="row">
+              {/* LEFT SECTION – USER INFO */}
+              <div className="col-md-6 d-flex justify-content-start align-items-center p-4">
+                <div className="p-4">
+                  <h4 className="fw-bold mb-2">{userdata.name}</h4>
 
-                  <div className="col-md-2 d-flex justify-content-center align-items-center p-2">
-                    <img
-                      /*   src="/images/resource/nextUpdate.png" */
-                      src="/images/resource/Group 1 (1).jpg"
-                      alt="Profile"
-                      className="w-100 h-100 object-cover"
-                    />
-                  </div>
-                  <div className="col-md-2 d-flex justify-content-center align-items-center p-2">
-                    <img
-                      /*  src="/images/resource/cibil.png" */
-                      src="/images/resource/Group 3.jpg"
-                      alt="Profile"
-                      className="w-100 h-100 object-cover"
-                    />
-                  </div>
-                  <div className="col-md-2 d-flex justify-content-center align-items-center p-2">
-                    <img
-                      /* src="/images/resource/experian.png" */
-                      src="/images/resource/Group 2.jpg"
-                      alt="Profile"
-                      className="w-100 h-100 object-cover"
-                    />
-                  </div>
+                  <p className="mb-2" title={userdata.phone_number}>
+                    <FaPhone className="text-secondary me-2" />
+                    {userdata.phone_number || "N/A"}
+                  </p>
+
+                  <p className="mb-2" title={userdata.email}>
+                    <FaEnvelope className="text-secondary me-2" />
+                    {userdata.email || "N/A"}
+                  </p>
                 </div>
-              </>
-            )}
+              </div>
 
-            {/* end */}
-          </div>
+              {/* RIGHT SECTION – GEISIL SCORE */}
+              <div className="col-md-3 d-flex flex-column justify-content-center align-items-center p-2">
+                <img
+                  src="/images/resource/Eisil Score Logo.png"
+                  alt="GEISIL"
+                  style={{
+                    width: "134px",
+                    height: "50px",
+                    marginBottom: "-20px",
+                  }}
+                />
+                <CreditScoreGauge
+                  minScore={0}
+                  maxScore={100}
+                  score={gesilscore}
+                  size={200}
+                />
+              </div>
+
+              {/* RIGHT SECTION – CIBIL SCORE */}
+              <div className="col-md-3 d-flex flex-column justify-content-center align-items-center p-2">
+                <img
+                  src="/images/resource/Cibil Logo.png"
+                  alt="CIBIL"
+                  style={{
+                    width: "80px",
+                    height: "40px",
+                    marginBottom: "-20px",
+                  }}
+                />
+                <CreditScoreGauge
+                  minScore={0}
+                  maxScore={100}
+                  score={cibilscore}
+                  size={200}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -31,67 +31,63 @@ const HeadSection = () => {
 
   const [sectionloading, setSectionloading] = useState(true);
 
-  const [gesilscore , Setgesilscore ] = useState(0);
-  const [cibilscore, Setcibilscore ] = useState(0)
+  const [gesilscore, Setgesilscore] = useState(0);
+  const [cibilscore, Setcibilscore] = useState(0);
 
   useEffect(() => {
- 
-
     fetchProfilePic();
     fetchscore();
   }, [reload]);
-     const fetchProfilePic = async () => {
-      try {
-        setReload(false);
-        setSectionloading(true);
-        const token = localStorage.getItem("candidate_token");
-        const response = await queueRequest(() =>
-          axios.get(`${apiurl}/api/userdata/userdata`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-        );
-        if (response.data?.profilePicture) {
-          setProfile_pic(response.data.profilePicture);
-        }
-
-        if (response.data?.progress) {
-          setProgress(response.data.progress);
-        }
-
-        setUser(response.data);
-      } catch (error) {
-        console.error("Error fetching profile pic:", error);
-      } finally {
-        setSectionloading(false);
+  const fetchProfilePic = async () => {
+    try {
+      setReload(false);
+      setSectionloading(true);
+      const token = localStorage.getItem("candidate_token");
+      const response = await queueRequest(() =>
+        axios.get(`${apiurl}/api/userdata/userdata`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      );
+      if (response.data?.profilePicture) {
+        setProfile_pic(response.data.profilePicture);
       }
-    };
 
-       const fetchscore = async () => {
-      try {
-        setReload(false);
-        setSectionloading(true);
-        const token = localStorage.getItem("candidate_token");
-        const response = await queueRequest(() =>
-          axios.get(`${apiurl}/api/userdata/getscore`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-        );
-        if (response.data?.success) {
-          Setgesilscore(response.data?.GeisilScore || 0);
-          Setcibilscore(response.data?.CibilScore || 0);
-        }
-
-      } catch (error) {
-        console.error("Error fetching profile pic:", error);
-      } finally {
-        setSectionloading(false);
+      if (response.data?.progress) {
+        setProgress(response.data.progress);
       }
-    };
 
+      setUser(response.data);
+    } catch (error) {
+      console.error("Error fetching profile pic:", error);
+    } finally {
+      setSectionloading(false);
+    }
+  };
+
+  const fetchscore = async () => {
+    try {
+      setReload(false);
+      setSectionloading(true);
+      const token = localStorage.getItem("candidate_token");
+      const response = await queueRequest(() =>
+        axios.get(`${apiurl}/api/userdata/getscore`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      );
+      if (response.data?.success) {
+        Setgesilscore(response.data?.GeisilScore || 0);
+        Setcibilscore(response.data?.CibilScore || 0);
+      }
+    } catch (error) {
+      console.error("Error fetching profile pic:", error);
+    } finally {
+      setSectionloading(false);
+    }
+  };
 
   const salaryCurrencies = [
     { label: "₹", value: "INR" },
@@ -164,29 +160,46 @@ const HeadSection = () => {
 
                   {/* Right Section - Image */}
                   <div className="col-lg-3 d-flex flex-column justify-content-center align-items-center p-2">
-  {/* Logo */}
-  <img
-    src="/images/resource/Eisil Score Logo.png"
-    alt="Profile"
-    style={{ width: "150px", height: "50px",marginBottom: "-20px" }}
-  />
+                    {/* Logo */}
+                    <img
+                      src="/images/resource/Eisil Score Logo.png"
+                      alt="Profile"
+                      style={{
+                        width: "150px",
+                        height: "50px",
+                        marginBottom: "-20px",
+                      }}
+                    />
 
-  {/* Gauge */}
-   <CreditScoreGauge minScore= {0} maxScore={100}  score = {gesilscore} size={200}/>
-</div>
+                    {/* Gauge */}
+                    <CreditScoreGauge
+                      minScore={0}
+                      maxScore={100}
+                      score={gesilscore}
+                      size={200}
+                    />
+                  </div>
 
-                    <div className="col-lg-3 d-flex flex-column justify-content-center align-items-center p-2">
-  {/* Logo */}
-  <img
-    src="/images/resource/Cibil Logo.png"
-    alt="Profile"
-    style={{ width: "150px", height: "50px", marginBottom: "-20px" }}
-  />
+                  <div className="col-lg-3 d-flex flex-column justify-content-center align-items-center p-2">
+                    {/* Logo */}
+                    <img
+                      src="/images/resource/Cibil Logo.png"
+                      alt="Profile"
+                      style={{
+                        width: "150px",
+                        height: "50px",
+                        marginBottom: "-20px",
+                      }}
+                    />
 
-  {/* Gauge */}
-  <CreditScoreGauge minScore= {0} maxScore={100}  score = {cibilscore} size={200}/>
-</div>
-                
+                    {/* Gauge */}
+                    <CreditScoreGauge
+                      minScore={0}
+                      maxScore={100}
+                      score={cibilscore}
+                      size={200}
+                    />
+                  </div>
                 </div>
               </div>
             </>
