@@ -19,7 +19,7 @@ const TopCardBlock = () => {
       id: 3,
       icon: <MessageSquare size={22} className="text-warning" />,
       countNumber: "74",
-      metaName: "Messages",
+      metaName: "Verified Employees",
     },
     {
       id: 4,

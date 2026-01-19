@@ -48,21 +48,22 @@ module.exports = [
     routePath: "/candidates-dashboard/short-listed-jobs",
     active: "",
   },
-  {
-    id: 7,
-    name: "CV manager",
-    icon: "la la-file-invoice",
-    routePath: "/candidates-dashboard/cv-manager",
-    active: "",
-  },
+  // {
+  //   id: 7,
+  //   name: "CV manager",
+  //   icon: "la la-file-invoice",
+  //   routePath: "/candidates-dashboard/cv-manager",
+  //   active: "",
+  // },
 
-  {
-    id: 9,
-    name: "Messages",
-    icon: "la-comment-o",
-    routePath: "/candidates-dashboard/messages",
-    active: "",
-  },
+  // {
+  //   id: 9,
+  //   name: "Messages",
+  //   icon: "la-comment-o",
+  //   routePath: "/candidates-dashboard/messages",
+  //   active: "",
+  // },
+  
   /*  {
     id: 10,
     name: "Change Password",

@@ -1,83 +1,119 @@
 import Link from "next/link";
-import candidatesData from "../../../../../data/candidates";
 import Image from "next/image";
+import candidatesData from "../../../../../data/candidates";
+import styles from "./Applicants.module.css";
 
 const Applicants = () => {
   return (
-    <>
-      {candidatesData.slice(17, 23).map((candidate) => (
-        <div
-          className="candidate-block-three col-lg-6 col-md-12 col-sm-12"
-          key={candidate.id}
-        >
-          <div className="inner-box">
-            <div className="content">
-              <figure className="image">
-                <Image
-                  width={90}
-                  height={90}
-                  src={candidate.avatar}
-                  alt="candidates"
-                />
-              </figure>
-              <h4 className="name">
-                <Link href={`/candidates-details/${candidate.id}`}>
-                  {candidate.name}
-                </Link>
-              </h4>
+    <div className={styles.tabsBox}>
+      {/* HEADER */}
+      <div
+        className={`d-flex justify-content-between align-items-center mb-4 ${styles.widgetTitle}`}
+      >
+        <h4 className="mb-0">Job Applicants</h4>
 
-              <ul className="candidate-info">
-                <li className="designation">{candidate.designation}</li>
-                <li>
-                  <span className="icon flaticon-map-locator"></span>{" "}
+        <Link href="/shortlisted-candidates" className={styles.shortlistedLink}>
+          <i className="la la-user-check me-1"></i>
+          Shortlisted Candidates
+        </Link>
+      </div>
+
+      {/* TABLE */}
+      <div className="table-responsive">
+        <table className="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>Candidate</th>
+              <th>Designation</th>
+              <th>Location</th>
+              <th>Rate</th>
+              <th>Skills</th>
+              <th className="text-center">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {candidatesData.slice(17, 23).map((candidate) => (
+              <tr key={candidate.id}>
+                <td>
+                  <div className="d-flex align-items-center gap-3">
+                    <Image
+                      src={candidate.avatar}
+                      width={46}
+                      height={46}
+                      className="rounded-circle"
+                      alt={candidate.name}
+                    />
+                    <Link
+                      href={`/candidates-details/${candidate.id}`}
+                      className={styles.candidateName}
+                    >
+                      {candidate.name}
+                    </Link>
+                  </div>
+                </td>
+
+                <td>{candidate.designation}</td>
+
+                <td>
+                  <i className="la la-map-marker me-1"></i>
                   {candidate.location}
-                </li>
-                <li>
-                  <span className="icon flaticon-money"></span> $
-                  {candidate.hourlyRate} / hour
-                </li>
-              </ul>
-              {/* End candidate-info */}
+                </td>
 
-              <ul className="post-tags">
-                {candidate.tags.map((val, i) => (
-                  <li key={i}>
-                    <a href="#">{val}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            {/* End content */}
+                <td>
+                  <i className="la la-money me-1"></i>${candidate.hourlyRate} /
+                  hr
+                </td>
 
-            <div className="option-box">
-              <ul className="option-list">
-                <li>
-                  <button data-text="View Aplication">
-                    <span className="la la-eye"></span>
-                  </button>
-                </li>
-                <li>
-                  <button data-text="Approve Aplication">
-                    <span className="la la-check"></span>
-                  </button>
-                </li>
-                <li>
-                  <button data-text="Reject Aplication">
-                    <span className="la la-times-circle"></span>
-                  </button>
-                </li>
-                <li>
-                  <button data-text="Delete Aplication">
-                    <span className="la la-trash"></span>
-                  </button>
-                </li>
-              </ul>
-            </div>
-            {/* End admin options box */}
-          </div>
-        </div>
-      ))}
-    </>
+                <td>
+                  <div className={styles.skillsWrap}>
+                    {candidate.tags.map((tag, i) => (
+                      <span key={i} className={styles.skillBadge}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </td>
+
+                <td>
+                  <div
+                    className={`d-flex justify-content-center gap-2 ${styles.actionBtns}`}
+                  >
+                    <button
+                      className="btn btn-outline-primary btn-sm"
+                      title="View"
+                    >
+                      <i className="la la-eye"></i>
+                    </button>
+
+                    <button
+                      className="btn btn-outline-success btn-sm"
+                      title="Approve"
+                    >
+                      <i className="la la-check"></i>
+                    </button>
+
+                    {/* <button
+                      className="btn btn-outline-danger btn-sm"
+                      title="Reject"
+                    >
+                      <i className="la la-times-circle"></i>
+                    </button>
+
+                    <button
+                      className="btn btn-outline-dark btn-sm"
+                      title="Delete"
+                    >
+                      <i className="la la-trash"></i>
+                    </button> */}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 };
 
