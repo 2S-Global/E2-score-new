@@ -195,103 +195,93 @@ const [jobTitleLoading, setJobTitleLoading] = useState(false);
     return () => clearTimeout(timeout);
   }, [type, formData.jobLocationType]);
 
-  useEffect(() => {
-    if (id) {
-      setPageLoading(false); // create mode
+useEffect(() => {
+  // ✅ CREATE MODE → no loading screen
+  if (!id) {
+    setPageLoading(false);
+    return;
+  }
 
-      const fetchData = async () => {
-        try {
-          const response = await axios.get(
-            `${apiurl}/api/jobposting/get_job_posting_details`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-              params: {
-                jobId: id,
-              },
-            },
-          );
+  // ✅ EDIT MODE
+  const fetchData = async () => {
+    setPageLoading(true);
 
-          if (response.data.success && response.status === 200) {
-            const job = response.data.data;
-            setInputValue(job.jobTitle || "");
-            // setLoading(false);
+    try {
+      const response = await axios.get(
+        `${apiurl}/api/jobposting/get_job_posting_details`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            jobId: id,
+          },
+        },
+      );
 
-            setFormData({
-              jobTitleId: job.jobTitle || "",
-              jobTitleName: job.jobTitle || "",
-              jobTitle: job.jobTitle || "",
-              jobDescription: job.jobDescription || "",
-              getApplicationUpdateEmail: job.getApplicationUpdateEmail || "",
+      if (response.data.success) {
+        const job = response.data.data;
 
-              // ✅ FIXED
-              specialization: Array.isArray(job.specialization)
-                ? job.specialization
-                : [],
+        setInputValue(job.jobTitle || "");
 
-              jobType: job.jobType?.map((t) => t._id) || [],
-              showBy: job.showBy || "fixed",
-
-              expectedHours: job.expectedHours || "",
-              fromHours: job.fromHours || "",
-              toHours: job.toHours || "",
-
-              contractLength: job.contractLength || "",
-              contractPeriod: job.contractPeriod || "",
-              positionAvailable: job.positionAvailable || "",
-
-              jobExpiryDate: job.jobExpiryDate
-                ? new Date(job.jobExpiryDate).toISOString().split("T")[0]
-                : null,
-
-              salary: {
-                structure: job.salary?.structure || "range",
-                currency: job.salary?.currency || "₹",
-                min: job.salary?.min || null,
-                max: job.salary?.max || null,
-                amount: job.salary?.amount || null,
-                rate: job.salary?.rate || "per year",
-              },
-
-              benefits: job.benefits?.map((b) => b._id) || [],
-
-              careerLevel: job.careerLevel?._id || "",
-              experienceLevel: job.experienceLevel?._id || "",
-              gender: job.gender?.map((g) => g._id) || [],
-
-              industry: job.industry || "",
-              qualification: job.qualification?.map((q) => q._id) || [],
-
-              jobLocationType: job.jobLocationType || "",
-              country: job.country ? String(job.country) : "",
-              state: job.state ? String(job.state) : "",
-              city: job.city ? String(job.city) : "",
-              branch: job.branch?._id || "",
-              address: job.address || "",
-
-              advertiseCity: job.advertiseCity || "",
-              advertiseCityName: job.advertiseCityName || "",
-              resumeRequired: job.resumeRequired || false,
-
-              // ✅ FIXED
-              jobSkills: Array.isArray(job.jobSkills)
-                ? job.jobSkills.map((s) => ({
-                    value: s,
-                    label: s,
-                  }))
-                : [],
-            });
-          }
-        } catch (error) {
-          console.error("Error fetching data", error);
-        } finally {
-          setPageLoading(false); // ✅ ONLY here
-        }
-      };
-      fetchData();
+        setFormData({
+          jobTitleId: job.jobTitle || "",
+          jobTitleName: job.jobTitle || "",
+          jobTitle: job.jobTitle || "",
+          jobDescription: job.jobDescription || "",
+          getApplicationUpdateEmail: job.getApplicationUpdateEmail || "",
+          specialization: Array.isArray(job.specialization)
+            ? job.specialization
+            : [],
+          jobType: job.jobType?.map((t) => t._id) || [],
+          showBy: job.showBy || "fixed",
+          expectedHours: job.expectedHours || "",
+          fromHours: job.fromHours || "",
+          toHours: job.toHours || "",
+          contractLength: job.contractLength || "",
+          contractPeriod: job.contractPeriod || "",
+          positionAvailable: job.positionAvailable || "",
+          jobExpiryDate: job.jobExpiryDate
+            ? new Date(job.jobExpiryDate).toISOString().split("T")[0]
+            : null,
+          salary: {
+            structure: job.salary?.structure || "range",
+            currency: job.salary?.currency || "₹",
+            min: job.salary?.min || null,
+            max: job.salary?.max || null,
+            amount: job.salary?.amount || null,
+            rate: job.salary?.rate || "per year",
+          },
+          benefits: job.benefits?.map((b) => b._id) || [],
+          careerLevel: job.careerLevel?._id || "",
+          experienceLevel: job.experienceLevel?._id || "",
+          gender: job.gender?.map((g) => g._id) || [],
+          industry: job.industry || "",
+          qualification: job.qualification?.map((q) => q._id) || [],
+          jobLocationType: job.jobLocationType || "",
+          country: job.country ? String(job.country) : "",
+          state: job.state ? String(job.state) : "",
+          city: job.city ? String(job.city) : "",
+          branch: job.branch?._id || "",
+          address: job.address || "",
+          advertiseCity: job.advertiseCity || "",
+          advertiseCityName: job.advertiseCityName || "",
+          resumeRequired: job.resumeRequired || false,
+          jobSkills: Array.isArray(job.jobSkills)
+            ? job.jobSkills.map((s) => ({ value: s, label: s }))
+            : [],
+        });
+      }
+    } catch (err) {
+      console.error("Edit fetch failed", err);
+    } finally {
+      setPageLoading(false); // ✅ ONLY here
     }
-  }, [id]);
+  };
+
+  fetchData();
+}, [id]);
+
 
   const fetchStates = async () => {
     try {
