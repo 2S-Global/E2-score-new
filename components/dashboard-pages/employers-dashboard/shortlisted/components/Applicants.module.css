@@ -1,0 +1,164 @@
+/* MAIN CONTAINER */
+.tabsBox {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+/* HEADER */
+.widgetTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.widgetTitle h4 {
+  font-weight: 600;
+  font-size: 20px;
+  margin: 0;
+}
+
+.linksContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shortlistedLink {
+  position: relative;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2563eb;
+  text-decoration: none;
+  padding-bottom: 2px;
+  padding: 4px 12px;
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+/* underline animation */
+.shortlistedLink::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #2563eb;
+  transition: width 0.25s ease;
+}
+
+.shortlistedLink:hover {
+  color: #1d4ed8;
+}
+
+.shortlistedLink:hover::after {
+  width: 100%;
+}
+
+.shortlistedLink.active {
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.shortlistedLink.active::after {
+  width: 100%;
+}
+
+/* TABLE */
+.table {
+  border-collapse: separate;
+  border-spacing: 0 12px;
+  margin-bottom: 0;
+}
+
+.table thead th {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ff0204 !important;
+  background-color: transparent !important;
+  border: none;
+  padding: 10px 14px !important;
+  text-align: left;
+}
+
+.table tbody tr {
+  background: #f8fafc;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease;
+}
+
+.table tbody tr:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table tbody td {
+  border: none;
+  padding: 14px 16px;
+  vertical-align: middle;
+  font-size: 13px;
+}
+
+/* FIRST & LAST CELL ROUNDING */
+.table tbody tr td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.table tbody tr td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* CANDIDATE */
+.candidateName {
+  font-weight: 600;
+  color: #2563eb;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.candidateName:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+/* SKILLS */
+.skillsWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.skillBadge {
+  background: #e5e7eb;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 14px;
+  white-space: nowrap;
+}
+
+/* ACTION BUTTONS */
+.actionBtns button {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 6px;
+}
+
+.actionBtns i {
+  font-size: 16px;
+}
+
+.rounded-circle {
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  width: 50px !important;
+  height: 50px !important;
+  max-width: auto !important;
+}
