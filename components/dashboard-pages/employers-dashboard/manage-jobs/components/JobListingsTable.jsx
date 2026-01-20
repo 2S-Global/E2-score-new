@@ -17,6 +17,7 @@ const JobListingsTable = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [errorId, setErrorId] = useState(0);
+const [loading, setLoading] = useState(true);
 
   const handleEdit = (jobId) => {
     router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
@@ -33,14 +34,21 @@ const JobListingsTable = () => {
 
   const fetchAllJobListing = async () => {
     // setLoading(true);
+      setLoading(true);
     try {
-      const response = await axios.get(`${apiurl}/api/jobposting/get_all_job_listing`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.get(
+        `${apiurl}/api/jobposting/get_all_job_listing`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
-      console.log("Here is my all job listing data which is coming from useEffect !", response.data);
+      console.log(
+        "Here is my all job listing data which is coming from useEffect !",
+        response.data,
+      );
 
       if (response.data.success && response.status === 200) {
         const job = response.data.data;
@@ -48,6 +56,8 @@ const JobListingsTable = () => {
       }
     } catch (error) {
       console.error("Error fetching data", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -117,7 +127,16 @@ const JobListingsTable = () => {
             </thead>
 
             <tbody>
-              {allJobListing && allJobListing.length > 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan="5" className="text-center py-5">
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <div className="mt-2">Loading job listings...</div>
+                  </td>
+                </tr>
+              ) : allJobListing.length > 0 ? (
                 allJobListing.map((job) => (
                   <tr key={job._id}>
                     <td>
@@ -146,28 +165,22 @@ const JobListingsTable = () => {
                               ? job.advertiseCityName
                                 ? `Remote - ${job.advertiseCityName}`
                                 : "Remote"
-                              : job.jobLocationType === "on-site"
-                                ? job.location || "N/A"
-                                : job.location || "N/A"}
+                              : job.location || "N/A"}
                           </small>
                         </div>
                       </div>
                     </td>
                     <td>
-                      <small>
-                        {/* <a href="#">3+ Applied</a> */}
-                        <a href="#">N/A</a>
-                      </small>
+                      <small>N/A</small>
                     </td>
                     <td>
-                      <small>{job.createdAt}</small> <br />
+                      <small>{job.createdAt}</small>
+                      <br />
                       <small>{job.expiryDate}</small>
                     </td>
                     <td>
                       <span
-                        className={`badge ${
-                          job.isActive ? "bg-success" : "bg-secondary"
-                        }`}
+                        className={`badge ${job.isActive ? "bg-success" : "bg-secondary"}`}
                       >
                         {job.isActive ? "Active" : "Inactive"}
                       </span>
@@ -176,7 +189,6 @@ const JobListingsTable = () => {
                       <div className="d-flex gap-2">
                         <button
                           className="btn btn-outline-primary btn-sm"
-                          title="View"
                           onClick={() =>
                             router.push(`/job-details/${job._id}?view=employer`)
                           }
@@ -186,14 +198,13 @@ const JobListingsTable = () => {
 
                         <button
                           className="btn btn-outline-secondary btn-sm"
-                          title="Edit"
                           onClick={() => handleEdit(job._id)}
                         >
                           <i className="la la-pencil"></i>
                         </button>
+
                         <button
                           className="btn btn-outline-danger btn-sm"
-                          title="Delete"
                           onClick={() => handleDelete(job._id)}
                         >
                           <i className="la la-trash"></i>

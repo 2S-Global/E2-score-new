@@ -318,7 +318,7 @@ useEffect(() => {
   useEffect(() => {
     const fetchRandomSkills = async () => {
       try {
-        setLoading(true);
+        setJobTitleLoading(true);
         const res = await axios.get(`${apiurl}/api/sql/dropdown/Random_Skill`);
         const data = res.data.data || [];
 
@@ -893,7 +893,15 @@ useEffect(() => {
         const status = response.data.data.status; // draft
 
         // router.push(`/employers-dashboard/post-jobs/review-jobs/${jobId}?status=${status}`);
-        router.push(`/employers-dashboard/post-jobs/review-jobs/${jobId}`);
+   if (id) {
+     // ✅ EDIT MODE → no review page, no status needed
+     router.push("/employers-dashboard/manage-jobs");
+   } else {
+     // ✅ CREATE MODE → go to review page with status
+     router.push(
+       `/employers-dashboard/post-jobs/review-jobs/${jobId}?status=${status}`,
+     );
+   }
         // router.push(`/employers-dashboard/post-jobs/review-jobs`);
         // OR if you want to pass as query: /review-job?jobId=...&status=...
       } else {
@@ -2431,8 +2439,10 @@ useEffect(() => {
               {submitting ? (
                 <>
                   <span className="spinner-border spinner-border-sm me-2"></span>
-                  Saving...
+                  {id ? "Updating..." : "Saving..."}
                 </>
+              ) : id ? (
+                "Update"
               ) : (
                 "Next"
               )}

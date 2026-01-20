@@ -778,7 +778,9 @@ const Index = () => {
             <div className="button-container">
               <button
                 className="btn back-btn"
-                onClick={() => router.back()}
+                onClick={() =>
+                  router.push(`/employers-dashboard/post-jobs/edit/${jobId}`)
+                }
                 disabled={loading}
               >
                 ← Back
