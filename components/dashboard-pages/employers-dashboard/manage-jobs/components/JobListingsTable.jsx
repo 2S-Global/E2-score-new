@@ -294,7 +294,8 @@ const handleStatusToggle = async (job) => {
 
                         <button
                           className="btn btn-outline-secondary btn-sm"
-                          onClick={() => handleEdit(job._id)}
+                          // onClick={() => handleEdit(job._id)}
+                          onClick={() => handleEdit(job.id)}
                         >
                           <i className="la la-pencil"></i>
                         </button>
