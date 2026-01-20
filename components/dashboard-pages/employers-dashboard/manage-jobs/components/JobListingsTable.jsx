@@ -9,7 +9,6 @@ import axios from "axios";
 import MessageComponent from "@/components/common/ResponseMsg.jsx";
 
 const JobListingsTable = () => {
-
   // Initialize route here
   const router = useRouter();
 
@@ -17,7 +16,8 @@ const JobListingsTable = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [errorId, setErrorId] = useState(0);
-const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [updatingJobId, setUpdatingJobId] = useState(null);
 
   const handleEdit = (jobId) => {
     router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
@@ -32,9 +32,44 @@ const [loading, setLoading] = useState(true);
 
   const [allJobListing, setAllJobListing] = useState([]);
 
+const handleStatusToggle = async (job) => {
+  // If already completed, do nothing (optional safety)
+  if (job.status === "completed") return;
+
+  try {
+    setUpdatingJobId(job._id);
+
+    const response = await axios.post(
+      `${apiurl}/api/jobposting/confirm_job_posting_details`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          jobId: job._id,
+        },
+      },
+    );
+
+    if (!response.data.success) {
+      alert(response.data.message || "Failed to update job status");
+      return;
+    }
+
+    setSuccess("Job activated successfully");
+    fetchAllJobListing(); // refresh table
+  } catch (err) {
+    alert(err.response?.data?.message || err.message);
+  } finally {
+    setUpdatingJobId(null);
+  }
+};
+
+
   const fetchAllJobListing = async () => {
     // setLoading(true);
-      setLoading(true);
+    setLoading(true);
     try {
       const response = await axios.get(
         `${apiurl}/api/jobposting/get_all_job_listing`,
@@ -69,10 +104,13 @@ const [loading, setLoading] = useState(true);
     if (!confirm("Are you sure you want to delete this job?")) return;
 
     try {
-      const response = await axios.delete(`${apiurl}/api/jobposting/delete_job_posting`, {
-        headers: { Authorization: `Bearer ${token}` },
-        params: { jobId },
-      });
+      const response = await axios.delete(
+        `${apiurl}/api/jobposting/delete_job_posting`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          params: { jobId },
+        },
+      );
 
       if (!response.data.success) {
         setError(response.data.message);
@@ -91,7 +129,6 @@ const [loading, setLoading] = useState(true);
       alert("Failed to delete job.");
     }
   };
-
 
   return (
     <div className="tabs-box container-fluid px-0">
@@ -122,6 +159,7 @@ const [loading, setLoading] = useState(true);
                 <th>Applications</th>
                 <th>Created & Expired</th>
                 <th>Status</th>
+                <th>Job Status</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -185,6 +223,64 @@ const [loading, setLoading] = useState(true);
                         {job.isActive ? "Active" : "Inactive"}
                       </span>
                     </td>
+                    <td>
+                      <div
+                        className={`form-check form-switch d-flex align-items-center ${
+                          job.status === "completed"
+                            ? "opacity-80"
+                            : "opacity-40"
+                        }`}
+                        style={{
+                          cursor:
+                            updatingJobId === job._id ||
+                            job.status === "completed"
+                              ? "not-allowed"
+                              : "pointer",
+                        }}
+                      >
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          checked={job.status === "completed"}
+                          disabled={
+                            updatingJobId === job._id ||
+                            job.status === "completed"
+                          }
+                          onChange={() => handleStatusToggle(job)}
+                          style={{
+                            cursor:
+                              updatingJobId === job._id ||
+                              job.status === "completed"
+                                ? "not-allowed"
+                                : "pointer",
+                          }}
+                        />
+
+                        <label
+                          className="form-check-label ms-2"
+                          style={{
+                            cursor:
+                              updatingJobId === job._id ||
+                              job.status === "completed"
+                                ? "not-allowed"
+                                : "pointer",
+                          }}
+                        >
+                          {updatingJobId === job._id ? (
+                            <span className="spinner-border spinner-border-sm text-primary"></span>
+                          ) : job.status === "completed" ? (
+                            <span className="text-success fw-bold">
+                              Active
+                            </span>
+                          ) : (
+                            <span className="text-warning fw-semibold">
+                              Draft
+                            </span>
+                          )}
+                        </label>
+                      </div>
+                    </td>
+
                     <td>
                       <div className="d-flex gap-2">
                         <button

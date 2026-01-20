@@ -18,6 +18,7 @@ const Index = () => {
     const [data, setData] = useState({});
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+  const [updatingJobId, setUpdatingJobId] = useState(null);
 
     const formattedExpiryDate = data?.jobExpiryDate
       ? new Date(data.jobExpiryDate).toLocaleDateString("en-GB", {
