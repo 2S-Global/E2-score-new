@@ -12,31 +12,45 @@ const Applicants = () => {
       >
         <h4 className="mb-0">Job Applicants</h4>
 
-        <Link href="/shortlisted-candidates" className={styles.shortlistedLink}>
-          <i className="la la-user-check me-1"></i>
-          Shortlisted Candidates
-        </Link>
+        <div className={styles.linksContainer}>
+          <Link href="/offer-letter-sent" className={styles.shortlistedLink}>
+            <i className="la la-envelope me-1"></i>
+            Offer Letter Sent
+          </Link>
+
+          <Link href="/invitation-sent" className={styles.shortlistedLink}>
+            <i className="la la-envelope me-1"></i>
+            Invitation Sent
+          </Link>
+
+          <Link href="/shortlisted-candidates" className={styles.shortlistedLink}>
+            <i className="la la-user-check me-1"></i>
+            Shortlisted Candidates
+          </Link>
+        </div>
       </div>
 
       {/* TABLE */}
       <div className="table-responsive">
-        <table className="table table-hover align-middle">
+        <table className={`table table-hover align-middle ${styles.table}`}>
           <thead>
             <tr>
-              <th>Candidate</th>
-              <th>Designation</th>
-              <th>Location</th>
-              <th>Rate</th>
-              <th>Skills</th>
-              <th className="text-center">Action</th>
+              <th style={{ width: "20%" }}>Candidate</th>
+              <th style={{ width: "15%" }}>Designation</th>
+              <th style={{ width: "12%" }}>Location</th>
+              <th style={{ width: "12%" }}>Salary</th>
+              <th style={{ width: "18%" }}>Skills</th>
+              <th style={{ width: "15%" }}>Experience / Notice Period</th>
+              <th style={{ width: "8%", textAlign: "center" }}>Action</th>
             </tr>
           </thead>
 
           <tbody>
-            {candidatesData.slice(17, 23).map((candidate) => (
+            {candidatesData.slice(0, 10).map((candidate) => (
               <tr key={candidate.id}>
                 <td>
-                  <div className="d-flex align-items-center gap-3">
+                  {/* <div className="d-flex align-items-center gap-3"> */}
+                  <div className="d-flex flex-column align-items-center text-center gap-1">
                     <Image
                       src={candidate.avatar}
                       width={46}
@@ -61,8 +75,8 @@ const Applicants = () => {
                 </td>
 
                 <td>
-                  <i className="la la-money me-1"></i>${candidate.hourlyRate} /
-                  hr
+                  ₹{candidate.monthlySalary} /
+                  month
                 </td>
 
                 <td>
@@ -74,6 +88,8 @@ const Applicants = () => {
                     ))}
                   </div>
                 </td>
+
+                <td>{candidate.experience} / {candidate.noticePeriod}</td>
 
                 <td>
                   <div

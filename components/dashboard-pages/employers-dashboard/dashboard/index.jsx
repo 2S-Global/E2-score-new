@@ -7,7 +7,7 @@ import TopCardBlock from "./components/TopCardBlock";
 import TopCardBlock2 from "./components/TopCardBlock2";
 import ProfileChart from "./components/ProfileChart";
 import Notification from "./components/Notification";
-import Applicants from "./components/Applicants";
+import ApplicantsContainer from "./components/ApplicantsContainer";
 import CopyrightFooter from "../../CopyrightFooter";
 import MenuToggler from "../../MenuToggler";
 
@@ -80,7 +80,7 @@ const Index = () => {
                 <div className="row">
                   {/* <!-- Candidate block three --> */}
 
-                  <Applicants />
+                  <ApplicantsContainer />
                 </div>
               </div>
             </div>
