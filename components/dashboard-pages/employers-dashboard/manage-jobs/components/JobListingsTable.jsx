@@ -135,7 +135,7 @@ const handleStatusToggle = async (job) => {
       <div className="widget-title d-flex justify-content-between align-items-center mb-3">
         <h4 className="mb-0">My Job Listings</h4>
 
-        <div className="chosen-outer">
+        {/* <div className="chosen-outer">
           <select className="form-select form-select-sm w-auto">
             <option>Last 6 Months</option>
             <option>Last 12 Months</option>
@@ -143,7 +143,7 @@ const handleStatusToggle = async (job) => {
             <option>Last 24 Months</option>
             <option>Last 5 year</option>
           </select>
-        </div>
+        </div> */}
       </div>
 
       {/* Message Component Section */}
@@ -158,7 +158,7 @@ const handleStatusToggle = async (job) => {
                 <th>Title</th>
                 <th>Applications</th>
                 <th>Created & Expired</th>
-                <th>Status</th>
+                {/* <th>Status</th> */}
                 <th>Job Status</th>
                 <th>Action</th>
               </tr>
@@ -216,13 +216,13 @@ const handleStatusToggle = async (job) => {
                       <br />
                       <small>{job.expiryDate}</small>
                     </td>
-                    <td>
+                    {/* <td>
                       <span
                         className={`badge ${job.isActive ? "bg-success" : "bg-secondary"}`}
                       >
                         {job.isActive ? "Active" : "Inactive"}
                       </span>
-                    </td>
+                    </td> */}
                     <td>
                       <div
                         className={`form-check form-switch d-flex align-items-center ${
