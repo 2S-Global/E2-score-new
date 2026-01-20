@@ -19,7 +19,7 @@ import JobDetailsDescriptions from "@/components/job-single-pages/shared-compone
 import ApplyJobModalContent from "@/components/job-single-pages/shared-components/ApplyJobModalContent";
 import Image from "next/image";
 import JobDescription from "@/components/job-single-pages/shared-components/JobDescription";
-
+import DashboardHeader from "../../../../components/header/DashboardHeader";
 const JobSingleDynamicV1 = () => {
   const params = useParams(); // ✅ Don't wrap it with `use()` && get dynamic route params (/job-details/[id])
   const id = params.id;
@@ -78,7 +78,7 @@ const JobSingleDynamicV1 = () => {
       <LoginPopup />
       {/* End Login Popup Modal */}
 
-      <DefaulHeader />
+      <DashboardHeader />
       {/* <!--End Main Header --> */}
 
       <MobileMenu />
@@ -95,12 +95,17 @@ const JobSingleDynamicV1 = () => {
                     <Image
                       width={100}
                       height={98}
-                      src={jobPreviewDetails?.logoImage || "/images/resource/no_user.png"}
+                      src={
+                        jobPreviewDetails?.logoImage ||
+                        "/images/resource/no_user.png"
+                      }
                       alt="logo"
                     />
                   </span>
 
-                  {jobPreviewDetails?.title && <h4>{jobPreviewDetails?.title}</h4>}
+                  {jobPreviewDetails?.title && (
+                    <h4>{jobPreviewDetails?.title}</h4>
+                  )}
 
                   <ul className="job-info">
                     {/* Industry Type */}
@@ -130,17 +135,34 @@ const JobSingleDynamicV1 = () => {
                         <span className="icon flaticon-money"></span>{" "}
                         {jobPreviewDetails?.salary ? (
                           (() => {
-                            const { structure, currency, min, max, amount, rate } = jobPreviewDetails.salary;
+                            const {
+                              structure,
+                              currency,
+                              min,
+                              max,
+                              amount,
+                              rate,
+                            } = jobPreviewDetails.salary;
 
                             switch (structure) {
                               case "range":
-                                if (currency && min != null && max != null && rate) {
+                                if (
+                                  currency &&
+                                  min != null &&
+                                  max != null &&
+                                  rate
+                                ) {
                                   return (
                                     <>
                                       {currency}
-                                      {min.toLocaleString("en-IN", { maximumFractionDigits: 2 })} -{" "}
-                                      {currency}
-                                      {max.toLocaleString("en-IN", { maximumFractionDigits: 2 })} {rate}
+                                      {min.toLocaleString("en-IN", {
+                                        maximumFractionDigits: 2,
+                                      })}{" "}
+                                      - {currency}
+                                      {max.toLocaleString("en-IN", {
+                                        maximumFractionDigits: 2,
+                                      })}{" "}
+                                      {rate}
                                     </>
                                   );
                                 }
@@ -151,7 +173,10 @@ const JobSingleDynamicV1 = () => {
                                   return (
                                     <>
                                       From {currency}
-                                      {amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })} {rate}
+                                      {amount.toLocaleString("en-IN", {
+                                        maximumFractionDigits: 2,
+                                      })}{" "}
+                                      {rate}
                                     </>
                                   );
                                 }
@@ -162,7 +187,10 @@ const JobSingleDynamicV1 = () => {
                                   return (
                                     <>
                                       Up to {currency}
-                                      {amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })} {rate}
+                                      {amount.toLocaleString("en-IN", {
+                                        maximumFractionDigits: 2,
+                                      })}{" "}
+                                      {rate}
                                     </>
                                   );
                                 }
@@ -173,7 +201,10 @@ const JobSingleDynamicV1 = () => {
                                   return (
                                     <>
                                       {currency}
-                                      {amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })} {rate}
+                                      {amount.toLocaleString("en-IN", {
+                                        maximumFractionDigits: 2,
+                                      })}{" "}
+                                      {rate}
                                     </>
                                   );
                                 }
@@ -187,7 +218,6 @@ const JobSingleDynamicV1 = () => {
                           <span>Salary not specified</span>
                         )}
                       </li>
-
                     )}
                     {/* salary info */}
                   </ul>
@@ -272,10 +302,15 @@ const JobSingleDynamicV1 = () => {
         <div className="job-detail-outer">
           <div className="auto-container">
             <div className="row">
-              <div className="content-column col-lg-8 col-md-12 col-sm-12" style={{listStyleType: "unset"}}>
+              <div
+                className="content-column col-lg-8 col-md-12 col-sm-12"
+                style={{ listStyleType: "unset" }}
+              >
                 {/* <JobDetailsDescriptions /> */}
                 {jobPreviewDetails?.jobDescription && (
-                  <JobDescription description={jobPreviewDetails?.jobDescription} />
+                  <JobDescription
+                    description={jobPreviewDetails?.jobDescription}
+                  />
                 )}
                 {/* End jobdetails content */}
 
@@ -287,7 +322,6 @@ const JobSingleDynamicV1 = () => {
                   </div>
                 </div>
                 */}
-
 
                 {/* <!-- Other Options --> */}
 
@@ -340,11 +374,16 @@ const JobSingleDynamicV1 = () => {
                           <Image
                             width={54}
                             height={53}
-                            src={jobPreviewDetails?.logoImage || "/images/resource/no_user.png"}
+                            src={
+                              jobPreviewDetails?.logoImage ||
+                              "/images/resource/no_user.png"
+                            }
                             alt="resource"
                           />
                         </div>
-                        <h5 className="company-name">{jobPreviewDetails?.companyName || "Not specified"}</h5>
+                        <h5 className="company-name">
+                          {jobPreviewDetails?.companyName || "Not specified"}
+                        </h5>
                         <a href="#" className="profile-link">
                           View company profile
                         </a>
@@ -357,7 +396,9 @@ const JobSingleDynamicV1 = () => {
                         <div className="btn-box">
                           <a
                             href={
-                              jobPreviewDetails.companyWebsite.startsWith("http")
+                              jobPreviewDetails.companyWebsite.startsWith(
+                                "http",
+                              )
                                 ? jobPreviewDetails.companyWebsite
                                 : `https://${jobPreviewDetails.companyWebsite}`
                             }
