@@ -33,7 +33,9 @@ const PostBoxForm = () => {
   const [advertiseCity, setAdvertiseCity] = useState("No"); // Yes or No
   const [salaryStructure, setSalaryStructure] = useState("");
 
-  const [loading, setLoading] = useState(true);
+const [pageLoading, setPageLoading] = useState(true);
+const [jobTitleLoading, setJobTitleLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const jobTitleRef = useRef();
   const jobDescriptionRef = useRef();
@@ -125,7 +127,7 @@ const PostBoxForm = () => {
   const [inputValue, setInputValue] = useState(""); // ⭐ controls typing
 
   // Error Variables
-  const [error, setError] = useState(null);
+  const [error, setError] = useState({});
 
   const [success, setSuccess] = useState(null);
   const [errorId, setErrorId] = useState(0);
@@ -195,6 +197,8 @@ const PostBoxForm = () => {
 
   useEffect(() => {
     if (id) {
+      setPageLoading(false); // create mode
+
       const fetchData = async () => {
         try {
           const response = await axios.get(
@@ -206,17 +210,26 @@ const PostBoxForm = () => {
               params: {
                 jobId: id,
               },
-            }
+            },
           );
 
           if (response.data.success && response.status === 200) {
             const job = response.data.data;
+            setInputValue(job.jobTitle || "");
+            // setLoading(false);
+
             setFormData({
+              jobTitleId: job.jobTitle || "",
+              jobTitleName: job.jobTitle || "",
               jobTitle: job.jobTitle || "",
               jobDescription: job.jobDescription || "",
               getApplicationUpdateEmail: job.getApplicationUpdateEmail || "",
 
-              specialization: job.specialization?.map((s) => s._id) || [],
+              // ✅ FIXED
+              specialization: Array.isArray(job.specialization)
+                ? job.specialization
+                : [],
+
               jobType: job.jobType?.map((t) => t._id) || [],
               showBy: job.showBy || "fixed",
 
@@ -251,24 +264,29 @@ const PostBoxForm = () => {
               qualification: job.qualification?.map((q) => q._id) || [],
 
               jobLocationType: job.jobLocationType || "",
-              country: job.country?._id || "",
-              city: job.city?._id || "",
+              country: job.country ? String(job.country) : "",
+              state: job.state ? String(job.state) : "",
+              city: job.city ? String(job.city) : "",
               branch: job.branch?._id || "",
               address: job.address || "",
 
               advertiseCity: job.advertiseCity || "",
               advertiseCityName: job.advertiseCityName || "",
               resumeRequired: job.resumeRequired || false,
-              // jobSkills: job.jobSkills?.map((s) => s.Skill) || [],
-              jobSkills:
-                job.jobSkills?.map((s) => ({
-                  value: s.Skill,
-                  label: s.Skill,
-                })) || [],
+
+              // ✅ FIXED
+              jobSkills: Array.isArray(job.jobSkills)
+                ? job.jobSkills.map((s) => ({
+                    value: s,
+                    label: s,
+                  }))
+                : [],
             });
           }
         } catch (error) {
           console.error("Error fetching data", error);
+        } finally {
+          setPageLoading(false); // ✅ ONLY here
         }
       };
       fetchData();
@@ -317,16 +335,16 @@ const PostBoxForm = () => {
         console.log("Here is my all random skills::::'''''", data);
         setJobSkills(
           Array.from(
-            new Set(data.filter(Boolean).map((s) => s.trim().toLowerCase()))
+            new Set(data.filter(Boolean).map((s) => s.trim().toLowerCase())),
           ).map((skill) => ({
             label: skill.charAt(0).toUpperCase() + skill.slice(1),
             value: skill,
-          }))
+          })),
         );
       } catch (err) {
         console.error("Error fetching random skills:", err);
       } finally {
-        setLoading(false);
+        setJobTitleLoading(false); // ✅ correct
       }
     };
     fetchRandomSkills();
@@ -342,13 +360,13 @@ const PostBoxForm = () => {
         `${apiurl}/api/sql/dropdown/matching_Skill?skill_name=${inputValue}`,
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       const fetched = response.data.data || [];
 
       const unique = Array.from(
-        new Set(fetched.map((s) => s.trim().toLowerCase()))
+        new Set(fetched.map((s) => s.trim().toLowerCase())),
       );
 
       const formatted = unique.map((skill) => ({
@@ -381,11 +399,14 @@ const PostBoxForm = () => {
     fetchSkills(inputValue);
   };
 
-  const selectedValues = (formData.jobType || []).map((opt) => opt.label);
-  const isPartTime = selectedValues.includes("Part-time");
+  const selectedJobTypeLabels = jobType
+    .filter((opt) => formData.jobType.includes(opt.value))
+    .map((opt) => opt.label);
 
-  const isInternLike = selectedValues.some((v) =>
-    ["Internship", "Contractual / Temporary", "Freelance"].includes(v)
+  const isPartTime = selectedJobTypeLabels.includes("Part-time");
+
+  const isInternLike = selectedJobTypeLabels.some((label) =>
+    ["Internship", "Contractual / Temporary", "Freelance"].includes(label),
   );
 
   const fetchSpecialization = async (inputValue) => {
@@ -393,7 +414,7 @@ const PostBoxForm = () => {
 
     try {
       const response = await fetch(
-        `${apiurl}/api/jobposting/all_job_specializations?query=${inputValue}`
+        `${apiurl}/api/jobposting/all_job_specializations?query=${inputValue}`,
       );
 
       const data = await response.json();
@@ -410,6 +431,19 @@ const PostBoxForm = () => {
     }
   };
 
+  // 🔥 AUTO LOAD STATE & CITY IN EDIT MODE
+  useEffect(() => {
+    if (formData.country) {
+      fetchStates(formData.country);
+    }
+  }, [formData.country]);
+
+  useEffect(() => {
+    if (formData.state) {
+      fetchCities(formData.state);
+    }
+  }, [formData.state]);
+
   useEffect(() => {
     const fetchJobType = async () => {
       // setLoading(true);
@@ -417,7 +451,7 @@ const PostBoxForm = () => {
         const response = await fetch(`${apiurl}/api/jobposting/all_job_types`);
         const data = await response.json();
         setJobType(
-          data.data.map((item) => ({ label: item.name, value: item._id }))
+          data.data.map((item) => ({ label: item.name, value: item._id })),
         );
       } catch (error) {
         console.error("Error fetching more info list:", error);
@@ -430,11 +464,11 @@ const PostBoxForm = () => {
       // setLoading(true);
       try {
         const response = await fetch(
-          `${apiurl}/api/jobposting/all_job_benefits`
+          `${apiurl}/api/jobposting/all_job_benefits`,
         );
         const data = await response.json();
         setBenefits(
-          data.data.map((item) => ({ label: item.name, value: item._id }))
+          data.data.map((item) => ({ label: item.name, value: item._id })),
         );
       } catch (error) {
         console.error("Error fetching marriage status list:", error);
@@ -447,7 +481,7 @@ const PostBoxForm = () => {
       // setLoading(true);
       try {
         const response = await fetch(
-          `${apiurl}/api/jobposting/all_job_career_levels`
+          `${apiurl}/api/jobposting/all_job_career_levels`,
         );
         const data = await response.json();
         console.log("Career Levels Data by mee :) :", data);
@@ -464,7 +498,7 @@ const PostBoxForm = () => {
       // setLoading(true);
       try {
         const response = await fetch(
-          `${apiurl}/api/jobposting/all_job_experience_levels`
+          `${apiurl}/api/jobposting/all_job_experience_levels`,
         );
         const data = await response.json();
         setExperienceLevel(data.data);
@@ -484,7 +518,7 @@ const PostBoxForm = () => {
           data.data.map((item) => ({
             label: item.name,
             value: item.id,
-          }))
+          })),
         );
       } catch (error) {
         console.error("Error fetching countries:", error);
@@ -510,11 +544,11 @@ const PostBoxForm = () => {
       //  setLoading(true);
       try {
         const response = await fetch(
-          `${apiurl}/api/jobposting/all_job_qualifications`
+          `${apiurl}/api/jobposting/all_job_qualifications`,
         );
         const data = await response.json();
         setQualification(
-          data.data.map((item) => ({ label: item.name, value: item._id }))
+          data.data.map((item) => ({ label: item.name, value: item._id })),
         );
       } catch (error) {
         console.error("Error fetching countries:", error);
@@ -545,11 +579,11 @@ const PostBoxForm = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         console.log(
           "Branches Data by mee should only data :) :",
-          response.data.data
+          response.data.data,
         );
         if (response.status === 200) {
           console.log("All Company Branches fetched successfully");
@@ -581,7 +615,7 @@ const PostBoxForm = () => {
   const eighteenYearsAgo = new Date(
     today.getFullYear() - 18,
     today.getMonth(),
-    today.getDate()
+    today.getDate(),
   );
 
   // Map dropdown values → label names
@@ -603,6 +637,7 @@ const PostBoxForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault(); // prevent page reload
     // console.log("Form Data Submitted:", formData);
+
     if (!formData.jobTitleId?.trim()) {
       setError({ jobTitle: "Job title is required" });
       setErrorField("jobTitle");
@@ -752,21 +787,52 @@ const PostBoxForm = () => {
       setError("Authorization token is missing. Please log in.");
       return;
     }
+
+    setSubmitting(true);
     try {
       let response;
       if (id) {
+        const payload = {
+          ...formData,
+
+          // ✅ REQUIRED by backend
+          jobTitle: formData.jobTitleName?.trim(),
+
+          // ✅ string[]
+          jobSkills: formData.jobSkills
+            .map((s) => s.value.trim())
+            .filter(Boolean),
+
+          // ✅ string[]
+          specialization: formData.specialization.map((s) => s.trim()),
+
+          // ✅ ObjectId[]
+          jobType: formData.jobType,
+
+          // ✅ ObjectId[]
+          benefits: formData.benefits,
+          qualification: formData.qualification,
+          gender: formData.gender,
+
+          careerLevel: formData.careerLevel || null,
+          experienceLevel: formData.experienceLevel || null,
+          country: formData.country || null,
+          city: formData.city || null,
+          branch: formData.branch || null,
+        };
+
         response = await axios.post(
           `${apiurl}/api/jobposting/edit_job_posting_details`,
-          formData,
+          payload,
           {
             headers: {
-              "Content-Type": "multipart/form-data",
+              "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
             params: {
               jobId: id,
             },
-          }
+          },
         );
 
         if (!response.data.success) {
@@ -777,15 +843,44 @@ const PostBoxForm = () => {
 
         setSuccess("Job post updated successfully!");
       } else {
+        const payload = {
+          ...formData,
+
+          // ✅ REQUIRED by backend
+          jobTitle: formData.jobTitleName?.trim(),
+
+          // ✅ string[]
+          jobSkills: formData.jobSkills
+            .map((s) => s.value.trim())
+            .filter(Boolean),
+
+          // ✅ string[]
+          specialization: formData.specialization.map((s) => s.trim()),
+
+          // ✅ ObjectId[]
+          jobType: formData.jobType,
+
+          // ✅ ObjectId[]
+          benefits: formData.benefits,
+          qualification: formData.qualification,
+          gender: formData.gender,
+
+          careerLevel: formData.careerLevel || null,
+          experienceLevel: formData.experienceLevel || null,
+          country: formData.country || null,
+          city: formData.city || null,
+          branch: formData.branch || null,
+        };
+
         response = await axios.post(
           `${apiurl}/api/jobposting/add_job_posting_details`,
-          formData,
+          payload,
           {
             headers: {
-              "Content-Type": "multipart/form-data",
+              "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         if (!response.data.success) {
@@ -794,13 +889,13 @@ const PostBoxForm = () => {
           return;
         }
 
-        setSuccess("Candidate added successfully!");
+        setSuccess("Job posting created successfully!");
       }
 
       if (response.data.success) {
         console.log(
           "✅ Job posting data is saved successfully:",
-          response.data.data
+          response.data.data,
         );
 
         // ✅ Redirect to review page with returned jobId
@@ -824,7 +919,7 @@ const PostBoxForm = () => {
       setError("Failed. Try again.");
       setErrorId(Date.now());
     } finally {
-      // setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -839,7 +934,7 @@ const PostBoxForm = () => {
         `${apiurl}/api/sql/dropdown/get_india_cities`,
         {
           params: { stateId }, // ✅ PASS stateId here
-        }
+        },
       );
 
       if (res.data.success) {
@@ -852,6 +947,16 @@ const PostBoxForm = () => {
       setCity([]);
     }
   };
+  if (pageLoading) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "70vh" }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -868,7 +973,7 @@ const PostBoxForm = () => {
             <Autocomplete
               freeSolo
               disablePortal
-              loading={loading}
+              loading={jobTitleLoading}
               options={jobTitleOptions}
               getOptionLabel={(option) =>
                 typeof option === "string" ? option : option.label
@@ -888,10 +993,11 @@ const PostBoxForm = () => {
                 }));
 
                 if (reason === "input") {
-                  setLoading(true);
+                  setJobTitleLoading(true);
+
                   const result = await loadJobTitles(value);
                   setJobTitleOptions(result);
-                  setLoading(false);
+                  setJobTitleLoading(false);
                 }
 
                 // ⭐ When user clears text
@@ -948,7 +1054,10 @@ const PostBoxForm = () => {
                     ...params.InputProps,
                     endAdornment: (
                       <>
-                        {loading ? <CircularProgress size={20} /> : null}
+                        {jobTitleLoading ? (
+                          <CircularProgress size={20} />
+                        ) : null}
+
                         {params.InputProps.endAdornment}
                       </>
                     ),
@@ -1087,7 +1196,7 @@ const PostBoxForm = () => {
               className="basic-multi-select"
               classNamePrefix="select"
               value={gender.filter((option) =>
-                formData.gender.includes(option.value)
+                formData.gender.includes(option.value),
               )} // ensure proper value binding
               onChange={(selectedOptions) =>
                 setFormData((prev) => ({
@@ -1165,29 +1274,27 @@ const PostBoxForm = () => {
               isMulti
               cacheOptions
               defaultOptions={false}
-              loadOptions={fetchSkills} // ⭐ Your async API function
+              loadOptions={fetchSkills}
               placeholder="Search or create skills..."
               classNamePrefix="select"
               ref={jobSkillsRef}
               noOptionsMessage={() => "Please start typing…"}
-              value={formData.jobSkills.map((skill) => ({
-                label: skill,
-                value: skill,
-              }))}
-              // ⭐ When selecting options
+              value={formData.jobSkills}
               onChange={(selected) =>
                 setFormData((prev) => ({
                   ...prev,
-                  jobSkills: selected ? selected.map((opt) => opt.value) : [],
+                  jobSkills: selected || [],
                 }))
               }
-              // ⭐ When creating a new skill (Enter key)
-              onCreateOption={(inputValue) => {
+              onCreateOption={(inputValue) =>
                 setFormData((prev) => ({
                   ...prev,
-                  jobSkills: [...prev.jobSkills, inputValue],
-                }));
-              }}
+                  jobSkills: [
+                    ...prev.jobSkills,
+                    { label: inputValue, value: inputValue },
+                  ],
+                }))
+              }
             />
 
             {errorField === "jobSkills" && error?.jobSkills && (
@@ -1248,42 +1355,34 @@ const PostBoxForm = () => {
               isMulti
               name="jobType"
               ref={jobTypeRef}
-              options={jobType}
-              // className={`basic-multi-select ${errorField === "jobType" ? "error-highlight" : ""}`}
+              options={jobType} // [{label, value:_id}]
               className="basic-multi-select"
               classNamePrefix="select"
-              value={formData.jobType}
+              /* ✅ VALUE BINDING (IDs → objects for UI) */
+              value={jobType.filter((opt) =>
+                formData.jobType.includes(opt.value),
+              )}
               onChange={(selectedOptions) => {
-                // selected full objects from react-select
-                console.log(
-                  "Selected Options (full objects):",
-                  selectedOptions
-                );
-
-                const selectedValues = selectedOptions
-                  ? selectedOptions.map((opt) => opt.value)
+                const ids = selectedOptions
+                  ? selectedOptions.map((opt) => opt.value) // ✅ ONLY ObjectId strings
                   : [];
 
-                console.log("Selected Values (value only):", selectedValues);
-
-                const selectedLabels = selectedOptions
+                const labels = selectedOptions
                   ? selectedOptions.map((opt) => opt.label)
                   : [];
 
-                console.log("Selected Labels (label only):", selectedLabels);
-
-                const isPartTimeSelected = selectedLabels.includes("Part-time");
-                const isInternLikeSelected = selectedValues.some((v) =>
+                const isPartTimeSelected = labels.includes("Part-time");
+                const isInternLikeSelected = labels.some((v) =>
                   [
                     "Internship",
                     "Contractual / Temporary",
                     "Freelance",
-                  ].includes(v)
+                  ].includes(v),
                 );
 
                 setFormData((prev) => ({
                   ...prev,
-                  jobType: selectedOptions || [],
+                  jobType: ids, // ✅ BACKEND SAFE
 
                   expectedHours: isPartTimeSelected ? prev.expectedHours : "",
                   fromHours: isPartTimeSelected ? prev.fromHours : "",
@@ -1575,7 +1674,7 @@ const PostBoxForm = () => {
                   new Date(
                     today.getFullYear() + 1,
                     today.getMonth(),
-                    today.getDate()
+                    today.getDate(),
                   )
                 }
                 format="dd/MM/yyyy"
@@ -1788,7 +1887,7 @@ const PostBoxForm = () => {
               className="basic-multi-select"
               classNamePrefix="select"
               value={benefits.filter((option) =>
-                formData.benefits.includes(option.value)
+                formData.benefits.includes(option.value),
               )} // ensure proper value binding
               onChange={(selectedOptions) =>
                 setFormData((prev) => ({
@@ -1935,7 +2034,7 @@ const PostBoxForm = () => {
               className="basic-multi-select"
               classNamePrefix="select"
               value={qualification.filter((option) =>
-                formData.qualification.includes(option.value)
+                formData.qualification.includes(option.value),
               )} // ensure proper value binding
               onChange={(selectedOptions) =>
                 setFormData((prev) => ({
@@ -1974,10 +2073,40 @@ const PostBoxForm = () => {
               value={formData.jobLocationType}
               ref={jobLocationTypeRef}
               onChange={(e) => {
-                setFormData((prev) => ({
-                  ...prev,
-                  jobLocationType: e.target.value,
-                }));
+                const value = e.target.value;
+
+                setFormData((prev) => {
+                  if (value === "remote") {
+                    return {
+                      ...prev,
+                      jobLocationType: "remote",
+
+                      // 🔥 CLEAR ON-SITE FIELDS
+                      country: "",
+                      state: "",
+                      city: "",
+                      branch: "",
+                      address: "",
+
+                      // default remote values
+                      advertiseCity: "No",
+                      advertiseCityName: "",
+                    };
+                  }
+
+                  if (value === "on-site") {
+                    return {
+                      ...prev,
+                      jobLocationType: "on-site",
+
+                      // 🔥 CLEAR REMOTE FIELDS
+                      advertiseCity: "",
+                      advertiseCityName: "",
+                    };
+                  }
+
+                  return prev;
+                });
               }}
             >
               <option value="">Select</option>
@@ -2010,7 +2139,7 @@ const PostBoxForm = () => {
                 </label>
                 <select
                   className="chosen-single form-select"
-                  value={formData.country}
+                  value={formData.country || ""}
                   onChange={(e) => {
                     setFormData((prev) => ({
                       ...prev,
@@ -2018,8 +2147,10 @@ const PostBoxForm = () => {
                     }));
                   }}
                 >
+                  <option value="">Select Country</option>
+
                   {country.map((level) => (
-                    <option key={level.id} value={level.id}>
+                    <option key={level.id} value={String(level.id)}>
                       {level.name}
                     </option>
                   ))}
@@ -2053,7 +2184,7 @@ const PostBoxForm = () => {
                 >
                   <option value="">Select</option>
                   {state.map((level) => (
-                    <option key={level.id} value={level.id}>
+                    <option key={level.id} value={String(level.id)}>
                       {level.name}
                     </option>
                   ))}
@@ -2092,7 +2223,7 @@ const PostBoxForm = () => {
                 >
                   <option value="">Select</option>
                   {city.map((level) => (
-                    <option key={level.id} value={level.id}>
+                    <option key={level.id} value={String(level.id)}>
                       {level.city_name}
                     </option>
                   ))}
@@ -2124,7 +2255,7 @@ const PostBoxForm = () => {
                   onChange={(e) => {
                     console.log(
                       "Branch selected value -- Chandra Sarkar : ",
-                      e.target.value
+                      e.target.value,
                     );
                     setFormData((prev) => ({
                       ...prev,
@@ -2173,7 +2304,7 @@ const PostBoxForm = () => {
                   onChange={(e) => {
                     console.log(
                       "Complete Address selected value -- Chandra Sarkar : ",
-                      e.target.value
+                      e.target.value,
                     );
                     setFormData((prev) => ({
                       ...prev,
@@ -2302,7 +2433,20 @@ const PostBoxForm = () => {
 
           {/* <!-- Input --> */}
           <div className="form-group col-lg-12 col-md-12 text-right">
-            <button className="theme-btn btn-style-one">Next</button>
+            <button
+              type="submit"
+              className="theme-btn btn-style-one"
+              disabled={submitting}
+            >
+              {submitting ? (
+                <>
+                  <span className="spinner-border spinner-border-sm me-2"></span>
+                  Saving...
+                </>
+              ) : (
+                "Next"
+              )}
+            </button>
           </div>
         </div>
       </form>
