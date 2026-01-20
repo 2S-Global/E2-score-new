@@ -100,11 +100,7 @@ const JobListingsTable = () => {
       </div>
 
       {/* Message Component Section */}
-      <MessageComponent
-        error={error}
-        success={success}
-        errorId={errorId}
-      />
+      <MessageComponent error={error} success={success} errorId={errorId} />
 
       {/* Responsive Table Section */}
       <div className="widget-content">
@@ -134,7 +130,9 @@ const JobListingsTable = () => {
                         />
                         <div>
                           <small className="mb-1">
-                            <Link href={`/job-details/${job._id}?view=employer`}>
+                            <Link
+                              href={`/job-details/${job._id}?view=employer`}
+                            >
                               {job.jobTitle}
                             </Link>
                           </small>
@@ -143,7 +141,7 @@ const JobListingsTable = () => {
                             <i className="flaticon-briefcase me-1"></i>{" "}
                             {job.jobType?.join(", ")}
                             <br />
-                            <i className="flaticon-map-locator me-1"></i> {" "}
+                            <i className="flaticon-map-locator me-1"></i>{" "}
                             {job.jobLocationType === "remote"
                               ? job.advertiseCityName
                                 ? `Remote - ${job.advertiseCityName}`
@@ -166,17 +164,26 @@ const JobListingsTable = () => {
                       <small>{job.expiryDate}</small>
                     </td>
                     <td>
-                      <span className={`badge ${job.isActive ? "bg-success" : "bg-secondary"
-                        }`}>{job.isActive ? "Active" : "Inactive"}</span>
+                      <span
+                        className={`badge ${
+                          job.isActive ? "bg-success" : "bg-secondary"
+                        }`}
+                      >
+                        {job.isActive ? "Active" : "Inactive"}
+                      </span>
                     </td>
                     <td>
                       <div className="d-flex gap-2">
                         <button
                           className="btn btn-outline-primary btn-sm"
                           title="View"
+                          onClick={() =>
+                            router.push(`/job-details/${job._id}?view=employer`)
+                          }
                         >
                           <i className="la la-eye"></i>
                         </button>
+
                         <button
                           className="btn btn-outline-secondary btn-sm"
                           title="Edit"
