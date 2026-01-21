@@ -209,7 +209,7 @@ const handleStatusToggle = async (job) => {
                       </div>
                     </td>
                     <td>
-                      <small>N/A</small>
+                      <small>{job.appliedCount} Applied</small>
                     </td>
                     <td>
                       <small>{job.createdAt}</small>
