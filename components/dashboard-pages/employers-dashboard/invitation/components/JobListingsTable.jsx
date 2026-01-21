@@ -4,18 +4,31 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./Applicants.module.css";
+import { usePathname } from "next/navigation";
 
 export default function InvitationPage() {
-  const [showModal, setShowModal] = useState(false);
+  const pathname = usePathname();
+  const isActive = (path) => pathname === path;
+
+  /* ================= STATES ================= */
+  const [showRemarksModal, setShowRemarksModal] = useState(false);
+  const [showOfferModal, setShowOfferModal] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState("");
 
-  const openModal = (name) => {
+  /* ================= HANDLERS ================= */
+  const openRemarksModal = (name) => {
     setSelectedCandidate(name);
-    setShowModal(true);
+    setShowRemarksModal(true);
   };
 
-  const closeModal = () => {
-    setShowModal(false);
+  const openOfferModal = (name) => {
+    setSelectedCandidate(name);
+    setShowOfferModal(true);
+  };
+
+  const closeAllModals = () => {
+    setShowRemarksModal(false);
+    setShowOfferModal(false);
     setSelectedCandidate("");
   };
 
@@ -26,26 +39,51 @@ export default function InvitationPage() {
         <div
           className={`d-flex justify-content-between align-items-center mb-4 ${styles.widgetTitle}`}
         >
-          <h4 className="mb-0">Interview Invitation List</h4>
-
-          {/* TOP RIGHT LINKS */}
           <div className={styles.topLinks}>
             <Link
-            href="/employers-dashboard/shortlisted"
-            className={`${styles.topLink}`}
-          >
-            <i className="la la-user-check me-1"></i> Shortlisted Candidates
-          </Link>
-  
-            <Link href="/employers-dashboard/offer-letter" className={styles.topLink}>
-              <i className="la la-envelope me-1"></i> Offer Letter Sent
+              href="/employers-dashboard/offer-letter"
+              className={`${styles.topLink} ${
+                isActive("/employers-dashboard/offer-letter")
+                  ? styles.active
+                  : ""
+              }`}
+            >
+              <i className="la la-envelope"></i>
+              Offer Letter Sent
             </Link>
-  
+
+            <Link
+              href="/employers-dashboard/invitation"
+              className={`${styles.topLink} ${
+                isActive("/employers-dashboard/invitation") ? styles.active : ""
+              }`}
+            >
+              <i className="la la-paper-plane"></i>
+              Invitation Sent
+            </Link>
+
+            <Link
+              href="/employers-dashboard/shortlisted"
+              className={`${styles.topLink} ${
+                isActive("/employers-dashboard/shortlisted")
+                  ? styles.active
+                  : ""
+              }`}
+            >
+              <i className="la la-user-check"></i>
+              Shortlisted Candidates
+            </Link>
+
             <Link
               href="/employers-dashboard/job-applicants"
-              className={`${styles.topLink}`}
+              className={`${styles.topLink} ${
+                isActive("/employers-dashboard/job-applicants")
+                  ? styles.active
+                  : ""
+              }`}
             >
-              <i className="la la-user"></i> Job Applicants
+              <i className="la la-users"></i>
+              Job Applicants
             </Link>
           </div>
         </div>
@@ -67,190 +105,231 @@ export default function InvitationPage() {
             </thead>
 
             <tbody>
-              {/* ===== Row 1 ===== */}
-              <tr>
-                <td className="text-center">
-                  <Image
-                    src="/images/candidates/candidate-1.jpg"
-                    width={42}
-                    height={42}
-                    className="rounded-circle"
-                    alt="Candidate"
-                  />
-                </td>
+              {[
+                {
+                  name: "Rahul Sharma",
+                  img: "/images/resource/candidate-1.png",
+                  status: "Pending",
+                  statusClass: "bg-warning text-dark",
+                  exp: "5 Years",
+                  notice: "30 Days",
+                  date: "25 Jan 2026",
+                  time: "11:00 AM",
+                },
+                {
+                  name: "Sneha Verma",
+                  img: "/images/resource/candidate-3.png",
+                  status: "Completed",
+                  statusClass: "bg-success",
+                  exp: "3 Years",
+                  notice: "Immediate",
+                  date: "22 Jan 2026",
+                  time: "02:30 PM",
+                },
+              ].map((c, i) => (
+                <tr key={i}>
+                  <td className="text-center">
+                    <div className={styles.candidateAvatar}>
+                      <Image
+                        src={c.img}
+                        alt={c.name}
+                        fill
+                        sizes="50px"
+                        className={styles.avatarImg}
+                      />
+                    </div>
+                  </td>
 
-                <td>
-                  <Link href="#" className={styles.candidateName}>
-                    Rahul Sharma
-                  </Link>
-                </td>
+                  <td>
+                    <Link href="#" className={styles.candidateName}>
+                      {c.name}
+                    </Link>
+                  </td>
 
-                <td>25 Jan 2026</td>
-                <td>11:00 AM</td>
+                  <td>{c.date}</td>
+                  <td>{c.time}</td>
 
-                <td>
-                  <span className="badge bg-warning text-dark">Pending</span>
-                </td>
+                  <td>
+                    <span className={`badge ${c.statusClass}`}>{c.status}</span>
+                  </td>
 
-                <td>5 Years</td>
-                <td>30 Days</td>
+                  <td>{c.exp}</td>
+                  <td>{c.notice}</td>
 
-                <td>
-                  <div className="d-flex justify-content-center gap-2">
-                    <button className="btn btn-outline-primary btn-sm">
-                      <i className="la la-eye"></i>
-                    </button>
+                  <td>
+                    <div className="d-flex justify-content-center gap-2">
+                      <button className="btn btn-outline-primary btn-sm">
+                        <i className="la la-eye"></i>
+                      </button>
 
-                    <button
-                      className="btn btn-outline-secondary btn-sm"
-                      onClick={() => openModal("Rahul Sharma")}
-                    >
-                      <i className="la la-comment"></i>
-                    </button>
+                      <button
+                        className="btn btn-outline-secondary btn-sm"
+                        onClick={() => openRemarksModal(c.name)}
+                      >
+                        <i className="la la-comment"></i>
+                      </button>
 
-                    <button className="btn btn-outline-success btn-sm">
-                      <i className="la la-envelope"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-
-              {/* ===== Row 2 ===== */}
-              <tr>
-                <td className="text-center">
-                  <Image
-                    src="/images/candidates/candidate-2.jpg"
-                    width={42}
-                    height={42}
-                    className="rounded-circle"
-                    alt="Candidate"
-                  />
-                </td>
-
-                <td>
-                  <Link href="#" className={styles.candidateName}>
-                    Sneha Verma
-                  </Link>
-                </td>
-
-                <td>22 Jan 2026</td>
-                <td>02:30 PM</td>
-
-                <td>
-                  <span className="badge bg-success">Completed</span>
-                </td>
-
-                <td>3 Years</td>
-                <td>Immediate</td>
-
-                <td>
-                  <div className="d-flex justify-content-center gap-2">
-                    <button className="btn btn-outline-primary btn-sm">
-                      <i className="la la-eye"></i>
-                    </button>
-
-                    <button
-                      className="btn btn-outline-secondary btn-sm"
-                      onClick={() => openModal("Sneha Verma")}
-                    >
-                      <i className="la la-comment"></i>
-                    </button>
-
-                    <button className="btn btn-outline-success btn-sm">
-                      <i className="la la-envelope"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
+                      <button
+                        className="btn btn-outline-success btn-sm"
+                        onClick={() => openOfferModal(c.name)}
+                      >
+                        <i className="la la-envelope"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
       </div>
 
       {/* ================= REMARKS MODAL ================= */}
-      {showModal && (
-        <div className="modal fade show d-block" tabIndex="-1">
-          <div className="modal-dialog modal-lg modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">
-                  Interview Remarks – {selectedCandidate}
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={closeModal}
-                ></button>
-              </div>
+      {showRemarksModal && (
+        <>
+          <div
+            className="modal show d-block"
+            tabIndex="-1"
+            onClick={closeAllModals}
+          >
+            <div
+              className="modal-dialog modal-lg modal-dialog-centered"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">
+                    Interview Remarks – {selectedCandidate}
+                  </h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={closeAllModals}
+                  />
+                </div>
 
-              <div className="modal-body">
-                <div className="row g-3">
-                  <div className="col-md-6">
-                    <label className="form-label">Communication</label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      placeholder="Score (1–10)"
-                    />
-                  </div>
+                <div className="modal-body">
+                  <div className="row g-3">
+                    {[
+                      "Communication",
+                      "Technical Skills",
+                      "Attitude",
+                      "Overall Score",
+                    ].map((label) => (
+                      <div className="col-md-6" key={label}>
+                        <label className="form-label">{label}</label>
+                        <input
+                          type="number"
+                          className="form-control"
+                          placeholder="Score (1–10)"
+                        />
+                      </div>
+                    ))}
 
-                  <div className="col-md-6">
-                    <label className="form-label">Technical Skills</label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      placeholder="Score (1–10)"
-                    />
-                  </div>
-
-                  <div className="col-md-6">
-                    <label className="form-label">Attitude</label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      placeholder="Score (1–10)"
-                    />
-                  </div>
-
-                  <div className="col-md-6">
-                    <label className="form-label">Overall Score</label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      placeholder="Score (1–10)"
-                    />
-                  </div>
-
-                  <div className="col-12">
-                    <label className="form-label">Message</label>
-                    <textarea
-                      className="form-control"
-                      rows="3"
-                      placeholder="Enter remarks"
-                    ></textarea>
+                    <div className="col-12">
+                      <label className="form-label">Message</label>
+                      <textarea
+                        className="form-control"
+                        rows="3"
+                        placeholder="Enter remarks"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={closeModal}
-                >
-                  Cancel
-                </button>
-                <button type="button" className="btn btn-primary">
-                  Save Remarks
-                </button>
+                <div className="modal-footer">
+                  <button
+                    className="btn btn-secondary"
+                    onClick={closeAllModals}
+                  >
+                    Cancel
+                  </button>
+                  <button className="btn btn-primary">Save Remarks</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+
+          <div className="modal-backdrop show" />
+        </>
       )}
 
-      {/* Modal Backdrop */}
-      {showModal && <div className="modal-backdrop fade show"></div>}
+      {/* ================= OFFER / ENVELOPE MODAL ================= */}
+      {showOfferModal && (
+        <>
+          <div
+            className="modal show d-block"
+            tabIndex="-1"
+            onClick={closeAllModals}
+          >
+            <div
+              className="modal-dialog modal-lg modal-dialog-centered"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">
+                    Offer Discussion – {selectedCandidate}
+                  </h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={closeAllModals}
+                  />
+                </div>
+
+                <div className="modal-body">
+                  <div className="row g-3">
+                    <div className="col-md-6">
+                      <label className="form-label">Designation</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="e.g. Senior Developer"
+                      />
+                    </div>
+
+                    <div className="col-md-6">
+                      <label className="form-label">Joining Date</label>
+                      <input type="date" className="form-control" />
+                    </div>
+
+                    <div className="col-md-6">
+                      <label className="form-label">Salary Expectation</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="e.g. ₹8,00,000 / year"
+                      />
+                    </div>
+
+                    <div className="col-12">
+                      <label className="form-label">Message</label>
+                      <textarea
+                        className="form-control"
+                        rows="3"
+                        placeholder="Enter message for candidate"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="modal-footer">
+                  <button
+                    className="btn btn-secondary"
+                    onClick={closeAllModals}
+                  >
+                    Cancel
+                  </button>
+                  <button className="btn btn-primary">Send Offer</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="modal-backdrop show" />
+        </>
+      )}
     </>
   );
 }

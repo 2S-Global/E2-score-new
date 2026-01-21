@@ -5,8 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import candidatesData from "../../../../../data/candidates";
 import styles from "./Applicants.module.css";
+import { usePathname } from "next/navigation";
 
 export default function ShortlistedCandidatesPage() {
+  const pathname = usePathname();
+  const isActive = (path) => pathname === path;
+
   const [showModal, setShowModal] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
 
@@ -35,26 +39,52 @@ export default function ShortlistedCandidatesPage() {
       <div
         className={`d-flex justify-content-between align-items-center mb-4 ${styles.widgetTitle}`}
       >
-        <h4 className="mb-0">Shortlisted Candidates List</h4>
+        {/* <h4 className="mb-0">Shortlisted Candidates List</h4> */}
 
         {/* TOP RIGHT LINKS */}
-          <div className={styles.topLinks}>
-            <Link href="/employers-dashboard/offer-letter" className={styles.topLink}>
-              <i className="la la-envelope me-1"></i> Offer Letter Sent
-            </Link>
-  
-            <Link href="/employers-dashboard/invitation" className={styles.topLink}>
-              <i className="la la-paper-plane me-1"></i> Invitation Sent
-            </Link>
-  
-            <Link
-              href="/employers-dashboard/job-applicants"
-              className={`${styles.topLink}`}
-            >
-              <i className="la la-user"></i> Job Applicants
-            </Link>
-          </div>
-              
+        <div className={styles.topLinks}>
+          <Link
+            href="/employers-dashboard/offer-letter"
+            className={`${styles.topLink} ${
+              isActive("/employers-dashboard/offer-letter") ? styles.active : ""
+            }`}
+          >
+            <i className="la la-envelope"></i>
+            Offer Letter Sent
+          </Link>
+
+          <Link
+            href="/employers-dashboard/invitation"
+            className={`${styles.topLink} ${
+              isActive("/employers-dashboard/invitation") ? styles.active : ""
+            }`}
+          >
+            <i className="la la-paper-plane"></i>
+            Invitation Sent
+          </Link>
+
+          <Link
+            href="/employers-dashboard/shortlisted"
+            className={`${styles.topLink} ${
+              isActive("/employers-dashboard/shortlisted") ? styles.active : ""
+            }`}
+          >
+            <i className="la la-user-check"></i>
+            Shortlisted Candidates
+          </Link>
+
+          <Link
+            href="/employers-dashboard/job-applicants"
+            className={`${styles.topLink} ${
+              isActive("/employers-dashboard/job-applicants")
+                ? styles.active
+                : ""
+            }`}
+          >
+            <i className="la la-users"></i>
+            Job Applicants
+          </Link>
+        </div>
       </div>
 
       {/* ================= TABLE ================= */}
@@ -144,89 +174,72 @@ export default function ShortlistedCandidatesPage() {
 
       {/* ================= INVITATION MODAL ================= */}
       {showModal && (
-        <div className="modal fade show d-block" tabIndex="-1">
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <form onSubmit={handleSubmit}>
-                <div className="modal-header">
-                  <h5 className="modal-title">
-                    Send Interview Invitation
-                  </h5>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    onClick={closeModal}
-                  ></button>
-                </div>
-
-                <div className="modal-body">
-                  {/* Candidate Info */}
-                  <p className="mb-3">
-                    <strong>Candidate:</strong>{" "}
-                    {selectedCandidate?.name}
-                  </p>
-
-                  {/* Interview Date */}
-                  <div className="mb-3">
-                    <label className="form-label">
-                      Interview Date
-                    </label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      required
+        <>
+          <div
+            className="modal show d-block"
+            tabIndex="-1"
+            onClick={closeModal}
+          >
+            <div
+              className="modal-dialog modal-dialog-centered"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="modal-content">
+                <form onSubmit={handleSubmit}>
+                  <div className="modal-header">
+                    <h5 className="modal-title">Send Interview Invitation</h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={closeModal}
                     />
                   </div>
 
-                  {/* Interview Time */}
-                  <div className="mb-3">
-                    <label className="form-label">
-                      Interview Time
-                    </label>
-                    <input
-                      type="time"
-                      className="form-control"
-                      required
-                    />
+                  <div className="modal-body">
+                    <p className="mb-3">
+                      <strong>Candidate:</strong> {selectedCandidate?.name}
+                    </p>
+
+                    <div className="mb-3">
+                      <label className="form-label">Interview Date</label>
+                      <input type="date" className="form-control" required />
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label">Interview Time</label>
+                      <input type="time" className="form-control" required />
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label">Designation For</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        defaultValue={selectedCandidate?.designation}
+                        required
+                      />
+                    </div>
                   </div>
 
-                  {/* Designation For */}
-                  <div className="mb-3">
-                    <label className="form-label">
-                      Designation For
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="e.g. Senior React Developer"
-                      defaultValue={selectedCandidate?.designation}
-                      required
-                    />
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={closeModal}
+                    >
+                      Cancel
+                    </button>
+                    <button type="submit" className="btn btn-primary">
+                      Send Invitation
+                    </button>
                   </div>
-                </div>
-
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={closeModal}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                  >
-                    Send Invitation
-                  </button>
-                </div>
-              </form>
+                </form>
+              </div>
             </div>
           </div>
 
-          {/* Backdrop */}
-          <div className="modal-backdrop fade show"></div>
-        </div>
+          <div className="modal-backdrop show" />
+        </>
       )}
     </div>
   );

@@ -165,11 +165,16 @@
 
 .topLinks {
   display: flex;
-  gap: 24px;
+  gap: 28px;
+  margin-left: auto; /* pushes links to right */
 }
 
+/* Link style */
 .topLink {
-  color: #2563eb; /* Blue text */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #2563eb;
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
@@ -177,7 +182,7 @@
   padding-bottom: 6px;
 }
 
-/* Hover underline effect */
+/* Hover underline */
 .topLink::after {
   content: "";
   position: absolute;
@@ -192,4 +197,16 @@
 .topLink:hover::after {
   width: 100%;
 }
+
+/* Active tab */
+.active::after {
+  width: 100%;
+}
+
+/* Icon sizing */
+.topLink i {
+  font-size: 16px;
+}
+
+
 

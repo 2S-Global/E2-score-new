@@ -4,37 +4,63 @@ import Link from "next/link";
 import Image from "next/image";
 import candidatesData from "../../../../../data/candidates";
 import styles from "./Applicants.module.css";
+import { usePathname } from "next/navigation";
 
 export default function OfferLetterPage() {
+  const pathname = usePathname();
+  const isActive = (path) => pathname === path;
   return (
     <div className={styles.tabsBox}>
       {/* ================= HEADER ================= */}
       <div
         className={`d-flex justify-content-between align-items-center mb-4 ${styles.widgetTitle}`}
       >
-        <h4 className="mb-0">Offer Letter Sent List</h4>
+        {/* <h4 className="mb-0">Offer Letter Sent List</h4> */}
 
         {/* TOP RIGHT LINKS */}
-          <div className={styles.topLinks}>
-            <Link
-            href="/employers-dashboard/shortlisted"
-            className={`${styles.topLink}`}
+        <div className={styles.topLinks}>
+          <Link
+            href="/employers-dashboard/offer-letter"
+            className={`${styles.topLink} ${
+              isActive("/employers-dashboard/offer-letter") ? styles.active : ""
+            }`}
           >
-            <i className="la la-user-check me-1"></i> Shortlisted Candidates
+            <i className="la la-envelope"></i>
+            Offer Letter Sent
           </Link>
-  
-            <Link href="/employers-dashboard/invitation" className={styles.topLink}>
-              <i className="la la-paper-plane me-1"></i> Invitation Sent
-            </Link>
-  
-            <Link
-              href="/employers-dashboard/job-applicants"
-              className={`${styles.topLink}`}
-            >
-              <i className="la la-user"></i> Job Applicants
-            </Link>
-          </div>
-    
+
+          <Link
+            href="/employers-dashboard/invitation"
+            className={`${styles.topLink} ${
+              isActive("/employers-dashboard/invitation") ? styles.active : ""
+            }`}
+          >
+            <i className="la la-paper-plane"></i>
+            Invitation Sent
+          </Link>
+
+          <Link
+            href="/employers-dashboard/shortlisted"
+            className={`${styles.topLink} ${
+              isActive("/employers-dashboard/shortlisted") ? styles.active : ""
+            }`}
+          >
+            <i className="la la-user-check"></i>
+            Shortlisted Candidates
+          </Link>
+
+          <Link
+            href="/employers-dashboard/job-applicants"
+            className={`${styles.topLink} ${
+              isActive("/employers-dashboard/job-applicants")
+                ? styles.active
+                : ""
+            }`}
+          >
+            <i className="la la-users"></i>
+            Job Applicants
+          </Link>
+        </div>
       </div>
 
       {/* ================= TABLE ================= */}
