@@ -26,7 +26,28 @@ export default function InvitationPage() {
         <div
           className={`d-flex justify-content-between align-items-center mb-4 ${styles.widgetTitle}`}
         >
-          <h4 className="mb-0">Interview Invitation</h4>
+          <h4 className="mb-0">Interview Invitation List</h4>
+
+          {/* TOP RIGHT LINKS */}
+          <div className={styles.topLinks}>
+            <Link
+            href="/employers-dashboard/shortlisted"
+            className={`${styles.topLink}`}
+          >
+            <i className="la la-user-check me-1"></i> Shortlisted Candidates
+          </Link>
+  
+            <Link href="/employers-dashboard/offer-letter" className={styles.topLink}>
+              <i className="la la-envelope me-1"></i> Offer Letter Sent
+            </Link>
+  
+            <Link
+              href="/employers-dashboard/job-applicants"
+              className={`${styles.topLink} ${styles.active}`}
+            >
+              <i className="la la-user"></i> Job Applicants
+            </Link>
+          </div>
         </div>
 
         {/* ================= TABLE ================= */}

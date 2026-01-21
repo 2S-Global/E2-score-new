@@ -12,9 +12,25 @@ export default function JobApplicantsPage() {
       <div
         className={`d-flex justify-content-between align-items-center mb-4 ${styles.widgetTitle}`}
       >
-        <h4 className="mb-0">Job Applicants</h4>
+        <h4 className="mb-0">Job Applicants list</h4>
 
-    
+        {/* TOP RIGHT LINKS */}
+        <div className={styles.topLinks}>
+          <Link href="/employers-dashboard/offer-letter" className={styles.topLink}>
+            <i className="la la-envelope me-1"></i> Offer Letter Sent
+          </Link>
+
+          <Link href="/employers-dashboard/invitation" className={styles.topLink}>
+            <i className="la la-paper-plane me-1"></i> Invitation Sent
+          </Link>
+
+          <Link
+            href="/employers-dashboard/shortlisted"
+            className={`${styles.topLink} ${styles.active}`}
+          >
+            <i className="la la-user-check me-1"></i> Shortlisted Candidates
+          </Link>
+        </div>
       </div>
 
       {/* TABLE */}
@@ -58,7 +74,7 @@ export default function JobApplicantsPage() {
                   <i className="la la-map-marker me-1"></i>
                   {candidate.location}
                 </td>
-                <td>₹{candidate.monthlySalary} / month</td>
+                <td>₹{candidate.monthlySalary} /month</td>
 
                 <td>
                   <div className={styles.skillsWrap}>

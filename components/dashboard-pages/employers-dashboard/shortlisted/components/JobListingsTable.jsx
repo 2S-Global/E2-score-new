@@ -35,7 +35,26 @@ export default function ShortlistedCandidatesPage() {
       <div
         className={`d-flex justify-content-between align-items-center mb-4 ${styles.widgetTitle}`}
       >
-        <h4 className="mb-0">Shortlisted Candidates</h4>
+        <h4 className="mb-0">Shortlisted Candidates List</h4>
+
+        {/* TOP RIGHT LINKS */}
+          <div className={styles.topLinks}>
+            <Link href="/employers-dashboard/offer-letter" className={styles.topLink}>
+              <i className="la la-envelope me-1"></i> Offer Letter Sent
+            </Link>
+  
+            <Link href="/employers-dashboard/invitation" className={styles.topLink}>
+              <i className="la la-paper-plane me-1"></i> Invitation Sent
+            </Link>
+  
+            <Link
+              href="/employers-dashboard/job-applicants"
+              className={`${styles.topLink} ${styles.active}`}
+            >
+              <i className="la la-user"></i> Job Applicants
+            </Link>
+          </div>
+              
       </div>
 
       {/* ================= TABLE ================= */}

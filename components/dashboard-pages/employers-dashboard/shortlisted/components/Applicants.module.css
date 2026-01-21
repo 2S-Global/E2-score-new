@@ -162,3 +162,33 @@
   height: 50px !important;
   max-width: auto !important;
 }
+
+.topLinks {
+  display: flex;
+  gap: 24px;
+}
+
+.topLink {
+  color: #2563eb; /* Blue text */
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 6px;
+}
+
+/* Hover underline effect */
+.topLink::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #2563eb;
+  transition: width 0.25s ease;
+}
+
+.topLink:hover::after {
+  width: 100%;
+}
