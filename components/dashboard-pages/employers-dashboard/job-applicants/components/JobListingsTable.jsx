@@ -70,7 +70,7 @@ export default function JobApplicantsPage() {
         <table className={`table table-hover align-middle ${styles.table}`}>
           <thead>
             <tr>
-              <th>Candidate</th>
+              <th className="text-center" style={{ width: "15%"}}>Candidate</th>
               <th>Designation</th>
               <th>Location</th>
               <th>Salary</th>
@@ -91,6 +91,8 @@ export default function JobApplicantsPage() {
                         alt={candidate.name}
                         fill
                         sizes="50px"
+                        quality={100}
+                        unoptimized
                         className={styles.avatarImg}
                       />
                     </div>
@@ -143,7 +145,7 @@ export default function JobApplicantsPage() {
                       className="btn btn-outline-danger btn-sm"
                       title="Reject"
                     >
-                      <i className="la la-times-circle-o"></i>
+                      <i className="la la-times"></i>
                     </button>
                   </div>
                 </td>

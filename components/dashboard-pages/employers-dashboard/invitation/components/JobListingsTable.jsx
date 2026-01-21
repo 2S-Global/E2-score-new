@@ -135,6 +135,8 @@ export default function InvitationPage() {
                         alt={c.name}
                         fill
                         sizes="50px"
+                        quality={100}
+                        unoptimized
                         className={styles.avatarImg}
                       />
                     </div>

@@ -68,13 +68,12 @@ export default function OfferLetterPage() {
         <table className={`table table-hover align-middle ${styles.table}`}>
           <thead>
             <tr>
-              <th style={{ width: "20%" }}>Candidate</th>
-              <th style={{ width: "15%" }}>Designation</th>
-              <th style={{ width: "12%" }}>Location</th>
-              <th style={{ width: "12%" }}>Salary</th>
-              <th style={{ width: "18%" }}>Skills</th>
-              <th style={{ width: "15%" }}>Experience / Notice Period</th>
-              <th style={{ width: "8%", textAlign: "center" }}>Action</th>
+              <th className="text-center" style={{ width: "20%"}}>Candidate</th>
+              <th>Designation</th>
+              <th>Salary Offered</th>
+              <th>Joining Date</th>
+              <th>Status</th>
+              <th className="text-center">Action</th>
             </tr>
           </thead>
 
@@ -84,13 +83,18 @@ export default function OfferLetterPage() {
                 {/* Candidate */}
                 <td>
                   <div className="d-flex flex-column align-items-center text-center gap-1">
-                    <Image
-                      src={candidate.avatar}
-                      width={46}
-                      height={46}
-                      className="rounded-circle"
-                      alt={candidate.name}
-                    />
+                    <div className={styles.candidateAvatar}>
+                      <Image
+                        src={candidate.avatar}
+                        alt={candidate.name}
+                        fill
+                        sizes="50px"
+                        quality={100}
+                        unoptimized
+                        className={styles.avatarImg}
+                      />
+                    </div>
+
                     <Link
                       href={`/candidates-details/${candidate.id}`}
                       className={styles.candidateName}
@@ -103,29 +107,15 @@ export default function OfferLetterPage() {
                 {/* Designation */}
                 <td>{candidate.designation}</td>
 
-                {/* Location */}
-                <td>
-                  <i className="la la-map-marker me-1"></i>
-                  {candidate.location}
-                </td>
-
-                {/* Salary */}
+                {/* Salary Offered*/}
                 <td>₹{candidate.monthlySalary} / month</td>
 
-                {/* Skills */}
-                <td>
-                  <div className={styles.skillsWrap}>
-                    {candidate.tags.map((tag, index) => (
-                      <span key={index} className={styles.skillBadge}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </td>
+                {/* Joining date */}
+                <td>01 Feb 2026</td>
 
-                {/* Experience / Notice */}
+                {/* Status */}
                 <td>
-                  {candidate.experience} / {candidate.noticePeriod}
+                  <span className="badge bg-success">Completed</span>
                 </td>
 
                 {/* Actions */}
@@ -139,10 +129,10 @@ export default function OfferLetterPage() {
                     </button>
 
                     <button
-                      className="btn btn-outline-success btn-sm"
-                      title="Accept Offer"
+                      className="btn btn-outline-danger btn-sm"
+                      title="Reject"
                     >
-                      <i className="la la-check"></i>
+                      <i className="la la-times"></i>
                     </button>
                   </div>
                 </td>

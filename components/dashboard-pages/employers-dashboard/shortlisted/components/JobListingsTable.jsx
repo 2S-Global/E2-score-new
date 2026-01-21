@@ -92,13 +92,13 @@ export default function ShortlistedCandidatesPage() {
         <table className={`table table-hover align-middle ${styles.table}`}>
           <thead>
             <tr>
-              <th style={{ width: "20%" }}>Candidate</th>
-              <th style={{ width: "15%" }}>Designation</th>
-              <th style={{ width: "12%" }}>Location</th>
-              <th style={{ width: "12%" }}>Salary</th>
-              <th style={{ width: "18%" }}>Skills</th>
-              <th style={{ width: "15%" }}>Experience / Notice Period</th>
-              <th style={{ width: "8%", textAlign: "center" }}>Action</th>
+              <th className="text-center" style={{ width: "15%"}}>Candidate</th>
+              <th>Designation</th>
+              <th>Location</th>
+              <th>Salary</th>
+              <th>Skills</th>
+              <th>Experience / Notice Period</th>
+              <th className="text-center">Action</th>
             </tr>
           </thead>
 
@@ -114,6 +114,8 @@ export default function ShortlistedCandidatesPage() {
                         alt={candidate.name}
                         fill
                         sizes="50px"
+                        quality={100}
+                        unoptimized
                         className={styles.avatarImg}
                       />
                     </div>
@@ -166,6 +168,13 @@ export default function ShortlistedCandidatesPage() {
                       onClick={() => openModal(candidate)}
                     >
                       <i className="la la-paper-plane"></i>
+                    </button>
+
+                    <button
+                      className="btn btn-outline-danger btn-sm"
+                      title="Reject"
+                    >
+                      <i className="la la-times"></i>
                     </button>
                   </div>
                 </td>
@@ -234,12 +243,6 @@ export default function ShortlistedCandidatesPage() {
                     </button>
                     <button type="submit" className="btn btn-primary">
                       Send Invitation
-                    </button>
-                    <button
-                      className="btn btn-outline-danger btn-sm"
-                      title="Reject Candidate"
-                    >
-                      <i className="la la-times"></i>
                     </button>
                   </div>
                 </form>
