@@ -85,13 +85,16 @@ export default function JobApplicantsPage() {
               <tr key={candidate.id}>
                 <td>
                   <div className="d-flex flex-column align-items-center text-center gap-1">
-                    <Image
-                      src={candidate.avatar}
-                      width={46}
-                      height={46}
-                      className="rounded-circle"
-                      alt={candidate.name}
-                    />
+                    <div className={styles.candidateAvatar}>
+                      <Image
+                        src={candidate.avatar}
+                        alt={candidate.name}
+                        fill
+                        sizes="50px"
+                        className={styles.avatarImg}
+                      />
+                    </div>
+
                     <Link
                       href={`/candidates-details/${candidate.id}`}
                       className={styles.candidateName}
@@ -124,11 +127,23 @@ export default function JobApplicantsPage() {
 
                 <td>
                   <div className="d-flex justify-content-center gap-2">
-                    <button className="btn btn-outline-primary btn-sm">
+                    <button
+                      className="btn btn-outline-primary btn-sm"
+                      title="View"
+                    >
                       <i className="la la-eye"></i>
                     </button>
-                    <button className="btn btn-outline-success btn-sm">
+                    <button
+                      className="btn btn-outline-success btn-sm"
+                      title="Approve"
+                    >
                       <i className="la la-check"></i>
+                    </button>
+                    <button
+                      className="btn btn-outline-danger btn-sm"
+                      title="Reject"
+                    >
+                      <i className="la la-times-circle-o"></i>
                     </button>
                   </div>
                 </td>

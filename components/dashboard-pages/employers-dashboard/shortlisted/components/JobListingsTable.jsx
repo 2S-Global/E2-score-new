@@ -108,13 +108,16 @@ export default function ShortlistedCandidatesPage() {
                 {/* Candidate */}
                 <td>
                   <div className="d-flex flex-column align-items-center text-center gap-1">
-                    <Image
-                      src={candidate.avatar}
-                      width={46}
-                      height={46}
-                      className="rounded-circle"
-                      alt={candidate.name}
-                    />
+                    <div className={styles.candidateAvatar}>
+                      <Image
+                        src={candidate.avatar}
+                        alt={candidate.name}
+                        fill
+                        sizes="50px"
+                        className={styles.avatarImg}
+                      />
+                    </div>
+
                     <Link
                       href={`/candidates-details/${candidate.id}`}
                       className={styles.candidateName}
@@ -231,6 +234,12 @@ export default function ShortlistedCandidatesPage() {
                     </button>
                     <button type="submit" className="btn btn-primary">
                       Send Invitation
+                    </button>
+                    <button
+                      className="btn btn-outline-danger btn-sm"
+                      title="Reject Candidate"
+                    >
+                      <i className="la la-times"></i>
                     </button>
                   </div>
                 </form>

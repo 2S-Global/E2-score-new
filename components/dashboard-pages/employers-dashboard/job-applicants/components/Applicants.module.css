@@ -208,5 +208,22 @@
   font-size: 16px;
 }
 
+/* Candidate Avatar Wrapper */
+.candidateAvatar {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+/* Avatar Image */
+.avatarImg {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  max-height: auto;
+}
 
 
