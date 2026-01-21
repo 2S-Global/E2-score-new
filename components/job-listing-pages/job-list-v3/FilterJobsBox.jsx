@@ -297,13 +297,13 @@ const FilterJobsBox = () => {
       {/* End top filter bar box */}
       <div className="row">{content}</div>
       {/* <!-- List Show More --> */}
-      <div className="ls-show-more">
+{/*       <div className="ls-show-more">
         <p>Show 36 of 497 Jobs</p>
         <div className="bar">
           <span className="bar-inner" style={{ width: "40%" }}></span>
         </div>
         <button className="show-more">Show More</button>
-      </div>
+      </div> */}
     </>
   );
 };

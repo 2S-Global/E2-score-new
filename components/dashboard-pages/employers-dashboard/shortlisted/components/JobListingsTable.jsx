@@ -1,11 +1,34 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import candidatesData from "../../../../../data/candidates";
 import styles from "./Applicants.module.css";
 
 export default function ShortlistedCandidatesPage() {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCandidate, setSelectedCandidate] = useState(null);
+
+  const openModal = (candidate) => {
+    setSelectedCandidate(candidate);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedCandidate(null);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // 👉 handle API call here
+    console.log("Invitation sent to:", selectedCandidate);
+
+    closeModal();
+  };
+
   return (
     <div className={styles.tabsBox}>
       {/* ================= HEADER ================= */}
@@ -13,8 +36,6 @@ export default function ShortlistedCandidatesPage() {
         className={`d-flex justify-content-between align-items-center mb-4 ${styles.widgetTitle}`}
       >
         <h4 className="mb-0">Shortlisted Candidates</h4>
-
-
       </div>
 
       {/* ================= TABLE ================= */}
@@ -54,19 +75,15 @@ export default function ShortlistedCandidatesPage() {
                   </div>
                 </td>
 
-                {/* Designation */}
                 <td>{candidate.designation}</td>
 
-                {/* Location */}
                 <td>
                   <i className="la la-map-marker me-1"></i>
                   {candidate.location}
                 </td>
 
-                {/* Salary */}
                 <td>₹{candidate.monthlySalary} / month</td>
 
-                {/* Skills */}
                 <td>
                   <div className={styles.skillsWrap}>
                     {candidate.tags.map((tag, index) => (
@@ -77,7 +94,6 @@ export default function ShortlistedCandidatesPage() {
                   </div>
                 </td>
 
-                {/* Experience / Notice */}
                 <td>
                   {candidate.experience} / {candidate.noticePeriod}
                 </td>
@@ -95,6 +111,7 @@ export default function ShortlistedCandidatesPage() {
                     <button
                       className="btn btn-outline-info btn-sm"
                       title="Send Invitation"
+                      onClick={() => openModal(candidate)}
                     >
                       <i className="la la-paper-plane"></i>
                     </button>
@@ -105,6 +122,93 @@ export default function ShortlistedCandidatesPage() {
           </tbody>
         </table>
       </div>
+
+      {/* ================= INVITATION MODAL ================= */}
+      {showModal && (
+        <div className="modal fade show d-block" tabIndex="-1">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <form onSubmit={handleSubmit}>
+                <div className="modal-header">
+                  <h5 className="modal-title">
+                    Send Interview Invitation
+                  </h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={closeModal}
+                  ></button>
+                </div>
+
+                <div className="modal-body">
+                  {/* Candidate Info */}
+                  <p className="mb-3">
+                    <strong>Candidate:</strong>{" "}
+                    {selectedCandidate?.name}
+                  </p>
+
+                  {/* Interview Date */}
+                  <div className="mb-3">
+                    <label className="form-label">
+                      Interview Date
+                    </label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      required
+                    />
+                  </div>
+
+                  {/* Interview Time */}
+                  <div className="mb-3">
+                    <label className="form-label">
+                      Interview Time
+                    </label>
+                    <input
+                      type="time"
+                      className="form-control"
+                      required
+                    />
+                  </div>
+
+                  {/* Designation For */}
+                  <div className="mb-3">
+                    <label className="form-label">
+                      Designation For
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="e.g. Senior React Developer"
+                      defaultValue={selectedCandidate?.designation}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={closeModal}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                  >
+                    Send Invitation
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          {/* Backdrop */}
+          <div className="modal-backdrop fade show"></div>
+        </div>
+      )}
     </div>
   );
 }
