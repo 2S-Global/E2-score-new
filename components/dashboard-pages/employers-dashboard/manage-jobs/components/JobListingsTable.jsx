@@ -32,40 +32,39 @@ const JobListingsTable = () => {
 
   const [allJobListing, setAllJobListing] = useState([]);
 
-const handleStatusToggle = async (job) => {
-  // If already completed, do nothing (optional safety)
-  if (job.status === "completed") return;
+  const handleStatusToggle = async (job) => {
+    // If already completed, do nothing (optional safety)
+    if (job.status === "completed") return;
 
-  try {
-    setUpdatingJobId(job._id);
+    try {
+      setUpdatingJobId(job._id);
 
-    const response = await axios.post(
-      `${apiurl}/api/jobposting/confirm_job_posting_details`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.post(
+        `${apiurl}/api/jobposting/confirm_job_posting_details`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            jobId: job._id,
+          },
         },
-        params: {
-          jobId: job._id,
-        },
-      },
-    );
+      );
 
-    if (!response.data.success) {
-      alert(response.data.message || "Failed to update job status");
-      return;
+      if (!response.data.success) {
+        alert(response.data.message || "Failed to update job status");
+        return;
+      }
+
+      setSuccess("Job activated successfully");
+      fetchAllJobListing(); // refresh table
+    } catch (err) {
+      alert(err.response?.data?.message || err.message);
+    } finally {
+      setUpdatingJobId(null);
     }
-
-    setSuccess("Job activated successfully");
-    fetchAllJobListing(); // refresh table
-  } catch (err) {
-    alert(err.response?.data?.message || err.message);
-  } finally {
-    setUpdatingJobId(null);
-  }
-};
-
+  };
 
   const fetchAllJobListing = async () => {
     // setLoading(true);
@@ -209,7 +208,14 @@ const handleStatusToggle = async (job) => {
                       </div>
                     </td>
                     <td>
-                      <small>{job.appliedCount} Applied</small>
+                      <Link
+                        href={`/employers-dashboard/job-applicants`}
+                        className="text-decoration-none"
+                      >
+                        <span className="badge bg-info">
+                          {job.appliedCount ?? 0} Applied
+                        </span>
+                      </Link>
                     </td>
                     <td>
                       <small>{job.createdAt}</small>
@@ -269,9 +275,7 @@ const handleStatusToggle = async (job) => {
                           {updatingJobId === job._id ? (
                             <span className="spinner-border spinner-border-sm text-primary"></span>
                           ) : job.status === "completed" ? (
-                            <span className="text-success fw-bold">
-                              Active
-                            </span>
+                            <span className="text-success fw-bold">Active</span>
                           ) : (
                             <span className="text-warning fw-semibold">
                               Draft
