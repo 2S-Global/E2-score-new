@@ -26,7 +26,7 @@ export default function JobApplicantsPage() {
 
           <Link
             href="/employers-dashboard/shortlisted"
-            className={`${styles.topLink} ${styles.active}`}
+            className={`${styles.topLink}`}
           >
             <i className="la la-user-check me-1"></i> Shortlisted Candidates
           </Link>

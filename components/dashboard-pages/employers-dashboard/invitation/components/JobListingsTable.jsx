@@ -43,7 +43,7 @@ export default function InvitationPage() {
   
             <Link
               href="/employers-dashboard/job-applicants"
-              className={`${styles.topLink} ${styles.active}`}
+              className={`${styles.topLink}`}
             >
               <i className="la la-user"></i> Job Applicants
             </Link>
