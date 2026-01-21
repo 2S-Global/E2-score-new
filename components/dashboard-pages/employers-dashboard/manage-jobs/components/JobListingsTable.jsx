@@ -198,12 +198,12 @@ const handleStatusToggle = async (job) => {
                             <i className="flaticon-briefcase me-1"></i>{" "}
                             {job.jobType?.join(", ")}
                             <br />
-                            <i className="flaticon-map-locator me-1"></i>{" "}
-                            {job.jobLocationType === "remote"
+                            {/* <i className="flaticon-map-locator me-1"></i>{" "} */}
+                            {/* {job.jobLocationType === "remote"
                               ? job.advertiseCityName
                                 ? `Remote - ${job.advertiseCityName}`
                                 : "Remote"
-                              : job.location || "N/A"}
+                              : job.location || "N/A"} */}
                           </small>
                         </div>
                       </div>
