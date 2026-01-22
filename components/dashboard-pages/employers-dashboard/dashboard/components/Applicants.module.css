@@ -74,10 +74,16 @@
   margin-bottom: 0;
 }
 
+/* .table-responsive {
+  position: relative;
+  left: -25px;
+  overflow: unset !important;
+} */
+
 .table thead th {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
-  color: #ff0204 !important;
+  color: #000000 !important;
   background-color: transparent !important;
   border: none;
   padding: 10px 14px !important;
@@ -161,4 +167,22 @@
   width: 50px !important;
   height: 50px !important;
   max-width: auto !important;
+}
+
+/* Candidate Avatar Wrapper */
+.candidateAvatar {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+/* Avatar Image */
+.avatarImg {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  max-height: auto;
 }

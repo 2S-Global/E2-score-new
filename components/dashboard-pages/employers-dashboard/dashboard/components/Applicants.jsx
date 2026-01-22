@@ -23,7 +23,10 @@ const Applicants = () => {
             Invitation Sent
           </Link>
 
-          <Link href="/shortlisted-candidates" className={styles.shortlistedLink}>
+          <Link
+            href="/shortlisted-candidates"
+            className={styles.shortlistedLink}
+          >
             <i className="la la-user-check me-1"></i>
             Shortlisted Candidates
           </Link>
@@ -51,13 +54,17 @@ const Applicants = () => {
                 <td>
                   {/* <div className="d-flex align-items-center gap-3"> */}
                   <div className="d-flex flex-column align-items-center text-center gap-1">
-                    <Image
-                      src={candidate.avatar}
-                      width={46}
-                      height={46}
-                      className="rounded-circle"
-                      alt={candidate.name}
-                    />
+                    <div className={styles.candidateAvatar}>
+                      <Image
+                        src={candidate.avatar}
+                        alt={candidate.name}
+                        fill
+                        sizes="50px"
+                        quality={100}
+                        unoptimized
+                        className={styles.avatarImg}
+                      />
+                    </div>
                     <Link
                       href={`/candidates-details/${candidate.id}`}
                       className={styles.candidateName}
@@ -74,10 +81,7 @@ const Applicants = () => {
                   {candidate.location}
                 </td>
 
-                <td>
-                  ₹{candidate.monthlySalary} /
-                  month
-                </td>
+                <td>₹{candidate.monthlySalary} / month</td>
 
                 <td>
                   <div className={styles.skillsWrap}>
@@ -89,7 +93,9 @@ const Applicants = () => {
                   </div>
                 </td>
 
-                <td>{candidate.experience} / {candidate.noticePeriod}</td>
+                <td>
+                  {candidate.experience} / {candidate.noticePeriod}
+                </td>
 
                 <td>
                   <div

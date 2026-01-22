@@ -113,7 +113,10 @@ const ApplicantsContainer = () => {
       </div>
 
       {/* ================= TABLE ================= */}
-      <div className="table-responsive">
+      <div
+        className="table-responsive"
+        style={{ position: "relative", left: "-25px", overflow: "unset" }}
+      >
         <table className={`table table-hover align-middle ${styles.table}`}>
           <thead>
             <tr>
@@ -122,9 +125,7 @@ const ApplicantsContainer = () => {
               <th style={{ width: "12%" }}>Location</th>
               <th style={{ width: "12%" }}>Salary</th>
               <th style={{ width: "18%" }}>Skills</th>
-              <th style={{ width: "15%" }}>
-                Experience / Notice Period
-              </th>
+              <th style={{ width: "15%" }}>Experience / Notice Period</th>
               <th style={{ width: "8%", textAlign: "center" }}>Action</th>
             </tr>
           </thead>
@@ -134,13 +135,17 @@ const ApplicantsContainer = () => {
               <tr key={candidate.id}>
                 <td>
                   <div className="d-flex flex-column align-items-center text-center gap-1">
-                    <Image
-                      src={candidate.avatar}
-                      width={46}
-                      height={46}
-                      className="rounded-circle"
-                      alt={candidate.name}
-                    />
+                    <div className={styles.candidateAvatar}>
+                      <Image
+                        src={candidate.avatar}
+                        alt={candidate.name}
+                        fill
+                        sizes="50px"
+                        quality={100}
+                        unoptimized
+                        className={styles.avatarImg}
+                      />
+                    </div>
                     <Link
                       href={`/candidates-details/${candidate.id}`}
                       className={styles.candidateName}
