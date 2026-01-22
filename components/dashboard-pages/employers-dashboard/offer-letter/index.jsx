@@ -9,7 +9,7 @@ import MenuToggler from "../../MenuToggler";
 
 const index = () => {
   return (
-    <div className="page-wrapper dashboard">
+    <div className="page-wrapper dashboard" style={{ marginLeft: 0, paddingLeft: 0 }}>
       <span className="header-span"></span>
       {/* <!-- Header Span for hight --> */}
 
@@ -19,15 +19,16 @@ const index = () => {
       <DashboardHeader />
       {/* End Header */}
 
-      <MobileMenu />
+      {/* <MobileMenu /> */}
       {/* End MobileMenu */}
 
-      <DashboardEmployerSidebar />
+      {/* <DashboardEmployerSidebar /> */}
       {/* <!-- End User Sidebar Menu --> */}
 
       {/* <!-- Dashboard --> */}
       <section className="user-dashboard">
-        <div className="dashboard-outer">
+        {/* <div className="dashboard-outer"> */}
+        <div className="no-sidebar-dashboard" style={{padding: "30px"}}>
           <BreadCrumb title="Offer-letters" />
           {/* breadCrumb */}
 
