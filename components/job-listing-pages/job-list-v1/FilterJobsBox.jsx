@@ -47,6 +47,8 @@ const FilterJobsBox = () => {
   ====================== */
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
+  const [bookmarkLoading, setBookmarkLoading] = useState({});
+  const [savedJobs, setSavedJobs] = useState({});
 
   /* ======================
      FETCH JOBS
@@ -61,9 +63,16 @@ const FilterJobsBox = () => {
           },
         );
 
-        if (response.data.success) {
-          setAllJobs(response.data.data);
-        }
+       if (response.data.success) {
+         setAllJobs(response.data.data);
+
+         // ✅ Initialize savedJobs from backend
+         const initialSavedJobs = {};
+         response.data.data.forEach((job) => {
+           initialSavedJobs[job._id] = job.isBookmarked;
+         });
+         setSavedJobs(initialSavedJobs);
+       }
       } catch (err) {
         setError(err.message);
       }
@@ -71,6 +80,51 @@ const FilterJobsBox = () => {
 
     fetchAllJobs();
   }, []);
+
+  const handleBookmark = async (jobId) => {
+    if (!token) return;
+
+    setBookmarkLoading((prev) => ({ ...prev, [jobId]: true }));
+
+    try {
+      if (savedJobs[jobId]) {
+        // 🔴 REMOVE saved job
+        await axios.post(
+          `${apiurl}/api/candidate/joblisting/remove_saved_job`,
+          { savedJobId: jobId },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        // ❌ Remove from state
+        setSavedJobs((prev) => ({
+          ...prev,
+          [jobId]: false,
+        }));
+      } else {
+        // 🟢 SAVE job
+        await axios.post(
+          `${apiurl}/api/candidate/joblisting/save_job`,
+          { jobId },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        // ✅ Mark as saved
+        setSavedJobs((prev) => ({ ...prev, [jobId]: true }));
+      }
+    } catch (error) {
+      console.error("Bookmark toggle failed", error);
+    } finally {
+      setBookmarkLoading((prev) => ({ ...prev, [jobId]: false }));
+    }
+  };
 
   /* ======================
      FILTERS (UNCHANGED)
@@ -183,8 +237,27 @@ const FilterJobsBox = () => {
               ))}
           </ul>
 
-          <button className="bookmark-btn">
-            <span className="flaticon-bookmark"></span>
+          <button
+            className="bookmark-btn"
+            disabled={bookmarkLoading[item._id]}
+            onClick={() => handleBookmark(item._id)}
+          >
+            {bookmarkLoading[item._id] ? (
+              <span className="spinner-border spinner-border-sm"></span>
+            ) : (
+              <i
+                className={
+                  savedJobs[item._id]
+                    ? "fa-solid fa-bookmark"
+                    : "fa-regular fa-bookmark"
+                }
+                style={{
+                  color: savedJobs[item._id] ? "#000" : "#666",
+                  fontSize: "16px",
+                  transition: "0.2s ease",
+                }}
+              ></i>
+            )}
           </button>
         </div>
       </div>
