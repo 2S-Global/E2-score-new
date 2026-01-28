@@ -101,23 +101,22 @@ const JobFavouriteTable = () => {
                               </span>
 
                               <h4>
-                                <Link href={`/job-details/${job._id}`}>
+                                <Link
+                                  href={`/job-details/${job._id}?view=candidate`}
+                                >
                                   {job.jobTitle}
                                 </Link>
                               </h4>
 
                               <ul className="job-other-info">
                                 {Array.isArray(job.jobType) &&
-                                job.jobType.length > 0 ? (
-                                  job.jobType.map((type, index) => (
-                                    <li key={index} className="time">
-                                     
-                                      {type}
-                                    </li>
-                                  ))
-                                ) : (
-                                  ""
-                                )}
+                                job.jobType.length > 0
+                                  ? job.jobType.map((type, index) => (
+                                      <li key={index} className="time">
+                                        {type}
+                                      </li>
+                                    ))
+                                  : ""}
                               </ul>
                             </div>
                           </div>

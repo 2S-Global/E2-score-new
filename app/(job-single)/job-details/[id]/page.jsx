@@ -20,6 +20,8 @@ import ApplyJobModalContent from "@/components/job-single-pages/shared-component
 import Image from "next/image";
 import JobDescription from "@/components/job-single-pages/shared-components/JobDescription";
 import DashboardHeader from "../../../../components/header/DashboardHeader";
+import MessageComponent from "@/components/common/ResponseMsg";
+
 const JobSingleDynamicV1 = () => {
   const params = useParams(); // ✅ Don't wrap it with `use()` && get dynamic route params (/job-details/[id])
   const id = params.id;
@@ -47,16 +49,22 @@ const JobSingleDynamicV1 = () => {
     const fetchJobPreviewDetails = async () => {
       // setLoading(true);
       try {
-        const response = await axios.get(`${apiurl}/api/jobposting/get_job_preview_details`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        const response = await axios.get(
+          `${apiurl}/api/jobposting/get_job_preview_details`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            params: {
+              jobId: id,
+            },
           },
-          params: {
-            jobId: id,
-          },
-        });
+        );
 
-        console.log("Here is my all job listing data which is coming from useEffect !", response.data);
+        console.log(
+          "Here is my all job listing data which is coming from useEffect !",
+          response.data,
+        );
 
         if (response.data.success && response.status === 200) {
           setJobPreviewDetails(response.data.data);
@@ -68,7 +76,6 @@ const JobSingleDynamicV1 = () => {
 
     fetchJobPreviewDetails();
   }, []);
-
 
   return (
     <>
@@ -255,9 +262,9 @@ const JobSingleDynamicV1 = () => {
                     >
                       Apply For Job
                     </a>
-                    <button className="bookmark-btn">
+                    {/* <button className="bookmark-btn">
                       <i className="flaticon-bookmark"></i>
-                    </button>
+                    </button> */}
                   </div>
                 )}
 
@@ -272,8 +279,17 @@ const JobSingleDynamicV1 = () => {
                   tabIndex="-1"
                   aria-hidden="true"
                 >
-                  <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                    <div className="apply-modal-content modal-content">
+                  <div
+                    className="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                    style={{ maxHeight: "80vh" }} // 👈 controls overall modal height
+                  >
+                    <div
+                      className="apply-modal-content modal-content"
+                      style={{
+                        height: "70vh", // 👈 increase height
+                        overflowY: "auto", // 👈 enable scroll
+                      }}
+                    >
                       <div className="text-center">
                         <h3 className="title">Apply for this job</h3>
                         <button
@@ -283,14 +299,18 @@ const JobSingleDynamicV1 = () => {
                           aria-label="Close"
                         ></button>
                       </div>
-                      {/* End modal-header */}
+                      <button
+                        type="button"
+                        id="applyJobModalCloseBtn"
+                        className="d-none"
+                        data-bs-dismiss="modal"
+                      ></button>
 
-                      <ApplyJobModalContent />
-                      {/* End PrivateMessageBox */}
+                      <ApplyJobModalContent jobId={params.id} />
                     </div>
-                    {/* End .send-private-message-wrapper */}
                   </div>
                 </div>
+
                 {/* End .modal */}
               </div>
             </div>
@@ -347,16 +367,7 @@ const JobSingleDynamicV1 = () => {
                     {/* <!-- Job Overview --> */}
                     <h4 className="widget-title">Job Overview</h4>
                     <JobOverView overview={jobPreviewDetails} />
-                    {/* if you want to add map then uncomment this . but dont uncommint in dev mode without map reconfiguration */}
-                    {/* <!-- Map Widget --> */}
-                    {/* <h4 className="widget-title mt-5">Job Location</h4>
-                    <div className="widget-content">
-                      <div className="map-outer">
-                        <div style={{ height: "300px", width: "100%" }}>
-                          <MapJobFinder />
-                        </div>
-                      </div>
-                    </div> */}
+
                     {/* <!--  Map Widget --> */}
 
                     <h4 className="widget-title mt-2">Job Skills</h4>
