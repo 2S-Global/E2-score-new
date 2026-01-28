@@ -13,6 +13,8 @@ const JobFavouriteTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const ITEMS_PER_PAGE = 10;
+  const MAX_PAGES_TO_SHOW = 10;
+
   const totalPages = Math.ceil(jobs.length / ITEMS_PER_PAGE);
 
   const paginatedJobs = jobs.slice(
@@ -52,6 +54,14 @@ const JobFavouriteTable = () => {
     fetchJobs();
   }, []);
 
+  /* ======================
+     PAGINATION RANGE
+  ====================== */
+  const startPage =
+    Math.floor((currentPage - 1) / MAX_PAGES_TO_SHOW) * MAX_PAGES_TO_SHOW + 1;
+
+  const endPage = Math.min(startPage + MAX_PAGES_TO_SHOW - 1, totalPages);
+
   return (
     <div className="tabs-box">
       <div className="widget-title"></div>
@@ -62,111 +72,98 @@ const JobFavouriteTable = () => {
             <thead>
               <tr>
                 <th>Job Title</th>
-                <th>Date Applied</th>
-                <th>Status</th>
+                <th>Job Post Date</th>
+
                 <th>Action</th>
               </tr>
             </thead>
 
             <tbody>
-              {paginatedJobs.map((item) => {
-                const job = item.job; // ✅ IMPORTANT
+              {paginatedJobs.length > 0 ? (
+                paginatedJobs.map((item) => {
+                  const job = item.job;
 
-                return (
-                  <tr key={item.savedJobId}>
-                    <td>
-                      <div className="job-block">
-                        <div className="inner-box">
-                          <div className="content">
-                            <span className="company-logo">
-                              <Image
-                                width={48}
-                                height={48}
-                                src={job.logo || "/images/resource/no_user.png"}
-                                alt="logo"
-                              />
-                            </span>
+                  return (
+                    <tr key={item.savedJobId}>
+                      <td>
+                        <div className="job-block">
+                          <div className="inner-box">
+                            <div className="content">
+                              <span className="company-logo">
+                                <Image
+                                  width={48}
+                                  height={48}
+                                  src={
+                                    job.logo || "/images/resource/no_user.png"
+                                  }
+                                  alt="logo"
+                                />
+                              </span>
 
-                            <h4>
-                              <Link href={`/job-details/${job._id}`}>
-                                {job.jobTitle}
-                              </Link>
-                            </h4>
+                              <h4>
+                                <Link href={`/job-details/${job._id}`}>
+                                  {job.jobTitle}
+                                </Link>
+                              </h4>
 
-                            {/* SIDE-BY-SIDE INLINE CSS (UNCHANGED) */}
-                            <ul
-                              className="job-info"
-                              style={{
-                                display: "flex",
-                                gap: "15px",
-                                alignItems: "center",
-                                listStyle: "none",
-                                padding: 0,
-                                margin: 0,
-                              }}
-                            >
-                              <li
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <span
-                                  className="icon flaticon-briefcase"
-                                  style={{ marginRight: "6px" }}
-                                ></span>
-                                {Array.isArray(job.jobType)
-                                  ? job.jobType.join(", ")
-                                  : "—"}
-                              </li>
-
-                              <li
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <span
-                                  className="icon flaticon-map-locator"
-                                  style={{ marginRight: "6px" }}
-                                ></span>
-                                {job.jobLocationType === "remote"
-                                  ? "Remote"
-                                  : job.address || "—"}
-                              </li>
-                            </ul>
+                              <ul className="job-other-info">
+                                {Array.isArray(job.jobType) &&
+                                job.jobType.length > 0 ? (
+                                  job.jobType.map((type, index) => (
+                                    <li key={index} className="time">
+                                     
+                                      {type}
+                                    </li>
+                                  ))
+                                ) : (
+                                  ""
+                                )}
+                              </ul>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </td>
+                      </td>
 
-                    {/* Saved date instead of createdAgo */}
-                    <td>{new Date(item.savedAt).toLocaleDateString()}</td>
-                    <td className="status">Saved</td>
-                    <td>
-                      <div className="option-box">
-                        <ul className="option-list">
-                          <li>
-                            <button data-text="View Application">
-                              <span className="la la-eye"></span>
-                            </button>
-                          </li>
-                          <li>
-                            <button data-text="Remove Saved Job">
-                              <span className="la la-trash"></span>
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+                      <td>
+                        {new Date(item.job.createdAt).toLocaleDateString(
+                          "en-GB",
+                          {
+                            timeZone: "Asia/Kolkata",
+                          },
+                        )}
+                      </td>
+
+                      <td>
+                        <div className="option-box">
+                          <ul className="option-list">
+                            {/* <li>
+                              <button data-text="View Job">
+                                <span className="la la-eye"></span>
+                              </button>
+                            </li> */}
+                            <li>
+                              <button data-text="Remove Saved Job">
+                                <span className="la la-trash"></span>
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <tr>
+                  <td colSpan="4" className="text-center">
+                    No saved jobs found
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
 
           {/* ======================
-             PAGINATION  
+             PAGINATION
           ====================== */}
           {totalPages > 1 && (
             <div className="ls-pagination mt-4 text-center">
@@ -178,15 +175,18 @@ const JobFavouriteTable = () => {
                 Prev
               </button>
 
-              {[...Array(totalPages)].map((_, index) => (
+              {Array.from(
+                { length: endPage - startPage + 1 },
+                (_, i) => startPage + i,
+              ).map((page) => (
                 <button
-                  key={index}
+                  key={page}
                   className={`btn btn-sm mx-1 ${
-                    currentPage === index + 1 ? "btn-primary" : "btn-light"
+                    currentPage === page ? "btn-primary" : "btn-light"
                   }`}
-                  onClick={() => setCurrentPage(index + 1)}
+                  onClick={() => setCurrentPage(page)}
                 >
-                  {index + 1}
+                  {page}
                 </button>
               ))}
 

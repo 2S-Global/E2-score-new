@@ -43,9 +43,9 @@ module.exports = [
   },
   {
     id: 6,
-    name: "Shortlisted Jobs",
+    name: "Saved Jobs",
     icon: "la-bookmark-o",
-    routePath: "/candidates-dashboard/short-listed-jobs",
+    routePath: "/candidates-dashboard/saved-jobs",
     active: "",
   },
   // {
