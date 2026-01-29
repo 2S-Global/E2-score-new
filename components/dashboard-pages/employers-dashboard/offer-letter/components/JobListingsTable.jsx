@@ -1,26 +1,64 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import candidatesData from "../../../../../data/candidates";
 import styles from "./Applicants.module.css";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export default function OfferLetterPage() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const jobId = searchParams.get("jobId");
+
   const isActive = (path) => pathname === path;
+
+  /* ================= STATES ================= */
+  const [loading, setLoading] = useState(true);
+  const [candidates, setCandidates] = useState([]);
+
+  const token =
+    typeof window !== "undefined"
+      ? localStorage.getItem("employer_token")
+      : null;
+
+  /* ================= API CALL ================= */
+  useEffect(() => {
+    if (!jobId || !token) return;
+
+    const fetchOfferSentCandidates = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/jobposting/get_all_job_related_offer_sent_candidates?jobId=${jobId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        const data = await res.json();
+        setCandidates(data?.data || []);
+      } catch (error) {
+        console.error("Failed to fetch offer sent candidates", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOfferSentCandidates();
+  }, [jobId, token]);
+
   return (
     <div className={styles.tabsBox}>
       {/* ================= HEADER ================= */}
       <div
         className={`d-flex justify-content-between align-items-center mb-4 ${styles.widgetTitle}`}
       >
-        {/* <h4 className="mb-0">Offer Letter Sent List</h4> */}
-
-        {/* TOP RIGHT LINKS */}
         <div className={styles.topLinks}>
           <Link
-            href="/employers-dashboard/offer-letter"
+            href={`/employers-dashboard/offer-letter?jobId=${jobId}`}
             className={`${styles.topLink} ${
               isActive("/employers-dashboard/offer-letter") ? styles.active : ""
             }`}
@@ -30,7 +68,7 @@ export default function OfferLetterPage() {
           </Link>
 
           <Link
-            href="/employers-dashboard/invitation"
+            href={`/employers-dashboard/invitation?jobId=${jobId}`}
             className={`${styles.topLink} ${
               isActive("/employers-dashboard/invitation") ? styles.active : ""
             }`}
@@ -40,7 +78,7 @@ export default function OfferLetterPage() {
           </Link>
 
           <Link
-            href="/employers-dashboard/shortlisted"
+            href={`/employers-dashboard/shortlisted?jobId=${jobId}`}
             className={`${styles.topLink} ${
               isActive("/employers-dashboard/shortlisted") ? styles.active : ""
             }`}
@@ -50,7 +88,7 @@ export default function OfferLetterPage() {
           </Link>
 
           <Link
-            href="/employers-dashboard/job-applicants"
+            href={`/employers-dashboard/job-applicants?jobId=${jobId}`}
             className={`${styles.topLink} ${
               isActive("/employers-dashboard/job-applicants")
                 ? styles.active
@@ -68,76 +106,87 @@ export default function OfferLetterPage() {
         <table className={`table table-hover align-middle ${styles.table}`}>
           <thead>
             <tr>
-              <th className="text-center" style={{ width: "20%"}}>Candidate</th>
+              <th className="text-center" style={{ width: "20%" }}>
+                Candidate
+              </th>
               <th>Designation</th>
               <th>Salary Offered</th>
               <th>Joining Date</th>
-              <th>Status</th>
               <th className="text-center">Action</th>
             </tr>
           </thead>
 
           <tbody>
-            {candidatesData.map((candidate) => (
-              <tr key={candidate.id}>
-                {/* Candidate */}
-                <td>
-                  <div className="d-flex flex-column align-items-center text-center gap-1">
-                    <div className={styles.candidateAvatar}>
-                      <Image
-                        src={candidate.avatar}
-                        alt={candidate.name}
-                        fill
-                        sizes="50px"
-                        quality={100}
-                        unoptimized
-                        className={styles.avatarImg}
-                      />
-                    </div>
-
-                    <Link
-                      href={`/candidates-details/${candidate.id}`}
-                      className={styles.candidateName}
-                    >
-                      {candidate.name}
-                    </Link>
-                  </div>
-                </td>
-
-                {/* Designation */}
-                <td>{candidate.designation}</td>
-
-                {/* Salary Offered*/}
-                <td>₹{candidate.monthlySalary} / month</td>
-
-                {/* Joining date */}
-                <td>01 Feb 2026</td>
-
-                {/* Status */}
-                <td>
-                  <span className="badge bg-success">Completed</span>
-                </td>
-
-                {/* Actions */}
-                <td>
-                  <div className="d-flex justify-content-center gap-2">
-                    <button
-                      className="btn btn-outline-primary btn-sm"
-                      title="View"
-                    >
-                      <i className="la la-eye"></i>
-                    </button>
-
-                    <button
-                      className="btn btn-outline-danger btn-sm"
-                      title="Reject"
-                    >
-                      <i className="la la-times"></i>
-                    </button>
-                  </div>
+            {/* LOADING */}
+            {loading && (
+              <tr>
+                <td colSpan="6" className="text-center py-5">
+                  <div className="spinner-border text-primary" />
+                  <div className="mt-2">Loading offer sent candidates...</div>
                 </td>
               </tr>
-            ))}
+            )}
+
+            {/* EMPTY */}
+            {!loading && candidates.length === 0 && (
+              <tr>
+                <td colSpan="6" className="text-center py-4">
+                  No offer sent candidates found
+                </td>
+              </tr>
+            )}
+
+            {/* DATA */}
+            {!loading &&
+              candidates.map((c) => (
+                <tr key={c.userId}>
+                  {/* Candidate */}
+                  <td>
+                    <div className="d-flex flex-column align-items-center text-center gap-1">
+                      <div className={styles.candidateAvatar}>
+                        <Image
+                          src={c.profilePicture || "/images/default-avatar.png"}
+                          alt={c.candidateName}
+                          fill
+                          sizes="50px"
+                          className={styles.avatarImg}
+                        />
+                      </div>
+
+                      <Link
+                        href={`/candidates-details/${c.userId}`}
+                        className={styles.candidateName}
+                      >
+                        {c.candidateName}
+                      </Link>
+                    </div>
+                  </td>
+
+                  <td>{c.jobRole || "-"}</td>
+
+                  <td>₹{c.expectedSalary.salary} / month</td>
+
+                  <td>{c.joiningDate || "-"}</td>
+
+                  <td>
+                    <div className="d-flex justify-content-center gap-2">
+                      <button
+                        className="btn btn-outline-primary btn-sm"
+                        title="View"
+                      >
+                        <i className="la la-eye"></i>
+                      </button>
+
+                      <button
+                        className="btn btn-outline-danger btn-sm"
+                        title="Reject"
+                      >
+                        <i className="la la-times"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

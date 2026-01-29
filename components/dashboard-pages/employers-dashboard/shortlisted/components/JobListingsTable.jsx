@@ -113,7 +113,7 @@ export default function ShortlistedCandidatesPage() {
             <tr>
               <th className="text-center">Candidate</th>
               <th>Job Role</th>
-              <th>Location</th>
+              <th>Current Location</th>
               <th>Expected Salary</th>
               <th>Experience / Notice</th>
               <th className="text-center">Action</th>
@@ -177,7 +177,7 @@ export default function ShortlistedCandidatesPage() {
                   </td>
 
                   <td>
-                    {candidate.experience} / {candidate.noticePeriod}
+                    {candidate.experienceLevel} Years / {candidate.noticePeriod}
                   </td>
 
                   <td>

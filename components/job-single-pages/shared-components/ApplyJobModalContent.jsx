@@ -12,7 +12,7 @@ const ApplyJobModalContent = ({ jobId, view = "candidate" }) => {
     willingToRelocate: "",
     description: "",
     acceptedTerms: false,
-    experience: "",
+    experienceLevel: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -54,10 +54,10 @@ useEffect(() => {
     let newErrors = {};
 
     // ✅ EXPERIENCE VALIDATION
-    if (!formData.experience && formData.experience !== 0) {
-      newErrors.experience = "* Required";
-    } else if (formData.experience < 0 || formData.experience > 50) {
-      newErrors.experience = "* Invalid experience";
+    if (!formData.experienceLevel && formData.experienceLevel !== 0) {
+      newErrors.experienceLevel = "* Required";
+    } else if (formData.experienceLevel < 0 || formData.experienceLevel > 50) {
+      newErrors.experienceLevel = "* Invalid experience";
     }
 
     if (!formData.noticePeriod) newErrors.noticePeriod = "* Required";
@@ -107,7 +107,7 @@ useEffect(() => {
             noticePeriod: formData.noticePeriod,
             preferredTime: formData.preferredTime,
             availabilityOnSaturday: formData.availabilityOnSaturday,
-            experience: Number(formData.experience),
+            experienceLevel: Number(formData.experienceLevel),
             willingToRelocate: formData.willingToRelocate,
             description: formData.description,
             acceptedTerms: formData.acceptedTerms,
@@ -127,7 +127,7 @@ useEffect(() => {
         preferredTime: "",
         availabilityOnSaturday: "",
         willingToRelocate: "",
-        experience: "",
+        experienceLevel: "",
         description: "",
         acceptedTerms: false,
       });
@@ -154,15 +154,13 @@ useEffect(() => {
             <input
               type="number"
               className="form-control"
-              name="experience"
+              name="experienceLevel"
               placeholder="Experience (Years)"
-              min="0"
-              max="50"
-              value={formData.experience}
+              value={formData.experienceLevel}
               onChange={handleChange}
             />
-            {errors.experience && (
-              <small className="text-danger">{errors.experience}</small>
+            {errors.experienceLevel && (
+              <small className="text-danger">{errors.experienceLevel}</small>
             )}
           </div>
           {/* Notice Period */}
@@ -175,10 +173,10 @@ useEffect(() => {
             >
               <option value="">Notice Period</option>
               <option value="immediate">Immediate</option>
-              <option value="15_days">15 Days</option>
-              <option value="30_days">30 Days</option>
-              <option value="45_days">45 Days</option>
-              <option value="60_days">60 Days</option>
+              <option value="15 days">15 Days</option>
+              <option value="30 days">30 Days</option>
+              <option value="45 days">45 Days</option>
+              <option value="60 days">60 Days</option>
             </select>
             {errors.noticePeriod && (
               <small className="text-danger">{errors.noticePeriod}</small>

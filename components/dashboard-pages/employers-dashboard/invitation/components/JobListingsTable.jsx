@@ -1,35 +1,73 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./Applicants.module.css";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export default function InvitationPage() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const jobId = searchParams.get("jobId");
+
   const isActive = (path) => pathname === path;
 
   /* ================= STATES ================= */
+  const [loading, setLoading] = useState(true);
+  const [candidates, setCandidates] = useState([]);
   const [showRemarksModal, setShowRemarksModal] = useState(false);
   const [showOfferModal, setShowOfferModal] = useState(false);
-  const [selectedCandidate, setSelectedCandidate] = useState("");
+  const [selectedCandidate, setSelectedCandidate] = useState(null);
+
+  const token =
+    typeof window !== "undefined"
+      ? localStorage.getItem("employer_token")
+      : null;
+
+  /* ================= API CALL ================= */
+  useEffect(() => {
+    if (!jobId || !token) return;
+
+    const fetchInvitedCandidates = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/jobposting/get_all_job_related_invitation_sent_candidates?jobId=${jobId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        const data = await res.json();
+        setCandidates(data?.data || []);
+      } catch (err) {
+        console.error("Failed to fetch invitation list", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInvitedCandidates();
+  }, [jobId, token]);
 
   /* ================= HANDLERS ================= */
-  const openRemarksModal = (name) => {
-    setSelectedCandidate(name);
+  const openRemarksModal = (candidate) => {
+    setSelectedCandidate(candidate);
     setShowRemarksModal(true);
   };
 
-  const openOfferModal = (name) => {
-    setSelectedCandidate(name);
+  const openOfferModal = (candidate) => {
+    setSelectedCandidate(candidate);
     setShowOfferModal(true);
   };
 
   const closeAllModals = () => {
     setShowRemarksModal(false);
     setShowOfferModal(false);
-    setSelectedCandidate("");
+    setSelectedCandidate(null);
   };
 
   return (
@@ -41,49 +79,45 @@ export default function InvitationPage() {
         >
           <div className={styles.topLinks}>
             <Link
-              href="/employers-dashboard/offer-letter"
+              href={`/employers-dashboard/offer-letter?jobId=${jobId}`}
               className={`${styles.topLink} ${
                 isActive("/employers-dashboard/offer-letter")
                   ? styles.active
                   : ""
               }`}
             >
-              <i className="la la-envelope"></i>
-              Offer Letter Sent
+              <i className="la la-envelope"></i> Offer Letter Sent
             </Link>
 
             <Link
-              href="/employers-dashboard/invitation"
+              href={`/employers-dashboard/invitation?jobId=${jobId}`}
               className={`${styles.topLink} ${
                 isActive("/employers-dashboard/invitation") ? styles.active : ""
               }`}
             >
-              <i className="la la-paper-plane"></i>
-              Invitation Sent
+              <i className="la la-paper-plane"></i> Invitation Sent
             </Link>
 
             <Link
-              href="/employers-dashboard/shortlisted"
+              href={`/employers-dashboard/shortlisted?jobId=${jobId}`}
               className={`${styles.topLink} ${
                 isActive("/employers-dashboard/shortlisted")
                   ? styles.active
                   : ""
               }`}
             >
-              <i className="la la-user-check"></i>
-              Shortlisted Candidates
+              <i className="la la-user-check"></i> Shortlisted Candidates
             </Link>
 
             <Link
-              href="/employers-dashboard/job-applicants"
+              href={`/employers-dashboard/job-applicants?jobId=${jobId}`}
               className={`${styles.topLink} ${
                 isActive("/employers-dashboard/job-applicants")
                   ? styles.active
                   : ""
               }`}
             >
-              <i className="la la-users"></i>
-              Job Applicants
+              <i className="la la-users"></i> Job Applicants
             </Link>
           </div>
         </div>
@@ -95,9 +129,7 @@ export default function InvitationPage() {
               <tr>
                 <th>Image</th>
                 <th>Name</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Status</th>
+
                 <th>Experience</th>
                 <th>Notice Period</th>
                 <th className="text-center">Action</th>
@@ -105,82 +137,66 @@ export default function InvitationPage() {
             </thead>
 
             <tbody>
-              {[
-                {
-                  name: "Rahul Sharma",
-                  img: "/images/resource/candidate-1.png",
-                  status: "Pending",
-                  statusClass: "bg-warning text-dark",
-                  exp: "5 Years",
-                  notice: "30 Days",
-                  date: "25 Jan 2026",
-                  time: "11:00 AM",
-                },
-                {
-                  name: "Sneha Verma",
-                  img: "/images/resource/candidate-3.png",
-                  status: "Completed",
-                  statusClass: "bg-success",
-                  exp: "3 Years",
-                  notice: "Immediate",
-                  date: "22 Jan 2026",
-                  time: "02:30 PM",
-                },
-              ].map((c, i) => (
-                <tr key={i}>
-                  <td className="text-center">
-                    <div className={styles.candidateAvatar}>
-                      <Image
-                        src={c.img}
-                        alt={c.name}
-                        fill
-                        sizes="50px"
-                        quality={100}
-                        unoptimized
-                        className={styles.avatarImg}
-                      />
-                    </div>
-                  </td>
-
-                  <td>
-                    <Link href="#" className={styles.candidateName}>
-                      {c.name}
-                    </Link>
-                  </td>
-
-                  <td>{c.date}</td>
-                  <td>{c.time}</td>
-
-                  <td>
-                    <span className={`badge ${c.statusClass}`}>{c.status}</span>
-                  </td>
-
-                  <td>{c.exp}</td>
-                  <td>{c.notice}</td>
-
-                  <td>
-                    <div className="d-flex justify-content-center gap-2">
-                      <button className="btn btn-outline-primary btn-sm">
-                        <i className="la la-eye"></i>
-                      </button>
-
-                      <button
-                        className="btn btn-outline-secondary btn-sm"
-                        onClick={() => openRemarksModal(c.name)}
-                      >
-                        <i className="la la-comment"></i>
-                      </button>
-
-                      <button
-                        className="btn btn-outline-success btn-sm"
-                        onClick={() => openOfferModal(c.name)}
-                      >
-                        <i className="la la-envelope"></i>
-                      </button>
-                    </div>
+              {/* LOADER */}
+              {loading && (
+                <tr>
+                  <td colSpan="6" className="text-center py-5">
+                    <div className="spinner-border text-primary" />
+                    <div className="mt-2">Loading invitations...</div>
                   </td>
                 </tr>
-              ))}
+              )}
+
+              {/* EMPTY */}
+              {!loading && candidates.length === 0 && (
+                <tr>
+                  <td colSpan="6" className="text-center py-4">
+                    No invitation sent candidates found
+                  </td>
+                </tr>
+              )}
+
+              {/* DATA */}
+              {!loading &&
+                candidates.map((c) => (
+                  <tr key={c.userId}>
+                    <td className="text-center">
+                      <div className={styles.candidateAvatar}>
+                        <Image
+                          src={c.profilePicture || "/images/default-avatar.png"}
+                          alt={c.candidateName}
+                          fill
+                          sizes="50px"
+                          className={styles.avatarImg}
+                        />
+                      </div>
+                    </td>
+                    <td className={styles.candidateName}>{c.candidateName}</td>
+                    <td>{c.experienceLevel || "-"} Years</td>
+                    <td>{c.noticePeriod}</td>
+                    <td>
+                      <div className="d-flex justify-content-center gap-2">
+                        <button className="btn btn-outline-primary btn-sm">
+                          <i className="la la-eye"></i>
+                        </button>
+
+                        <button
+                          className="btn btn-outline-secondary btn-sm"
+                          onClick={() => openRemarksModal(c)}
+                        >
+                          <i className="la la-comment"></i>
+                        </button>
+
+                        <button
+                          className="btn btn-outline-success btn-sm"
+                          onClick={() => openOfferModal(c)}
+                        >
+                          <i className="la la-envelope"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
@@ -201,7 +217,7 @@ export default function InvitationPage() {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title">
-                    Interview Remarks – {selectedCandidate}
+                    Interview Remarks – {selectedCandidate?.candidateName}
                   </h5>
                   <button
                     type="button"
@@ -271,7 +287,7 @@ export default function InvitationPage() {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title">
-                    Offer Discussion – {selectedCandidate}
+                    Offer Discussion – {selectedCandidate?.candidateName}
                   </h5>
                   <button
                     type="button"

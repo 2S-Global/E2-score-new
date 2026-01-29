@@ -81,7 +81,7 @@
   background-color: transparent !important;
   border: none;
   padding: 10px 14px !important;
-  text-align: left;
+  text-align: center;
 }
 
 .table tbody tr {
@@ -90,6 +90,7 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.2s ease;
    position: static !important;
+     text-align: center;
 }
 
 .table tbody tr:hover {
