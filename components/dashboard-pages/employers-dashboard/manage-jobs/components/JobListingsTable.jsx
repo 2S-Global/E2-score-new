@@ -209,7 +209,7 @@ const JobListingsTable = () => {
                     </td>
                     <td>
                       <Link
-                        href={`/employers-dashboard/job-applicants`}
+                        href={`/employers-dashboard/job-applicants?jobId=${job._id}`}
                         className="text-decoration-none"
                       >
                         <span className="badge bg-info">

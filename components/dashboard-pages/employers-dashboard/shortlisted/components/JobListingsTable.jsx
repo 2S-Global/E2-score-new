@@ -1,19 +1,58 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import candidatesData from "../../../../../data/candidates";
+import { usePathname, useSearchParams } from "next/navigation";
 import styles from "./Applicants.module.css";
-import { usePathname } from "next/navigation";
 
 export default function ShortlistedCandidatesPage() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const jobId = searchParams.get("jobId");
+
   const isActive = (path) => pathname === path;
+
+  const [candidates, setCandidates] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [showModal, setShowModal] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
 
+  const token =
+    typeof window !== "undefined"
+      ? localStorage.getItem("employer_token")
+      : null;
+
+  /* ================= FETCH SHORTLISTED CANDIDATES ================= */
+  useEffect(() => {
+    if (!jobId || !token) return;
+
+    const fetchShortlistedCandidates = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/jobposting/get_all_job_related_shortlisted_candidates?jobId=${jobId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        const result = await res.json();
+        setCandidates(result?.data || []);
+      } catch (error) {
+        console.error("Error fetching shortlisted candidates", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchShortlistedCandidates();
+  }, [jobId, token]);
+
+  /* ================= MODAL HANDLERS ================= */
   const openModal = (candidate) => {
     setSelectedCandidate(candidate);
     setShowModal(true);
@@ -26,10 +65,7 @@ export default function ShortlistedCandidatesPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // 👉 handle API call here
     console.log("Invitation sent to:", selectedCandidate);
-
     closeModal();
   };
 
@@ -39,50 +75,33 @@ export default function ShortlistedCandidatesPage() {
       <div
         className={`d-flex justify-content-between align-items-center mb-4 ${styles.widgetTitle}`}
       >
-        {/* <h4 className="mb-0">Shortlisted Candidates List</h4> */}
-
-        {/* TOP RIGHT LINKS */}
         <div className={styles.topLinks}>
           <Link
-            href="/employers-dashboard/offer-letter"
-            className={`${styles.topLink} ${
-              isActive("/employers-dashboard/offer-letter") ? styles.active : ""
-            }`}
+            href={`/employers-dashboard/offer-letter?jobId=${jobId}`}
+            className={`${styles.topLink} ${isActive("/employers-dashboard/offer-letter") ? styles.active : ""}`}
           >
-            <i className="la la-envelope"></i>
-            Offer Letter Sent
+            <i className="la la-envelope"></i> Offer Letter Sent
           </Link>
 
           <Link
-            href="/employers-dashboard/invitation"
-            className={`${styles.topLink} ${
-              isActive("/employers-dashboard/invitation") ? styles.active : ""
-            }`}
+            href={`/employers-dashboard/invitation?jobId=${jobId}`}
+            className={`${styles.topLink} ${isActive("/employers-dashboard/invitation") ? styles.active : ""}`}
           >
-            <i className="la la-paper-plane"></i>
-            Invitation Sent
+            <i className="la la-paper-plane"></i> Invitation Sent
           </Link>
 
           <Link
-            href="/employers-dashboard/shortlisted"
-            className={`${styles.topLink} ${
-              isActive("/employers-dashboard/shortlisted") ? styles.active : ""
-            }`}
+            href={`/employers-dashboard/shortlisted?jobId=${jobId}`}
+            className={`${styles.topLink} ${isActive("/employers-dashboard/shortlisted") ? styles.active : ""}`}
           >
-            <i className="la la-user-check"></i>
-            Shortlisted Candidates
+            <i className="la la-user-check"></i> Shortlisted Candidates
           </Link>
 
           <Link
-            href="/employers-dashboard/job-applicants"
-            className={`${styles.topLink} ${
-              isActive("/employers-dashboard/job-applicants")
-                ? styles.active
-                : ""
-            }`}
+            href={`/employers-dashboard/job-applicants?jobId=${jobId}`}
+            className={`${styles.topLink} ${isActive("/employers-dashboard/job-applicants") ? styles.active : ""}`}
           >
-            <i className="la la-users"></i>
-            Job Applicants
+            <i className="la la-users"></i> Job Applicants
           </Link>
         </div>
       </div>
@@ -92,94 +111,95 @@ export default function ShortlistedCandidatesPage() {
         <table className={`table table-hover align-middle ${styles.table}`}>
           <thead>
             <tr>
-              <th className="text-center" style={{ width: "15%"}}>Candidate</th>
-              <th>Designation</th>
+              <th className="text-center">Candidate</th>
+              <th>Job Role</th>
               <th>Location</th>
-              <th>Salary</th>
-              <th>Skills</th>
-              <th>Experience / Notice Period</th>
+              <th>Expected Salary</th>
+              <th>Experience / Notice</th>
               <th className="text-center">Action</th>
             </tr>
           </thead>
 
           <tbody>
-            {candidatesData.map((candidate) => (
-              <tr key={candidate.id}>
-                {/* Candidate */}
-                <td>
-                  <div className="d-flex flex-column align-items-center text-center gap-1">
-                    <div className={styles.candidateAvatar}>
-                      <Image
-                        src={candidate.avatar}
-                        alt={candidate.name}
-                        fill
-                        sizes="50px"
-                        quality={100}
-                        unoptimized
-                        className={styles.avatarImg}
-                      />
-                    </div>
-
-                    <Link
-                      href={`/candidates-details/${candidate.id}`}
-                      className={styles.candidateName}
-                    >
-                      {candidate.name}
-                    </Link>
-                  </div>
-                </td>
-
-                <td>{candidate.designation}</td>
-
-                <td>
-                  <i className="la la-map-marker me-1"></i>
-                  {candidate.location}
-                </td>
-
-                <td>₹{candidate.monthlySalary} / month</td>
-
-                <td>
-                  <div className={styles.skillsWrap}>
-                    {candidate.tags.map((tag, index) => (
-                      <span key={index} className={styles.skillBadge}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </td>
-
-                <td>
-                  {candidate.experience} / {candidate.noticePeriod}
-                </td>
-
-                {/* Actions */}
-                <td>
-                  <div className="d-flex justify-content-center gap-2">
-                    <button
-                      className="btn btn-outline-primary btn-sm"
-                      title="View Profile"
-                    >
-                      <i className="la la-eye"></i>
-                    </button>
-
-                    <button
-                      className="btn btn-outline-info btn-sm"
-                      title="Send Invitation"
-                      onClick={() => openModal(candidate)}
-                    >
-                      <i className="la la-paper-plane"></i>
-                    </button>
-
-                    <button
-                      className="btn btn-outline-danger btn-sm"
-                      title="Reject"
-                    >
-                      <i className="la la-times"></i>
-                    </button>
-                  </div>
+            {/* LOADER */}
+            {loading && (
+              <tr>
+                <td colSpan="6" className="text-center py-5">
+                  <div className="spinner-border text-primary" />
+                  <div className="mt-2">Loading shortlisted candidates...</div>
                 </td>
               </tr>
-            ))}
+            )}
+
+            {/* EMPTY */}
+            {!loading && candidates.length === 0 && (
+              <tr>
+                <td colSpan="6" className="text-center py-4">
+                  No shortlisted candidates found
+                </td>
+              </tr>
+            )}
+
+            {/* DATA */}
+            {!loading &&
+              candidates.map((candidate) => (
+                <tr key={candidate.userId}>
+                  <td>
+                    <div className="d-flex flex-column align-items-center text-center gap-1">
+                      <div className={styles.candidateAvatar}>
+                        <Image
+                          src={
+                            candidate.profilePicture ||
+                            "/images/default-avatar.png"
+                          }
+                          alt={candidate.candidateName}
+                          fill
+                          sizes="50px"
+                          className={styles.avatarImg}
+                        />
+                      </div>
+                      <span className={styles.candidateName}>
+                        {candidate.candidateName}
+                      </span>
+                    </div>
+                  </td>
+
+                  <td>{candidate.jobRole}</td>
+
+                  <td>
+                    <i className="la la-map-marker me-1"></i>
+                    {candidate.currentLocation}
+                  </td>
+
+                  <td>
+                    ₹{candidate.expectedSalary?.salary}{" "}
+                    {candidate.expectedSalary?.currency}
+                  </td>
+
+                  <td>
+                    {candidate.experience} / {candidate.noticePeriod}
+                  </td>
+
+                  <td>
+                    <div className="d-flex justify-content-center gap-2">
+                      <button className="btn btn-outline-primary btn-sm">
+                        <i className="la la-eye"></i>
+                      </button>
+
+                      <button
+                        className="btn btn-outline-info btn-sm"
+                        onClick={() => openModal(candidate)}
+                      >
+                        <i className="la la-paper-plane"></i>
+                      </button>
+
+                      <button className="btn btn-outline-danger btn-sm">
+                        <i className="la la-times"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
@@ -208,8 +228,9 @@ export default function ShortlistedCandidatesPage() {
                   </div>
 
                   <div className="modal-body">
-                    <p className="mb-3">
-                      <strong>Candidate:</strong> {selectedCandidate?.name}
+                    <p>
+                      <strong>Candidate:</strong>{" "}
+                      {selectedCandidate?.candidateName}
                     </p>
 
                     <div className="mb-3">
@@ -227,7 +248,7 @@ export default function ShortlistedCandidatesPage() {
                       <input
                         type="text"
                         className="form-control"
-                        defaultValue={selectedCandidate?.designation}
+                        defaultValue={selectedCandidate?.jobRole}
                         required
                       />
                     </div>

@@ -12,6 +12,7 @@ const ApplyJobModalContent = ({ jobId, view = "candidate" }) => {
     willingToRelocate: "",
     description: "",
     acceptedTerms: false,
+    experience: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -51,6 +52,13 @@ useEffect(() => {
   ======================= */
   const validate = () => {
     let newErrors = {};
+
+    // ✅ EXPERIENCE VALIDATION
+    if (!formData.experience && formData.experience !== 0) {
+      newErrors.experience = "* Required";
+    } else if (formData.experience < 0 || formData.experience > 50) {
+      newErrors.experience = "* Invalid experience";
+    }
 
     if (!formData.noticePeriod) newErrors.noticePeriod = "* Required";
     if (!formData.preferredTime) newErrors.preferredTime = "* Required";
@@ -99,6 +107,7 @@ useEffect(() => {
             noticePeriod: formData.noticePeriod,
             preferredTime: formData.preferredTime,
             availabilityOnSaturday: formData.availabilityOnSaturday,
+            experience: Number(formData.experience),
             willingToRelocate: formData.willingToRelocate,
             description: formData.description,
             acceptedTerms: formData.acceptedTerms,
@@ -118,6 +127,7 @@ useEffect(() => {
         preferredTime: "",
         availabilityOnSaturday: "",
         willingToRelocate: "",
+        experience: "",
         description: "",
         acceptedTerms: false,
       });
@@ -139,6 +149,22 @@ useEffect(() => {
 
       <form className="default-form job-apply-form" onSubmit={handleSubmit}>
         <div className="row">
+          {/* Experience */}
+          <div className="col-lg-6 form-group">
+            <input
+              type="number"
+              className="form-control"
+              name="experience"
+              placeholder="Experience (Years)"
+              min="0"
+              max="50"
+              value={formData.experience}
+              onChange={handleChange}
+            />
+            {errors.experience && (
+              <small className="text-danger">{errors.experience}</small>
+            )}
+          </div>
           {/* Notice Period */}
           <div className="col-lg-6 form-group">
             <select
@@ -178,6 +204,22 @@ useEffect(() => {
             )}
           </div>
 
+          {/* Relocate */}
+          <div className="col-lg-6 form-group">
+            <select
+              className="form-control"
+              name="willingToRelocate"
+              value={formData.willingToRelocate}
+              onChange={handleChange}
+            >
+              <option value="">Willing to Relocate</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+            {errors.willingToRelocate && (
+              <small className="text-danger">{errors.willingToRelocate}</small>
+            )}
+          </div>
           {/* Saturday Availability */}
           <div className="col-lg-6 form-group">
             <label className="mb-2 d-block">Availability on Saturday</label>
@@ -202,23 +244,6 @@ useEffect(() => {
               <div className="text-danger">
                 <small>{errors.availabilityOnSaturday}</small>
               </div>
-            )}
-          </div>
-
-          {/* Relocate */}
-          <div className="col-lg-6 form-group">
-            <select
-              className="form-control"
-              name="willingToRelocate"
-              value={formData.willingToRelocate}
-              onChange={handleChange}
-            >
-              <option value="">Willing to Relocate</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-            {errors.willingToRelocate && (
-              <small className="text-danger">{errors.willingToRelocate}</small>
             )}
           </div>
 
@@ -261,7 +286,6 @@ useEffect(() => {
               className="theme-btn btn-style-one w-100"
               type="submit"
               disabled={loading}
-
             >
               {loading ? "Applying..." : "Apply Job"}
             </button>
