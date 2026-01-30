@@ -15,6 +15,8 @@ export default function JobApplicantsPage() {
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
+  const [actionLoading, setActionLoading] = useState(null);
+
   const token =
     typeof window !== "undefined"
       ? localStorage.getItem("employer_token")
@@ -55,6 +57,7 @@ export default function JobApplicantsPage() {
 
     setError("");
     setSuccess("");
+     setActionLoading(applicationId);
 
     const apiMap = {
       accept: "/api/jobposting/accept_job_application_status",
@@ -85,6 +88,8 @@ export default function JobApplicantsPage() {
     } catch (err) {
       console.error(err);
       setError("Something went wrong. Please try again.");
+    } finally {
+      setActionLoading(null); // 🔥 stop loader
     }
   };
 
@@ -207,28 +212,49 @@ export default function JobApplicantsPage() {
 
                     <td>
                       <div className="d-flex justify-content-center gap-2">
-                        <button className="btn btn-outline-primary btn-sm">
+                        <Link
+                          href={`/candidates-details/${candidate.userId}`}
+                          className="btn btn-outline-primary btn-sm"
+                          title="View Candidate Details"
+                        >
                           <i className="la la-eye"></i>
-                        </button>
+                        </Link>
 
                         {/* ACCEPT */}
                         <button
                           className="btn btn-outline-success btn-sm"
+                          disabled={actionLoading === candidate._id}
+                          title="Accept Application"
                           onClick={() =>
                             handleApplicationAction(candidate._id, "accept")
                           }
                         >
-                          <i className="la la-check"></i>
+                          {actionLoading === candidate._id ? (
+                            <span
+                              className="spinner-border spinner-border-sm"
+                              role="status"
+                            />
+                          ) : (
+                            <i className="la la-check"></i>
+                          )}
                         </button>
 
-                        {/* REJECT */}
                         <button
                           className="btn btn-outline-danger btn-sm"
+                          disabled={actionLoading === candidate._id}
                           onClick={() =>
                             handleApplicationAction(candidate._id, "reject")
                           }
+                          title="Reject Application"
                         >
-                          <i className="la la-times"></i>
+                          {actionLoading === candidate._id ? (
+                            <span
+                              className="spinner-border spinner-border-sm"
+                              role="status"
+                            />
+                          ) : (
+                            <i className="la la-times"></i>
+                          )}
                         </button>
                       </div>
                     </td>

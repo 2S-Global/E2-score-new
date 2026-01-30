@@ -164,25 +164,32 @@ export default function OfferLetterPage() {
 
                   <td>{c.jobRole || "-"}</td>
 
-                  <td>₹{c.expectedSalary.salary} / month</td>
+                  <td>{c.offer_letter_salary}</td>
 
-                  <td>{c.joiningDate || "-"}</td>
+                  <td>
+                    {c.offer_letter_joining_date
+                      ? new Date(
+                          c.offer_letter_joining_date,
+                        ).toLocaleDateString("en-GB")
+                      : "-"}
+                  </td>
 
                   <td>
                     <div className="d-flex justify-content-center gap-2">
-                      <button
+                      <Link
+                        href={`/candidates-details/${c.userId}`}
                         className="btn btn-outline-primary btn-sm"
-                        title="View"
+                        title="View Candidate Details"
                       >
                         <i className="la la-eye"></i>
-                      </button>
+                      </Link>
 
-                      <button
+                      {/* <button
                         className="btn btn-outline-danger btn-sm"
                         title="Reject"
                       >
                         <i className="la la-times"></i>
-                      </button>
+                      </button> */}
                     </div>
                   </td>
                 </tr>
