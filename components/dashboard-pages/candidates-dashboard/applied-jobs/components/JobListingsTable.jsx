@@ -70,8 +70,8 @@ const JobListingsTable = () => {
                   <td>
                     <div className="job-block">
                       <div className="inner-box">
-                        <div className="content">
-                          <span className="company-logo">
+                        <div className="">
+{/*                           <span className="company-logo">
                             <Image
                               width={50}
                               height={50}
@@ -81,7 +81,7 @@ const JobListingsTable = () => {
                               }
                               alt="logo"
                             />
-                          </span>
+                          </span> */}
                           <h4>
                             <Link href={`/job-details/${item.jobId?._id}`}>
                               {item.jobId.jobTitle}
