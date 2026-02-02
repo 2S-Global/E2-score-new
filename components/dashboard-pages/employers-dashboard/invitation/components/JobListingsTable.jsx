@@ -46,7 +46,8 @@ export default function InvitationPage() {
   const [aptitudeScore, setAptitudeScore] = useState("");
   const [overallScore, setOverallScore] = useState("");
   const [remarksMessage, setRemarksMessage] = useState("");
-
+const [lastDrawnSalary, setLastDrawnSalary] = useState("");
+const [expectedSalary, setExpectedSalary] = useState("");
   // loader
   const [remarksLoading, setRemarksLoading] = useState(false);
 
@@ -57,6 +58,8 @@ export default function InvitationPage() {
     aptitude: "",
     overall: "",
     message: "",
+    lastDrawnSalary: "",
+    expectedSalary: "",
   });
 
   const token =
@@ -207,13 +210,16 @@ export default function InvitationPage() {
     setAptitudeScore("");
     setOverallScore("");
     setRemarksMessage("");
-
+setLastDrawnSalary("");
+setExpectedSalary("");
     setRemarksErrors({
       communication: "",
       technical: "",
       aptitude: "",
       overall: "",
       message: "",
+      lastDrawnSalary: "",
+      expectedSalary: "",
     });
 
     setError("");
@@ -246,6 +252,10 @@ export default function InvitationPage() {
     if (!overallScore) errors.overall = "Overall score is required";
     else if (overallScore < 1 || overallScore > 10)
       errors.overall = "Score must be between 1 and 10";
+    if (!lastDrawnSalary)
+      errors.lastDrawnSalary = "Last drawn salary is required";
+
+    if (!expectedSalary) errors.expectedSalary = "Expected salary is required";
 
     if (!remarksMessage) errors.message = "Remarks message is required";
 
@@ -272,6 +282,8 @@ export default function InvitationPage() {
             technicalSkillScore: technicalScore,
             aptitudeScore,
             overallScore,
+            lastDrawnSalary,
+            expectedSalary,
             message: remarksMessage,
           }),
         },
@@ -387,6 +399,7 @@ export default function InvitationPage() {
 
                 <th>Experience</th>
                 <th>Notice Period</th>
+                <th>Interview Date/Time</th>
                 <th className="text-center">Action</th>
               </tr>
             </thead>
@@ -429,6 +442,7 @@ export default function InvitationPage() {
                     <td className={styles.candidateName}>{c.candidateName}</td>
                     <td>{c.experienceLevel || "-"} Years</td>
                     <td>{c.noticePeriod}</td>
+                    <td></td>
                     <td>
                       <div className="d-flex justify-content-center gap-2">
                         <Link
@@ -595,6 +609,52 @@ export default function InvitationPage() {
                       {remarksErrors.overall && (
                         <small className="text-danger">
                           {remarksErrors.overall}
+                        </small>
+                      )}
+                    </div>
+
+                    {/* Last Drawn Salary */}
+                    <div className="col-md-6">
+                      <label className="form-label">Last Drawn Salary</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="e.g. ₹6,50,000 / year"
+                        value={lastDrawnSalary}
+                        onChange={(e) => {
+                          setLastDrawnSalary(e.target.value);
+                          setRemarksErrors((p) => ({
+                            ...p,
+                            lastDrawnSalary: "",
+                          }));
+                        }}
+                      />
+                      {remarksErrors.lastDrawnSalary && (
+                        <small className="text-danger">
+                          {remarksErrors.lastDrawnSalary}
+                        </small>
+                      )}
+                    </div>
+
+                    {/* Expected Salary */}
+                    <div className="col-md-6">
+                      <label className="form-label">Expected Salary</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="e.g. ₹8,00,000 / year"
+                        value={expectedSalary}
+                        onChange={(e) => {
+                          setExpectedSalary(e.target.value);
+                          setRemarksErrors((p) => ({
+                            ...p,
+                            expectedSalary: "",
+                          }));
+                        }}
+                      />
+                      {remarksErrors.expectedSalary && (
+                        <small className="text-danger">
+                          {remarksErrors.expectedSalary}
                         </small>
                       )}
                     </div>
