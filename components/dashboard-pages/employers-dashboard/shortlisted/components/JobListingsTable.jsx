@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname, useSearchParams } from "next/navigation";
 import styles from "./Applicants.module.css";
 import MessageComponent from "@/components/common/ResponseMsg";
+import { useRef } from "react";
 
 export default function ShortlistedCandidatesPage() {
   const pathname = usePathname();
@@ -31,6 +32,8 @@ export default function ShortlistedCandidatesPage() {
   // loaders
   const [submitLoading, setSubmitLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState(null);
+  const dateRef = useRef(null);
+  const timeRef = useRef(null);
   const [fieldErrors, setFieldErrors] = useState({
     interviewDate: "",
     interviewTime: "",
@@ -115,9 +118,9 @@ export default function ShortlistedCandidatesPage() {
       errors.interviewTime = "Interview time is required";
     }
 
-    if (!formDesignation) {
-      errors.formDesignation = "Designation is required";
-    }
+    // if (!formDesignation) {
+    //   errors.formDesignation = "Designation is required";
+    // }
 
     setFieldErrors(errors);
 
@@ -158,7 +161,7 @@ export default function ShortlistedCandidatesPage() {
       if (res.ok && result.success) {
         setSuccess(result.message || "Invitation sent successfully");
         closeModal();
-         fetchShortlistedCandidates();
+        fetchShortlistedCandidates();
       } else {
         setError(result?.message || "Failed to send invitation");
       }
@@ -219,31 +222,28 @@ export default function ShortlistedCandidatesPage() {
         >
           <div className={styles.topLinks}>
             <Link
-              href={`/employers-dashboard/offer-letter?jobId=${jobId}`}
-              className={`${styles.topLink} ${isActive("/employers-dashboard/offer-letter") ? styles.active : ""}`}
+              href={`/employers-dashboard/job-applicants?jobId=${jobId}`}
+              className={`${styles.topLink} ${isActive("/employers-dashboard/job-applicants") ? styles.active : ""}`}
             >
-              <i className="la la-envelope"></i> Offer Letter Sent
+              <i className="la la-users"></i> Applicants
             </Link>
-
-            <Link
-              href={`/employers-dashboard/invitation?jobId=${jobId}`}
-              className={`${styles.topLink} ${isActive("/employers-dashboard/invitation") ? styles.active : ""}`}
-            >
-              <i className="la la-paper-plane"></i> Invitation Sent
-            </Link>
-
             <Link
               href={`/employers-dashboard/shortlisted?jobId=${jobId}`}
               className={`${styles.topLink} ${isActive("/employers-dashboard/shortlisted") ? styles.active : ""}`}
             >
               <i className="la la-user-check"></i> Shortlisted Candidates
             </Link>
-
             <Link
-              href={`/employers-dashboard/job-applicants?jobId=${jobId}`}
-              className={`${styles.topLink} ${isActive("/employers-dashboard/job-applicants") ? styles.active : ""}`}
+              href={`/employers-dashboard/invitation?jobId=${jobId}`}
+              className={`${styles.topLink} ${isActive("/employers-dashboard/invitation") ? styles.active : ""}`}
             >
-              <i className="la la-users"></i> Job Applicants
+              <i className="la la-paper-plane"></i> Interview Letter
+            </Link>
+            <Link
+              href={`/employers-dashboard/offer-letter?jobId=${jobId}`}
+              className={`${styles.topLink} ${isActive("/employers-dashboard/offer-letter") ? styles.active : ""}`}
+            >
+              <i className="la la-envelope"></i> Offer Letter Sent
             </Link>
           </div>
         </div>
@@ -355,7 +355,6 @@ export default function ShortlistedCandidatesPage() {
                             <i className="la la-times"></i>
                           )}
                         </button>
-                        
                       </div>
                     </td>
                   </tr>
@@ -393,12 +392,19 @@ export default function ShortlistedCandidatesPage() {
                         {selectedCandidate?.candidateName}
                       </p>
 
+                      <p className="mb-4 mt-2">
+                        <strong>Designation For:</strong>{" "}
+                        {selectedCandidate?.jobRole}
+                      </p>
+
                       <div className="mb-3">
                         <label className="form-label">Interview Date</label>
                         <input
+                          ref={dateRef}
                           type="date"
                           className="form-control"
                           value={interviewDate}
+                          onClick={() => dateRef.current?.showPicker()}
                           onChange={(e) => {
                             setInterviewDate(e.target.value);
                             setFieldErrors((prev) => ({
@@ -418,9 +424,11 @@ export default function ShortlistedCandidatesPage() {
                       <div className="mb-3">
                         <label className="form-label">Interview Time</label>
                         <input
+                          ref={timeRef}
                           type="time"
                           className="form-control"
                           value={interviewTime}
+                          onClick={() => timeRef.current?.showPicker()}
                           onChange={(e) => {
                             setInterviewTime(e.target.value);
                             setFieldErrors((prev) => ({
@@ -429,7 +437,6 @@ export default function ShortlistedCandidatesPage() {
                             }));
                           }}
                         />
-
                         {fieldErrors.interviewTime && (
                           <small className="text-danger">
                             {fieldErrors.interviewTime}
@@ -437,10 +444,10 @@ export default function ShortlistedCandidatesPage() {
                         )}
                       </div>
 
-                      <div className="mb-3">
+                      {/* <div className="mb-3">
                         <label className="form-label">Designation For</label>
                         <input
-                          type="text"
+                          type="hidden"
                           className="form-control"
                           value={formDesignation}
                           readOnly
@@ -451,7 +458,7 @@ export default function ShortlistedCandidatesPage() {
                             {fieldErrors.formDesignation}
                           </small>
                         )}
-                      </div>
+                      </div> */}
                     </div>
 
                     <div className="modal-footer">

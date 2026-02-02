@@ -17,6 +17,22 @@ export default function JobApplicantsPage() {
   const [error, setError] = useState("");
   const [actionLoading, setActionLoading] = useState(null);
 
+  const statusLabelMap = {
+    applied: "Applied",
+    shortlisted: "Shortlisted",
+    invitation_sent: "Interview Scheduled",
+    offer_sent: "Offer Sent",
+    rejected: "Rejected",
+  };
+
+  const statusClassMap = {
+    applied: "badge bg-secondary",
+    shortlisted: "badge bg-info",
+    invitation_sent: "badge bg-warning",
+    offer_sent: "badge bg-success",
+    rejected: "badge bg-danger",
+  };
+
   const token =
     typeof window !== "undefined"
       ? localStorage.getItem("employer_token")
@@ -57,7 +73,7 @@ export default function JobApplicantsPage() {
 
     setError("");
     setSuccess("");
-     setActionLoading(applicationId);
+    setActionLoading(applicationId);
 
     const apiMap = {
       accept: "/api/jobposting/accept_job_application_status",
@@ -108,17 +124,10 @@ export default function JobApplicantsPage() {
         >
           <div className={styles.topLinks}>
             <Link
-              href={`/employers-dashboard/offer-letter?jobId=${jobId}`}
-              className={`${styles.topLink} ${isActive("/employers-dashboard/offer-letter") ? styles.active : ""}`}
+              href={`/employers-dashboard/job-applicants?jobId=${jobId}`}
+              className={`${styles.topLink} ${isActive("/employers-dashboard/job-applicants") ? styles.active : ""}`}
             >
-              <i className="la la-envelope"></i> Offer Letter Sent
-            </Link>
-
-            <Link
-              href={`/employers-dashboard/invitation?jobId=${jobId}`}
-              className={`${styles.topLink} ${isActive("/employers-dashboard/invitation") ? styles.active : ""}`}
-            >
-              <i className="la la-paper-plane"></i> Invitation Sent
+              <i className="la la-users"></i>Applicants
             </Link>
 
             <Link
@@ -127,12 +136,17 @@ export default function JobApplicantsPage() {
             >
               <i className="la la-user-check"></i> Shortlisted Candidates
             </Link>
-
             <Link
-              href={`/employers-dashboard/job-applicants?jobId=${jobId}`}
-              className={`${styles.topLink} ${isActive("/employers-dashboard/job-applicants") ? styles.active : ""}`}
+              href={`/employers-dashboard/invitation?jobId=${jobId}`}
+              className={`${styles.topLink} ${isActive("/employers-dashboard/invitation") ? styles.active : ""}`}
             >
-              <i className="la la-users"></i> Job Applicants
+              <i className="la la-paper-plane"></i> Interview Letter
+            </Link>
+            <Link
+              href={`/employers-dashboard/offer-letter?jobId=${jobId}`}
+              className={`${styles.topLink} ${isActive("/employers-dashboard/offer-letter") ? styles.active : ""}`}
+            >
+              <i className="la la-envelope"></i> Offer Letter Sent
             </Link>
           </div>
         </div>
@@ -149,6 +163,7 @@ export default function JobApplicantsPage() {
                 <th>Current Location</th>
                 <th>Expected Salary</th>
                 <th>Notice Period</th>
+                <th>Status</th>
                 <th className="text-center">Action</th>
               </tr>
             </thead>
@@ -209,6 +224,15 @@ export default function JobApplicantsPage() {
                     </td>
 
                     <td>{candidate.noticePeriod}</td>
+                    <td>
+                      <span
+                        className={
+                          statusClassMap[candidate.status] || "badge bg-light"
+                        }
+                      >
+                        {statusLabelMap[candidate.status] || candidate.status}
+                      </span>
+                    </td>
 
                     <td>
                       <div className="d-flex justify-content-center gap-2">
@@ -221,23 +245,25 @@ export default function JobApplicantsPage() {
                         </Link>
 
                         {/* ACCEPT */}
-                        <button
-                          className="btn btn-outline-success btn-sm"
-                          disabled={actionLoading === candidate._id}
-                          title="Accept Application"
-                          onClick={() =>
-                            handleApplicationAction(candidate._id, "accept")
-                          }
-                        >
-                          {actionLoading === candidate._id ? (
-                            <span
-                              className="spinner-border spinner-border-sm"
-                              role="status"
-                            />
-                          ) : (
-                            <i className="la la-check"></i>
-                          )}
-                        </button>
+                        {candidate.status === "applied" && (
+                          <button
+                            className="btn btn-outline-success btn-sm"
+                            disabled={actionLoading === candidate._id}
+                            title="Accept Application"
+                            onClick={() =>
+                              handleApplicationAction(candidate._id, "accept")
+                            }
+                          >
+                            {actionLoading === candidate._id ? (
+                              <span
+                                className="spinner-border spinner-border-sm"
+                                role="status"
+                              />
+                            ) : (
+                              <i className="la la-check"></i>
+                            )}
+                          </button>
+                        )}
 
                         <button
                           className="btn btn-outline-danger btn-sm"

@@ -58,23 +58,15 @@ export default function OfferLetterPage() {
       >
         <div className={styles.topLinks}>
           <Link
-            href={`/employers-dashboard/offer-letter?jobId=${jobId}`}
+            href={`/employers-dashboard/job-applicants?jobId=${jobId}`}
             className={`${styles.topLink} ${
-              isActive("/employers-dashboard/offer-letter") ? styles.active : ""
+              isActive("/employers-dashboard/job-applicants")
+                ? styles.active
+                : ""
             }`}
           >
-            <i className="la la-envelope"></i>
-            Offer Letter Sent
-          </Link>
-
-          <Link
-            href={`/employers-dashboard/invitation?jobId=${jobId}`}
-            className={`${styles.topLink} ${
-              isActive("/employers-dashboard/invitation") ? styles.active : ""
-            }`}
-          >
-            <i className="la la-paper-plane"></i>
-            Invitation Sent
+            <i className="la la-users"></i>
+            Applicants
           </Link>
 
           <Link
@@ -88,15 +80,22 @@ export default function OfferLetterPage() {
           </Link>
 
           <Link
-            href={`/employers-dashboard/job-applicants?jobId=${jobId}`}
+            href={`/employers-dashboard/invitation?jobId=${jobId}`}
             className={`${styles.topLink} ${
-              isActive("/employers-dashboard/job-applicants")
-                ? styles.active
-                : ""
+              isActive("/employers-dashboard/invitation") ? styles.active : ""
             }`}
           >
-            <i className="la la-users"></i>
-            Job Applicants
+            <i className="la la-paper-plane"></i>
+            Interview Letter
+          </Link>
+          <Link
+            href={`/employers-dashboard/offer-letter?jobId=${jobId}`}
+            className={`${styles.topLink} ${
+              isActive("/employers-dashboard/offer-letter") ? styles.active : ""
+            }`}
+          >
+            <i className="la la-envelope"></i>
+            Offer Letter Sent
           </Link>
         </div>
       </div>
