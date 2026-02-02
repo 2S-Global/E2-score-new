@@ -253,9 +253,9 @@ setExpectedSalary("");
     else if (overallScore < 1 || overallScore > 10)
       errors.overall = "Score must be between 1 and 10";
     if (!lastDrawnSalary)
-      errors.lastDrawnSalary = "Last drawn salary is required";
+      // errors.lastDrawnSalary = "Last drawn salary is required";
 
-    if (!expectedSalary) errors.expectedSalary = "Expected salary is required";
+    // if (!expectedSalary) errors.expectedSalary = "Expected salary is required";
 
     if (!remarksMessage) errors.message = "Remarks message is required";
 
@@ -400,6 +400,7 @@ setExpectedSalary("");
                 <th>Experience</th>
                 <th>Notice Period</th>
                 <th>Interview Date/Time</th>
+                <th>Interview Feedback</th>
                 <th className="text-center">Action</th>
               </tr>
             </thead>
@@ -443,6 +444,30 @@ setExpectedSalary("");
                     <td>{c.experienceLevel || "-"} Years</td>
                     <td>{c.noticePeriod}</td>
                     <td></td>
+                    <td className="small">
+                      <div className="row gx-1">
+                        <div className="col-6">
+                          <strong>Comm:</strong> 8/10
+                        </div>
+                        <div className="col-6">
+                          <strong>Tech:</strong> 8/10
+                        </div>
+
+                        <div className="col-6">
+                          <strong>Apt:</strong> 8/10
+                        </div>
+                        <div className="col-6">
+                          <strong>Overall:</strong>{" "}
+                          <span className="fw-bold text-success">10/10</span>
+                        </div>
+
+                        <div className="col-6 mt-1">
+                          <strong>Message:</strong>{" "}
+                          <span className="fst-italic text-muted">"asas"</span>
+                        </div>
+                      </div>
+                    </td>
+
                     <td>
                       <div className="d-flex justify-content-center gap-2">
                         <Link
