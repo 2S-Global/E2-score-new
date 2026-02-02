@@ -9,13 +9,6 @@ module.exports = [
     active: "active",
   },
   {
-    id: 2,
-    name: "Employee Verification",
-    icon: "la-user-tie",
-    routePath: "/employers-dashboard/employee-verification",
-    active: "",
-  },
-  {
     id: 3,
     name: "Company Profile",
     icon: "las la-building",
@@ -64,20 +57,14 @@ module.exports = [
   //   routePath: "/employers-dashboard/paynow",
   //   active: "",
   // },
-  {
-    id: 10,
-    name: "Search Employee",
-    icon: "la-search",
-    routePath: "/employers-dashboard/search-employee",
-    active: "",
-  },
-  {
+    {
     id: 11,
     name: "List Verified Employee",
     icon: "la-user-check",
     routePath: "/employers-dashboard/list-verified-employee",
     active: "",
   },
+  
   {
     id: 12,
     name: "Download Center",
@@ -85,6 +72,14 @@ module.exports = [
     routePath: "/employers-dashboard/download-center",
     active: "",
   },
+  {
+    id: 10,
+    name: "Search Employee",
+    icon: "la-search",
+    routePath: "/employers-dashboard/search-employee",
+    active: "",
+  },
+
   // {
   //   id: 13,
   //   name: "Messages",
@@ -106,6 +101,13 @@ module.exports = [
   //   routePath: "/employers-dashboard/packages",
   //   active: "",
   // },
+    {
+    id: 2,
+    name: "Verify Requests",
+    icon: "la-user-tie",
+    routePath: "/employers-dashboard/employee-verification",
+    active: "",
+  },
   {
     id: 16,
     name: "Change Password",
