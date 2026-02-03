@@ -290,5 +290,21 @@
   text-transform: capitalize;
 }
 
+
+/* Break inheritance at the SOURCE */
+.detailsCell {
+  text-align: left;
+}
+
+/* Force UL to left */
+.detailsCell ul {
+  text-align: left;
+}
+
+/* Force LI to left */
+.detailsCell li {
+  text-align: left;
+}
+
 }
 

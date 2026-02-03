@@ -163,7 +163,7 @@ export default function JobApplicantsPage() {
                 </th>
                 <th>Job Role</th>
                 <th>Current Location</th>
-                {/* <th>Expected Salary</th> */}
+                <th>Experience</th>
                 <th>Notice Period</th>
                 <th>Status</th>
                 <th>Details</th>
@@ -174,7 +174,7 @@ export default function JobApplicantsPage() {
             <tbody>
               {loading && (
                 <tr>
-                  <td colSpan="7" className="text-center py-5">
+                  <td colSpan="8" className="text-center py-5">
                     <div className="spinner-border text-primary" role="status">
                       <span className="visually-hidden">Loading...</span>
                     </div>
@@ -185,7 +185,7 @@ export default function JobApplicantsPage() {
 
               {!loading && candidates.length === 0 && (
                 <tr>
-                  <td colSpan="7" className="text-center py-4">
+                  <td colSpan="8" className="text-center py-4">
                     No applicants found
                   </td>
                 </tr>
@@ -226,6 +226,7 @@ export default function JobApplicantsPage() {
                       {candidate.expectedSalary?.currency}
                     </td> */}
 
+                    <td>{candidate.experienceLevel} Years</td>
                     <td>{candidate.noticePeriod}</td>
                     <td>
                       <span
@@ -240,15 +241,15 @@ export default function JobApplicantsPage() {
                       <ul
                         className={`list-unstyled mb-0 small ${styles.detailsList}`}
                       >
-                        <li>
+                        <li style={{ textAlign: "left" }}>
                           <strong>Preferred Time:</strong>{" "}
                           {capitalize(candidate.preferredTime)}
                         </li>
-                        <li>
+                        <li style={{ textAlign: "left" }}>
                           <strong>Saturday Available:</strong>{" "}
                           {capitalize(candidate.availabilityOnSaturday)}
                         </li>
-                        <li>
+                        <li style={{ textAlign: "left" }}>
                           <strong>Relocate:</strong>{" "}
                           {capitalize(candidate.willingToRelocate)}
                         </li>

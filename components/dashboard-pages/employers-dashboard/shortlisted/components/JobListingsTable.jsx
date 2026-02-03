@@ -332,15 +332,15 @@ export default function ShortlistedCandidatesPage() {
                       <ul
                         className={`list-unstyled mb-0 small ${styles.detailsList}`}
                       >
-                        <li>
+                        <li style={{ textAlign: "left" }}>
                           <strong>Preferred Time:</strong>{" "}
                           {capitalize(candidate.preferredTime)}
                         </li>
-                        <li>
-                          <strong>Saturday:</strong>{" "}
+                        <li style={{ textAlign: "left" }}>
+                          <strong>Saturday Available:</strong>{" "}
                           {capitalize(candidate.availabilityOnSaturday)}
                         </li>
-                        <li>
+                        <li style={{ textAlign: "left" }}>
                           <strong>Relocate:</strong>{" "}
                           {capitalize(candidate.willingToRelocate)}
                         </li>
@@ -353,6 +353,7 @@ export default function ShortlistedCandidatesPage() {
                           href={`/candidates-details/${candidate.userId}`}
                           className="btn btn-outline-primary btn-sm"
                           title="View Candidate Details"
+                          target="_blank"
                         >
                           <i className="la la-eye"></i>
                         </Link>
