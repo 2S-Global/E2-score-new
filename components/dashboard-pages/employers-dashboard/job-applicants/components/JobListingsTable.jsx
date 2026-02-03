@@ -33,6 +33,8 @@ export default function JobApplicantsPage() {
     rejected: "badge bg-danger",
   };
 
+  const capitalize = (value) =>
+    value ? value.charAt(0).toUpperCase() + value.slice(1) : "N/A";
   const token =
     typeof window !== "undefined"
       ? localStorage.getItem("employer_token")
@@ -161,9 +163,10 @@ export default function JobApplicantsPage() {
                 </th>
                 <th>Job Role</th>
                 <th>Current Location</th>
-                <th>Expected Salary</th>
+                {/* <th>Expected Salary</th> */}
                 <th>Notice Period</th>
                 <th>Status</th>
+                <th>Details</th>
                 <th className="text-center">Action</th>
               </tr>
             </thead>
@@ -171,7 +174,7 @@ export default function JobApplicantsPage() {
             <tbody>
               {loading && (
                 <tr>
-                  <td colSpan="6" className="text-center py-5">
+                  <td colSpan="7" className="text-center py-5">
                     <div className="spinner-border text-primary" role="status">
                       <span className="visually-hidden">Loading...</span>
                     </div>
@@ -182,7 +185,7 @@ export default function JobApplicantsPage() {
 
               {!loading && candidates.length === 0 && (
                 <tr>
-                  <td colSpan="6" className="text-center py-4">
+                  <td colSpan="7" className="text-center py-4">
                     No applicants found
                   </td>
                 </tr>
@@ -218,10 +221,10 @@ export default function JobApplicantsPage() {
                       {candidate.currentLocation}
                     </td>
 
-                    <td>
+                    {/* <td>
                       ₹{candidate.expectedSalary?.salary}{" "}
                       {candidate.expectedSalary?.currency}
-                    </td>
+                    </td> */}
 
                     <td>{candidate.noticePeriod}</td>
                     <td>
@@ -233,6 +236,24 @@ export default function JobApplicantsPage() {
                         {statusLabelMap[candidate.status] || candidate.status}
                       </span>
                     </td>
+                    <td className={styles.detailsCell}>
+                      <ul
+                        className={`list-unstyled mb-0 small ${styles.detailsList}`}
+                      >
+                        <li>
+                          <strong>Preferred Time:</strong>{" "}
+                          {capitalize(candidate.preferredTime)}
+                        </li>
+                        <li>
+                          <strong>Saturday Available:</strong>{" "}
+                          {capitalize(candidate.availabilityOnSaturday)}
+                        </li>
+                        <li>
+                          <strong>Relocate:</strong>{" "}
+                          {capitalize(candidate.willingToRelocate)}
+                        </li>
+                      </ul>
+                    </td>
 
                     <td>
                       <div className="d-flex justify-content-center gap-2">
@@ -240,6 +261,7 @@ export default function JobApplicantsPage() {
                           href={`/candidates-details/${candidate.userId}`}
                           className="btn btn-outline-primary btn-sm"
                           title="View Candidate Details"
+                          target="_blank"
                         >
                           <i className="la la-eye"></i>
                         </Link>
@@ -265,23 +287,33 @@ export default function JobApplicantsPage() {
                           </button>
                         )}
 
-                        <button
-                          className="btn btn-outline-danger btn-sm"
-                          disabled={actionLoading === candidate._id}
-                          onClick={() =>
-                            handleApplicationAction(candidate._id, "reject")
-                          }
-                          title="Reject Application"
-                        >
-                          {actionLoading === candidate._id ? (
-                            <span
-                              className="spinner-border spinner-border-sm"
-                              role="status"
-                            />
-                          ) : (
-                            <i className="la la-times"></i>
-                          )}
-                        </button>
+                        {candidate.status !== "rejected" && (
+                          <button
+                            className="btn btn-outline-danger btn-sm"
+                            disabled={actionLoading === candidate._id}
+                            onClick={() => {
+                              const confirmReject = window.confirm(
+                                "Are you sure you want to reject this application?",
+                              );
+                              if (confirmReject) {
+                                handleApplicationAction(
+                                  candidate._id,
+                                  "reject",
+                                );
+                              }
+                            }}
+                            title="Reject Application"
+                          >
+                            {actionLoading === candidate._id ? (
+                              <span
+                                className="spinner-border spinner-border-sm"
+                                role="status"
+                              />
+                            ) : (
+                              <i className="la la-times"></i>
+                            )}
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

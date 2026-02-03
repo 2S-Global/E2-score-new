@@ -179,6 +179,7 @@ export default function OfferLetterPage() {
                         href={`/candidates-details/${c.userId}`}
                         className="btn btn-outline-primary btn-sm"
                         title="View Candidate Details"
+                        target="_blank"
                       >
                         <i className="la la-eye"></i>
                       </Link>

@@ -39,6 +39,9 @@ export default function ShortlistedCandidatesPage() {
     interviewTime: "",
     formDesignation: "",
   });
+
+  const capitalize = (value) =>
+    value ? value.charAt(0).toUpperCase() + value.slice(1) : "N/A";
   const token =
     typeof window !== "undefined"
       ? localStorage.getItem("employer_token")
@@ -256,8 +259,9 @@ export default function ShortlistedCandidatesPage() {
                 <th className="text-center">Candidate</th>
                 <th>Job Role</th>
                 <th>Current Location</th>
-                <th>Expected Salary</th>
+                {/* <th>Expected Salary</th> */}
                 <th>Experience / Notice</th>
+                <th>Details</th>
                 <th className="text-center">Action</th>
               </tr>
             </thead>
@@ -315,14 +319,32 @@ export default function ShortlistedCandidatesPage() {
                       {candidate.currentLocation}
                     </td>
 
-                    <td>
+                    {/* <td>
                       ₹{candidate.expectedSalary?.salary}{" "}
                       {candidate.expectedSalary?.currency}
-                    </td>
+                    </td> */}
 
                     <td>
                       {candidate.experienceLevel} Years /{" "}
                       {candidate.noticePeriod}
+                    </td>
+                    <td className={styles.detailsCell}>
+                      <ul
+                        className={`list-unstyled mb-0 small ${styles.detailsList}`}
+                      >
+                        <li>
+                          <strong>Preferred Time:</strong>{" "}
+                          {capitalize(candidate.preferredTime)}
+                        </li>
+                        <li>
+                          <strong>Saturday:</strong>{" "}
+                          {capitalize(candidate.availabilityOnSaturday)}
+                        </li>
+                        <li>
+                          <strong>Relocate:</strong>{" "}
+                          {capitalize(candidate.willingToRelocate)}
+                        </li>
+                      </ul>
                     </td>
 
                     <td>
