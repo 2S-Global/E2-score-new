@@ -372,7 +372,24 @@ const JobSingleDynamicV1 = () => {
 
                     <h4 className="widget-title mt-2">Job Skills</h4>
                     <div className="widget-content">
-                      <JobSkills />
+                      {/* <JobSkills  /> */}
+
+                <ul className="job-skills">
+                    {Array.isArray(jobPreviewDetails?.jobSkills) &&
+                      jobPreviewDetails.jobSkills.map((skill, index) => (
+                        <li key={index} >
+                          <a href="#">{skill}</a>
+                        </li>
+                      ))}
+                  </ul>
+
+{/*                     <ul className="job-skills">
+                    {jobPreviewDetails?.jobSkills.map((skill, i) => (
+                    <li key={i}>
+                    <a href="#">{skill}</a>
+                    </li>
+                    ))}
+                    </ul> */}
                     </div>
                     {/* <!-- Job Skills --> */}
                   </div>

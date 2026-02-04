@@ -7,7 +7,7 @@ module.exports = [
     icon: "la-home",
     routePath: "/employers-dashboard/dashboard",
     active: "active",
-  },
+  },  
   {
     id: 3,
     name: "Company Profile",
