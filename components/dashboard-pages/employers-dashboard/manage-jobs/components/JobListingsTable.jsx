@@ -20,7 +20,7 @@ const JobListingsTable = () => {
   const [updatingJobId, setUpdatingJobId] = useState(null);
 
   const handleEdit = (jobId) => {
-    router.push(`/employers-dashboard/post-jobs/edit/${jobId}`);
+    router.push(`/employers-dashboard/post-jobs-edit/edit/${jobId}`);
   };
 
   // Token

@@ -26,6 +26,7 @@ const PostBoxForm = () => {
   const searchParams = useSearchParams(); // for query params like ?type=jobTitle
   const id = params.jobId; // from route /edit/[jobId]
   const type = searchParams.get("type"); // from query string ?type=jobTitle
+  const flag = searchParams.get("flag");
 
   const [showBy, setShowBy] = useState(""); // Track dropdown selection
   const [selectedJobTypes, setSelectedJobTypes] = useState([]);
@@ -208,17 +209,17 @@ const [openExpiryPicker, setOpenExpiryPicker] = useState(false);
       setPageLoading(true);
 
       try {
-        const response = await axios.get(
-          `${apiurl}/api/jobposting/get_job_posting_details`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            params: {
-              jobId: id,
-            },
+
+         const apiEndpoint =
+           flag === "review"
+             ? `${apiurl}/api/jobposting/get_temp_job_posting_details`
+             : `${apiurl}/api/jobposting/get_job_posting_details`;
+        const response = await axios.get(apiEndpoint, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+          params: flag === "review" ? { tempId: id } : { jobId: id },
+        });
 
         if (response.data.success) {
           const job = response.data.data;
@@ -281,7 +282,7 @@ const [openExpiryPicker, setOpenExpiryPicker] = useState(false);
     };
 
     fetchData();
-  }, [id]);
+  }, []);
 
   const fetchStates = async () => {
     try {
@@ -812,7 +813,7 @@ const [openExpiryPicker, setOpenExpiryPicker] = useState(false);
         };
 
         response = await axios.post(
-          `${apiurl}/api/jobposting/edit_job_posting_details`,
+          `${apiurl}/api/jobposting/edit_live_job_posting_details`,
           payload,
           {
             headers: {
@@ -893,15 +894,11 @@ const [openExpiryPicker, setOpenExpiryPicker] = useState(false);
         const status = response.data.data.status; // draft
 
         // router.push(`/employers-dashboard/post-jobs/review-jobs/${jobId}?status=${status}`);
-        if (id) {
-          // ✅ EDIT MODE → no review page, no status needed
-          router.push("/employers-dashboard/manage-jobs");
-        } else {
-          // ✅ CREATE MODE → go to review page with status
+
           router.push(
-            `/employers-dashboard/post-jobs/review-jobs/${jobId}?status=${status}`,
+            `/employers-dashboard/post-jobs-edit/review-jobs/${jobId}?status=${status}`,
           );
-        }
+     
         // router.push(`/employers-dashboard/post-jobs/review-jobs`);
         // OR if you want to pass as query: /review-job?jobId=...&status=...
       } else {
@@ -1673,8 +1670,7 @@ const [openExpiryPicker, setOpenExpiryPicker] = useState(false);
               <DatePicker
                 open={openExpiryPicker}
                 onOpen={() => setOpenExpiryPicker(true)}
-                onClose={() => setOpenExpiryPicker(false)} // ✅ closes on outside click
-                closeOnSelect // ✅ closes after date select
+                onClose={() => setOpenExpiryPicker(false)}
                 value={
                   formData.jobExpiryDate
                     ? new Date(formData.jobExpiryDate)
@@ -1682,7 +1678,7 @@ const [openExpiryPicker, setOpenExpiryPicker] = useState(false);
                 }
                 onChange={(newValue) => {
                   handleDateChange(newValue);
-                  setOpenExpiryPicker(false);
+                  setOpenExpiryPicker(false); // close after select
                 }}
                 minDate={new Date()}
                 maxDate={
@@ -1699,7 +1695,8 @@ const [openExpiryPicker, setOpenExpiryPicker] = useState(false);
                     id: "jobExpiryDate",
                     placeholder: "dd/mm/yyyy",
                     error: errorField === "jobExpiryDate",
-                    onClick: () => setOpenExpiryPicker(true), // ✅ open on click
+                    onClick: () => setOpenExpiryPicker(true), // ⭐ opens on click
+               
                     className: "form-control",
                     style: {
                       backgroundColor: "#f0f5f7",

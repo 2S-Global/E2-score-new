@@ -986,6 +986,19 @@ const [designationLoading, setDesignationLoading] = useState(false);
                   />
                 </div>
 
+                {/* ===== LAST WITHDRAWN & EXPECTED SALARY (READ ONLY) ===== */}
+                <div className="col-12 px-3">
+                  <p className="mb-1">
+                    <strong>Last Withdrawn Salary:</strong>{" "}
+                    {selectedCandidate?.feedback?.lastDrawnSalary || "N/A"}
+                  </p>
+
+                  <p className="mb-0">
+                    <strong>Expected Salary:</strong>{" "}
+                    {selectedCandidate?.feedback?.expectedSalary || "N/A"}
+                  </p>
+                </div>
+
                 <div className="modal-body">
                   <div className="row g-3">
                     <div className="col-md-6 position-relative">

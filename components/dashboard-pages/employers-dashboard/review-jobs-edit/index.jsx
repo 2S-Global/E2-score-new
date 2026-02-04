@@ -7,6 +7,7 @@ import CopyrightFooter from "../../CopyrightFooter";
 import { FaEdit } from "react-icons/fa";
 import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
+
 const Index = () => {
   const router = useRouter();
   const params = useParams();
@@ -19,7 +20,9 @@ const Index = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [updatingJobId, setUpdatingJobId] = useState(null);
+  const [pageLoading, setPageLoading] = useState(true);
   const [confirmLoading, setConfirmLoading] = useState(false);
+
   const [success, setSuccess] = useState(null);
   const [errorId, setErrorId] = useState(0);
   const [errorField, setErrorField] = useState(0);
@@ -33,17 +36,16 @@ const Index = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true); // start loader
+      setPageLoading(true);
       try {
         const response = await axios.get(
-          `${apiurl}/api/jobposting/get_job_posting_details`,
+          `${apiurl}/api/jobposting/get_temp_job_posting_details`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
             params: {
-              jobId: jobId,
-              status: "draft",
+              tempId: jobId,
             },
           },
         );
@@ -54,7 +56,7 @@ const Index = () => {
       } catch (err) {
         setError(err.response?.data?.message || err.message);
       } finally {
-        setLoading(false); // stop loader
+        setPageLoading(false);
       }
     };
 
@@ -65,28 +67,25 @@ const Index = () => {
   const handleConfirm = async () => {
     setConfirmLoading(true);
     try {
-      console.log(
-        "Handle Confirm is running successfully and token from review-jobs !",
-        token,
-      );
+      // console.log("Handle Confirm is running successfully and token from review-jobs !", token)
       const response = await axios.post(
-        `${apiurl}/api/jobposting/confirm_job_posting_details`,
+        `${apiurl}/api/jobposting/confirm_live_job_posting_details`,
         {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
           params: {
-            jobId: jobId,
+            tempId: jobId,
           },
         },
       );
 
       if (response.data.success) {
         // Redirect to another page on success
-        setSuccess("Job post Created successfully!");
+        setSuccess("Job post updated successfully!");
         setTimeout(() => {
-          router.push("/employers-dashboard/manage-jobs"); // Replace with your target page
+          router.push("/employers-dashboard/manage-jobs");
         }, 2000);
       } else {
         alert(response.data.message || "Something went wrong!");
@@ -94,14 +93,14 @@ const Index = () => {
     } catch (err) {
       alert(err.response?.data?.message || err.message);
     } finally {
-      setConfirmLoading(false); // stop loader
+      setConfirmLoading(false);
     }
   };
 
   return (
     <>
       <MessageComponent success={success} errorId={errorId} />
-      {loading ? (
+      {pageLoading ? (
         <CustomizedProgressBars />
       ) : (
         <div className="review-container">
@@ -118,14 +117,13 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=jobTitleBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=jobTitleBlock&flag=review`,
                       );
                     }}
                   >
                     {/* &#9998; */}
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -142,14 +140,13 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=jobDescriptionBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=jobDescriptionBlock&flag=review`,
                       );
                     }}
                   >
                     {/* &#9998; */}
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -163,9 +160,8 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=jobDescription`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=jobDescription&flag=review`,
                       );
                     }}
                   >
@@ -186,14 +182,13 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=genderBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=genderBlock&flag=review`,
                       );
                     }}
                   >
                     {/* &#9998; */}
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -208,13 +203,12 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=specializationBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=specializationBlock&flag=review`,
                       );
                     }}
                   >
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -229,13 +223,12 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=skillBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=skillBlock&flag=review`,
                       );
                     }}
                   >
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -249,14 +242,13 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=numberOfPositionAvaiable`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=numberOfPositionAvaiable&flag=review`,
                       );
                     }}
                   >
                     {/* &#9998; */}
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -270,14 +262,13 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=jobType`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=jobType&flag=review`,
                       );
                     }}
                   >
                     {/* &#9998; */}
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -292,13 +283,12 @@ const Index = () => {
                     <span
                       className="edit-icon"
                       onClick={async () => {
-                        setLoading(true);
                         router.push(
-                          `/employers-dashboard/post-jobs/edit/${jobId}?type=expectedHoursBlock`,
+                          `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=expectedHoursBlock&flag=review`,
                         );
                       }}
                     >
-                      {loading ? <CustomizedProgressBars /> : "✎"}
+                      {pageLoading ? <CustomizedProgressBars /> : "✎"}
                     </span>
                   </div>
                 </div>
@@ -325,14 +315,13 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=contractLengthBlock&flag=review`,
                       );
                     }}
                   >
                     {/* &#9998; */}
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -415,13 +404,12 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=salaryBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=salaryBlock&flag=review`,
                       );
                     }}
                   >
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -435,13 +423,12 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=jobExpiryDateBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=jobExpiryDateBlock&flag=review`,
                       );
                     }}
                   >
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -455,14 +442,13 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=benefitsBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=benefitsBlock&flag=review`,
                       );
                     }}
                   >
                     {/* &#9998; */}
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -478,14 +464,13 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=careerLevelBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=careerLevelBlock&flag=review`,
                       );
                     }}
                   >
                     {/* &#9998; */}
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -500,14 +485,13 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=experienceLevelBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=experienceLevelBlock&flag=review`,
                       );
                     }}
                   >
                     {/* &#9998; */}
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -523,13 +507,12 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=industryBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=industryBlock&flag=review`,
                       );
                     }}
                   >
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -545,14 +528,13 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=qualificationBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=qualificationBlock&flag=review`,
                       );
                     }}
                   >
                     {/* &#9998; */}
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -568,14 +550,13 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=countryBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=countryBlock&flag=review`,
                       );
                     }}
                   >
                     {/* &#9998; */}
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -592,11 +573,11 @@ const Index = () => {
                     className="edit-icon"
                     onClick={() =>
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=stateBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=stateBlock&flag=review`,
                       )
                     }
                   >
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -610,13 +591,12 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=cityBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=cityBlock&flag=review`,
                       );
                     }}
                   >
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -630,13 +610,12 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=branchBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=branchBlock&flag=review`,
                       );
                     }}
                   >
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -650,14 +629,13 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=completeAddressBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=completeAddressBlock&flag=review`,
                       );
                     }}
                   >
                     {/* &#9998; */}
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -677,14 +655,13 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=mailBlock123`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=mailBlock&flag=review`,
                       );
                     }}
                   >
                     {/* &#9998; */}
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -697,14 +674,13 @@ const Index = () => {
                 <span
                   className="edit-icon"
                   onClick={async () => {
-                    setLoading(true);
                     router.push(
-                      `/employers-dashboard/post-jobs/edit/${jobId}?type=requireRemumeBlock`,
+                      `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=requireRemumeBlock&flag=review`,
                     );
                   }}
                 >
                   {/* &#9998; */}
-                  {loading ? <CustomizedProgressBars /> : "✎"}
+                  {pageLoading ? <CustomizedProgressBars /> : "✎"}
                 </span>
               </div>
             </div>
@@ -717,14 +693,13 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}?type=mailBlock`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}?type=mailBlock&flag=review`,
                       );
                     }}
                   >
                     {/* &#9998; */}
-                    {loading ? <CustomizedProgressBars /> : "✎"}
+                    {pageLoading ? <CustomizedProgressBars /> : "✎"}
                   </span>
                 </div>
               </div>
@@ -752,9 +727,8 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}&flag=review`,
                       );
                     }}
                   >
@@ -773,9 +747,8 @@ const Index = () => {
                   <span
                     className="edit-icon"
                     onClick={async () => {
-                      setLoading(true);
                       router.push(
-                        `/employers-dashboard/post-jobs/edit/${jobId}`,
+                        `/employers-dashboard/post-jobs-edit/edit/${jobId}&flag=review`,
                       );
                     }}
                   >
@@ -791,7 +764,9 @@ const Index = () => {
             <button
               className="btn back-btn"
               onClick={() =>
-                router.push(`/employers-dashboard/post-jobs/edit/${jobId}`)
+                router.push(
+                  `/employers-dashboard/post-jobs-edit/edit/${jobId}?flag=review`,
+                )
               }
               disabled={confirmLoading}
             >
