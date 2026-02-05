@@ -35,9 +35,9 @@ export default function InvitationPage() {
   // loaders
   const [offerLoading, setOfferLoading] = useState(false);
   const [rejectLoading, setRejectLoading] = useState(null);
-const [designationOptions, setDesignationOptions] = useState([]);
-const [showDesignationDropdown, setShowDesignationDropdown] = useState(false);
-const [designationLoading, setDesignationLoading] = useState(false);
+  const [designationOptions, setDesignationOptions] = useState([]);
+  const [showDesignationDropdown, setShowDesignationDropdown] = useState(false);
+  const [designationLoading, setDesignationLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({
     interviewDate: "",
     interviewTime: "",
@@ -60,6 +60,8 @@ const [designationLoading, setDesignationLoading] = useState(false);
   const [lastDrawnSalary, setLastDrawnSalary] = useState("");
   const [expectedSalary, setExpectedSalary] = useState("");
   const [submitLoading, setSubmitLoading] = useState(false);
+
+  const [candidateAppeared, setCandidateAppeared] = useState("");
 
   // loader
   const [remarksLoading, setRemarksLoading] = useState(false);
@@ -273,8 +275,6 @@ const [designationLoading, setDesignationLoading] = useState(false);
     }
   };
 
-  
-
   const openModal = (candidate) => {
     setSelectedCandidate(candidate);
 
@@ -302,11 +302,10 @@ const [designationLoading, setDesignationLoading] = useState(false);
     setSubmitLoading(false);
   };
 
-
   /* ================= HANDLERS ================= */
   const openRemarksModal = (candidate) => {
     setSelectedCandidate(candidate);
-
+    setCandidateAppeared("");
     setCommunicationScore("");
     setTechnicalScore("");
     setAptitudeScore("");
@@ -330,12 +329,65 @@ const [designationLoading, setDesignationLoading] = useState(false);
   };
 
   const handleSaveRemarks = async () => {
+    // 1️⃣ Candidate appeared is mandatory
+    if (!candidateAppeared) {
+      setRemarksErrors((p) => ({
+        ...p,
+        appeared: "Please select whether candidate appeared",
+      }));
+      return;
+    }
+
+    // 2️⃣ If candidate did NOT appear → save minimal data
+    if (candidateAppeared === "no") {
+      setRemarksLoading(true);
+      setError("");
+      setSuccess("");
+
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/jobposting/save_interview_feedback`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              applicationId: selectedCandidate._id,
+              appeared: false,
+            }),
+          },
+        );
+
+        const result = await res.json();
+
+        if (res.ok && result.success) {
+          setSuccess("Candidate marked as not appeared");
+          setShowRemarksModal(false);
+          fetchInvitedCandidates();
+        } else {
+          setError(result?.message || "Failed to save feedback");
+        }
+      } catch (err) {
+        console.error(err);
+        setError("Something went wrong");
+      } finally {
+        setRemarksLoading(false);
+      }
+
+      return; // ⛔ STOP HERE
+    }
+
+    // 3️⃣ Candidate appeared = YES → full validation
     let errors = {
       communication: "",
       technical: "",
       aptitude: "",
       overall: "",
       message: "",
+      lastDrawnSalary: "",
+      expectedSalary: "",
     };
 
     if (!communicationScore)
@@ -354,11 +406,11 @@ const [designationLoading, setDesignationLoading] = useState(false);
     if (!overallScore) errors.overall = "Overall score is required";
     else if (overallScore < 1 || overallScore > 10)
       errors.overall = "Score must be between 1 and 10";
-    if (!lastDrawnSalary)
-      if (!remarksMessage)
-        errors.lastDrawnSalary = "Last drawn salary is required";
 
-        if (!expectedSalary) errors.expectedSalary = "Expected salary is required";
+    if (!lastDrawnSalary)
+      errors.lastDrawnSalary = "Last drawn salary is required";
+
+    if (!expectedSalary) errors.expectedSalary = "Expected salary is required";
 
     if (!remarksMessage) errors.message = "Remarks message is required";
 
@@ -366,6 +418,7 @@ const [designationLoading, setDesignationLoading] = useState(false);
 
     if (Object.values(errors).some(Boolean)) return;
 
+    // 4️⃣ Save full feedback
     setRemarksLoading(true);
     setError("");
     setSuccess("");
@@ -381,6 +434,7 @@ const [designationLoading, setDesignationLoading] = useState(false);
           },
           body: JSON.stringify({
             applicationId: selectedCandidate._id,
+            appeared: true,
             communicationSkillScore: communicationScore,
             technicalSkillScore: technicalScore,
             aptitudeScore,
@@ -455,7 +509,6 @@ const [designationLoading, setDesignationLoading] = useState(false);
       return [];
     }
   };
-
 
   return (
     <>
@@ -781,159 +834,223 @@ const [designationLoading, setDesignationLoading] = useState(false);
                   />
                 </div>
 
-                <div className="modal-body">
-                  <div className="row g-3">
-                    {/* Communication */}
-                    <div className="col-md-6">
-                      <label className="form-label">Communication</label>
+                {/* Candidate Appeared */}
+                <div className="col-12 px-3">
+                  <label className="form-label fw-semibold">
+                    Candidate Appeared <span className="text-danger">*</span>
+                  </label>
+
+                  <div className="d-flex gap-4 mt-1 ">
+                    <div className="form-check">
                       <input
-                        type="number"
-                        className="form-control"
-                        placeholder="Score (1–10)"
-                        value={communicationScore}
-                        onChange={(e) => {
-                          setCommunicationScore(e.target.value);
-                          setRemarksErrors((p) => ({
-                            ...p,
-                            communication: "",
-                          }));
-                        }}
+                        className="form-check-input"
+                        type="radio"
+                        name="candidateAppeared"
+                        id="appearedYes"
+                        value="yes"
+                        checked={candidateAppeared === "yes"}
+                        onChange={() => setCandidateAppeared("yes")}
                       />
-                      {remarksErrors.communication && (
-                        <small className="text-danger">
-                          {remarksErrors.communication}
-                        </small>
-                      )}
+                      <label className="form-check-label" htmlFor="appearedYes">
+                        Yes
+                      </label>
                     </div>
 
-                    {/* Technical Skills */}
-                    <div className="col-md-6">
-                      <label className="form-label">Technical Skills</label>
+                    <div className="form-check">
                       <input
-                        type="number"
-                        className="form-control"
-                        placeholder="Score (1–10)"
-                        value={technicalScore}
-                        onChange={(e) => {
-                          setTechnicalScore(e.target.value);
-                          setRemarksErrors((p) => ({ ...p, technical: "" }));
-                        }}
-                      />
-                      {remarksErrors.technical && (
-                        <small className="text-danger">
-                          {remarksErrors.technical}
-                        </small>
-                      )}
-                    </div>
+                        className="form-check-input"
+                        type="radio"
+                        name="candidateAppeared"
+                        id="appearedNo"
+                        value="no"
+                        checked={candidateAppeared === "no"}
+                        onChange={() => {
+                          setCandidateAppeared("no");
 
-                    {/* Aptitude */}
-                    <div className="col-md-6">
-                      <label className="form-label">Aptitude</label>
-                      <input
-                        type="number"
-                        className="form-control"
-                        placeholder="Score (1–10)"
-                        value={aptitudeScore}
-                        onChange={(e) => {
-                          setAptitudeScore(e.target.value);
-                          setRemarksErrors((p) => ({ ...p, aptitude: "" }));
+                          // reset fields if No
+                          setCommunicationScore("");
+                          setTechnicalScore("");
+                          setAptitudeScore("");
+                          setOverallScore("");
+                          setLastDrawnSalary("");
+                          setExpectedSalary("");
+                          setRemarksMessage("");
                         }}
                       />
-                      {remarksErrors.aptitude && (
-                        <small className="text-danger">
-                          {remarksErrors.aptitude}
-                        </small>
-                      )}
-                    </div>
-
-                    {/* Overall Score */}
-                    <div className="col-md-6">
-                      <label className="form-label">Overall Score</label>
-                      <input
-                        type="number"
-                        className="form-control"
-                        placeholder="Score (1–10)"
-                        value={overallScore}
-                        onChange={(e) => {
-                          setOverallScore(e.target.value);
-                          setRemarksErrors((p) => ({ ...p, overall: "" }));
-                        }}
-                      />
-                      {remarksErrors.overall && (
-                        <small className="text-danger">
-                          {remarksErrors.overall}
-                        </small>
-                      )}
-                    </div>
-
-                    {/* Last Drawn Salary */}
-                    <div className="col-md-6">
-                      <label className="form-label">Last Drawn Salary</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="e.g. ₹6,50,000 / year"
-                        value={lastDrawnSalary}
-                        onChange={(e) => {
-                          setLastDrawnSalary(e.target.value);
-                          setRemarksErrors((p) => ({
-                            ...p,
-                            lastDrawnSalary: "",
-                          }));
-                        }}
-                      />
-                      {remarksErrors.lastDrawnSalary && (
-                        <small className="text-danger">
-                          {remarksErrors.lastDrawnSalary}
-                        </small>
-                      )}
-                    </div>
-
-                    {/* Expected Salary */}
-                    <div className="col-md-6">
-                      <label className="form-label">Expected Salary</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="e.g. ₹8,00,000 / year"
-                        value={expectedSalary}
-                        onChange={(e) => {
-                          setExpectedSalary(e.target.value);
-                          setRemarksErrors((p) => ({
-                            ...p,
-                            expectedSalary: "",
-                          }));
-                        }}
-                      />
-                      {remarksErrors.expectedSalary && (
-                        <small className="text-danger">
-                          {remarksErrors.expectedSalary}
-                        </small>
-                      )}
-                    </div>
-
-                    {/* Message */}
-                    <div className="col-12">
-                      <label className="form-label">Message</label>
-                      <textarea
-                        className="form-control"
-                        rows="3"
-                        placeholder="Enter remarks"
-                        value={remarksMessage}
-                        onChange={(e) => {
-                          setRemarksMessage(e.target.value);
-                          setRemarksErrors((p) => ({ ...p, message: "" }));
-                        }}
-                      />
-                      {remarksErrors.message && (
-                        <small className="text-danger">
-                          {remarksErrors.message}
-                        </small>
-                      )}
+                      <label className="form-check-label" htmlFor="appearedNo">
+                        No
+                      </label>
                     </div>
                   </div>
+
+                  {remarksErrors.appeared && (
+                    <small className="text-danger">
+                      {remarksErrors.appeared}
+                    </small>
+                  )}
                 </div>
 
+                {candidateAppeared === "yes" && (
+                  <>
+                    <div className="modal-body">
+                      <div className="row g-3">
+                        {/* Communication */}
+                        <div className="col-md-6">
+                          <label className="form-label">Communication</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            placeholder="Score (1–10)"
+                            value={communicationScore}
+                            onChange={(e) => {
+                              setCommunicationScore(e.target.value);
+                              setRemarksErrors((p) => ({
+                                ...p,
+                                communication: "",
+                              }));
+                            }}
+                          />
+                          {remarksErrors.communication && (
+                            <small className="text-danger">
+                              {remarksErrors.communication}
+                            </small>
+                          )}
+                        </div>
+
+                        {/* Technical Skills */}
+                        <div className="col-md-6">
+                          <label className="form-label">Technical Skills</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            placeholder="Score (1–10)"
+                            value={technicalScore}
+                            onChange={(e) => {
+                              setTechnicalScore(e.target.value);
+                              setRemarksErrors((p) => ({
+                                ...p,
+                                technical: "",
+                              }));
+                            }}
+                          />
+                          {remarksErrors.technical && (
+                            <small className="text-danger">
+                              {remarksErrors.technical}
+                            </small>
+                          )}
+                        </div>
+
+                        {/* Aptitude */}
+                        <div className="col-md-6">
+                          <label className="form-label">Aptitude</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            placeholder="Score (1–10)"
+                            value={aptitudeScore}
+                            onChange={(e) => {
+                              setAptitudeScore(e.target.value);
+                              setRemarksErrors((p) => ({ ...p, aptitude: "" }));
+                            }}
+                          />
+                          {remarksErrors.aptitude && (
+                            <small className="text-danger">
+                              {remarksErrors.aptitude}
+                            </small>
+                          )}
+                        </div>
+
+                        {/* Overall Score */}
+                        <div className="col-md-6">
+                          <label className="form-label">Overall Score</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            placeholder="Score (1–10)"
+                            value={overallScore}
+                            onChange={(e) => {
+                              setOverallScore(e.target.value);
+                              setRemarksErrors((p) => ({ ...p, overall: "" }));
+                            }}
+                          />
+                          {remarksErrors.overall && (
+                            <small className="text-danger">
+                              {remarksErrors.overall}
+                            </small>
+                          )}
+                        </div>
+
+                        {/* Last Drawn Salary */}
+                        <div className="col-md-6">
+                          <label className="form-label">
+                            Last Drawn Salary
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="e.g. ₹6,50,000 / year"
+                            value={lastDrawnSalary}
+                            onChange={(e) => {
+                              setLastDrawnSalary(e.target.value);
+                              setRemarksErrors((p) => ({
+                                ...p,
+                                lastDrawnSalary: "",
+                              }));
+                            }}
+                          />
+                          {remarksErrors.lastDrawnSalary && (
+                            <small className="text-danger">
+                              {remarksErrors.lastDrawnSalary}
+                            </small>
+                          )}
+                        </div>
+
+                        {/* Expected Salary */}
+                        <div className="col-md-6">
+                          <label className="form-label">Expected Salary</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="e.g. ₹8,00,000 / year"
+                            value={expectedSalary}
+                            onChange={(e) => {
+                              setExpectedSalary(e.target.value);
+                              setRemarksErrors((p) => ({
+                                ...p,
+                                expectedSalary: "",
+                              }));
+                            }}
+                          />
+                          {remarksErrors.expectedSalary && (
+                            <small className="text-danger">
+                              {remarksErrors.expectedSalary}
+                            </small>
+                          )}
+                        </div>
+
+                        {/* Message */}
+                        <div className="col-12">
+                          <label className="form-label">Message</label>
+                          <textarea
+                            className="form-control"
+                            rows="3"
+                            placeholder="Enter remarks"
+                            value={remarksMessage}
+                            onChange={(e) => {
+                              setRemarksMessage(e.target.value);
+                              setRemarksErrors((p) => ({ ...p, message: "" }));
+                            }}
+                          />
+                          {remarksErrors.message && (
+                            <small className="text-danger">
+                              {remarksErrors.message}
+                            </small>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
                 <div className="modal-footer">
                   <button
                     className="btn btn-secondary"
@@ -1049,19 +1166,6 @@ const [designationLoading, setDesignationLoading] = useState(false);
                             overflowY: "auto",
                           }}
                         >
-                          {/* {designationLoading && (
-                            <li className="list-group-item text-muted">
-                              Loading...
-                            </li>
-                          )} */}
-
-                          {/* {!designationLoading &&
-                            designationOptions.length === 0 && (
-                              <li className="list-group-item text-muted">
-                                No designation found
-                              </li>
-                            )} */}
-
                           {designationOptions.map((item, index) => (
                             <li
                               key={index}
