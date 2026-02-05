@@ -895,7 +895,9 @@ const [openExpiryPicker, setOpenExpiryPicker] = useState(false);
         // router.push(`/employers-dashboard/post-jobs/review-jobs/${jobId}?status=${status}`);
         if (id) {
           // ✅ EDIT MODE → no review page, no status needed
-          router.push("/employers-dashboard/manage-jobs");
+          router.push(
+            `/employers-dashboard/post-jobs/review-jobs/${jobId}?status=${status}`,
+          );
         } else {
           // ✅ CREATE MODE → go to review page with status
           router.push(
@@ -2147,7 +2149,7 @@ const [openExpiryPicker, setOpenExpiryPicker] = useState(false);
           {/* Show when On-site */}
           {formData.jobLocationType === "on-site" && (
             <>
-              <div className="form-group col-lg-6 col-md-12" id="countryBlock">
+              {/* <div className="form-group col-lg-6 col-md-12" id="countryBlock">
                 <label>
                   <b>Country </b>
                 </label>
@@ -2217,7 +2219,6 @@ const [openExpiryPicker, setOpenExpiryPicker] = useState(false);
                 )}
               </div>
 
-              {/* <!-- Input --> */}
               <div className="form-group col-lg-6 col-md-12" id="cityBlock">
                 <label>
                   <b>City </b>
@@ -2255,7 +2256,7 @@ const [openExpiryPicker, setOpenExpiryPicker] = useState(false);
                     {error.city}
                   </p>
                 )}
-              </div>
+              </div> */}
 
               {/* brance dropdown */}
               <div className="form-group col-lg-6 col-md-12" id="branchBlock">

@@ -290,10 +290,7 @@ export const validateDocuments = (formData) => {
   // ON-SITE
   // -----------------------------
   if (jobLocationType === "on-site") {
-    if (!state || state.trim() === "")
-      return { field: "state", message: "Please select a state." };
-    if (!city || city.trim() === "")
-      return { field: "city", message: "Please select a city." };
+
 
     if (!branch || branch.trim() === "")
       return { field: "branch", message: "Please select a branch." };
