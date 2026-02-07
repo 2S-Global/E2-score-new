@@ -25,6 +25,7 @@ const FormInfoBox = ({ setActiveTab }) => {
   const [message_id, setMessageId] = useState(null);
   const [success, setSuccess] = useState(null);
   const token = localStorage.getItem("employer_token");
+const [isSubmitted, setIsSubmitted] = useState(false);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -156,6 +157,8 @@ const FormInfoBox = ({ setActiveTab }) => {
       if (response.data.success) {
         const data = response.data.data;
 
+         const submitted = data.isSubmitted === true;
+   setIsSubmitted(submitted);
         const updatedFormData = {
           ...formdata,
           cin_id: data.cin_id || "",
@@ -375,6 +378,7 @@ const FormInfoBox = ({ setActiveTab }) => {
                   id={`company-${item._id}`}
                   value={item._id}
                   checked={formdata.company_type === item._id}
+                  disabled={isSubmitted}
                   onChange={(e) =>
                     setFormdata({
                       ...formdata,
@@ -407,6 +411,8 @@ const FormInfoBox = ({ setActiveTab }) => {
                 onChange={(e) =>
                   setFormdata({ ...formdata, cin: e.target.value })
                 }
+                readOnly={isSubmitted}
+                disabled={isSubmitted}
                 required
                 className="form-control"
                 pattern="^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$"
@@ -414,6 +420,7 @@ const FormInfoBox = ({ setActiveTab }) => {
               <button
                 type="button"
                 className="btn btn-primary"
+                disabled={isSubmitted}
                 onClick={() => handelcinsubmit()}
               >
                 <Search />
@@ -449,6 +456,8 @@ const FormInfoBox = ({ setActiveTab }) => {
                 name="name"
                 placeholder="Enter company name"
                 value={formdata.name}
+                readOnly={isSubmitted}
+                disabled={isSubmitted}
                 onChange={(e) =>
                   setFormdata({ ...formdata, name: e.target.value })
                 }
@@ -467,6 +476,8 @@ const FormInfoBox = ({ setActiveTab }) => {
                 name="name"
                 placeholder="Enter email address"
                 value={formdata.email}
+                readOnly={isSubmitted}
+                disabled={isSubmitted}
                 onChange={(e) =>
                   setFormdata({ ...formdata, email: e.target.value })
                 }
@@ -526,6 +537,7 @@ const FormInfoBox = ({ setActiveTab }) => {
                 onChange={(date) =>
                   setFormdata({ ...formdata, established: date })
                 }
+              disabled={isSubmitted}
                 dateFormat="dd/MM/yyyy"
                 className="form-control"
                 required
@@ -564,17 +576,18 @@ const FormInfoBox = ({ setActiveTab }) => {
                 isMulti
                 required
                 name="industry"
+                isDisabled={isSubmitted}
                 options={industries}
                 className="basic-multi-select"
                 classNamePrefix="select"
                 value={industries.filter((opt) =>
-                  formdata.industry_type?.includes(opt.value)
+                  formdata.industry_type?.includes(opt.value),
                 )}
                 onChange={(selectedOptions) =>
                   setFormdata({
                     ...formdata,
                     industry_type: selectedOptions.map(
-                      (option) => option.value
+                      (option) => option.value,
                     ),
                   })
                 }

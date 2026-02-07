@@ -55,19 +55,19 @@ const Index = () => {
               {/* End profile chart */}
             </div>
             {/* End .col */}
-
+{/* 
             <div className="">
-              {/* <!-- Notification Widget --> */}
+              
               <div className="notification-widget ls-widget">
                 <div className="widget-title">
                   <h4>Notifications</h4>
                 </div>
                 <div className="widget-content">
-                  <Notification />
+   
                 </div>
               </div>
-            </div>
-            {/* End .col */}
+            </div> */}
+         
           </div>
 
           <div className="col-lg-12">

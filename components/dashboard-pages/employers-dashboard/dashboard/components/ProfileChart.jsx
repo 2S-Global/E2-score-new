@@ -1,92 +1,99 @@
 "use client";
+
+import { useEffect, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
-  Title,
   Tooltip,
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { faker } from "@faker-js/faker";
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
-  Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
-export const options = {
+const options = {
   responsive: true,
-
   plugins: {
-    legend: {
-      display: false,
-    },
-    title: {
-      display: false,
-    },
-
-    tooltips: {
-      position: "nearest",
-      mode: "index",
-      intersect: false,
-      yPadding: 10,
-      xPadding: 10,
-      caretSize: 4,
-      backgroundColor: "rgba(72, 241, 12, 1)",
-      borderColor: "rgb(255, 99, 132)",
-      backgroundColor: "#1967d2",
-      borderColor: "rgba(0,0,0,1)",
-      borderWidth: 4,
-    },
+    legend: { display: false },
   },
 };
 
-const labels = ["January", "February", "March", "April", "May", "June"];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "Dataset",
-      data: labels.map(() => faker.datatype.number({ min: 100, max: 400 })),
-      borderColor: "#1967d2",
-      backgroundColor: "#1967d2",
-      data: [196, 132, 215, 362, 210, 252],
-      fill: false,
-    },
-  ],
-};
-
 const ProfileChart = () => {
+  const [chartData, setChartData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const token = localStorage.getItem("employer_token");
+
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/getMonthlyApplicantsStats`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        const json = await res.json();
+
+        if (json.success && Array.isArray(json.data)) {
+          const labels = json.data.map((item) => item.month);
+          const counts = json.data.map((item) => item.totalApplicants);
+
+          setChartData({
+            labels,
+            datasets: [
+              {
+                label: "Applicants",
+                data: counts,
+                borderColor: "#1967d2",
+                backgroundColor: "#1967d2",
+                tension: 0.4,
+                pointRadius: 4,
+              },
+            ],
+          });
+        }
+      } catch (err) {
+        console.error("Failed to load chart data", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
   return (
     <div className="tabs-box w-100 h-100">
-      <div className="widget-title d-flex justify-content-between align-items-center">
-        <h4>Your Profile Views</h4>
-        <div className="chosen-outer">
-          <select className="chosen-single form-select">
-            <option>Last 6 Months</option>
-            <option>Last 12 Months</option>
-            <option>Last 16 Months</option>
-            <option>Last 24 Months</option>
-            <option>Last 5 year</option>
-          </select>
-        </div>
+      <div className="widget-title">
+        <h4 className="mb-4">Candidate Application Statistics</h4>
       </div>
 
-      {/* Full height chart */}
       <div
-        className="widget-content"
-        style={{ height: "100%", minHeight: "400px" }}
+        className="widget-content d-flex justify-content-center align-items-center"
+        style={{ minHeight: "400px" }}
       >
-        <Line options={options} data={data} />
+        {loading ? (
+          <div className="text-center">
+            <div className="spinner-border text-primary" />
+            <div className="mt-2">Loading statistics...</div>
+          </div>
+        ) : (
+          chartData && <Line data={chartData} options={options} />
+        )}
       </div>
     </div>
   );
