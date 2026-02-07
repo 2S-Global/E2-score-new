@@ -1,118 +1,47 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import candidatesData from "../../../../../data/candidates";
 import styles from "./Applicants.module.css";
+import axios from "axios";
 
 const ApplicantsContainer = () => {
-  const searchParams = useSearchParams();
-  const tableType = searchParams.get("type") || "all";
+  const [candidates, setCandidates] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   /* ======================
-     PAGE TITLE
+     FETCH APPLICANTS
   ====================== */
-  const getPageTitle = () => {
-    switch (tableType) {
-      case "offer-letter":
-        return "Offer Letter Sent";
-      case "invitation":
-        return "Invitation Sent";
-      case "shortlisted":
-        return "Shortlisted Candidates";
-      default:
-        return "Job Applicants";
-    }
-  };
+  useEffect(() => {
+    const fetchApplicants = async () => {
+      try {
+        setLoading(true);
 
-  /* ======================
-     ACTION BUTTONS
-  ====================== */
-  const getActionButtons = () => {
-    switch (tableType) {
-      case "offer-letter":
-        return [
-          { icon: "la la-eye", title: "View", variant: "primary" },
-          { icon: "la la-check", title: "Accept", variant: "success" },
-        ];
-      case "invitation":
-        return [
-          { icon: "la la-eye", title: "View", variant: "primary" },
-          { icon: "la la-check", title: "Accept", variant: "success" },
-        ];
-      case "shortlisted":
-        return [
-          { icon: "la la-eye", title: "View", variant: "primary" },
+        const token = localStorage.getItem("employer_token");
+
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/getLatestApplicants`,
           {
-            icon: "la la-paper-plane",
-            title: "Send Invitation",
-            variant: "info",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        ];
-      default:
-        return [
-          { icon: "la la-eye", title: "View", variant: "primary" },
-          { icon: "la la-check", title: "Approve", variant: "success" },
-        ];
-    }
-  };
+        );
 
-  /* ======================
-     TOP RIGHT LINKS CONFIG
-  ====================== */
-  const tableLinks = [
-    {
-      type: "all",
-      label: "Job Applicants",
-      icon: "la la-users",
-      href: "/employers-dashboard/dashboard",
-    },
-    {
-      type: "offer-letter",
-      label: "Offer Letter Sent",
-      icon: "la la-envelope",
-      href: "/employers-dashboard/dashboard?type=offer-letter",
-    },
-    {
-      type: "invitation",
-      label: "Invitation Sent",
-      icon: "la la-paper-plane",
-      href: "/employers-dashboard/dashboard?type=invitation",
-    },
-    {
-      type: "shortlisted",
-      label: "Shortlisted Candidates",
-      icon: "la la-user-check",
-      href: "/employers-dashboard/dashboard?type=shortlisted",
-    },
-  ];
+        setCandidates(response.data?.data || []);
+      } catch (error) {
+        console.error("Failed to fetch applicants:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchApplicants();
+  }, []);
 
   return (
     <div className={styles.tabsBox}>
-      {/* ================= HEADER ================= */}
-      <div
-        className={`d-flex justify-content-between align-items-center mb-4 ${styles.widgetTitle}`}
-      >
-        <h4 className="mb-0">{getPageTitle()}</h4>
-
-        <div className={styles.linksContainer}>
-          {tableLinks
-            .filter((link) => link.type !== tableType)
-            .map((link) => (
-              <Link
-                key={link.type}
-                href={link.href}
-                className={styles.shortlistedLink}
-              >
-                <i className={`${link.icon} me-1`}></i>
-                {link.label}
-              </Link>
-            ))}
-        </div>
-      </div>
-
-      {/* ================= TABLE ================= */}
       <div
         className="table-responsive"
         style={{ position: "relative", left: "-25px", overflow: "unset" }}
@@ -120,79 +49,100 @@ const ApplicantsContainer = () => {
         <table className={`table table-hover align-middle ${styles.table}`}>
           <thead>
             <tr>
-              <th style={{ width: "20%" }}>Candidate</th>
-              <th style={{ width: "15%" }}>Designation</th>
-              <th style={{ width: "12%" }}>Location</th>
-              <th style={{ width: "12%" }}>Salary</th>
-              <th style={{ width: "18%" }}>Skills</th>
-              <th style={{ width: "15%" }}>Experience / Notice Period</th>
-              <th style={{ width: "8%", textAlign: "center" }}>Action</th>
+              <th style={{ width: "20%" }} className="text-center">
+                Candidate
+              </th>
+              <th style={{ width: "15%" }} className="text-center">
+                Designation
+              </th>
+              <th style={{ width: "12%" }} className="text-center">
+                Location
+              </th>
+              <th style={{ width: "15%" }} className="text-center">
+                Experience / Notice Period
+              </th>
+              <th style={{ width: "8%" }} className="text-center">
+                Action
+              </th>
             </tr>
           </thead>
 
           <tbody>
-            {candidatesData.map((candidate) => (
-              <tr key={candidate.id}>
-                <td>
-                  <div className="d-flex flex-column align-items-center text-center gap-1">
-                    <div className={styles.candidateAvatar}>
-                      <Image
-                        src={candidate.avatar}
-                        alt={candidate.name}
-                        fill
-                        sizes="50px"
-                        quality={100}
-                        unoptimized
-                        className={styles.avatarImg}
-                      />
-                    </div>
-                    <Link
-                      href={`/candidates-details/${candidate.id}`}
-                      className={styles.candidateName}
-                    >
-                      {candidate.name}
-                    </Link>
-                  </div>
-                </td>
-
-                <td>{candidate.designation}</td>
-
-                <td>
-                  <i className="la la-map-marker me-1"></i>
-                  {candidate.location}
-                </td>
-
-                <td>₹{candidate.monthlySalary} / month</td>
-
-                <td>
-                  <div className={styles.skillsWrap}>
-                    {candidate.tags.map((tag, i) => (
-                      <span key={i} className={styles.skillBadge}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </td>
-
-                <td>
-                  {candidate.experience} / {candidate.noticePeriod}
-                </td>
-
-                <td>
-                  <div className="d-flex justify-content-center gap-2">
-                    {getActionButtons().map((btn, index) => (
-                      <button
-                        key={index}
-                        className={`btn btn-outline-${btn.variant} btn-sm`}
-                        title={btn.title}
-                      >
-                        <i className={btn.icon}></i>
-                      </button>
-                    ))}
+            {loading ? (
+              <tr>
+                <td colSpan="5" className="text-center py-5">
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
                   </div>
                 </td>
               </tr>
-            ))}
+            ) : candidates.length === 0 ? (
+              <tr>
+                <td colSpan="5" className="text-center py-4">
+                  No applicants found
+                </td>
+              </tr>
+            ) : (
+              candidates.map((candidate) => (
+                <tr key={candidate._id}>
+                  {/* Candidate */}
+                  <td className="text-center">
+                    <div className="d-flex flex-column align-items-center text-center gap-1">
+                      <div className={styles.candidateAvatar}>
+                        <Image
+                          src={
+                            candidate.profilePicture ||
+                            "/images/default-avatar.png"
+                          }
+                          alt={candidate.candidateName}
+                          fill
+                          sizes="50px"
+                          className={styles.avatarImg}
+                        />
+                      </div>
+
+                      <Link
+                        href={`/candidates-details/${candidate.userId}`}
+                        className={styles.candidateName}
+                        target="_blank"
+                      >
+                        {candidate.candidateName}
+                      </Link>
+                    </div>
+                  </td>
+
+                  {/* Designation */}
+                  <td className="text-center">{candidate.jobRole || "-"}</td>
+
+                  {/* Location */}
+                  <td className="text-center">
+                    <i className="la la-map-marker me-1"></i>
+                    {candidate.currentLocation || "-"}
+                  </td>
+
+                  {/* Experience / Notice Period */}
+                  <td className="text-center">
+                    {candidate.experienceLevel
+                      ? `${candidate.experienceLevel} yrs`
+                      : "-"}{" "}
+                    / {candidate.noticePeriod || "-"}
+                  </td>
+
+                  {/* Action */}
+                  <td className="text-center">
+                    <a
+                      href={`/employers-dashboard/job-applicants?jobId=${candidate.jobId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-outline-primary btn-sm"
+                      title="View"
+                    >
+                      <i className="la la-eye"></i>
+                    </a>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

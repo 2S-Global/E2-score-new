@@ -307,7 +307,7 @@ Dashboard
 .dashboard {
   position: relative;
   background-color: #f5f7fc;
-  padding-left: 365px;
+  padding-left: 300px;
   min-height: 100vh;
 }
 
@@ -317,7 +317,7 @@ Dashboard
 
 .dashboard .dashboard-outer {
   position: relative;
-  padding: 60px 60px 0;
+  padding: 60px 44px 0;
 }
 
 .dashboard .upper-title-box {
@@ -883,7 +883,7 @@ User Sidebar
   left: 0;
   bottom: 0;
   height: calc(100%);
-  width: 365px;
+  width: 300px;
   padding-top: 80px;
   background: #ffffff;
   overflow: auto;

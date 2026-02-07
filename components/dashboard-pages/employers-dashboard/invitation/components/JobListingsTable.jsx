@@ -242,7 +242,7 @@ export default function InvitationPage() {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/jobposting/accept_shortlisted_candidates`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/jobposting/accept_shortlisted_candidates_reschedule`,
         {
           method: "PATCH",
           headers: {
@@ -578,6 +578,7 @@ export default function InvitationPage() {
                 <th>Experience</th>
                 <th>Notice Period</th>
                 <th>Interview Date/Time</th>
+                <th>Status</th>
                 <th>Interview Feedback</th>
                 <th className="text-center">Action</th>
               </tr>
@@ -620,7 +621,12 @@ export default function InvitationPage() {
                     </td>
                     <td className={styles.candidateName}>{c.candidateName}</td>
                     <td>{c.experienceLevel || "-"} Years</td>
-                    <td>{c.noticePeriod}</td>
+                    <td>
+                      {c.noticePeriod
+                        ? c.noticePeriod.charAt(0).toUpperCase() +
+                          c.noticePeriod.slice(1)
+                        : "-"}
+                    </td>
                     <td className="small">
                       {c.interviewDate && c.interviewTime ? (
                         <>
@@ -648,6 +654,27 @@ export default function InvitationPage() {
                         <span className="text-muted fst-italic">
                           Not scheduled
                         </span>
+                      )}
+                    </td>
+
+                    <td>
+                      {c.interviewInvitationStatus ? (
+                        <span
+                          className={
+                            c.interviewInvitationStatus === "pending"
+                              ? "text-warning fw-semibold"
+                              : c.interviewInvitationStatus === "accepted"
+                                ? "text-success fw-semibold"
+                                : c.interviewInvitationStatus === "rejected"
+                                  ? "text-danger fw-semibold"
+                                  : ""
+                          }
+                        >
+                          {c.interviewInvitationStatus.charAt(0).toUpperCase() +
+                            c.interviewInvitationStatus.slice(1)}
+                        </span>
+                      ) : (
+                        "-"
                       )}
                     </td>
 
@@ -1110,9 +1137,16 @@ export default function InvitationPage() {
                     {selectedCandidate?.feedback?.lastDrawnSalary || "N/A"}
                   </p>
 
-                  <p className="mb-0">
+                  <p className="mb-1">
                     <strong>Expected Salary:</strong>{" "}
                     {selectedCandidate?.feedback?.expectedSalary || "N/A"}
+                  </p>
+                  <p className="mb-0">
+                    <strong>Notice Period:</strong>{" "}
+                    {selectedCandidate?.noticePeriod
+                      ? selectedCandidate.noticePeriod.charAt(0).toUpperCase() +
+                        selectedCandidate.noticePeriod.slice(1)
+                      : "N/A"}
                   </p>
                 </div>
 
