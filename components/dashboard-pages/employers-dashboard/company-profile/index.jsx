@@ -72,7 +72,7 @@ const CompanyProfile = () => {
         {/* Dashboard Section */}
         <section className="user-dashboard">
           <div className="dashboard-outer">
-            <BreadCrumb title="Company Profile!" />
+            <BreadCrumb title="Company Profile" />
             <MenuToggler />
 
             {/* Tabs Navigation */}

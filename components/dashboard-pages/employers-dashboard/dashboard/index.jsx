@@ -32,7 +32,7 @@ const Index = () => {
       {/* <!-- Dashboard --> */}
       <section className="user-dashboard">
         <div className="dashboard-outer">
-          <BreadCrumb title="Dashboard Home!" />
+          <BreadCrumb title="Dashboard Home" />
           {/* breadCrumb */}
 
           <MenuToggler />

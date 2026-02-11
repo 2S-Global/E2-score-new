@@ -5,7 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
 import DataTable from "react-data-table-component";
-import { Trash2, Pencil, Eye, FileDown } from "lucide-react";
+import { Trash2, Pencil, Eye, FileDown, PackageOpen } from "lucide-react";
 import EditfieldModal from "./modals/editfield";
 import EditplanModal from "./modals/planmodal";
 import VerifiedlistModal from "./modals/verifiedlistModal";
@@ -38,6 +38,13 @@ const Companytable = ({ setRefresh, refresh }) => {
     setIsModalOpen(true);
     document.body.style.overflow = "hidden"; // Disable background scrolling
   };
+
+    const openModalPlanRH = (companydetails) => {
+      setEditcompany(companydetails);
+      setIsModalplanOpen(true);
+      document.body.style.overflow = "hidden"; // Disable background scrolling
+      console.log("open modal plan");
+    };
 
   const closeModalVL = () => {
     setIsModalvlOpen(false);
@@ -342,6 +349,14 @@ const Companytable = ({ setRefresh, refresh }) => {
             size={20}
           /> */}
 
+          <span title="Plan">
+            <PackageOpen
+              className="text-info"
+              style={{ cursor: "pointer" }}
+              onClick={() => openModalPlanRH(row)}
+              size={20}
+            />
+          </span>
           <Pencil
             className="text-primary"
             style={{ cursor: "pointer" }}
@@ -354,7 +369,7 @@ const Companytable = ({ setRefresh, refresh }) => {
             style={{ cursor: "pointer" }}
             onClick={() => {
               const confirmDelete = window.confirm(
-                "Are you sure you want to delete this candidate?"
+                "Are you sure you want to delete this candidate?",
               );
               if (confirmDelete) handleDelete(row._id);
             }}

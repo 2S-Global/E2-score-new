@@ -42,7 +42,13 @@ const DocumentUpload = ({
           placeholder={`Enter Name on ${label}`}
           className="form-control"
           value={valuename}
-          onChange={onfieldChange}
+          onChange={(e) => {
+            const value = e.target.value;
+            // allow only alphabets and spaces
+            if (/^[a-zA-Z\s]*$/.test(value)) {
+              onfieldChange(e);
+            }
+          }}
         />
       </div>
 
@@ -74,7 +80,12 @@ const DocumentUpload = ({
           <label
             className="uploadButton-button ripple-effect"
             htmlFor={fileId}
-            style={{ width: "100%", height: "40px", cursor: "pointer" }}
+            style={{
+              width: "100%",
+              height: "54px",
+              cursor: "pointer",
+              borderRadius: "6px",
+            }}
           >
             {documentData.file ? (
               <span

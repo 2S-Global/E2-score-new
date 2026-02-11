@@ -32,13 +32,11 @@ const WidgetContentBox = () => {
     licensenumdoc: null,
     passportdoc: null,
     // uanname:null,
-    uannumber:null,
-
-
+    uannumber: null,
   });
 
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
-  const token = localStorage.getItem("Admin_token");
+  const token = localStorage.getItem("employer_token");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -61,8 +59,123 @@ const WidgetContentBox = () => {
     }));
   };
 
+  const validateForm = () => {
+    const PAN_REGEX = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+    const AADHAAR_REGEX = /^\d{12}$/;
+    const PASSPORT_REGEX = /^[A-Z][0-9]{7}$/;
+    const DL_REGEX = /^[A-Z0-9]{10,16}$/;
+    const VOTER_REGEX = /^[A-Z0-9]{10}$/;
+    // 1. Mandatory basic fields
+    if (!formData.name || !formData.email || !formData.dob) {
+      return "Name, Email and Date of Birth are mandatory";
+    }
+
+    // 4️⃣ Email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailRegex.test(formData.email)) {
+      return "Please enter a valid email address";
+    }
+
+    // 5️⃣ Phone (optional but must be 10 digits if entered)
+    if (formData.phone && !/^\d{10}$/.test(formData.phone)) {
+      return "Mobile number must be exactly 10 digits";
+    }
+
+    // PAN validation
+    if (
+      formData.pannumber &&
+      !PAN_REGEX.test(formData.pannumber.toUpperCase())
+    ) {
+      return "Invalid PAN number (Format: ABCDE1234F)";
+    }
+
+    // Passport validation
+    if (
+      formData.passportnumber &&
+      !PASSPORT_REGEX.test(formData.passportnumber.toUpperCase())
+    ) {
+      return "Invalid Passport File Number (Format: A1234567)";
+    }
+
+    // Aadhaar validation
+    if (formData.aadhaarnumber && !AADHAAR_REGEX.test(formData.aadhaarnumber)) {
+      return "Invalid Aadhaar number (Must be 12 digits)";
+    }
+
+    // Driving License validation
+    if (
+      formData.licensenumber &&
+      !DL_REGEX.test(formData.licensenumber.toUpperCase())
+    ) {
+      return "Invalid Driving License number";
+    }
+
+    // Voter ID validation
+    if (
+      formData.voternumber &&
+      !VOTER_REGEX.test(formData.voternumber.toUpperCase())
+    ) {
+      return "Invalid Voter ID number";
+    }
+
+    // 2. Identity fields check
+    const identityFields = [
+      formData.panname,
+      formData.pannumber,
+      formData.passportname,
+      formData.passportnumber,
+      formData.aadhaarname,
+      formData.aadhaarnumber,
+      formData.licensename,
+      formData.licensenumber,
+      formData.votername,
+      formData.voternumber,
+      formData.uannumber,
+    ];
+
+    const hasAnyIdentity = identityFields.some(
+      (val) => val && val.toString().trim() !== "",
+    );
+
+    if (!hasAnyIdentity) {
+      return "Please fill at least one identity document (PAN / Passport / Aadhaar / License / Voter / UAN)";
+    }
+
+    // 3. Pair validation helper
+    const pairCheck = (name, number, label) => {
+      if ((name && !number) || (!name && number)) {
+        return `${label} Name and ${label} Number both are required`;
+      }
+      return null;
+    };
+
+    return (
+      pairCheck(formData.panname, formData.pannumber, "PAN") ||
+      pairCheck(formData.passportname, formData.passportnumber, "Passport") ||
+      pairCheck(formData.aadhaarname, formData.aadhaarnumber, "Aadhaar") ||
+      pairCheck(
+        formData.licensename,
+        formData.licensenumber,
+        "Driving License",
+      ) ||
+      pairCheck(formData.votername, formData.voternumber, "Voter")
+    );
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // 🔥 FORCE reset first
+    setError(null);
+    setSuccess(null);
+
+    // ⏳ allow React to flush state
+    await Promise.resolve();
+
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
     setLoading(true);
     setError(null);
     setSuccess(null);
@@ -87,7 +200,7 @@ const WidgetContentBox = () => {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.status === 201) {
@@ -159,8 +272,14 @@ const WidgetContentBox = () => {
                 name="name"
                 className="form-control"
                 value={formData.name}
-                onChange={handleChange}
-                required
+                onChange={(e) => {
+                  const value = e.target.value;
+                  // allow only letters and spaces
+                  if (/^[a-zA-Z\s]*$/.test(value)) {
+                    setFormData({ ...formData, name: value });
+                  }
+                }}
+                placeholder="Enter full name"
               />
             </div>
 
@@ -169,12 +288,91 @@ const WidgetContentBox = () => {
               <label>
                 Date of Birth <span style={{ color: "red" }}>*</span>
               </label>
+
               <DatePicker
-                selected={formData.dob ? new Date(formData.dob) : null}
+                selected={formData.dob}
                 onChange={handleDateChange}
                 dateFormat="dd/MM/yyyy"
+                placeholderText="DD / MM / YYYY"
+                maxDate={new Date()}
+                showPopperArrow={false}
                 className="form-control"
-                required
+                wrapperClassName="w-100"
+                renderCustomHeader={({
+                  date,
+                  changeYear,
+                  changeMonth,
+                  decreaseMonth,
+                  increaseMonth,
+                  prevMonthButtonDisabled,
+                  nextMonthButtonDisabled,
+                }) => (
+                  <div
+                    style={{
+                      margin: 8,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: "8px",
+                    }}
+                  >
+                    <button
+                      onClick={decreaseMonth}
+                      disabled={prevMonthButtonDisabled}
+                      type="button"
+                    >
+                      ‹
+                    </button>
+
+                    {/* MONTH DROPDOWN */}
+                    <select
+                      value={date.getMonth()}
+                      onChange={(e) => changeMonth(Number(e.target.value))}
+                    >
+                      {[
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "May",
+                        "Jun",
+                        "Jul",
+                        "Aug",
+                        "Sep",
+                        "Oct",
+                        "Nov",
+                        "Dec",
+                      ].map((month, index) => (
+                        <option key={month} value={index}>
+                          {month}
+                        </option>
+                      ))}
+                    </select>
+
+                    {/* YEAR DROPDOWN */}
+                    <select
+                      value={date.getFullYear()}
+                      onChange={(e) => changeYear(Number(e.target.value))}
+                    >
+                      {Array.from({ length: 100 }, (_, i) => {
+                        const year = new Date().getFullYear() - i;
+                        return (
+                          <option key={year} value={year}>
+                            {year}
+                          </option>
+                        );
+                      })}
+                    </select>
+
+                    <button
+                      onClick={increaseMonth}
+                      disabled={nextMonthButtonDisabled}
+                      type="button"
+                    >
+                      ›
+                    </button>
+                  </div>
+                )}
               />
             </div>
 
@@ -182,11 +380,20 @@ const WidgetContentBox = () => {
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
               <label>Phone Number</label>
               <input
-                type="number"
+                type="text"
                 name="phone"
                 className="form-control"
+                placeholder="Enter 10 digit mobile number"
                 value={formData.phone}
-                onChange={handleChange}
+                inputMode="numeric"
+                maxLength={10}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  // allow only digits and max 10
+                  if (/^\d{0,10}$/.test(value)) {
+                    setFormData({ ...formData, phone: value });
+                  }
+                }}
               />
             </div>
 
@@ -196,12 +403,11 @@ const WidgetContentBox = () => {
                 Email <span style={{ color: "red" }}>*</span>
               </label>
               <input
-                type="email"
+                type="text"
                 name="email"
                 className="form-control"
                 value={formData.email}
                 onChange={handleChange}
-                required
               />
             </div>
 
@@ -256,7 +462,13 @@ const WidgetContentBox = () => {
                 placeholder="Enter Name on Passport"
                 className="form-control"
                 value={formData.passportname}
-                onChange={handleChange}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  // allow only alphabets and spaces
+                  if (/^[a-zA-Z\s]*$/.test(value)) {
+                    setFormData({ ...formData, passportname: value });
+                  }
+                }}
               />
             </div>
 
@@ -288,7 +500,12 @@ const WidgetContentBox = () => {
                 <label
                   className="uploadButton-button ripple-effect"
                   htmlFor={fileId}
-                  style={{ width: "100%", height: "40px", cursor: "pointer" }}
+                  style={{
+                    width: "100%",
+                    height: "54px",
+                    cursor: "pointer",
+                    borderRadius: "6px",
+                  }}
                 >
                   {documentData.file ? (
                     <span
@@ -336,7 +553,6 @@ const WidgetContentBox = () => {
           />
 
           <div className="row">
- 
             <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
               <label>UAN</label>
               <input
@@ -348,8 +564,7 @@ const WidgetContentBox = () => {
                 onChange={handleChange}
               />
             </div>
-            
-            </div>
+          </div>
           {/* Submit Button */}
           <div className="form-group">
             <button

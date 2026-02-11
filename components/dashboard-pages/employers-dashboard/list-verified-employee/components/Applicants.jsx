@@ -23,26 +23,30 @@ const Applicants = () => {
   useEffect(() => {
     const fetchCandidates = async () => {
       try {
-        const token = localStorage.getItem("Admin_token");
+        const token = localStorage.getItem("employer_token");
+        console.log("Fetching candidates with token:", token);
+
         if (!token) {
-          console.error("Error: No token found in localStorage");
           setError("Unauthorized: No token found");
           setLoading(false);
           return;
         }
 
-        const response = await axios.get(
-          `${API_URL}/api/verify/listUserVerifiedList`,
+        const response = await axios.post(
+          `${API_URL}/api/admin/cart/getAllVerifiedCandidateAdmin`,
+          {}, // 👈 POST body (keep empty if backend doesn't need data)
           {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
         );
 
-        setCandidates(response.data);
+        setCandidates(response.data.data);
       } catch (error) {
         console.error(
           "Error fetching candidates:",
-          error.response?.data || error
+          error.response?.data || error,
         );
         setError(error.response?.data?.message || "Internal Server Error");
       } finally {
@@ -130,7 +134,7 @@ const Applicants = () => {
     },
     {
       name: "Verified At",
-      selector: (row) => new Date(row.updatedAt).toLocaleDateString("en-GB"),
+      selector: (row) => row.date,
     },
 
     {
@@ -139,7 +143,7 @@ const Applicants = () => {
         <div className="d-flex gap-2">
           {/* View Button */}
           <Link
-            href={`/employers-dashboard/list-verified-employee/details?id=${row._id}`}
+            href={`/employers-dashboard/list-verified-employee/details?id=${row.id}`}
             passHref
           >
             <button className="btn btn-sm" title="View Details">
@@ -160,7 +164,7 @@ const Applicants = () => {
 
   // ✅ Filter candidates based on search
   const filteredCandidates = candidates.filter((candidate) =>
-    candidate.candidate_name.toLowerCase().includes(searchText.toLowerCase())
+    candidate.candidate_name.toLowerCase().includes(searchText.toLowerCase()),
   );
 
   // ✅ Loader UI when fetching data

@@ -26,7 +26,7 @@ const PaymentDetails = () => {
   const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY;
   const router = useRouter();
   useEffect(() => {
-    const storedToken = localStorage.getItem("Admin_token");
+    const storedToken = localStorage.getItem("employer_token");
     console.log("Fetched token:", storedToken); // Debugging
     setToken(storedToken);
   }, []);

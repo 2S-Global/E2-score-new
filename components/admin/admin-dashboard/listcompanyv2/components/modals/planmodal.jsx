@@ -25,6 +25,7 @@ const EditplanModal = ({ show, onClose, field }) => {
   const [plans, setPlans] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
     if (!show || !field?._id || didFetch.current) return;
@@ -96,6 +97,15 @@ const EditplanModal = ({ show, onClose, field }) => {
     }
   }, [show]);
 
+  useEffect(() => {
+    if (show) {
+      setAnimate(true);
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [show]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "discount_percent") {
@@ -160,17 +170,34 @@ const EditplanModal = ({ show, onClose, field }) => {
     }
   };
 
+  const handleClose = () => {
+    setAnimate(false);
+
+    setTimeout(() => {
+      onClose();
+    }, 300); // must match transition duration
+  };
+
   if (!show) return null;
 
   return (
     <div
-      className="modal fade show d-block"
+      className={`modal fade d-block ${animate ? "show" : ""}`}
       tabIndex="-1"
       role="dialog"
-      style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+      style={{
+        transform: animate ? "scale(1)" : "scale(0.95)",
+        transition: "transform 0.3s ease",
+      }}
     >
       <div
         className="modal-dialog modal-lg modal-dialog-centered"
+        style={{
+          transform: animate
+            ? "translateY(0) scale(1)"
+            : "translateY(20px) scale(0.9)",
+          transition: "all 0.6s cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
         role="document"
       >
         <div className="modal-content shadow-lg border-0 rounded-4">
@@ -181,7 +208,7 @@ const EditplanModal = ({ show, onClose, field }) => {
             <button
               type="button"
               className="btn-close"
-              onClick={onClose}
+              onClick={handleClose}
               aria-label="Close"
             ></button>
           </div>
@@ -224,7 +251,7 @@ const EditplanModal = ({ show, onClose, field }) => {
                               id={`plan-${plan._id}`}
                               value={plan._id}
                               checked={formData.selected_plan.includes(
-                                plan._id
+                                plan._id,
                               )}
                               onChange={handleCheckboxChange}
                             />
@@ -342,9 +369,6 @@ const EditplanModal = ({ show, onClose, field }) => {
                         />
                       </div>
                     )}
-
-       
-                    
                   </div>
                 </div>
 
@@ -365,7 +389,7 @@ const EditplanModal = ({ show, onClose, field }) => {
             <button
               type="button"
               className="btn btn-outline-secondary"
-              onClick={onClose}
+              onClick={handleClose}
             >
               Cancel
             </button>

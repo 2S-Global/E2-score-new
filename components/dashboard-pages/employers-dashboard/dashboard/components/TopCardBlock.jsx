@@ -55,7 +55,7 @@ const TopCardBlock = () => {
       id: 3,
       icon: <Bookmark size={22} className="text-success" />,
       countNumber: stats?.totalShortlisted ?? 0,
-      metaName: "Shortlist",
+      metaName: "Shortlisted",
     },
     {
       id: 4,

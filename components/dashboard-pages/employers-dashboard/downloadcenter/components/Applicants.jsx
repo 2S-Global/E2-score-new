@@ -24,7 +24,7 @@ const Applicants = () => {
   useEffect(() => {
     const fetchCandidates = async () => {
       try {
-        const token = localStorage.getItem("Admin_token");
+        const token = localStorage.getItem("employer_token");
         if (!token) {
           console.error("Error: No token found in localStorage");
           setError("Unauthorized: No token found");
@@ -33,11 +33,11 @@ const Applicants = () => {
         }
 
         const response = await axios.post(
-          `${API_URL}/api/usercart/getPaidUserVerificationCartByEmployer`,
+          `${API_URL}/api/admin/cart/getPaidUserVerificationCartByEmployer`,
           {},
           {
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         );
         setCandidates(response.data);
       } catch (error) {

@@ -36,7 +36,7 @@ const Index = () => {
       {/* <!-- Dashboard --> */}
       <section className="user-dashboard">
         <div className="dashboard-outer">
-          <BreadCrumb title="Employee Verification!" />
+          <BreadCrumb title="Employee Verification" />
           {/* breadCrumb */}
           <div className="row">
             <div className="col-lg-12">

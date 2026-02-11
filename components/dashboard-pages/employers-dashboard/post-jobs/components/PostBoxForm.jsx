@@ -2318,7 +2318,7 @@ const [openExpiryPicker, setOpenExpiryPicker] = useState(false);
                   type="text"
                   name="address"
                   ref={addressRef}
-                  placeholder="329 Queensberry Street, North Melbourne VIC 3051, Australia."
+                  placeholder="C-1 Someshwar Tenament, Ranip, Ahmedabad, Gujarat, India"
                   value={formData.address}
                   onChange={(e) => {
                     console.log(
