@@ -137,7 +137,7 @@ const PassdocumentUpload = ({
           <label
             className="uploadButton-button ripple-effect"
             htmlFor={fileId}
-            style={{ width: "100%", height: "40px", cursor: "pointer" }}
+            style={{ width: "100%", height: "54px", cursor: "pointer" }}
           >
             {documentData.file ? (
               <span

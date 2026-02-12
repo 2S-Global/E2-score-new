@@ -7,7 +7,7 @@ module.exports = [
     icon: "la-home",
     routePath: "/employers-dashboard/dashboard",
     active: "active",
-  },  
+  },
   {
     id: 3,
     name: "Company Profile",
@@ -50,6 +50,14 @@ module.exports = [
     routePath: "/employers-dashboard/verify-employee",
     active: "",
   },
+
+  {
+    id: 9,
+    name: "Aadhar Verification",
+    icon: "la-id-badge",
+    routePath: "/employers-dashboard/aadhar-otp",
+    active: "",
+  },
   // {
   //   id: 9,
   //   name: "Paynow",
@@ -57,14 +65,14 @@ module.exports = [
   //   routePath: "/employers-dashboard/paynow",
   //   active: "",
   // },
-    {
-    id: 11,
-    name: "List Verified Employee",
-    icon: "la-user-check",
-    routePath: "/employers-dashboard/list-verified-employee",
-    active: "",
-  },
-  
+  //   {
+  //   id: 11,
+  //   name: "List Verified Employee",
+  //   icon: "la-user-check",
+  //   routePath: "/employers-dashboard/list-verified-employee",
+  //   active: "",
+  // },
+
   {
     id: 12,
     name: "Download Center",
@@ -101,7 +109,7 @@ module.exports = [
   //   routePath: "/employers-dashboard/packages",
   //   active: "",
   // },
-    {
+  {
     id: 2,
     name: "Verify Requests",
     icon: "la-user-tie",

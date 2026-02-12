@@ -124,7 +124,7 @@ const PaymentDetails = () => {
   const handlePaymentSuccess = async (response, pay, pids) => {
     console.log("Payment successful!", response, "payment ", pay);
     console.log("Payment IDs:", pids);
-    alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
+    // alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
 
     // API call success
     const paymentData = {

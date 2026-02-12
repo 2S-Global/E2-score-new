@@ -66,13 +66,16 @@ const FormContent2 = () => {
       //save token to local storage
       if (role == "0") {
         localStorage.setItem("Super_token", token);
+          localStorage.setItem("Role", role);
         router.push("/admin/dashboard");
       } else if (role == "1") {
         localStorage.setItem("candidate_token", token);
+          localStorage.setItem("Role", role);
         router.push("/candidates-dashboard/dashboard");
       } else if (role == "2") {
         localStorage.setItem("employer_token", token);
         localStorage.setItem("employer_name", employerName);
+        localStorage.setItem("Role", role);
 
         if (response.data.not_dashboard == true) {
           router.push(

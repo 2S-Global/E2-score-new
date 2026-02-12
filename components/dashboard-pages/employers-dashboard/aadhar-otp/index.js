@@ -2,10 +2,11 @@ import MobileMenu from "../../../header/MobileMenu";
 import DashboardHeader from "../../../header/DashboardHeader";
 import LoginPopup from "../../../common/form/login/LoginPopup";
 import DashboardEmployerSidebar from "../../../header/DashboardEmployerSidebar";
-import BreadCrumb from "../../BreadCrumb";
 import CopyrightFooter from "../../CopyrightFooter";
-import WidgetContentBox from "./components/WidgetContentBox";
 import MenuToggler from "../../MenuToggler";
+//component
+import AadharOtp from "./components/aadharotp";
+
 const index = () => {
   return (
     <div className="page-wrapper dashboard">
@@ -25,16 +26,28 @@ const index = () => {
       {/* <!-- End User Sidebar Menu --> */}
 
       {/* <!-- Dashboard --> */}
-      <section className="user-dashboard">
-        <div className="dashboard-outer">
+      <section className="user-dashboard d-flex flex-column min-vh-100">
+        <div className="dashboard-outer flex-grow-1">
           <MenuToggler />
           <div className="row">
             <div className="col-lg-12">
-              <div className="applicants-widget ls-widget">
-                {/* End widget top filter box */}
-                <WidgetContentBox />
+              <div className="ls-widget">
+                <div className="tabs-box">
+                  <div className="widget-title">
+                    <h4>Verify Aadhar with OTP</h4>
+                  </div>
+                  {/* End widget-title */}
+
+                  <div className="widget-content">
+                    <div className="table-outer">
+                      <AadharOtp />
+                      {/*  <PaymentDetails /> */}
+                    </div>
+                  </div>
+                  {/* End widget-content */}
+                </div>
               </div>
-              {/* <!-- applicants Widget --> */}
+              {/* <!-- Ls widget --> */}
             </div>
           </div>
           {/* End .row */}
@@ -46,7 +59,6 @@ const index = () => {
       <CopyrightFooter />
       {/* <!-- End Copyright --> */}
     </div>
-    // End page-wrapper
   );
 };
 
