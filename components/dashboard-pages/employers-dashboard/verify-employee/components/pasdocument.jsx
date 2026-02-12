@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Trash2 } from "lucide-react";
-
-const DocumentUpload = ({
+const PassdocumentUpload = ({
   label,
   name,
   fileId,
@@ -21,6 +20,7 @@ const DocumentUpload = ({
     file: null,
     filePreview: null,
   });
+
   const [isSameAsFullName, setIsSameAsFullName] = useState(false);
 
   const handleFileSelect = (e) => {
@@ -38,7 +38,6 @@ const DocumentUpload = ({
       }
     }
   };
-
   const handleCheckboxChange = (e) => {
     const checked = e.target.checked;
     setIsSameAsFullName(checked);
@@ -60,7 +59,6 @@ const DocumentUpload = ({
       });
     }
   };
-
   return (
     <div
       className="row"
@@ -69,9 +67,10 @@ const DocumentUpload = ({
         opacity: disabled ? 0.5 : 1,
       }}
     >
+      {/* Heading */}
       {/* Document Number Input */}
       <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-        <label>{label} Number</label>
+        <label>Passport File Number</label>
         <input
           type="text"
           name={`${name}number`}
@@ -81,7 +80,6 @@ const DocumentUpload = ({
           onChange={onfieldChange}
           onBlur={onfieldValidation}
           disabled={disabled}
-          autoComplete="off"
         />
 
         {numberError && (
@@ -90,10 +88,9 @@ const DocumentUpload = ({
           </small>
         )}
       </div>
-
-      {/* Name Input + Checkbox */}
+      {/* Name Input */}
       <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-        <label>Name as per {label}</label>
+        <label>Name as per Passport </label>
         <div className="">
           <input
             type="text"
@@ -126,14 +123,14 @@ const DocumentUpload = ({
 
       {/* File Upload */}
       <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-        <label htmlFor={fileId}>Upload {label}</label>
+        <label htmlFor={fileId}>Upload Passport File</label>
         <div className="uploadButton d-flex align-items-center">
           <input
             key={inputKey}
             className="uploadButton-input"
             type="file"
             name="file"
-            accept=".jpg, .jpeg"
+            accept="image/*"
             id={fileId}
             onChange={handleFileSelect}
           />
@@ -149,12 +146,12 @@ const DocumentUpload = ({
                 {documentData.file.name}
               </span>
             ) : (
-              `Browse ${label}`
+              `Browse Passport File`
             )}
           </label>
           {documentData.file ? (
             <Trash2
-              className="text-danger"
+              className="text-danger "
               size={20}
               onClick={() => {
                 setDocumentData({
@@ -175,4 +172,4 @@ const DocumentUpload = ({
   );
 };
 
-export default DocumentUpload;
+export default PassdocumentUpload;

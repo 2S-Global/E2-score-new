@@ -61,6 +61,7 @@ const FormContent2 = () => {
       setMessageId(Date.now());
       const token = response.data.token;
       const role = response.data.role;
+      const employerName = response.data.data?.name || "";
 
       //save token to local storage
       if (role == "0") {
@@ -71,9 +72,11 @@ const FormContent2 = () => {
         router.push("/candidates-dashboard/dashboard");
       } else if (role == "2") {
         localStorage.setItem("employer_token", token);
+        localStorage.setItem("employer_name", employerName);
+
         if (response.data.not_dashboard == true) {
           router.push(
-            "/employers-dashboard/company-profile?c9b1e5a4-1d5f-4b9e-9c32-8c0f4a9e1d3b=true"
+            "/employers-dashboard/company-profile?c9b1e5a4-1d5f-4b9e-9c32-8c0f4a9e1d3b=true",
           );
         } else {
           router.push("/employers-dashboard/dashboard");
@@ -229,7 +232,7 @@ const FormContent2 = () => {
         <button
           onClick={() =>
             handleExternalLink(
-              "https://www.facebook.com/profile.php?id=61575548305003"
+              "https://www.facebook.com/profile.php?id=61575548305003",
             )
           }
           className="btn btn-outline-primary rounded-circle"
@@ -240,7 +243,7 @@ const FormContent2 = () => {
         <button
           onClick={() =>
             handleExternalLink(
-              "https://www.linkedin.com/company/global-employability-information-services-india-limited/"
+              "https://www.linkedin.com/company/global-employability-information-services-india-limited/",
             )
           }
           className="btn btn-outline-primary rounded-circle"
