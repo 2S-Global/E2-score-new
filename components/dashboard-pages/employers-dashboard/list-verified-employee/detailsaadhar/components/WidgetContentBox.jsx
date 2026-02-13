@@ -141,49 +141,7 @@ const WidgetContentBox = () => {
               <DocumentsTable user={user} handleclick={handleClick} />
             </div>
 
-            {/* PAN */}
-            {/* {
-               user?.pan_response && ( */}
-
-            <PanDetails user={user} />
-            {/*    ) 
-            }
- */}
-            {/* passport */}
-            {/*    {
-              user?.passport_response && ( */}
-
-            <PassDetails user={user} />
-
-            {/*  )
-        } */}
-            {/* adhare */}
-            {/* {
-              user?.aadhar_response && ( */}
-
             <AdharDetails user={user} />
-
-            {/*   )
-            }
- */}
-
-            {/* dl */}
-            {/*  {
-              user?.dl_response && (
- */}
-            <DlDetails user={user} />
-
-            {/*    )
-            } */}
-
-            {/* Epic */}
-            {/*  {
-              user?.epic_response && ( */}
-
-            <EpicDetails user={user} />
-
-            {/*  )
-            } */}
           </div>
         </>
       )}

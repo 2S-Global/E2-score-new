@@ -26,6 +26,8 @@ const RazorpayPayment = ({ amount, razorpayKey, onSuccess, paymentIds }) => {
   }, []);
 
   const handlePayment = async () => {
+   
+
     if (!isRazorpayLoaded) {
       console.error("Razorpay SDK is not loaded yet!");
       return;

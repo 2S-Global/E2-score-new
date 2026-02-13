@@ -17,7 +17,7 @@ export const DocumentsTable = ({ user, handleclick }) => {
     setSuccess(null);
     try {
       const response = await axios.post(
-        `${apiurl}/api/pdf/generate-pdf`,
+        `${apiurl}/api/pdf/otp-generate-pdf`,
         { order_id: id },
         { responseType: "blob" },
       );
@@ -46,7 +46,7 @@ export const DocumentsTable = ({ user, handleclick }) => {
     if (!user?.[key]) {
       return <OctagonAlert className="text-danger" size={20} />;
     }
-    return user[key]?.response_code == 100 ? (
+    return user[key]?.response_code == 100 || user[key]?.status_code == 200 ? (
       <BadgeCheck
         className="text-success cursor-pointer"
         size={20}
@@ -75,7 +75,7 @@ export const DocumentsTable = ({ user, handleclick }) => {
             <th style={{ minWidth: "200px" }}>Candidate Name</th>
             <th style={{ minWidth: "100px" }}>PAN</th>
             <th style={{ minWidth: "100px" }}>Passport</th>
-            <th style={{ minWidth: "100px" }}>Aadhar</th>
+            <th style={{ minWidth: "100px" }}>Aadhar With OTP</th>
             <th style={{ minWidth: "100px" }}>DL</th>
             <th style={{ minWidth: "100px" }}>EPIC</th>
             <th style={{ minWidth: "100px" }}>Action</th>

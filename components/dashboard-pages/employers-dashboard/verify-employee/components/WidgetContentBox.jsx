@@ -296,16 +296,19 @@ const WidgetContentBox = () => {
     !validationErrors.licensenumber &&
     !validationErrors.voternumber &&
     !validationErrors.phone &&
-    !validationErrors.email;
-  !validationErrors.uannumber;
+    !validationErrors.email &&
+    !validationErrors.uannumber;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (loading) return; // prevent double submit
 
     setError(null);
     setSuccess(null);
     setvaliError(null);
 
+    // Run document validation first
     const errorMsg = validateDocuments(formData);
     if (errorMsg) {
       setError(errorMsg);
@@ -313,56 +316,70 @@ const WidgetContentBox = () => {
       return;
     }
 
+    // Run field validation check
+    const hasValidationErrors = Object.values(validationErrors).some(
+      (err) => err && err.trim() !== "",
+    );
+
+    if (hasValidationErrors) {
+      setError("Please fix validation errors before submitting.");
+      setErrorId(Date.now());
+      return;
+    }
+
     setLoading(true);
 
-    const formDataToSend = new FormData();
-    Object.keys(formData).forEach((key) => {
-      if (formData[key] instanceof File) {
-        formDataToSend.append(key, formData[key]);
-      } else if (formData[key] instanceof Date) {
-        formDataToSend.append(key, format(formData[key], "yyyy-MM-dd")); // Convert Date to string
-      } else if (key === "additionalfields" && formData[key]) {
-        const additionalString = Object.entries(formData[key])
-          .map(([k, v]) => `${k}: ${v}`)
-          .join(", ");
-        formDataToSend.append(key, additionalString);
-      } else if (formData[key]) {
-        formDataToSend.append(key, formData[key]);
-      }
-    });
-
     try {
-      for (let pair of formDataToSend.entries()) {
-        //    console.log(`${pair[0]}: ${pair[1]}`);
-      }
-      //  console.log(formDataToSend.additionalfields);
+      const formDataToSend = new FormData();
+
+      Object.keys(formData).forEach((key) => {
+        const value = formData[key];
+
+        if (!value) return;
+
+        if (value instanceof File) {
+          formDataToSend.append(key, value);
+        } else if (value instanceof Date) {
+          formDataToSend.append(key, format(value, "yyyy-MM-dd"));
+        } else if (key === "additionalfields" && typeof value === "object") {
+          const additionalString = Object.entries(value)
+            .map(([k, v]) => `${k}: ${v}`)
+            .join(", ");
+          formDataToSend.append(key, additionalString);
+        } else {
+          formDataToSend.append(key, value);
+        }
+      });
+
       const response = await axios.post(
         `${apiurl}/api/usercart/add_user_cart`,
         formDataToSend,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
         },
       );
-      if (!response.data.success) {
-        setError(response.data.message);
-        setErrorId(Date.now());
-        return;
-      }
 
-      if (response.status === 201) {
-        setSuccess(response.data.message);
+      if (response.status === 201 && response.data?.success) {
         router.push("/employers-dashboard/paynow");
       } else {
-        setError(response.data.error);
+        setError(
+          response.data?.message ||
+            response.data?.error ||
+            "Submission failed.",
+        );
+        setErrorId(Date.now());
       }
     } catch (err) {
-      //   console.error("Error submitting form:", err);
-      setError(err.response?.data?.message || "Failed. Try again.");
+      setError(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Something went wrong. Please try again.",
+      );
+      setErrorId(Date.now());
     } finally {
-      setLoading(false);
+      setLoading(false); // ALWAYS reset loading
     }
   };
 
@@ -609,9 +626,12 @@ const WidgetContentBox = () => {
                   className="form-control"
                   name="plan"
                   value={formData.plan}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handlePlanChange(e);
+                  }}
                   required
-                  onBlur={handlePlanChange}
+                  // onBlur={handlePlanChange}
                 >
                   {availablePlans?.map((plan) => (
                     <option key={plan._id} value={plan._id}>
@@ -660,170 +680,6 @@ const WidgetContentBox = () => {
                   disabled={!approvedFields.PASSPORT}
                   formData={formData}
                 />
-
-                {/*  commented for now */}
-                {/*  {approvedFields.PASSPORT ? (
-              <div className="row">
-                <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-                  <label>Passport File Number</label>
-                  <input
-                    type="text"
-                    name="passportnumber"
-                    placeholder="Enter Name as per Passport"
-                    className="form-control"
-                    value={formData.passportnumber}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-                  <label>Name as per Passport</label>
-                  <input
-                    type="text"
-                    name="passportname"
-                    placeholder="Enter Name on Passport"
-                    className="form-control"
-                    value={formData.passportname}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-                  <label htmlFor={fileId}>Upload Passport File</label>
-                  <div className="uploadButton d-flex align-items-center">
-                    <input
-                      className="uploadButton-input"
-                      type="file"
-                      name="file"
-                      accept="image/*"
-                      id={fileId}
-                      onChange={handleFileSelect}
-                    />
-                    <label
-                      className="uploadButton-button ripple-effect"
-                      htmlFor={fileId}
-                      style={{
-                        width: "100%",
-                        height: "40px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {documentData.file ? (
-                        <span
-                          onClick={() =>
-                            window.open(documentData.filePreview, "_blank")
-                          }
-                        >
-                          {documentData.file.name}
-                        </span>
-                      ) : (
-                        `Browse Passport File`
-                      )}
-                    </label>
-                    {documentData.file ? (
-                      <Trash2
-                        className="text-danger "
-                        size={20}
-                        onClick={() =>
-                          setDocumentData({
-                            ...documentData,
-                            file: null,
-                            filePreview: null,
-                          })
-                        }
-                      />
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div style={{ pointerEvents: "none", opacity: 0.5 }}>
-                <div className="row">
-                  <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-                    <label>Passport File Number</label>
-                    <input
-                      type="text"
-                      name="passportnumber"
-                      placeholder="Enter Name as per Passport"
-                      className="form-control"
-                      value={formData.passportnumber}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-                    <label>Name as per Passport</label>
-                    <input
-                      type="text"
-                      name="passportname"
-                      placeholder="Enter Name on Passport"
-                      className="form-control"
-                      value={formData.passportname}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="form-group col-lg-4 col-md-4 d-flex flex-column">
-                    <label htmlFor={fileId}>Upload Passport File</label>
-                    <div className="uploadButton d-flex align-items-center">
-                      <input
-                        className="uploadButton-input"
-                        type="file"
-                        name="file"
-                        accept="image/*"
-                        id={fileId}
-                        onChange={handleFileSelect}
-                      />
-                      <label
-                        className="uploadButton-button ripple-effect"
-                        htmlFor={fileId}
-                        style={{
-                          width: "100%",
-                          height: "40px",
-                          cursor: "pointer",
-                        }}
-                      >
-                        {documentData.file ? (
-                          <span
-                            onClick={() =>
-                              window.open(documentData.filePreview, "_blank")
-                            }
-                          >
-                            {documentData.file.name}
-                          </span>
-                        ) : (
-                          `Browse Passport File`
-                        )}
-                      </label>
-                      {documentData.file ? (
-                        <Trash2
-                          className="text-danger "
-                          size={20}
-                          onClick={() =>
-                            setDocumentData({
-                              ...documentData,
-                              file: null,
-                              filePreview: null,
-                            })
-                          }
-                        />
-                      ) : null}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )} */}
-
-                {/* <DocumentUpload
-                  label="Aadhaar"
-                  name="aadhaar"
-                  fileId="upload-aadhaar"
-                  valuename={formData.aadhaarname}
-                  numbername={formData.aadhaarnumber}
-                  onFileChange={handleFileChange}
-                  onfieldChange={handleChange}
-                  numberError={validationErrors.aadhaarnumber}
-                  onfieldValidation={handleValidation}
-                  disabled={!approvedFields.AADHAAR}
-                /> */}
 
                 <DocumentUpload
                   label="Driving License"

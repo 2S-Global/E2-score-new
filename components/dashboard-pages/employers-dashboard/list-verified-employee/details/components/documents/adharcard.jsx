@@ -45,6 +45,18 @@ const AdharDetails = ({ user }) => {
               {user?.aadhaar_response?.result?.user_gender || "N/A"}
             </span>
           </div>
+
+          <div className="d-flex align-items-center mb-1">
+            {user.aadhar_image && (
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-primary me-2"
+                onClick={() => window.open(user.aadhar_image, "_blank")}
+              >
+                View Document
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

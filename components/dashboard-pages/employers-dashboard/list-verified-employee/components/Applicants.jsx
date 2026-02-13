@@ -23,26 +23,22 @@ const Applicants = () => {
   useEffect(() => {
     const fetchCandidates = async () => {
       try {
-        const token = localStorage.getItem("employer_token");
-        console.log("Fetching candidates with token:", token);
-
+        const token = localStorage.getItem("Admin_token");
         if (!token) {
+          console.error("Error: No token found in localStorage");
           setError("Unauthorized: No token found");
           setLoading(false);
           return;
         }
 
-        const response = await axios.post(
-          `${API_URL}/api/admin/cart/getAllVerifiedCandidateAdmin`,
-          {}, // 👈 POST body (keep empty if backend doesn't need data)
+        const response = await axios.get(
+          `${API_URL}/api/verify/listUserVerifiedList`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           },
         );
 
-        setCandidates(response.data.data);
+        setCandidates(response.data);
       } catch (error) {
         console.error(
           "Error fetching candidates:",
@@ -99,42 +95,56 @@ const Applicants = () => {
   // ✅ Define DataTable columns
   const columns = [
     {
+      name: "Id",
+      selector: (row) => row.order_id,
+      sortable: true,
+      center: "true",
+    },
+    {
       name: "Candidate Name",
       selector: (row) => row.candidate_name,
       sortable: true,
+      center: "true",
     },
     {
       name: "Mobile",
       selector: (row) => row.candidate_mobile,
+      center: "true",
     },
     {
       name: "Pan Status",
       selector: (row) => renderVerificationStatus(row.pan_response),
       cell: (row) => renderVerificationStatus(row.pan_response),
+      center: "true",
     },
     {
       name: "Passport Status",
       selector: (row) => renderVerificationStatus(row.passport_response),
       cell: (row) => renderVerificationStatus(row.passport_response),
+      center: "true",
     },
     {
       name: "Aadhaar Status",
       selector: (row) => renderVerificationStatus(row.aadhaar_response),
       cell: (row) => renderVerificationStatus(row.aadhaar_response),
+      center: "true",
     },
     {
       name: "DL Status",
       selector: (row) => renderVerificationStatus(row.dl_response),
       cell: (row) => renderVerificationStatus(row.dl_response),
+      center: "true",
     },
     {
       name: "Epic Status",
       selector: (row) => renderVerificationStatus(row.epic_response),
       cell: (row) => renderVerificationStatus(row.epic_response),
+      center: "true",
     },
     {
       name: "Verified At",
-      selector: (row) => row.date,
+      selector: (row) => new Date(row.updatedAt).toLocaleDateString("en-GB"),
+      center: "true",
     },
 
     {
@@ -142,10 +152,7 @@ const Applicants = () => {
       cell: (row) => (
         <div className="d-flex gap-2">
           {/* View Button */}
-          <Link
-            href={`/employers-dashboard/list-verified-employee/details?id=${row.id}`}
-            passHref
-          >
+          <Link href={`/list-verified-employee/details?id=${row._id}`} passHref>
             <button className="btn btn-sm" title="View Details">
               <Eye size={16} className="me-1 text-primary" />
             </button>
@@ -163,9 +170,9 @@ const Applicants = () => {
   ];
 
   // ✅ Filter candidates based on search
-  const filteredCandidates = candidates.filter((candidate) =>
-    candidate.candidate_name.toLowerCase().includes(searchText.toLowerCase()),
-  );
+  // const filteredCandidates = candidates.filter((candidate) =>
+  //   candidate.candidate_name.toLowerCase().includes(searchText.toLowerCase())
+  // );
 
   // ✅ Loader UI when fetching data
   if (loading)
@@ -185,9 +192,9 @@ const Applicants = () => {
     <div className="container mt-4">
       {/* DataTable */}
       <DataTable
-        title="Applicants"
+        title=""
         columns={columns}
-        data={filteredCandidates}
+        data={candidates}
         progressPending={loading}
         pagination
         highlightOnHover
