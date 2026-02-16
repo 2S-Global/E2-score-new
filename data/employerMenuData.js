@@ -80,13 +80,13 @@ module.exports = [
     routePath: "/employers-dashboard/download-center",
     active: "",
   },
-  {
-    id: 10,
-    name: "Search Employee",
-    icon: "la-search",
-    routePath: "/employers-dashboard/search-employee",
-    active: "",
-  },
+  // {
+  //   id: 10,
+  //   name: "Search Employee",
+  //   icon: "la-search",
+  //   routePath: "/employers-dashboard/search-employee",
+  //   active: "",
+  // },
 
   // {
   //   id: 13,

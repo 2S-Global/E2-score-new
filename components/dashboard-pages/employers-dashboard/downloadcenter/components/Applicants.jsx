@@ -309,7 +309,7 @@ const Applicants = () => {
               const url =
                 row.aadhat_otp === "yes"
                   ? `${API_URL}/api/pdf/otp-generate-pdf`
-                  : `${API_URL}/api/pdf/generate-pdf`;
+                  : `${API_URL}/api/pdf/generate-pdf-employer`;
 
               // Pass the URL, data (order_id and file_url), and rowId (row._id) to handleDownload
               handleDownload(

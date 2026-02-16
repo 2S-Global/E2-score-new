@@ -220,27 +220,29 @@ const AadharForm = ({
   };
 
   const [isSameAsFullName, setIsSameAsFullName] = useState(false);
+
+
+  useEffect(() => {
+    if (isSameAsFullName) {
+      setFormData((prev) => ({
+        ...prev,
+        aadhar_name: formData.name || "",
+      }));
+    }
+  }, [formData.name, isSameAsFullName]);
+
   const handleCheckboxChangenew = (e) => {
     const checked = e.target.checked;
     setIsSameAsFullName(checked);
 
-    if (checked) {
-      // simulate event so parent's onfieldChange works
-      handleChange({
-        target: {
-          name: `aadhar_name`,
-          value: formData.name || "",
-        },
-      });
-    } else {
-      handleChange({
-        target: {
-          name: `aadhar_name`,
-          value: "",
-        },
-      });
+    if (!checked) {
+      setFormData((prev) => ({
+        ...prev,
+        aadhar_name: "",
+      }));
     }
   };
+
   return (
     <>
       <form

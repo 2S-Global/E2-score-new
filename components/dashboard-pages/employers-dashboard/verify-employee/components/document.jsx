@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Trash2 } from "lucide-react";
+// import React, { useState, useEffect } from "react";
 
 const DocumentUpload = ({
   label,
@@ -23,6 +24,16 @@ const DocumentUpload = ({
   });
   const [isSameAsFullName, setIsSameAsFullName] = useState(false);
 
+useEffect(() => {
+  if (isSameAsFullName) {
+    onfieldChange({
+      target: {
+        name: `${name}name`,
+        value: formData.name || "",
+      },
+    });
+  }
+}, [formData.name, isSameAsFullName]); 
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -39,27 +50,20 @@ const DocumentUpload = ({
     }
   };
 
-  const handleCheckboxChange = (e) => {
-    const checked = e.target.checked;
-    setIsSameAsFullName(checked);
+const handleCheckboxChange = (e) => {
+  const checked = e.target.checked;
+  setIsSameAsFullName(checked);
 
-    if (checked) {
-      // simulate event so parent's onfieldChange works
-      onfieldChange({
-        target: {
-          name: `${name}name`,
-          value: formData.name || "",
-        },
-      });
-    } else {
-      onfieldChange({
-        target: {
-          name: `${name}name`,
-          value: "",
-        },
-      });
-    }
-  };
+  if (!checked) {
+    onfieldChange({
+      target: {
+        name: `${name}name`,
+        value: "",
+      },
+    });
+  }
+};
+
 
   return (
     <div
@@ -105,7 +109,7 @@ const DocumentUpload = ({
             autoComplete="off"
             disabled={isSameAsFullName || disabled} // lock editing when checkbox checked
           />
-          <div className="form-check me-2">
+          <div className="form-check me-2 mt-3">
             <input
               className="form-check-input"
               type="checkbox"
