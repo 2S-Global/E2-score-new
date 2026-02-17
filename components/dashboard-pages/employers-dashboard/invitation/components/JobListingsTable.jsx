@@ -7,6 +7,7 @@ import styles from "./Applicants.module.css";
 import { usePathname, useSearchParams } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
 import { useRef } from "react";
+import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
 
 export default function InvitationPage() {
   const pathname = usePathname();
@@ -79,6 +80,9 @@ export default function InvitationPage() {
     lastDrawnSalary: "",
     expectedSalary: "",
   });
+
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [selectedApplicationId, setSelectedApplicationId] = useState(null);
 
   const token =
     typeof window !== "undefined"
@@ -813,12 +817,8 @@ export default function InvitationPage() {
                           className="btn btn-outline-danger btn-sm"
                           disabled={rejectLoading === c._id}
                           onClick={() => {
-                            const confirmReject = window.confirm(
-                              "Are you sure you want to reject this candidate?",
-                            );
-                            if (confirmReject) {
-                              handleRejectCandidate(c._id);
-                            }
+                            setSelectedApplicationId(c._id);
+                            setShowRejectModal(true);
                           }}
                           title="Reject Candidate"
                         >
@@ -1437,6 +1437,27 @@ export default function InvitationPage() {
           <div className="modal-backdrop show" />
         </>
       )}
+
+      <ConfirmModal
+        isOpen={showRejectModal}
+        onClose={() => {
+          setShowRejectModal(false);
+          setSelectedApplicationId(null);
+        }}
+        title="Reject Candidate"
+        message="Are you sure you want to reject this candidate?"
+        confirmText="Yes, Reject"
+        cancelText="Cancel"
+        danger
+        loading={rejectLoading === selectedApplicationId}
+        onConfirm={async () => {
+          if (selectedApplicationId) {
+            await handleRejectCandidate(selectedApplicationId);
+          }
+          setShowRejectModal(false);
+          setSelectedApplicationId(null);
+        }}
+      />
     </>
   );
 }

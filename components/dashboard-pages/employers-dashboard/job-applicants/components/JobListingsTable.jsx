@@ -6,6 +6,8 @@ import Image from "next/image";
 import { usePathname, useSearchParams } from "next/navigation";
 import styles from "./Applicants.module.css";
 import MessageComponent from "@/components/common/ResponseMsg";
+import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
+
 export default function JobApplicantsPage() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -16,6 +18,8 @@ export default function JobApplicantsPage() {
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
   const [actionLoading, setActionLoading] = useState(null);
+const [showRejectModal, setShowRejectModal] = useState(false);
+const [selectedApplicationId, setSelectedApplicationId] = useState(null);
 
   const statusLabelMap = {
     applied: "Applied",
@@ -293,15 +297,8 @@ export default function JobApplicantsPage() {
                             className="btn btn-outline-danger btn-sm"
                             disabled={actionLoading === candidate._id}
                             onClick={() => {
-                              const confirmReject = window.confirm(
-                                "Are you sure you want to reject this application?",
-                              );
-                              if (confirmReject) {
-                                handleApplicationAction(
-                                  candidate._id,
-                                  "reject",
-                                );
-                              }
+                              setSelectedApplicationId(candidate._id);
+                              setShowRejectModal(true);
                             }}
                             title="Reject Application"
                           >
@@ -323,6 +320,26 @@ export default function JobApplicantsPage() {
           </table>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={showRejectModal}
+        onClose={() => {
+          setShowRejectModal(false);
+          setSelectedApplicationId(null);
+        }}
+        title="Reject Application"
+        message="Are you sure you want to reject this application?"
+        confirmText="Yes, Reject"
+        cancelText="Cancel"
+        danger
+        onConfirm={async () => {
+          if (selectedApplicationId) {
+            await handleApplicationAction(selectedApplicationId, "reject");
+          }
+          setShowRejectModal(false);
+          setSelectedApplicationId(null);
+        }}
+      />
     </>
   );
 }

@@ -7,6 +7,8 @@ import { usePathname, useSearchParams } from "next/navigation";
 import styles from "./Applicants.module.css";
 import MessageComponent from "@/components/common/ResponseMsg";
 import { useRef } from "react";
+import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
+
 
 export default function ShortlistedCandidatesPage() {
   const pathname = usePathname();
@@ -39,6 +41,9 @@ export default function ShortlistedCandidatesPage() {
     interviewTime: "",
     formDesignation: "",
   });
+
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [selectedApplicationId, setSelectedApplicationId] = useState(null);
 
   const capitalize = (value) =>
     value ? value.charAt(0).toUpperCase() + value.slice(1) : "N/A";
@@ -369,7 +374,10 @@ export default function ShortlistedCandidatesPage() {
                         <button
                           className="btn btn-outline-danger btn-sm"
                           disabled={actionLoading === candidate._id}
-                          onClick={() => handleReject(candidate._id)}
+                          onClick={() => {
+                            setSelectedApplicationId(candidate._id);
+                            setShowRejectModal(true);
+                          }}
                           title="Remove from Shortlist"
                         >
                           {actionLoading === candidate._id ? (
@@ -513,6 +521,26 @@ export default function ShortlistedCandidatesPage() {
           </>
         )}
       </div>
+
+      <ConfirmModal
+        isOpen={showRejectModal}
+        onClose={() => {
+          setShowRejectModal(false);
+          setSelectedApplicationId(null);
+        }}
+        title="Remove from Shortlist"
+        message="Are you sure you want to remove this candidate from shortlist?"
+        confirmText="Yes, Remove"
+        cancelText="Cancel"
+        danger
+        onConfirm={async () => {
+          if (selectedApplicationId) {
+            await handleReject(selectedApplicationId);
+          }
+          setShowRejectModal(false);
+          setSelectedApplicationId(null);
+        }}
+      />
     </>
   );
 }

@@ -1,0 +1,54 @@
+.wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f0f4ff, #e6f7ff);
+}
+
+.card {
+  background: #ffffff;
+  padding: 40px;
+  width: 420px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.successIcon {
+  font-size: 60px;
+  margin-bottom: 15px;
+}
+
+.rejectIcon {
+  font-size: 60px;
+  margin-bottom: 15px;
+}
+
+.dashboardBtn {
+  margin-top: 25px;
+  padding: 12px 20px;
+  border: none;
+  background-color: #2563eb;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.dashboardBtn:hover {
+  background-color: #1e40af;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
