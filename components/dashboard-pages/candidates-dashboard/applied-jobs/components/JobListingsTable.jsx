@@ -15,6 +15,24 @@ const JobListingsTable = () => {
       ? localStorage.getItem("candidate_token")
       : null;
 
+
+      const formatStatus = (status) => {
+        switch (status) {
+          case "invitation_sent":
+            return "Invitation Sent";
+          case "offer_sent":
+            return "Offer Sent";
+          case "applied":
+            return "Applied";
+          case "shortlisted":
+            return "Shortlisted";
+          case "rejected":
+            return "Rejected";
+          default:
+            return status;
+        }
+      };
+
   useEffect(() => {
     const fetchAppliedJobs = async () => {
       try {
@@ -24,7 +42,7 @@ const JobListingsTable = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         if (response.data.success) {
@@ -71,17 +89,6 @@ const JobListingsTable = () => {
                     <div className="job-block">
                       <div className="inner-box">
                         <div className="">
-{/*                           <span className="company-logo">
-                            <Image
-                              width={50}
-                              height={50}
-                              src={
-                                item.jobId?.companyLogo ||
-                                "/images/default-logo.png"
-                              }
-                              alt="logo"
-                            />
-                          </span> */}
                           <h4>
                             <Link href={`/job-details/${item.jobId?._id}`}>
                               {item.jobId.jobTitle}
@@ -91,11 +98,16 @@ const JobListingsTable = () => {
                           <ul className="job-info">
                             <li>
                               <span className="icon flaticon-money"></span>
-                             {item.jobId.salary.currency} {item.jobId.salary.amount} {item.jobId.salary.rate}
+                              {item.jobId.salary.currency}{" "}
+                              {item.jobId.salary.amount}{" "}
+                              {item.jobId.salary.rate}
                             </li>
                             <li>
                               <span className="icon flaticon-map-locator"></span>
-                             <span style={{ textTransform: "capitalize" }}> {item.jobId.jobLocationType}</span>
+                              <span style={{ textTransform: "capitalize" }}>
+                                {" "}
+                                {item.jobId.jobLocationType}
+                              </span>
                             </li>
                           </ul>
                         </div>
@@ -103,16 +115,19 @@ const JobListingsTable = () => {
                     </div>
                   </td>
 
-                  <td>
-                    {new Date(item.appliedAt).toLocaleDateString()}
-                  </td>
+                  <td>{new Date(item.appliedAt).toLocaleDateString()}</td>
 
                   <td className={`status ${item.status}`}>
-                   <span style={{
-    textTransform: "capitalize",
-    textDecoration: "none",
-    fontWeight: "bold",
-  }}> {item.status}</span>
+                    <span
+                      style={{
+                        textTransform: "capitalize",
+                        textDecoration: "none",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {" "}
+                      {formatStatus(item.status)}
+                    </span>
                   </td>
 
                   <td>
@@ -126,12 +141,6 @@ const JobListingsTable = () => {
                             <span className="la la-eye"></span>
                           </Link>
                         </li>
-
-{/*                         <li>
-                          <button data-text="Withdraw Application">
-                            <span className="la la-trash"></span>
-                          </button>
-                        </li> */}
                       </ul>
                     </div>
                   </td>
@@ -140,9 +149,7 @@ const JobListingsTable = () => {
             </tbody>
           </table>
 
-          {error && (
-            <p className="text-danger text-center mt-3">{error}</p>
-          )}
+          {error && <p className="text-danger text-center mt-3">{error}</p>}
         </div>
       </div>
     </div>

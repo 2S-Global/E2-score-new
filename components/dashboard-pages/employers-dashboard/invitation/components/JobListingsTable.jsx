@@ -660,7 +660,6 @@ export default function InvitationPage() {
                         </span>
                       )}
                     </td>
-
                     <td>
                       {c.interviewInvitationStatus ? (
                         <span
@@ -674,8 +673,11 @@ export default function InvitationPage() {
                                   : ""
                           }
                         >
-                          {c.interviewInvitationStatus.charAt(0).toUpperCase() +
-                            c.interviewInvitationStatus.slice(1)}
+                          {c.interviewInvitationStatus === "accepted"
+                            ? "Attending"
+                            : c.interviewInvitationStatus === "rejected"
+                              ? "Not Attending"
+                              : "Pending"}
                         </span>
                       ) : (
                         "-"
@@ -1133,7 +1135,7 @@ export default function InvitationPage() {
                 {/* ===== LAST WITHDRAWN & EXPECTED SALARY (READ ONLY) ===== */}
                 <div className="col-12 px-3">
                   <p className="mb-1">
-                    <strong>Last Withdrawn Salary:</strong>{" "}
+                    <strong>Last Drawn Salary:</strong>{" "}
                     {selectedCandidate?.feedback?.lastDrawnSalary || "N/A"}
                   </p>
 
