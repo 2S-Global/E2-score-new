@@ -267,7 +267,7 @@ const AadharOtp = () => {
         setRequest_id("");
         setOtp("");
         setTimeout(() => {
-          router.push("/download-center");
+          router.push("/employers-dashboard/download-center");
         }, 5000);
       } else {
         console.log("Error submitting OTP:", response.data.message);
