@@ -30,7 +30,7 @@ const FilterJobsBox = () => {
   const dispatch = useDispatch();
 
   const { jobList, jobSort } = useSelector((state) => state.filter);
-  const { keyword, location, tag } = jobList || {};
+  const { keyword, location, tag, jobType } = jobList || {};
   const { sort } = jobSort;
 
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
@@ -63,16 +63,16 @@ const FilterJobsBox = () => {
           },
         );
 
-       if (response.data.success) {
-         setAllJobs(response.data.data);
+        if (response.data.success) {
+          setAllJobs(response.data.data);
 
-         // ✅ Initialize savedJobs from backend
-         const initialSavedJobs = {};
-         response.data.data.forEach((job) => {
-           initialSavedJobs[job._id] = job.isBookmarked;
-         });
-         setSavedJobs(initialSavedJobs);
-       }
+          // ✅ Initialize savedJobs from backend
+          const initialSavedJobs = {};
+          response.data.data.forEach((job) => {
+            initialSavedJobs[job._id] = job.isBookmarked;
+          });
+          setSavedJobs(initialSavedJobs);
+        }
       } catch (err) {
         setError(err.message);
       }
@@ -129,10 +129,19 @@ const FilterJobsBox = () => {
   /* ======================
      FILTERS (UNCHANGED)
   ====================== */
-  const keywordFilter = (item) =>
-    keyword
-      ? item.jobTitle?.toLowerCase().includes(keyword.toLowerCase())
-      : true;
+  const keywordFilter = (item) => {
+    if (!keyword) return true;
+
+   const search = keyword.trim().toLowerCase();
+
+    return (
+      item.jobTitle?.toLowerCase().includes(search) ||
+      item.companyName?.toLowerCase().includes(search) ||
+      item.location?.toLowerCase().includes(search) ||
+      item.jobExperienceLevel?.toLowerCase().includes(search) ||
+      item.jobType?.some((type) => type.toLowerCase().includes(search))
+    );
+  };
 
   const locationFilter = (item) =>
     location
@@ -141,17 +150,21 @@ const FilterJobsBox = () => {
 
   const tagFilter = (item) => (tag ? item.tag === tag : true);
 
+  const jobTypeFilter = (item) => {
+    if (!jobType?.length) return true;
+
+    return item.jobType?.some((type) => jobType.includes(type));
+  };
+
   const sortFilter = (a, b) =>
     sort === "des"
       ? new Date(b.created_at) - new Date(a.created_at)
       : new Date(a.created_at) - new Date(b.created_at);
 
-  /* ======================
-     FILTER → SORT
-  ====================== */
   const filteredJobs = allJobs
     .filter(keywordFilter)
     .filter(locationFilter)
+    .filter(jobTypeFilter)
     .filter(tagFilter)
     .sort(sortFilter);
 
@@ -266,12 +279,56 @@ const FilterJobsBox = () => {
 
   return (
     <>
+      <style jsx>{`
+        .no-job-found {
+          background: #f9fafb;
+          border-radius: 12px;
+        }
+
+        .empty-state-box h4 {
+          font-weight: 600;
+        }
+
+        .empty-state-box p {
+          font-size: 14px;
+        }
+      `}</style>
       {error && <p className="text-danger">{error}</p>}
 
-      {content}
+      {paginatedJobs.length === 0 ? (
+        <div className="no-job-found text-center py-5">
+          <div className="empty-state-box">
+            <h4 className="mt-4">No Jobs Found</h4>
 
+            <p className="text-muted mb-4">
+              We couldn’t find any jobs matching your search criteria.
+              <br />
+              Try adjusting your filters or search keyword.
+            </p>
+
+            <button
+              className="theme-btn btn-style-one"
+              onClick={() => {
+                dispatch(clearJobType());
+                dispatch(clearExperience());
+                dispatch(addKeyword(""));
+                dispatch(addLocation(""));
+                dispatch(addTag(""));
+                dispatch(clearJobTypeToggle()); // 👈 ADD THIS
+                dispatch(clearExperienceToggle()); // 👈 ADD THIS
+                dispatch(clearDatePostToggle());
+                setCurrentPage(1);
+              }}
+            >
+              Clear Filters
+            </button>
+          </div>
+        </div>
+      ) : (
+        content
+      )}
       {/* ================= PAGINATION UI ================= */}
-      {totalPages > 1 && (
+      {totalPages > 1 && paginatedJobs.length > 0 && (
         <div className="ls-pagination mt-4 text-center">
           <button
             className="btn btn-sm btn-light"

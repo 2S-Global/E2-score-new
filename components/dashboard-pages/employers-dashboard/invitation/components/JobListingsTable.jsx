@@ -516,6 +516,32 @@ export default function InvitationPage() {
 
   return (
     <>
+      <style jsx>{`
+        .scheduled-box {
+          background: #f8f9fa;
+          padding: 12px;
+          border-radius: 8px;
+          margin-bottom: 15px;
+          border-left: 4px solid #0d6efd;
+        }
+
+        .request-box {
+          background: #fff8e1;
+          padding: 12px;
+          border-radius: 8px;
+          margin-bottom: 15px;
+          border-left: 4px solid #ffc107;
+        }
+
+        .request-badge {
+          background: #ffc107;
+          color: #000;
+          font-size: 12px;
+          padding: 3px 8px;
+          border-radius: 20px;
+          margin-left: 8px;
+        }
+      `}</style>
       <MessageComponent
         error={error}
         success={success}
@@ -670,14 +696,20 @@ export default function InvitationPage() {
                                 ? "text-success fw-semibold"
                                 : c.interviewInvitationStatus === "rejected"
                                   ? "text-danger fw-semibold"
-                                  : ""
+                                  : c.interviewInvitationStatus ===
+                                      "reschedule_request"
+                                    ? "text-primary fw-semibold"
+                                    : ""
                           }
                         >
                           {c.interviewInvitationStatus === "accepted"
                             ? "Attending"
                             : c.interviewInvitationStatus === "rejected"
                               ? "Not Attending"
-                              : "Pending"}
+                              : c.interviewInvitationStatus ===
+                                  "reschedule_request"
+                                ? "Reschedule Requested"
+                                : "Pending"}
                         </span>
                       ) : (
                         "-"
@@ -1347,11 +1379,49 @@ export default function InvitationPage() {
                       {selectedCandidate?.jobRole}
                     </p>
 
+                    {selectedCandidate?.requestReschedule && (
+                      <div className="scheduled-box">
+                        <p className="mb-1">
+                          <strong>Request Date:</strong>{" "}
+                          {new Date(
+                            selectedCandidate.requestDate,
+                          ).toLocaleDateString("en-IN", {
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                          })}
+                        </p>
+
+                        <p className="mb-1">
+                          <strong>Available Start Time:</strong>{" "}
+                          {new Date(
+                            `1970-01-01T${selectedCandidate.requestStartTime}:00`,
+                          ).toLocaleTimeString("en-IN", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                          })}
+                        </p>
+
+                        <p className="mb-0">
+                          <strong>Available End Time:</strong>{" "}
+                          {new Date(
+                            `1970-01-01T${selectedCandidate.requestEndTime}:00`,
+                          ).toLocaleTimeString("en-IN", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                          })}
+                        </p>
+                      </div>
+                    )}
+
                     <div className="mb-3">
                       <label className="form-label">Interview Date</label>
                       <input
                         ref={dateRef}
                         type="date"
+                        min={new Date().toISOString().split("T")[0]}
                         className="form-control"
                         value={interviewDate}
                         onClick={() => dateRef.current?.showPicker()}

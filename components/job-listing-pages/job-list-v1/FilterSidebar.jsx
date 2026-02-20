@@ -32,24 +32,18 @@ const FilterSidebar = () => {
         </div>
         {/* <!-- Filter Block --> */}
 
-        <div className="filter-block">
+        {/* <div className="filter-block">
           <h4>Location</h4>
           <div className="form-group">
             <LocationBox />
           </div>
 
-          <p>Radius around selected destination</p>
-          <DestinationRangeSlider />
-        </div>
+
+        </div> */}
         {/* <!-- Filter Block --> */}
 
-        <div className="filter-block">
-          <h4>Category</h4>
-          <div className="form-group">
-            <Categories />
-          </div>
-        </div>
-        {/* <!-- Filter Block --> */}
+     
+
 
         <div className="switchbox-outer">
           <h4>Job type</h4>
@@ -76,15 +70,11 @@ const FilterSidebar = () => {
         </div>
         {/* <!-- Filter Block --> */}
 
-        <div className="filter-block">
-          <h4>Tags</h4>
-          <Tag />
-        </div>
         {/* <!-- Filter Block --> */}
       </div>
       {/* Filter Outer */}
 
-      <CallToActions />
+
       {/* <!-- End Call To Action --> */}
     </div>
   );

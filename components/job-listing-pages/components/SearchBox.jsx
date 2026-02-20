@@ -1,22 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addKeyword } from "../../../features/filter/filterSlice";
 
 const SearchBox = () => {
   const { jobList } = useSelector((state) => state.filter);
-  const [getKeyWord, setkeyWord] = useState(jobList.keyword);
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
 
-  // keyword handler
   const keywordHandler = (e) => {
-    dispath(addKeyword(e.target.value));
+    dispatch(addKeyword(e.target.value));
   };
-
-  useEffect(() => {
-    setkeyWord(jobList.keyword);
-  }, [setkeyWord, jobList]);
 
   return (
     <>
@@ -24,7 +17,7 @@ const SearchBox = () => {
         type="text"
         name="listing-search"
         placeholder="Job title, keywords, or company"
-        value={getKeyWord}
+        value={jobList.keyword} // 👈 Directly from Redux
         onChange={keywordHandler}
       />
       <span className="icon flaticon-search-3"></span>

@@ -1,7 +1,8 @@
 "use client";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addJobType } from "../../../features/filter/filterSlice";
-import { jobTypeCheck } from "../../../features/job/jobSlice";
+import { jobTypeCheck, fetchJobTypes } from "../../../features/job/jobSlice";
 
 const JobType = () => {
   const { jobTypeList } = useSelector((state) => state.job) || {};
@@ -13,6 +14,11 @@ const JobType = () => {
     dispatch(jobTypeCheck(id));
   };
 
+  useEffect(() => {
+    if (!jobTypeList.length) {
+      dispatch(fetchJobTypes());
+    }
+  }, [dispatch, jobTypeList.length]);
   return (
     <ul className="switchbox">
       {jobTypeList?.map((item) => (
