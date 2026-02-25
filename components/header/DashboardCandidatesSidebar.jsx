@@ -67,7 +67,7 @@ const DashboardCandidatesSidebar = () => {
         </ul>
         {/* End navigation */}
 
-        <div className="skills-percentage">
+        {/* <div className="skills-percentage">
           <h4>Skills Percentage</h4>
           <p>
             `Put value for <strong>Cover Image</strong> field to increase your
@@ -87,8 +87,8 @@ const DashboardCandidatesSidebar = () => {
               text={`${percentage}%`}
             />
           </div>{" "}
-          {/* <!-- Pie Graph --> */}
-        </div>
+        
+        </div> */}
       </div>
     </div>
   );

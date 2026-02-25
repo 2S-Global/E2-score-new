@@ -34,13 +34,13 @@ module.exports = [
     routePath: "/candidates-dashboard/applied-jobs",
     active: "",
   },
-  {
-    id: 5,
-    name: "Job Alerts",
-    icon: "la la-bell",
-    routePath: "/candidates-dashboard/job-alerts",
-    active: "",
-  },
+  // {
+  //   id: 5,
+  //   name: "Job Alerts",
+  //   icon: "la la-bell",
+  //   routePath: "/candidates-dashboard/job-alerts",
+  //   active: "",
+  // },
   {
     id: 6,
     name: "Saved Jobs",
