@@ -27,6 +27,8 @@ const [selectedApplicationId, setSelectedApplicationId] = useState(null);
     invitation_sent: "Interview Scheduled",
     offer_sent: "Offer Sent",
     rejected: "Rejected",
+    offer_letter_accepted: "Offer Accepted",
+    offer_letter_rejected: "Offer Rejected",
   };
 
   const statusClassMap = {
@@ -34,7 +36,9 @@ const [selectedApplicationId, setSelectedApplicationId] = useState(null);
     shortlisted: "badge bg-info",
     invitation_sent: "badge bg-warning",
     offer_sent: "badge bg-success",
+    offer_letter_accepted: "badge bg-primary", // ✅ added
     rejected: "badge bg-danger",
+    offer_letter_rejected: "badge bg-danger",
   };
 
   const capitalize = (value) =>

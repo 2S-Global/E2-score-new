@@ -61,6 +61,10 @@ const endTimeRef = useRef(null);
         return "Shortlisted";
       case "rejected":
         return "Rejected";
+      case "offer_letter_accepted":
+        return "Offer Accepted";
+        case "offer_letter_rejected":
+        return "Offer Rejected";
       default:
         return status;
     }
@@ -207,6 +211,45 @@ const endTimeRef = useRef(null);
    }
  };
 
+
+const handleOfferResponse = async (applicationId, isAccepted) => {
+  try {
+    setError("");
+    setSuccess("");
+
+    setLoadingRow(applicationId);
+    setLoadingType(isAccepted ? "offer_accept" : "offer_reject");
+
+    const res = await axios.post(
+      `${apiurl}/api/jobposting/accept_reject_offer_letter`,
+      {
+        applicationId,
+        accept: isAccepted,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (res.data?.success) {
+      setSuccess(res.data.message || "Offer response submitted.");
+      await fetchAppliedJobs();
+    } else {
+      setError(res.data?.message || "Something went wrong.");
+    }
+  } catch (error) {
+    setError(
+      error?.response?.data?.message ||
+        "Server not responding. Please try again.",
+    );
+  } finally {
+    setLoadingRow(null);
+    setLoadingType(null);
+  }
+};
   return (
     <>
       <MessageComponent
@@ -374,6 +417,18 @@ const endTimeRef = useRef(null);
           margin-bottom: 15px;
           border-left: 4px solid #0d6efd;
         }
+        .option-list {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          padding: 0;
+          margin: 0;
+          list-style: none;
+        }
+
+        .option-list li {
+          width: 20%; /* 3 items per row */
+        }
       `}</style>
       <div className="tabs-box">
         <div className="widget-title">
@@ -406,10 +461,16 @@ const endTimeRef = useRef(null);
                   const isAlreadyAccepted = Boolean(
                     item.interviewInvitationAccepted,
                   );
-                  const shouldDisable =
-                    loadingRow === item._id ||
-                    item.status !== "invitation_sent" ||
-                    typeof item.interviewInvitationAccepted === "boolean";
+            const isInterviewStage = item.status === "invitation_sent";
+            const isOfferStage = item.status === "offer_sent";
+
+            const disableInterviewActions =
+              loadingRow === item._id ||
+              !isInterviewStage ||
+              typeof item.interviewInvitationAccepted === "boolean";
+
+            const disableOfferActions =
+              loadingRow === item._id || !isOfferStage;
 
                   return (
                     <tr key={item._id}>
@@ -472,7 +533,7 @@ const endTimeRef = useRef(null);
                             <li>
                               <button
                                 type="button"
-                                disabled={shouldDisable}
+                                disabled={disableInterviewActions}
                                 onClick={() =>
                                   handleResponse(item._id, item.jobId._id, true)
                                 }
@@ -492,7 +553,7 @@ const endTimeRef = useRef(null);
                             <li>
                               <button
                                 type="button"
-                                disabled={shouldDisable}
+                                disabled={disableInterviewActions}
                                 onClick={() =>
                                   handleResponse(
                                     item._id,
@@ -516,12 +577,52 @@ const endTimeRef = useRef(null);
                             <li>
                               <button
                                 type="button"
-                                disabled={shouldDisable}
+                                disabled={disableInterviewActions}
                                 onClick={() => handleReschedule(item)}
                                 className="icon-action"
                                 data-text="Reschedule Interview"
                               >
                                 <span className="la la-calendar text-warning"></span>
+                              </button>
+                            </li>
+
+                            {/* ✅ Accept Offer */}
+                            <li>
+                              <button
+                                type="button"
+                                disabled={disableOfferActions}
+                                onClick={() =>
+                                  handleOfferResponse(item._id, true)
+                                }
+                                data-text="Accept Offer"
+                                className="icon-action"
+                              >
+                                {loadingRow === item._id &&
+                                loadingType === "offer_accept" ? (
+                                  <span className="spinner"></span>
+                                ) : (
+                                  <span className="la la-thumbs-up text-success"></span>
+                                )}
+                              </button>
+                            </li>
+
+                            {/* Reject Offer */}
+                            <li>
+                              <button
+                                type="button"
+                                disabled={disableOfferActions}
+                                onClick={() =>
+                                  handleOfferResponse(item._id, false)
+                                }
+                                data-text="Reject Offer"
+                                className="icon-action"
+                              >
+                                {loadingRow === item._id &&
+                                loadingType === "offer_reject" ? (
+                                  <span className="spinner"></span>
+                                ) : (
+                                  <span className="la la-thumbs-down text-danger"></span>
+                                )}
                               </button>
                             </li>
                           </ul>
