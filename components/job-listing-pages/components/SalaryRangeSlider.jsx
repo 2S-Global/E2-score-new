@@ -8,41 +8,37 @@ import { addSalary } from "../../../features/filter/filterSlice";
 
 const SalaryRangeSlider = () => {
   const { jobList } = useSelector((state) => state.filter);
-  const [salary, setSalary] = useState({
-    min: jobList.salary.min,
-    max: jobList.salary.max,
-  });
-
   const dispatch = useDispatch();
 
-  const handleOnChange = ({ min, max }) => {
-    dispatch(addSalary({ min, max }));
+  const [salary, setSalary] = useState([
+    jobList.salary.min,
+    jobList.salary.max,
+  ]);
+
+  const handleOnChange = (value) => {
+    setSalary(value); // update local UI
+    dispatch(addSalary({ min: value[0], max: value[1] })); // update redux
   };
 
   useEffect(() => {
-    setSalary({
-      min: jobList.salary.min,
-      max: jobList.salary.max,
-    });
-  }, [setSalary, jobList]);
+    setSalary([jobList.salary.min, jobList.salary.max]);
+  }, [jobList.salary]);
 
   return (
     <div className="range-slider-one salary-range">
       <Slider
-        formatLabel={(value) => ``}
-        min={0}
-        max={20000}
-        value={{
-          min: salary.min,
-          max: salary.max,
-        }}
-        onChange={(value) => handleOnChange(value)}
+        range // ✅ IMPORTANT
+        min={10000}
+        max={3000000}
+        value={salary}
+        onChange={handleOnChange}
       />
+
       <div className="input-outer">
         <div className="amount-outer">
           <span className="d-inline-flex align-items-center">
-            <span className="min">${salary.min}</span>
-            <span className="max ms-2">${salary.max}</span>
+            <span className="min">₹{salary[0]}</span>
+            <span className="max ms-2">₹{salary[1]}</span>
           </span>
         </div>
       </div>

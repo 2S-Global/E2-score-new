@@ -63,11 +63,11 @@ const FilterSidebar = () => {
         </div>
         {/* <!-- Checkboxes Ouer --> */}
 
-        <div className="filter-block">
+        {/* <div className="filter-block">
           <h4>Salary</h4>
 
           <SalaryRangeSlider />
-        </div>
+        </div> */}
         {/* <!-- Filter Block --> */}
 
         {/* <!-- Filter Block --> */}

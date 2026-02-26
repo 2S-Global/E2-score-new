@@ -3,11 +3,22 @@ import axios from "axios";
 
 export const fetchJobTypes = createAsyncThunk("job/fetchJobTypes", async () => {
   const res = await axios.get(
-    "https://api.geisil.com/api/jobposting/all_job_types",
+    `${process.env.NEXT_PUBLIC_API_URL}/api/jobposting/all_job_types`,
   );
 
   return res.data.data;
 });
+
+export const fetchExperienceLevels = createAsyncThunk(
+  "job/fetchExperienceLevels",
+  async () => {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/jobposting/all_job_experience_levels`,
+    );
+
+    return res.data.data;
+  },
+);
 const initialState = {
   latestJob: ["full-time"],
   category: [
@@ -56,18 +67,7 @@ const initialState = {
       isChecked: false,
     },
   ],
-  experienceLavel: [
-    { id: 1, name: "Fresh", value: "fresh", isChecked: false },
-    { id: 2, name: "1 Year", value: "1-year", isChecked: false },
-    { id: 3, name: "2 Year", value: "2-year", isChecked: false },
-    { id: 4, name: "3 Year", value: "3-year", isChecked: false },
-    {
-      id: 5,
-      name: "4 Year",
-      value: "4-year",
-      isChecked: false,
-    },
-  ],
+  experienceLevel: [],
   tags: [
     {
       id: 1,
@@ -142,13 +142,13 @@ export const jobSlice = createSlice({
       });
     },
 
-    experienceLavelCheck: (state, { payload }) => {
-      const item = state.experienceLavel.find((i) => i.id === payload);
+    experienceLevelCheck: (state, { payload }) => {
+      const item = state.experienceLevel.find((i) => i.id === payload);
       if (item) item.isChecked = !item.isChecked;
     },
 
     clearExperienceToggle: (state) => {
-      state.experienceLavel.forEach((item) => {
+      state.experienceLevel.forEach((item) => {
         item.isChecked = false;
       });
     },
@@ -158,24 +158,37 @@ export const jobSlice = createSlice({
      EXTRA REDUCERS 👇
   ===================== */
   extraReducers: (builder) => {
-    builder.addCase(fetchJobTypes.fulfilled, (state, action) => {
-      state.jobTypeList = action.payload.map((item) => ({
-        id: item._id,
-        name: item.name,
-        value: item.name,
-        isChecked: false,
-      }));
-    });
+    builder
+
+      // Job Types
+      .addCase(fetchJobTypes.fulfilled, (state, action) => {
+        state.jobTypeList = action.payload.map((item) => ({
+          id: item._id,
+          name: item.name,
+          value: item.name,
+          isChecked: false,
+        }));
+      })
+
+      // Experience Levels
+      .addCase(fetchExperienceLevels.fulfilled, (state, action) => {
+        state.experienceLevel = action.payload.map((item) => ({
+          id: item._id,
+          name: item.name,
+          value: item.name,
+          isChecked: false,
+        }));
+      });
   },
 });
 
 export const {
-    addLatestJob,
-    clearJobTypeToggle,
-    jobTypeCheck,
-    datePostCheck,
-    clearDatePostToggle,
-    experienceLavelCheck,
-    clearExperienceToggle,
+  addLatestJob,
+  clearJobTypeToggle,
+  jobTypeCheck,
+  datePostCheck,
+  clearDatePostToggle,
+  experienceLevelCheck,
+  clearExperienceToggle,
 } = jobSlice.actions;
 export default jobSlice.reducer;

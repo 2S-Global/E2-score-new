@@ -24,13 +24,14 @@ import {
   clearDatePostToggle,
   clearExperienceToggle,
   clearJobTypeToggle,
+  
 } from "../../../features/job/jobSlice";
 
 const FilterJobsBox = () => {
   const dispatch = useDispatch();
 
   const { jobList, jobSort } = useSelector((state) => state.filter);
-  const { keyword, location, tag, jobType } = jobList || {};
+  const { keyword, location, tag, jobType, datePosted, experience } = jobList || {};
   const { sort } = jobSort;
 
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
@@ -156,15 +157,64 @@ const FilterJobsBox = () => {
     return item.jobType?.some((type) => jobType.includes(type));
   };
 
-  const sortFilter = (a, b) =>
-    sort === "des"
-      ? new Date(b.created_at) - new Date(a.created_at)
-      : new Date(a.created_at) - new Date(b.created_at);
+  const experienceFilter = (item) => {
+    if (!experience || !experience.length) return true;
+
+    return experience.some((exp) =>
+      item.jobExperienceLevel?.toLowerCase().includes(exp.toLowerCase()),
+    );
+  };
+
+  const datePostedFilter = (item) => {
+    if (!datePosted || datePosted === "all") return true;
+
+    const now = new Date();
+    const jobDate = new Date(item.createdDate);
+    const diffMs = now - jobDate;
+
+    const diffHours = diffMs / (1000 * 60 * 60);
+    const diffDays = diffHours / 24;
+
+    switch (datePosted) {
+      case "last-hour":
+        return diffHours <= 1;
+
+      case "last-24-hour":
+        return diffHours <= 24;
+
+      case "last-7-days":
+        return diffDays <= 7;
+
+      case "last-14-days":
+        return diffDays <= 14;
+
+      case "last-30-days":
+        return diffDays <= 30;
+
+      default:
+        return true;
+    }
+  };
+
+const sortFilter = (a, b) => {
+  // Default: latest first
+  if (!sort || sort === "des") {
+    return new Date(b.createdDate) - new Date(a.createdDate);
+  }
+
+  // Oldest first
+  if (sort === "asc") {
+    return new Date(a.createdDate) - new Date(b.createdDate);
+  }
+
+  return 0;
+};
 
   const filteredJobs = allJobs
     .filter(keywordFilter)
-    .filter(locationFilter)
+    .filter(experienceFilter)
     .filter(jobTypeFilter)
+    .filter(datePostedFilter)
     .filter(tagFilter)
     .sort(sortFilter);
 
@@ -178,12 +228,14 @@ const FilterJobsBox = () => {
     currentPage * ITEMS_PER_PAGE,
   );
 
+
+
   /* ======================
      RESET PAGE ON FILTER CHANGE
   ====================== */
   useEffect(() => {
     setCurrentPage(1);
-  }, [keyword, location, tag, sort]);
+  }, [keyword, location, tag, sort, datePosted]);
 
   /* ======================
      SAME UI (UNCHANGED)
@@ -313,6 +365,7 @@ const FilterJobsBox = () => {
                 dispatch(clearExperience());
                 dispatch(addKeyword(""));
                 dispatch(addLocation(""));
+                 dispatch(addDatePosted("all"));
                 dispatch(addTag(""));
                 dispatch(clearJobTypeToggle()); // 👈 ADD THIS
                 dispatch(clearExperienceToggle()); // 👈 ADD THIS

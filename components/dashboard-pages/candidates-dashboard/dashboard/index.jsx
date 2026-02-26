@@ -66,7 +66,7 @@ const Index = () => {
 
       <section className="user-dashboard">
         <div className="dashboard-outer">
-          <BreadCrumb title={"Hello, " + name + "!!"} />
+          <BreadCrumb title={"Hello, " + name } />
 
           {/* breadCrumb */}
           {/* Score  section*/}
@@ -91,13 +91,13 @@ const Index = () => {
             {/* End .col */}
 
             <div className="col-xl-5 col-lg-12 position-relative mb-2">
-              <div
+              {/* <div
                 className="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 
                d-flex justify-content-center align-items-center text-white fw-bold fs-4"
                 style={{ zIndex: 1050 }}
               >
                 Activating Soon
-              </div>
+              </div> */}
               {/* <!-- Notification Widget --> */}
               <div className="notification-widget ls-widget">
                 <div className="widget-title">

@@ -1,32 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    jobList: {
-        keyword: "",
-        location: "",
-        destination: {
-            min: 0,
-            max: 100,
-        },
-        category: "",
-        jobType: [],
-        jobTypeSelect: "",
-        datePosted: "",
-        experience: [],
-        experienceSelect: "",
-        salary: {
-            min: 0,
-            max: 20000,
-        },
-        tag: "",
+  jobList: {
+    keyword: "",
+    location: "",
+    destination: {
+      min: 0,
+      max: 100,
     },
-    jobSort: {
-        sort: "",
-        perPage: {
-            start: 0,
-            end: 0,
-        },
+    category: "",
+    jobType: [],
+    jobTypeSelect: "",
+    datePosted: "",
+    experience: [],
+    experienceSelect: "",
+    salary: {
+      min: 10000,
+      max: 3000000,
     },
+    tag: "",
+  },
+  jobSort: {
+    sort: "",
+    perPage: {
+      start: 0,
+      end: 0,
+    },
+  },
 };
 
 export const filterSlice = createSlice({
