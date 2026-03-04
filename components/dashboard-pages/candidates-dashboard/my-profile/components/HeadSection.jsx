@@ -195,7 +195,7 @@ const HeadSection = () => {
                     {/* Gauge */}
                     <CreditScoreGauge
                       minScore={0}
-                      maxScore={100}
+                      maxScore={1000}
                       score={cibilscore}
                       size={200}
                     />

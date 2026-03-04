@@ -4,6 +4,7 @@ import { FaPhone, FaEnvelope } from "react-icons/fa";
 import axios from "axios";
 import CustomizedProgressBars from "@/components/common/loader";
 import { CreditScoreGauge } from "@/components/common/Gauge";
+import { CreditCibilScoreGauge } from "@/components/common/CibilGauge";
 
 const ScoreSection = () => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
@@ -120,9 +121,9 @@ const ScoreSection = () => {
                     marginBottom: "-20px",
                   }}
                 />
-                <CreditScoreGauge
-                  minScore={0}
-                  maxScore={100}
+                <CreditCibilScoreGauge
+                  minScore={100}
+                  maxScore={1000}
                   score={cibilscore}
                   size={200}
                 />

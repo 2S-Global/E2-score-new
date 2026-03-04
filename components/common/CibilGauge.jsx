@@ -2,20 +2,20 @@
 
 import { useEffect, useState } from "react";
 
-export function CreditScoreGauge({
+export function CreditCibilScoreGauge({
   score,
-  minScore = 0,
-  maxScore = 100,
+  minScore = 100,
+  maxScore = 1000,
   size = 300,
   animated = true,
 }) {
   const [displayScore, setDisplayScore] = useState(animated ? minScore : score);
 
   const rangeSchema = [
-    { from: 0.0, to: 0.4, color: "#EF7673", label: "Poor" },
-    { from: 0.4, to: 0.6, color: "#F59E6C", label: "Average" },
-    { from: 0.6, to: 0.8, color: "#EAB86C", label: "Good" },
-    { from: 0.8, to: 1.0, color: "#5ED4A8", label: "Excellent" },
+    { from: 0.0, to: 0.25, color: "#EF7673", label: "Poor" },
+    { from: 0.25, to: 0.5, color: "#F59E6C", label: "Average" },
+    { from: 0.5, to: 0.80, color: "#EAB86C", label: "Good" },
+    { from: 0.80, to: 1.0, color: "#5ED4A8", label: "Excellent" },
   ];
 
   const ranges = rangeSchema.map((r) => ({
@@ -31,10 +31,12 @@ export function CreditScoreGauge({
     const duration = 2000;
     const steps = 60;
     const increment = (score - minScore) / steps;
+
     let currentStep = 0;
 
     const timer = setInterval(() => {
       currentStep++;
+
       if (currentStep <= steps) {
         setDisplayScore(minScore + increment * currentStep);
       } else {
@@ -50,6 +52,7 @@ export function CreditScoreGauge({
   const centerY = size * 0.55;
   const radius = (size * 0.65) / 2;
   const strokeWidth = size * 0.065;
+
   const startAngle = 180;
   const endAngle = 360;
   const totalAngle = endAngle - startAngle;
@@ -64,7 +67,9 @@ export function CreditScoreGauge({
   const createArc = (startAngle, endAngle, r) => {
     const start = polarToCartesian(startAngle, r);
     const end = polarToCartesian(endAngle, r);
+
     const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
     return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`;
   };
 
@@ -74,9 +79,11 @@ export function CreditScoreGauge({
     ) || ranges[0];
 
   const scorePercentage = (displayScore - minScore) / (maxScore - minScore);
+
   const scoreAngle = startAngle + totalAngle * scorePercentage;
 
   const indicatorPos = polarToCartesian(scoreAngle, radius);
+
   const indicatorRadius = strokeWidth * 0.65;
 
   return (
@@ -91,7 +98,9 @@ export function CreditScoreGauge({
 
         {ranges.map((range, index) => {
           const startPct = (range.min - minScore) / (maxScore - minScore);
+
           const endPct = (range.max - minScore) / (maxScore - minScore);
+
           return (
             <path
               key={index}
@@ -114,6 +123,7 @@ export function CreditScoreGauge({
           r={indicatorRadius + 3}
           fill={currentRange.color}
         />
+
         <circle
           cx={indicatorPos.x}
           cy={indicatorPos.y}
