@@ -24,14 +24,14 @@ import {
   clearDatePostToggle,
   clearExperienceToggle,
   clearJobTypeToggle,
-  
 } from "../../../features/job/jobSlice";
 
 const FilterJobsBox = () => {
   const dispatch = useDispatch();
 
   const { jobList, jobSort } = useSelector((state) => state.filter);
-  const { keyword, location, tag, jobType, datePosted, experience } = jobList || {};
+  const { keyword, location, tag, jobType, datePosted, experience } =
+    jobList || {};
   const { sort } = jobSort;
 
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
@@ -133,7 +133,7 @@ const FilterJobsBox = () => {
   const keywordFilter = (item) => {
     if (!keyword) return true;
 
-   const search = keyword.trim().toLowerCase();
+    const search = keyword.trim().toLowerCase();
 
     return (
       item.jobTitle?.toLowerCase().includes(search) ||
@@ -196,19 +196,19 @@ const FilterJobsBox = () => {
     }
   };
 
-const sortFilter = (a, b) => {
-  // Default: latest first
-  if (!sort || sort === "des") {
-    return new Date(b.createdDate) - new Date(a.createdDate);
-  }
+  const sortFilter = (a, b) => {
+    // Default: latest first
+    if (!sort || sort === "des") {
+      return new Date(b.createdDate) - new Date(a.createdDate);
+    }
 
-  // Oldest first
-  if (sort === "asc") {
-    return new Date(a.createdDate) - new Date(b.createdDate);
-  }
+    // Oldest first
+    if (sort === "asc") {
+      return new Date(a.createdDate) - new Date(b.createdDate);
+    }
 
-  return 0;
-};
+    return 0;
+  };
 
   const filteredJobs = allJobs
     .filter(keywordFilter)
@@ -227,8 +227,6 @@ const sortFilter = (a, b) => {
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE,
   );
-
-
 
   /* ======================
      RESET PAGE ON FILTER CHANGE
@@ -347,6 +345,16 @@ const sortFilter = (a, b) => {
       `}</style>
       {error && <p className="text-danger">{error}</p>}
 
+      <div className="showing-result mb-3 d-lg-none">
+        <button
+          type="button"
+          className="theme-btn toggle-filters"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#filter-sidebar"
+        >
+          <span className="icon icon-filter"></span> Filter
+        </button>
+      </div>
       {paginatedJobs.length === 0 ? (
         <div className="no-job-found text-center py-5">
           <div className="empty-state-box">
@@ -365,7 +373,7 @@ const sortFilter = (a, b) => {
                 dispatch(clearExperience());
                 dispatch(addKeyword(""));
                 dispatch(addLocation(""));
-                 dispatch(addDatePosted("all"));
+                dispatch(addDatePosted("all"));
                 dispatch(addTag(""));
                 dispatch(clearJobTypeToggle()); // 👈 ADD THIS
                 dispatch(clearExperienceToggle()); // 👈 ADD THIS

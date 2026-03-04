@@ -8,8 +8,6 @@ import AutoDetectPhoneInput from "../phonenumber";
 const FormContentcom = () => {
   const [formData, setFormData] = useState({
     company_type: "",
-    cin_id: "",
-    cin: "",
     name: "",
     email: "",
     password: "",
@@ -99,8 +97,7 @@ const FormContentcom = () => {
         if (response.data.success) {
           setFormData({
             ...formData,
-            cin_id: response.data.data._id,
-            cin: response.data.data.cinnumber,
+   
             name: response.data.data.companyname,
             email: response.data.data.companyemail,
             phone_number: response.data.data.companyphone,

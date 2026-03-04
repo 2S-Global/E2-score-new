@@ -1,9 +1,12 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import ListingShowing from "../components/ListingShowing";
-import candidatesData from "../../../data/candidates";
+import Image from "next/image";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { FaEye } from "react-icons/fa";
+
 import {
   addCandidateGender,
   addCategory,
@@ -21,9 +24,16 @@ import {
   clearExperience,
   clearQualification,
 } from "../../../features/candidate/candidateSlice";
-import Image from "next/image";
 
 const FilterTopBox = () => {
+  const [candidatesData, setCandidatesData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const employerToken =
+    typeof window !== "undefined"
+      ? localStorage.getItem("employer_token")
+      : null;
+
   const {
     keyword,
     location,
@@ -39,266 +49,184 @@ const FilterTopBox = () => {
 
   const dispatch = useDispatch();
 
-  // keyword filter
-  const keywordFilter = (item) =>
-    keyword !== ""
-      ? item?.name?.toLowerCase().includes(keyword?.toLowerCase()) && item
-      : item;
+  // ✅ Fetch Candidates
+  useEffect(() => {
+    const fetchCandidates = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/candidate/candidateDetails/get_all_candidates`,
+          {
+            headers: {
+              Authorization: `Bearer ${employerToken}`,
+            },
+          },
+        );
 
-  // location filter
+        if (res.data?.success) {
+          setCandidatesData(res.data.data);
+        } else {
+          setCandidatesData([]);
+        }
+      } catch (error) {
+        console.error("Error fetching candidates:", error);
+        setCandidatesData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (employerToken) {
+      fetchCandidates();
+    }
+  }, [employerToken]);
+
+  // ================= FILTERS =================
+
+const keywordFilter = (item) => {
+  if (!keyword) return true;
+
+  const search = keyword.toLowerCase();
+
+  return (
+    item?.name?.toLowerCase().includes(search) ||
+    item?.email?.toLowerCase().includes(search) ||
+    item?.phone_number?.toLowerCase().includes(search)
+  );
+};
+
   const locationFilter = (item) =>
     location !== ""
       ? item?.location?.toLowerCase().includes(location?.toLowerCase())
-      : item;
+      : true;
 
-  // destination filter
-  const destinationFilter = (item) =>
-    item?.destination?.min >= destination?.min &&
-    item?.destination?.max <= destination?.max;
-
-  // category filter
   const categoryFilter = (item) =>
     category !== ""
-      ? item?.category?.toLocaleLowerCase() === category?.toLocaleLowerCase()
-      : item;
+      ? item?.category?.toLowerCase() === category?.toLowerCase()
+      : true;
 
-  // gender filter
   const genderFilter = (item) =>
     candidateGender !== ""
-      ? item?.gender.toLocaleLowerCase() ===
-          candidateGender.toLocaleLowerCase() && item
-      : item;
+      ? item?.gender?.toLowerCase() === candidateGender.toLowerCase()
+      : true;
 
-  // date-posted filter
-  const datePostedFilter = (item) =>
-    datePost !== "all" && datePost !== ""
-      ? item?.created_at
-          ?.toLocaleLowerCase()
-          .split(" ")
-          .join("-")
-          .includes(datePost)
-      : item;
+  const sortFilter = (a, b) => (sort === "des" ? b.id - a.id : a.id - b.id);
 
-  // experience filter
-  const experienceFilter = (item) =>
-    experiences?.length !== 0
-      ? experiences?.includes(
-          item?.experience?.split(" ").join("-").toLocaleLowerCase()
-        )
-      : item;
-
-  // qualification filter
-  const qualificationFilter = (item) =>
-    qualifications?.length !== 0
-      ? qualifications?.includes(
-          item?.qualification?.split(" ").join("-").toLocaleLowerCase()
-        )
-      : item;
-
-  // sort filter
-  const sortFilter = (a, b) =>
-    sort === "des" ? a.id > b.id && -1 : a.id < b.id && -1;
-
-  let content = candidatesData
-    ?.slice(perPage.start, perPage.end === 0 ? 10 : perPage.end)
+  const filteredData = candidatesData
     ?.filter(keywordFilter)
     ?.filter(locationFilter)
-    ?.filter(destinationFilter)
     ?.filter(categoryFilter)
     ?.filter(genderFilter)
-    ?.filter(datePostedFilter)
-    ?.filter(experienceFilter)
-    ?.filter(qualificationFilter)
-    ?.sort(sortFilter)
-    ?.map((candidate) => (
-      <div className="candidate-block-three" key={candidate.id}>
-        <div className="inner-box">
-          <div className="content">
-            <figure className="image">
-              <Image
-                width={90}
-                height={90}
-                src={candidate.avatar}
-                alt="candidates"
-              />
-            </figure>
-            <h4 className="name">
-              <Link href={`/candidates-details/${candidate.id}`}>
-                {candidate.name}
-              </Link>
-            </h4>
+    ?.sort(sortFilter);
 
-            <ul className="candidate-info">
-              <li className="designation">{candidate.designation}</li>
-              <li>
-                <span className="icon flaticon-map-locator"></span>{" "}
-                {candidate.location}
-              </li>
-              <li>
-                <span className="icon flaticon-money"></span> $
-                {candidate.hourlyRate} / hour
-              </li>
-            </ul>
-            {/* End candidate-info */}
-
-            <ul className="post-tags">
-              {candidate.tags.map((val, i) => (
-                <li key={i}>
-                  <a href="#">{val}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          {/* End content */}
-
-          <div className="btn-box">
-            <button className="bookmark-btn me-2">
-              <span className="flaticon-bookmark"></span>
-            </button>
-            {/* End bookmark-btn */}
-
-            <Link
-              href={`/candidates-details/${candidate.id}`}
-              className="theme-btn btn-style-three"
-            >
-              <span className="btn-title">View Profile</span>
-            </Link>
-          </div>
-          {/* End btn-box */}
+  // ================= LOADER =================
+  if (loading) {
+    return (
+      <div className="text-center py-5">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
         </div>
       </div>
-    ));
-
-  // sort handler
-  const sortHandler = (e) => {
-    dispatch(addSort(e.target.value));
-  };
-
-  // per page handler
-  const perPageHandler = (e) => {
-    const pageData = JSON.parse(e.target.value);
-    dispatch(addPerPage(pageData));
-  };
-
-  // clear handler
-  const clearHandler = () => {
-    dispatch(addKeyword(""));
-    dispatch(addLocation(""));
-    dispatch(addDestination({ min: 0, max: 100 }));
-    dispatch(addCategory(""));
-    dispatch(addCandidateGender(""));
-    dispatch(addDatePost(""));
-    dispatch(clearDatePost());
-    dispatch(clearExperienceF());
-    dispatch(clearExperience());
-    dispatch(clearQualification());
-    dispatch(clearQualificationF());
-    dispatch(addSort(""));
-    dispatch(addPerPage({ start: 0, end: 0 }));
-  };
+    );
+  }
 
   return (
     <>
-      <div className="ls-switcher">
-        <div className="showing-result">
-          <div className="show-1023">
-            <button
-              type="button"
-              className="theme-btn toggle-filters "
-              data-bs-toggle="offcanvas"
-              data-bs-target="#filter-sidebar"
-            >
-              <span className="icon icon-filter"></span> Filter
-            </button>
-          </div>
-          {/* Collapsible sidebar button */}
+      <style jsx>{`
+        .btn-box {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
 
-          <div className="text">
-            <strong>{content?.length}</strong> jobs
-          </div>
-        </div>
-        {/* End showing-result */}
+        .view-btn {
+          width: 38px;
+          height: 38px;
+          border-radius: 6px;
+          background: #f5f5f5;
+          color: #333;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: 0.3s ease;
+        }
 
-        <div className="sort-by">
-          {keyword !== "" ||
-          location !== "" ||
-          destination.min !== 0 ||
-          destination.max !== 100 ||
-          category !== "" ||
-          candidateGender !== "" ||
-          datePost !== "" ||
-          experiences?.length !== 0 ||
-          qualifications?.length !== 0 ||
-          sort !== "" ||
-          perPage?.start !== 0 ||
-          perPage?.end !== 0 ? (
-            <button
-              className="btn btn-danger text-nowrap me-2"
-              style={{ minHeight: "45px", marginBottom: "15px" }}
-              onClick={clearHandler}
-            >
-              Clear All
-            </button>
-          ) : undefined}
+        .view-btn:hover {
+          background: #1967d2;
+          color: #fff;
+        }
+      `}</style>
 
-          <select
-            onChange={sortHandler}
-            className="chosen-single form-select"
-            value={sort}
-          >
-            <option value="">Sort by (default)</option>
-            <option value="asc">Newest</option>
-            <option value="des">Oldest</option>
-          </select>
-          {/* End select */}
-
-          <select
-            className="chosen-single form-select ms-3 "
-            onChange={perPageHandler}
-            value={JSON.stringify(perPage)}
-          >
-            <option
-              value={JSON.stringify({
-                start: 0,
-                end: 0,
-              })}
-            >
-              All
-            </option>
-            <option
-              value={JSON.stringify({
-                start: 0,
-                end: 15,
-              })}
-            >
-              15 per page
-            </option>
-            <option
-              value={JSON.stringify({
-                start: 0,
-                end: 20,
-              })}
-            >
-              20 per page
-            </option>
-            <option
-              value={JSON.stringify({
-                start: 0,
-                end: 25,
-              })}
-            >
-              25 per page
-            </option>
-          </select>
-          {/* End select */}
-        </div>
+      <div className="showing-result mb-3 d-lg-none">
+        <button
+          type="button"
+          className="theme-btn toggle-filters"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#filter-sidebar"
+        >
+          <span className="icon icon-filter"></span> Filter
+        </button>
       </div>
-      {/* End top filter bar box */}
 
-      {content}
+      {filteredData?.length === 0 && (
+        <div className="text-center py-4">
+          <p>No candidates found.</p>
+        </div>
+      )}
 
-      <ListingShowing />
-      {/* <!-- Listing Show More --> */}
+      {filteredData?.map((candidate) => (
+        <div className="candidate-block-three" key={candidate._id}>
+          <div className="inner-box">
+            <div className="content">
+              <figure className="image">
+                <Image
+                  width={90}
+                  height={90}
+                  src={candidate.profilePicture || "/images/default-avatar.png"}
+                  alt="candidate"
+                />
+              </figure>
+
+              <h4 className="name">
+                <Link
+                  href={`/candidates-details/${candidate._id}`}
+                  target="_blank"
+                >
+                  {candidate.name}
+                </Link>
+              </h4>
+
+              {/* ✅ Static Designation + Location + Salary */}
+              <ul className="candidate-info">
+                <li className="designation">Software Developer</li>
+                <li>
+                  <span className="icon flaticon-map-locator"></span> Kolkata,
+                  India
+                </li>
+                <li>
+                  <span className="icon flaticon-money"></span> $ 25 / hour
+                </li>
+                <li>
+                  <span className="icon flaticon-email"></span>{" "}
+                  {candidate.email}
+                </li>
+              </ul>
+
+              {/* ✅ Static Tags */}
+              <ul className="post-tags">
+                <li>
+                  <a href="#">React</a>
+                </li>
+                <li>
+                  <a href="#">Node.js</a>
+                </li>
+                <li>
+                  <a href="#">MongoDB</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      ))}
     </>
   );
 };

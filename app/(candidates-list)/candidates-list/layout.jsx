@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "E²-Score - Candidates List ",
-  description: "E²-Score Job portal",
+  title: "Geisil",
+  description: "Geisil",
 };
 
 export default function Layout({ children }) {
