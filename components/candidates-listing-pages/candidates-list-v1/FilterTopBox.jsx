@@ -81,12 +81,10 @@ const FilterTopBox = () => {
   }, [employerToken]);
 
   // ================= FILTERS =================
-
+//console.log('Filter Data',experiences)
 const keywordFilter = (item) => {
   if (!keyword) return true;
-
   const search = keyword.toLowerCase();
-
   return (
     item?.name?.toLowerCase().includes(search) ||
     item?.email?.toLowerCase().includes(search) ||
@@ -95,19 +93,39 @@ const keywordFilter = (item) => {
 };
 
   const locationFilter = (item) =>
-    location !== ""
-      ? item?.location?.toLowerCase().includes(location?.toLowerCase())
+     {
+   return  location !== ""
+      ? item?.candidateDetails?.currentLocation?.toLowerCase().includes(location?.toLowerCase())
       : true;
-
+     }
   const categoryFilter = (item) =>
     category !== ""
       ? item?.category?.toLowerCase() === category?.toLowerCase()
       : true;
 
-  const genderFilter = (item) =>
-    candidateGender !== ""
+  const genderFilter = (item) =>{
+    return candidateGender !== ""
       ? item?.gender?.toLowerCase() === candidateGender.toLowerCase()
       : true;
+  }
+
+const experiencesFilter = (item) =>{
+  let totalMonth=(Number(item?.candidateDetails?.totalExperience?.year?.replace("+",""))*12)+Number(item?.candidateDetails?.totalExperience?.month)||0
+  let min=experiences[0]*12
+  let max=experiences[1]*12
+    return experiences !== ""
+      ? min <= totalMonth &&  totalMonth <= max  
+      : true;
+  }
+
+
+  const qualificationFilter = (item) =>
+     {
+      let Qualification= item?.levels?.filter(val=> qualifications.includes(Number(val)))||[];
+      return  qualifications?.length>0
+          ? Qualification.length > 0
+          : true;
+     }
 
   const sortFilter = (a, b) => (sort === "des" ? b.id - a.id : a.id - b.id);
 
@@ -115,9 +133,10 @@ const keywordFilter = (item) => {
     ?.filter(keywordFilter)
     ?.filter(locationFilter)
     ?.filter(categoryFilter)
+    ?.filter(experiencesFilter)
+    ?.filter(qualificationFilter)
     ?.filter(genderFilter)
     ?.sort(sortFilter);
-
   // ================= LOADER =================
   if (loading) {
     return (
@@ -199,8 +218,7 @@ const keywordFilter = (item) => {
               <ul className="candidate-info">
                 <li className="designation">Software Developer</li>
                 <li>
-                  <span className="icon flaticon-map-locator"></span> Kolkata,
-                  India
+                  <span className="icon flaticon-map-locator"></span> {candidate?.candidateDetails?.currentLocation || "N/A"}
                 </li>
                 <li>
                   <span className="icon flaticon-money"></span> $ 25 / hour
