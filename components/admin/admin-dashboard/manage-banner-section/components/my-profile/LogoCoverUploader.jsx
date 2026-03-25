@@ -108,23 +108,24 @@ const LogoCoverUploader = ({ formdata, setFormdata, Deletecover }) => {
                 <img
                   src={logoPreview}
                   alt="Logo Preview"
-                  className="img-thumbnail rounded-circle d-block mx-auto shadow"
+                  // className="img-thumbnail rounded-circle d-block mx-auto shadow"
+                  className="img-thumbnail d-block mx-auto shadow"
                   style={{
                     width: "120px",
                     height: "120px",
                     objectFit: "cover",
-                    borderRadius: "50%",
+                    // borderRadius: "50%",
                     border: "2px solid #dee2e6", // Optional for cleaner border
                   }}
                 />
 
-                <button
+                {/* <button
                   type="button"
                   className="btn btn-sm btn-danger position-absolute top-0 end-0"
                   onClick={removeLogo}
                 >
                   ×
-                </button>
+                </button> */}
               </div>
             </div>
           )}
