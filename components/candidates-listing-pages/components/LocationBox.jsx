@@ -17,7 +17,7 @@ const LocationBox = () => {
   // location dispatch
   useEffect(() => {
     dispath(addLocation(getLocation));
-  }, [dispath, addLocation, getLocation]);
+  }, [dispath, getLocation]);
 
   return (
     <>
@@ -25,7 +25,7 @@ const LocationBox = () => {
         type="text"
         name="listing-search"
         placeholder="City or postcode"
-        value={location}
+        value={getLocation}
         onChange={locationHandler}
       />
       <span className="icon flaticon-map-locator"></span>

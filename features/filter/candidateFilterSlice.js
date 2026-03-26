@@ -9,9 +9,9 @@ const initialState = {
     },
     category: "",
     candidateGender: "",
-    datePost: "",
-    experiences: [],
-    qualifications: [],
+    datePost: [],
+    experiences: "",
+    qualifications: "",
     sort: "",
     perPage: {
         start: 0,
@@ -43,27 +43,22 @@ export const candidateFilterSlice = createSlice({
             state.datePost = payload;
         },
         addExperience: (state, { payload }) => {
-            const isExist = state.experiences.includes(payload);
+            
+           /*  const isExist = state.experiences.includes(payload);
             if (!isExist) {
                 state.experiences.push(payload);
             } else {
                 state.experiences = state.experiences.filter(
                     (item) => item !== payload
                 );
-            }
+            } */
+           state.experiences=payload
         },
         clearExperienceF: (state) => {
             state.experiences = [];
         },
         addQualification: (state, { payload }) => {
-            const isExist = state.qualifications.includes(payload);
-            if (!isExist) {
-                state.qualifications.push(payload);
-            } else {
-                state.qualifications = state.qualifications.filter(
-                    (item) => item !== payload
-                );
-            }
+                state.qualifications=payload;
         },
         clearQualificationF: (state) => {
             state.qualifications = [];
