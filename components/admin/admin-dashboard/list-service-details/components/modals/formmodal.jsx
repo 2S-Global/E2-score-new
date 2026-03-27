@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
+import dynamic from "next/dynamic";
+import "react-quill-new/dist/quill.snow.css";
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 const CandidateformModal = ({
   show,
@@ -184,7 +187,7 @@ const CandidateformModal = ({
                 </div>
 
                 {/* Email */}
-                <div className="mb-3 col-md-12">
+                {/* <div className="mb-3 col-md-12">
                   <label className="form-label">Service Description</label>
                   <textarea
                     name="description"
@@ -197,10 +200,76 @@ const CandidateformModal = ({
                     onBlur={() =>
                       setTouched((prev) => ({ ...prev, description: true }))
                     }
-                    rows={8} 
+                    rows={8}
                   />
                   {touched.description && formErrors.description && (
                     <div className="invalid-feedback">{formErrors.description}</div>
+                  )}
+                </div> */}
+
+                <div className="mb-3 col-md-12">
+                  <label className="form-label">
+                    Description <span style={{ color: "red" }}>*</span>
+                  </label>
+
+                  <ReactQuill
+                    theme="snow"
+                    value={formData.description}
+                    onChange={(content) => {
+                      setFormData((prev) => ({ ...prev, description: content }));
+
+                      // ✅ validate on change
+                      setFormErrors((prev) => ({
+                        ...prev,
+                        description: validateField("description", content),
+                      }));
+                    }}
+                    onBlur={() =>
+                      setTouched((prev) => ({ ...prev, description: true }))
+                    }
+                    
+                    placeholder="Write detailed description here..."
+                    className={`form-group ${touched.description && formErrors.description ? "is-invalid" : ""
+                      }`}
+                    modules={{
+                      toolbar: [
+                        [{ header: [1, 2, 3, false] }],
+                        ["bold", "italic", "underline", "strike"],
+                        [{ color: [] }, { background: [] }],
+                        [{ script: "sub" }, { script: "super" }],
+                        [{ list: "ordered" }, { list: "bullet" }],
+                        [{ indent: "-1" }, { indent: "+1" }],
+                        [{ align: [] }],
+                        ["blockquote", "code-block"],
+                        ["link", "image", "video"],
+                        ["clean"],
+                      ],
+                    }}
+                    formats={[
+                      "header",
+                      "bold",
+                      "italic",
+                      "underline",
+                      "strike",
+                      "color",
+                      "background",
+                      "script",
+                      "list",
+                      "indent",
+                      "align",
+                      "blockquote",
+                      "code-block",
+                      "link",
+                      "image",
+                      "video",
+                    ]}
+                  />
+
+                  {/* ✅ Correct error display */}
+                  {touched.description && formErrors.description && (
+                    <div className="invalid-feedback d-block">
+                      {formErrors.description}
+                    </div>
                   )}
                 </div>
               </div>

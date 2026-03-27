@@ -158,7 +158,7 @@ const Companytable = ({ setRefresh, refresh }) => {
       name: "S/N",
       selector: (row, index) => index + 1,
       width: "55px",
-      center: true,
+      center: "true",
       sortable: false,
     },
     {
@@ -166,14 +166,14 @@ const Companytable = ({ setRefresh, refresh }) => {
       selector: (row) => row.title,
       sortable: true,
       width: "",
-      center: true,
+      center: "true",
     },
     {
       name: "Description",
       selector: (row) => row.description,
       sortable: true,
       width: "",
-      center: true,
+      center: "true",
       cell: (row) => (
         <div
           title={row.email} // ✅ native tooltip on hover
@@ -201,7 +201,7 @@ const Companytable = ({ setRefresh, refresh }) => {
           timeZone: "Asia/Kolkata",
         }),
       sortable: true,
-      center: true,
+      center: "true",
       width: "150px",
     },
     {
@@ -227,7 +227,7 @@ const Companytable = ({ setRefresh, refresh }) => {
           />
         </div>
       ),
-      center: true,
+      center: "true",
       width: "80px",
     },
   ];
