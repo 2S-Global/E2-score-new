@@ -35,11 +35,19 @@ const CandidateformModal = ({
   // ------------------------------
   const validateField = (name, value) => {
     switch (name) {
+      // case "description":
+      //   return value ? "" : "Description is required.";
+
       case "description":
-        return value ? "" : "Description is required.";
+        const plainText = value
+          ?.replace(/<(.|\n)*?>/g, "") // remove all HTML
+          .replace(/&nbsp;/g, "")      // remove non-breaking space
+          .trim();
+
+        return plainText ? "" : "Description is required.";
 
       case "title":
-        return value ? "" : "Service Na is required.";
+        return value ? "" : "Service Name is required.";
 
       default:
         return "";
@@ -227,7 +235,7 @@ const CandidateformModal = ({
                     onBlur={() =>
                       setTouched((prev) => ({ ...prev, description: true }))
                     }
-                    
+
                     placeholder="Write detailed description here..."
                     className={`form-group ${touched.description && formErrors.description ? "is-invalid" : ""
                       }`}

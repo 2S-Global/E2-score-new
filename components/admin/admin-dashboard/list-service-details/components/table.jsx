@@ -39,12 +39,12 @@ const Companytable = ({ setRefresh, refresh }) => {
     document.body.style.overflow = "hidden"; // Disable background scrolling
   };
 
-    const openModalPlanRH = (companydetails) => {
-      setEditcompany(companydetails);
-      setIsModalplanOpen(true);
-      document.body.style.overflow = "hidden"; // Disable background scrolling
-      console.log("open modal plan");
-    };
+  const openModalPlanRH = (companydetails) => {
+    setEditcompany(companydetails);
+    setIsModalplanOpen(true);
+    document.body.style.overflow = "hidden"; // Disable background scrolling
+    console.log("open modal plan");
+  };
 
   const closeModalVL = () => {
     setIsModalvlOpen(false);
@@ -174,19 +174,38 @@ const Companytable = ({ setRefresh, refresh }) => {
       sortable: true,
       width: "",
       center: "true",
-      cell: (row) => (
-        <div
-          title={row.email} // ✅ native tooltip on hover
-          style={{
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            maxWidth: "140px",
-          }}
-        >
-          {row.description}
-        </div>
-      ),
+      // cell: (row) => (
+      //   <div
+      //     title={row.email} // ✅ native tooltip on hover
+      //     style={{
+      //       whiteSpace: "nowrap",
+      //       overflow: "hidden",
+      //       textOverflow: "ellipsis",
+      //       maxWidth: "140px",
+      //     }}
+      //   >
+      //     {row.description}
+      //   </div>
+      // ),
+      cell: (row) => {
+        const plainText = row.description
+          ?.replace(/<[^>]+>/g, "") // remove HTML tags
+          .trim();
+
+        return (
+          <div
+            title={plainText}
+            style={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              maxWidth: "140px",
+            }}
+          >
+            {plainText}
+          </div>
+        );
+      }
     },
     {
       name: "Created Date",
