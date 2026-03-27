@@ -43,7 +43,7 @@ const JobSingleDynamicV1 = () => {
   }
 
   const [jobPreviewDetails, setJobPreviewDetails] = useState([]);
-
+const [alreadyApplied, setAlreadyApplied] = useState(false);
   //My Custom code
   useEffect(() => {
     const fetchJobPreviewDetails = async () => {
@@ -76,6 +76,35 @@ const JobSingleDynamicV1 = () => {
 
     fetchJobPreviewDetails();
   }, []);
+
+  useEffect(() => {
+    const checkApplicationStatus = async () => {
+      try {
+        const response = await axios.get(
+          `${apiurl}/api/jobposting/check-application-status`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            params: {
+              jobId: id,
+            },
+          },
+        );
+
+      if (response.data.success && response.data.alreadyApplied) {
+        setAlreadyApplied(true);
+      }
+      } catch (error) {
+        console.error("Error checking application status", error);
+      }
+    };
+
+    // run only for candidate
+    if (view === "candidate") {
+      checkApplicationStatus();
+    }
+  }, [id, view]);
 
   return (
     <>
@@ -254,17 +283,24 @@ const JobSingleDynamicV1 = () => {
 
                 {view === "candidate" && (
                   <div className="btn-box">
-                    <a
-                      href="#"
-                      className="theme-btn btn-style-one"
-                      data-bs-toggle="modal"
-                      data-bs-target="#applyJobModal"
-                    >
-                      Apply For Job
-                    </a>
-                    {/* <button className="bookmark-btn">
-                      <i className="flaticon-bookmark"></i>
-                    </button> */}
+                    {alreadyApplied ? (
+                      <button
+                        className=" btn-style-one"
+                        style={{ backgroundColor: "green", color: "#fff" }}
+                        disabled
+                      >
+                        ✓ Already Applied
+                      </button>
+                    ) : (
+                      <a
+                        href="#"
+                        className="theme-btn btn-style-one"
+                        data-bs-toggle="modal"
+                        data-bs-target="#applyJobModal"
+                      >
+                        Apply For Job
+                      </a>
+                    )}
                   </div>
                 )}
 
@@ -374,16 +410,16 @@ const JobSingleDynamicV1 = () => {
                     <div className="widget-content">
                       {/* <JobSkills  /> */}
 
-                <ul className="job-skills">
-                    {Array.isArray(jobPreviewDetails?.jobSkills) &&
-                      jobPreviewDetails.jobSkills.map((skill, index) => (
-                        <li key={index} >
-                          <a href="#">{skill}</a>
-                        </li>
-                      ))}
-                  </ul>
+                      <ul className="job-skills">
+                        {Array.isArray(jobPreviewDetails?.jobSkills) &&
+                          jobPreviewDetails.jobSkills.map((skill, index) => (
+                            <li key={index}>
+                              <a href="#">{skill}</a>
+                            </li>
+                          ))}
+                      </ul>
 
-{/*                     <ul className="job-skills">
+                      {/*                     <ul className="job-skills">
                     {jobPreviewDetails?.jobSkills.map((skill, i) => (
                     <li key={i}>
                     <a href="#">{skill}</a>

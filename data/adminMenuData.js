@@ -43,6 +43,46 @@ module.exports = [
     routePath: "/admin/aboutpage",
     active: "",
   },
+  {
+    id: 7,
+    name: "Manage Banner",
+    icon: "la-images",
+    routePath: "/admin/manage-banner",
+    active: "",
+  },
+  {
+    id: 8,
+    name: "Testimonials",
+    icon: "la-info-circle",
+    routePath: "/admin/testimonial",
+    active: "",
+  }
+  // {
+  //   id: 8,
+  //   name: "Manage Services",
+  //   icon: "la-cogs",
+  //   routePath: "/admin/manage-services",
+  //   active: "",
+  // },
+  // 🔥 Parent Menu
+  // {
+  //   id: 8,
+  //   name: "Manage Home Page",
+  //   icon: "la-home",
+  //   active: "",
+  //   subMenu: [
+  //     {
+  //       id: 61,
+  //       name: "Manage Banner",
+  //       routePath: "/admin/manage-banner",
+  //     },
+  //     {
+  //       id: 62,
+  //       name: "Manage Services",
+  //       routePath: "/admin/manage-services",
+  //     },
+  //   ],
+  // },
   /*  {
     id: 5,
     name: "List Packages",

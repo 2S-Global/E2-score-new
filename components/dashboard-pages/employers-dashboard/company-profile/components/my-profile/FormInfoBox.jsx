@@ -428,13 +428,15 @@ const [isSubmitted, setIsSubmitted] = useState(false);
             </div>
           </div>
         )}
-        <button
-          type="button"
-          className="btn btn-warning mb-2"
-          onClick={() => setDisableform(false)}
-        >
-          Enter Manually
-        </button>
+        {!isSubmitted && (
+          <button
+            type="button"
+            className="btn btn-warning mb-2"
+            onClick={() => setDisableform(false)}
+          >
+            Enter Manually
+          </button>
+        )}
         {/*   {!disableform && ( */}
         {/* main form */}
         <>
@@ -537,7 +539,7 @@ const [isSubmitted, setIsSubmitted] = useState(false);
                 onChange={(date) =>
                   setFormdata({ ...formdata, established: date })
                 }
-              disabled={isSubmitted}
+                disabled={isSubmitted}
                 dateFormat="dd/MM/yyyy"
                 className="form-control"
                 required

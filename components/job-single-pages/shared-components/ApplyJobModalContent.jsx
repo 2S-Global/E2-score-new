@@ -20,18 +20,16 @@ const ApplyJobModalContent = ({ jobId, view = "candidate" }) => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        const closeBtn = document.getElementById("applyJobModalCloseBtn");
+        closeBtn?.click();
+      }, 2000); // ⏱ 2 seconds
 
-useEffect(() => {
-  if (success) {
-    const timer = setTimeout(() => {
-      const closeBtn = document.getElementById("applyJobModalCloseBtn");
-      closeBtn?.click();
-    }, 2000); // ⏱ 2 seconds
-
-    return () => clearTimeout(timer);
-  }
-}, [success]);
-
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
 
   /* =======================
      Handle Input Change
@@ -158,6 +156,8 @@ useEffect(() => {
               placeholder="Experience (Years)"
               value={formData.experienceLevel}
               onChange={handleChange}
+              min="0"
+              max="40"
             />
             {errors.experienceLevel && (
               <small className="text-danger">{errors.experienceLevel}</small>
