@@ -56,14 +56,14 @@ module.exports = [
     icon: "la-info-circle",
     routePath: "/admin/testimonial",
     active: "",
-  }
-  // {
-  //   id: 8,
-  //   name: "Manage Services",
-  //   icon: "la-cogs",
-  //   routePath: "/admin/manage-services",
-  //   active: "",
-  // },
+  },
+  {
+    id: 8,
+    name: "Manage Services",
+    icon: "la-cogs",
+    routePath: "/admin/manage-services",
+    active: "",
+  },
   // 🔥 Parent Menu
   // {
   //   id: 8,
