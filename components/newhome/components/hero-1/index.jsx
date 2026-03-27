@@ -1,6 +1,28 @@
+"use client";
 import ImageBox from "./ImageBox";
-
+import {useEffect,useState} from "react"
+import axios from "axios";
 const index = () => {
+   const [loading, setLoading] = useState(false);
+  const [homeBanner, sethomeBanner] = useState(null);
+   const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  useEffect(()=>{
+  (async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${apiurl}/api/home/get-banner-details`
+      );
+      if (response.data.success) {
+        sethomeBanner(response.data.data[0]);
+        
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    setLoading(false);
+  })()
+  },[])
   return (
     <section className="banner-section">
       <div className="auto-container">
@@ -13,20 +35,18 @@ const index = () => {
             >
               <div className="title-box">
                 <h3>
-                  There Are <span className="colored">93,178</span> Postings
-                  Here
-                  <br /> For you!
+                 {loading ?'loading...........' :homeBanner?.title}
                 </h3>
-                <div className="text">
+              {/*   <div className="text">
                   Find Jobs, Employment & Career Opportunities
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
           {/* End .col */}
 
           <div className="image-column col-lg-5 col-md-12">
-            <ImageBox />
+            <ImageBox data={homeBanner}/>
           </div>
         </div>
       </div>

@@ -7,7 +7,87 @@ const Services = () => {
       <div className="content-column col-md-12 ">
         <div className="inner-column " data-aos="fade-left">
           <div className="row g-4 mt-4">
-            <div className="col-md-6">
+             {/* <div className="row g-1 mt-1"> */}
+            {/* CARD TEMPLATE */}
+            <div className="col-lg-6 col-md-6">
+              <div className="card h-100 p-3 shadow-sm border-0 rounded-4 feature-card ">
+                <div className="d-flex align-items-center gap-1 mb-1">
+                  <span className="fs-4">🌎</span>
+                  <h5 className="m-0 fw-semibold">Global Staffing</h5>
+                </div>
+
+                <p className="text-muted mt-1">
+                  Strategic international talent acquisition and cross-border
+                  recruitment management.
+                </p>
+
+                <p className="fw-semibold mt-1">
+                  Helps secure specialized skills and build a diverse global
+                  workforce.
+                </p>
+              </div>
+            </div>
+
+            {/* CARD 2 */}
+            <div className="col-lg-6 col-md-6">
+              <div className="card h-100 p-3 shadow-sm border-0 rounded-4 feature-card ">
+                <div className="d-flex align-items-center gap-1 mb-1">
+                  <span className="fs-4">📊</span>
+                  <h5 className="m-0 fw-semibold">Employability</h5>
+                </div>
+
+                <p className="text-muted mt-1">
+                  A proprietary AI-driven scoring system to quantify candidate
+                  job readiness.
+                </p>
+
+                <p className="fw-semibold mt-1">
+                  Reduces time-to-hire and ensures unbiased, merit-based talent
+                  selection.
+                </p>
+              </div>
+            </div>
+
+            {/* CARD 3 */}
+            <div className="col-lg-6 col-md-6">
+              <div className="card h-100 p-3 shadow-sm border-0 rounded-4 feature-card ">
+                <div className="d-flex align-items-center gap-1 mb-1">
+                  <span className="fs-4">🛡️</span>
+                  <h5 className="m-0 fw-semibold">Background Check</h5>
+                </div>
+
+                <p className="text-muted mt-1">
+                  Legally compliant verification of employment, education, and
+                  criminal history.
+                </p>
+
+                <p className="fw-semibold mt-1">
+                  Protects your organization and strengthens hiring confidence.
+                </p>
+              </div>
+            </div>
+
+            {/* CARD 4 */}
+            <div className="col-lg-6 col-md-6">
+              <div className="card h-100 p-3 shadow-sm border-0 rounded-4 feature-card">
+                <div className="d-flex align-items-center gap-1 mb-1">
+                  <span className="fs-4">🆔</span>
+                  <h5 className="m-0 fw-semibold">KYC Verification</h5>
+                </div>
+
+                <p className="text-muted mt-1">
+                  Digital identity authentication and screening against global
+                  watchlists.
+                </p>
+
+                <p className="fw-semibold mt-1">
+                  Ensures AML/CTF compliance and prevents financial fraud.
+                </p>
+              </div>
+            </div>
+
+          </div>
+            {/* <div className="col-md-6">
               <div className="card h-100 p-3 shadow-sm border-0 rounded-4 feature-card ">
                 <div className="mb-2">
                   <h3 className="mb-4 text-center">
@@ -410,9 +490,9 @@ const Services = () => {
                   </ul>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
-        </div>
+       {/*  </div> */}
       </div>
     </>
   );

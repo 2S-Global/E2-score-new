@@ -48,7 +48,7 @@ const index = () => {
             </div>
           </div>
           <section className="sec-title " id="clients">
-            <h2 className="mb-4 text-center">Our Clients</h2>
+            <h2 className="mb-2 text-center">Our Clients</h2>
             <div className="sponsors-outer" data-aos="fade">
               {/* <!--Sponsors Carousel--> */}
               <ul className="sponsors-carousel">
@@ -61,9 +61,9 @@ const index = () => {
               {/* <!-- Sec Title --> */}
               <div className="sec-title text-center">
                 <h2>Testimonials From Our Customers</h2>
-                <div className="text">
+               {/*  <div className="text">
                   Lorem ipsum dolor sit amet elit, sed do eiusmod tempor
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="carousel-outer" data-aos="fade-up">
@@ -73,11 +73,11 @@ const index = () => {
               </div>
             </div>
           </section>
-          <section className="app-section" id="app-section">
+        {/*   <section className="app-section" id="app-section">
             <div className="auto-container">
               <AppSection />
             </div>
-          </section>
+          </section> */}
 
           <section className="app-section" id="contact">
             <h2 className="mb-4 text-center">Contact</h2>

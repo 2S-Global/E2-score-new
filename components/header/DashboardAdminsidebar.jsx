@@ -10,10 +10,8 @@ import { usePathname } from "next/navigation";
 import styles  from "./DashboardAdminSidebar.module.css"
 const DashboardEmployerSidebar = () => {
   const { menu } = useSelector((state) => state.toggle || {}); // Safe destructuring
-
   const dispatch = useDispatch();
   const pathname = usePathname();
-
   // menu toggle handler
   const menuToggleHandler = () => {
     dispatch(menuToggle());

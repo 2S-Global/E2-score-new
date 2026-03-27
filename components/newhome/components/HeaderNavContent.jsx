@@ -63,9 +63,9 @@ const HeaderNavContent = () => {
           >
             <Link href="#testimonials">Testimonials</Link>
           </li>
-          <li className="dropdown">
+        {/*   <li className="dropdown">
             <Link href="#app-section">App</Link>
-          </li>
+          </li> */}
           <li
             className={`${
               isActiveParent(homeItems, usePathname()) ? "current" : ""

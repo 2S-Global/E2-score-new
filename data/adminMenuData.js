@@ -36,6 +36,13 @@ module.exports = [
     routePath: "/admin/listpackage",
     active: "",
   },
+  {
+    id: 6,
+    name: "About Page",
+    icon: "la-id-badge",
+    routePath: "/admin/aboutpage",
+    active: "",
+  },
   /*  {
     id: 5,
     name: "List Packages",
