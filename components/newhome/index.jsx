@@ -28,18 +28,7 @@ const index = () => {
 
       <section className="job-categories ui-job-categories">
         <div className="auto-container">
-          <div className="sec-title " id="about">
-            <h2 className="mb-4 text-center">
-              {" "}
-              💡 About Global Employability Information Services India
-              Limited{" "}
-            </h2>
-
-            <div className="row">
-              <About />
-            </div>
-          </div>
-
+            <About />
           <div className="sec-title " id="service">
             <h2 className="mb-4 text-center">Our Services</h2>
 

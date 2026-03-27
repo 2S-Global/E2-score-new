@@ -80,6 +80,20 @@ const FormInfoBox = ({ setActiveTab }) => {
     }
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Preview (for UI)
+    const previewUrl = URL.createObjectURL(file);
+
+    setFormdata((prev) => ({
+      ...prev,
+      logo: file,              // actual file (for API)
+      logo_preview: previewUrl // preview (for UI)
+    }));
+  };
+
   // =============================================================
   // HANDLE SUBMIT
   // =============================================================
@@ -138,7 +152,47 @@ const FormInfoBox = ({ setActiveTab }) => {
             <textarea rows="2" value={formdata.banner_title} onChange={(e) => setFormdata({ ...formdata, banner_title: e.target.value })} required />
           </div>
 
-          <LogoCoverUploader formdata={formdata} setFormdata={setFormdata} />
+          {/* <LogoCoverUploader formdata={formdata} setFormdata={setFormdata} /> */}
+
+          <div className="form-group col-lg-12">
+            <label>Banner Image</label>
+
+            <div className="d-flex align-items-center gap-3">
+
+              {/* Upload Button */}
+              <div>
+                <label htmlFor="file-upload" className="btn btn-primary">
+                  Select Image
+                </label>
+                <input
+                  id="file-upload"
+                  type="file"
+                  accept="image/png, image/jpeg, image/gif"
+                  style={{ display: "none" }}
+                  onChange={handleFileChange}
+                />
+              </div>
+
+              {/* Image Preview */}
+              <div
+                className="overflow-hidden border rounded"
+                style={{ width: "120px", height: "120px" }}
+              >
+                {formdata.logo_preview ? (
+                  <img
+                    src={formdata.logo_preview}
+                    alt="Banner Preview"
+                    className="w-100 h-100 object-fit-cover"
+                  />
+                ) : (
+                  <div className="d-flex justify-content-center align-items-center h-100 text-muted">
+                    No Image
+                  </div>
+                )}
+              </div>
+
+            </div>
+          </div>
 
           <button className="theme-btn btn-style-one" disabled={loading || submitting}>
             {submitting ? "Saving..." : "Save"}

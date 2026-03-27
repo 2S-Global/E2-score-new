@@ -45,7 +45,7 @@ const index = () => {
           </div>
           {/* End .col */}
 
-          <div className="image-column col-lg-5 col-md-12">
+          <div className="image-column col-lg-5 ">
             <ImageBox data={homeBanner}/>
           </div>
         </div>
