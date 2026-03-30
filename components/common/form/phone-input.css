@@ -23,3 +23,7 @@
   background: transparent;
   left: 10px; /* 👈 keep some spacing from the edge */
 }
+
+.generate-pass:hover{
+  color:blue
+}

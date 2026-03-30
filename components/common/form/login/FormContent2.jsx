@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
+import {EyeIcon,EyeOff} from "lucide-react"
 //new component
 import MessageComponent from "../../ResponseMsg";
 
@@ -20,6 +21,8 @@ const FormContent2 = () => {
   const [errorId, setErrorId] = useState(null);
   const [success, setSuccess] = useState(null);
   const [message_id, setMessageId] = useState(null);
+  //password 
+  const [showPassword, setShowPassword] = useState(false);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [token, setToken] = useState(null);
 
@@ -160,18 +163,35 @@ const FormContent2 = () => {
         </div>
         {/* name */}
 
-        <div className="form-group mb-1">
-          <label>Password</label>
-          <input
-            id="password-field"
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </div>
+       
+       <div className="mb-3">
+            <label  className="form-label" style={{fontWeight:'500'}}>Password</label>
+            <div className="input-group input-group-lg">
+                <input
+                className="form-control"
+                  id="password-field"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+                <span className="input-group-text"  
+                 onMouseDown={() => setShowPassword(true)}   
+                onMouseUp={() => setShowPassword(false)}
+                onMouseLeave={() => setShowPassword(false)}
+                onTouchStart={() => setShowPassword(true)}
+                onTouchEnd={() => setShowPassword(false)}
+                  style={{ cursor: "pointer" }}>
+                     {showPassword?<EyeIcon size={20}/>
+                    :<EyeOff size={20}/>}
+                </span>
+            </div>
+      </div>
+
+
+
+
         {/* password */}
 
         <div className="form-group  mb-1">

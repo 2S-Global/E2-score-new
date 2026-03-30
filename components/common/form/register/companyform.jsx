@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import {EyeIcon,EyeOff,Search} from "lucide-react"
 //new component
 import MessageComponent from "../../ResponseMsg";
-import { Search } from "lucide-react";
+//import { Search } from "lucide-react";
 import AutoDetectPhoneInput from "../phonenumber";
+import {generateStrongPassword} from "../../../../utils/generatePassword"
 const FormContentcom = () => {
   const [formData, setFormData] = useState({
     company_type: "",
@@ -19,16 +21,65 @@ const FormContentcom = () => {
   const [success, setSuccess] = useState(null);
   const [message_id, setMessageId] = useState(null);
   const [company_type_list, setCompanyTypeList] = useState([]);
+  //password 
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState("");
+    //validation error
+    const [err, setErr] = useState(null);
+
   const router = useRouter();
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
   // Handle input changes
   const handleChange = (e) => {
+     setErr({ ...err, [e.target.name]:'' });
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+    // validation 
+  const validate = () => {
+        let newErrors = {};
+        if (!formData.password?.trim()) {
+          newErrors.password = "Password is required";
+        } 
+        if (formData.password?.trim()) {
+          const isValid =/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{}|;:,.<>?])[^\s]{8,}$/.test(formData.password?.trim());
+          if(!isValid){
+              newErrors.password = "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, one special character, and no spaces (e.g., Abc@1234).";
+          }
+            
+        } 
+  
+      if ( !confirmPassword.trim()) {
+        newErrors.confirmPassword= "Confirm password is required.";
+      }
+  
+      if ( formData.password?.trim() && confirmPassword && formData.password?.trim() !== confirmPassword) {
+        newErrors.confirmPassword= "Passwords and confirm password do not match.";
+      }
+  
+        return newErrors;
+  };
+  
+    //generate Password
+    const generatePassword=()=>{
+      const pass=generateStrongPassword()
+      setFormData({ ...formData, 'password': pass });
+      setShowPassword(true)
+      let timer;
+      (function(){
+          clearTimeout(timer)
+          timer=setTimeout(()=>setShowPassword(false),4000)
+      })()
+      
+    }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const validationErrors = validate();
+        setErr(validationErrors);
+    if (Object.keys(validationErrors).length === 0) {
     setLoading(true);
     setError(null);
     setSuccess(null);
@@ -68,6 +119,7 @@ const FormContentcom = () => {
     } finally {
       setLoading(false);
     }
+  }
   };
 
   const handelcinsubmit = async () => {
@@ -257,20 +309,88 @@ const FormContentcom = () => {
       />
       {/* Phone */}
 
-      <div className="form-group ">
-        <label>Password</label>
-        <span className="text-danger ms-2">*</span>
-        <input
-          id="password-field"
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-          value={formData.password}
-          onChange={handleChange}
-        />
+     
+     
+
+
+       <div className="mb-3">
+            <label  className="form-label pull-left" style={{fontWeight:'500'}}>Password</label>
+            <label  className="form-label pull-right generate-pass" style={{cursor:"pointer",fontWeight:'500'}} onClick={()=>generatePassword()}>Password generate</label>
+            <div className="input-group input-group-lg">
+                <input
+                className="form-control"
+                  id="password-field"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+                <span className="input-group-text"  
+                 onMouseDown={() => setShowPassword(true)}   
+                onMouseUp={() => setShowPassword(false)}
+                onMouseLeave={() => setShowPassword(false)}
+                onTouchStart={() => setShowPassword(true)}
+                onTouchEnd={() => setShowPassword(false)}
+                  style={{ cursor: "pointer" }}>
+                     {showPassword?<EyeIcon size={20}/>
+                    :<EyeOff size={20}/>}
+                </span>
+            </div>
       </div>
-      {/* password */}
+       {err?.password && (
+          <div
+            style={{
+              color: "red",
+              fontSize: "14px",
+              fontWeight: "500",
+              lineHeight: '17px'
+            }}
+          >
+            {err.password}
+          </div>
+        )}
+ {/* password */}
+        
+       <div className="mb-3">
+            <label  className="form-label" style={{fontWeight:'500'}}>Confirm Password</label>
+            <div className="input-group input-group-lg">
+                <input
+                  className="form-control"
+                  id="Confirm-password-field"
+                  type={showConfirm ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => {setConfirmPassword(e.target.value), setErr({ ...err, confirmPassword:'' });}}
+                />
+                <span className="input-group-text"
+                onMouseDown={() => setShowConfirm(true)}   
+                onMouseUp={() => setShowConfirm(false)}
+                onTouchStart={() => setShowConfirm(true)}
+                onTouchEnd={() => setShowConfirm(false)}
+                  style={{ cursor: "pointer" }}>
+                   
+                    {showConfirm?<EyeIcon size={20}/>
+                    :<EyeOff size={20}/>}
+                </span>
+            </div>
+      </div>
+       {err?.confirmPassword && (
+          <div
+            style={{
+              color: "red",
+              fontSize: "14px",
+              fontWeight: "500",
+              lineHeight: '17px',
+              marginBottom:"7px"
+            }}
+          >
+            {err.confirmPassword}
+          </div>
+        )}
+
+
+
+
 
       <div className="form-group">
         <button
