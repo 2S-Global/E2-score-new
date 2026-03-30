@@ -13,7 +13,6 @@ module.exports = [
     routePath: "/admin/listcompany",
     active: "",
   },
-
   {
     id: 3,
     name: "List Institute",
@@ -21,96 +20,50 @@ module.exports = [
     routePath: "/admin/listinstitute",
     active: "",
   },
-
   {
     id: 4,
-    name: "List  Candidate",
+    name: "List Candidate",
     icon: "la-id-badge",
     routePath: "/admin/listcandidate",
     active: "",
   },
   {
     id: 5,
-    name: "List  Package",
+    name: "List Package",
     icon: "la-id-badge",
     routePath: "/admin/listpackage",
     active: "",
   },
+
+  // ✅ COLLAPSE MENU START
   {
     id: 6,
-    name: "About Page",
-    icon: "la-id-badge",
-    routePath: "/admin/aboutpage",
-    active: "",
-  },
-  {
-    id: 7,
-    name: "Manage Banner",
-    icon: "la-images",
-    routePath: "/admin/manage-banner",
-    active: "",
-  },
-  {
-    id: 8,
-    name: "Testimonials",
-    icon: "la-info-circle",
-    routePath: "/admin/testimonial",
-    active: "",
-  },
-  {
-    id: 8,
-    name: "Manage Services",
+    name: "Manage CMS",
     icon: "la-cogs",
-    routePath: "/admin/manage-services",
     active: "",
+    subMenu: [
+      {
+        id: 62,
+        name: "Manage Banner",
+        routePath: "/admin/manage-banner",
+      },
+      {
+        id: 61,
+        name: "About Page",
+        routePath: "/admin/aboutpage",
+      },
+
+      {
+        id: 63,
+        name: "Testimonials",
+        routePath: "/admin/testimonial",
+      },
+      {
+        id: 64,
+        name: "Manage Services",
+        routePath: "/admin/manage-services",
+      },
+    ],
   },
-  // 🔥 Parent Menu
-  // {
-  //   id: 8,
-  //   name: "Manage Home Page",
-  //   icon: "la-home",
-  //   active: "",
-  //   subMenu: [
-  //     {
-  //       id: 61,
-  //       name: "Manage Banner",
-  //       routePath: "/admin/manage-banner",
-  //     },
-  //     {
-  //       id: 62,
-  //       name: "Manage Services",
-  //       routePath: "/admin/manage-services",
-  //     },
-  //   ],
-  // },
-  /*  {
-    id: 5,
-    name: "List Packages",
-    icon: "la-boxes",
-    routePath: "/admin/listpackage",
-    active: "",
-  }, */
-
-  // {
-  //   id: 6,
-  //   name: "Search Transaction",
-  //   icon: "la-wallet",
-  //   routePath: "/admin/payments",
-  //   active: "",
-  // },
-  // {
-  //   id: 7,
-  //   name: "Report",
-  //   icon: "la-file-alt",
-  //   routePath: "/admin/report",
-  //   active: "",
-  // },
-
-  /*  {
-    id: 15,
-    name: "Logout",
-    icon: "la-sign-out",
-    routePath: "/",
-    active: "",
-  }, */
+  // ✅ COLLAPSE MENU END
 ];
