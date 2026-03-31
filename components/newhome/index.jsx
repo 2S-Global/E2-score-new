@@ -37,7 +37,7 @@ const index = () => {
             </div>
           </div>
           <section className="sec-title " id="clients">
-            <h2 className="mb-2 text-center">Our Clients</h2>
+            <h2 className="mb-5 text-center">Our Clients</h2>
             <div className="sponsors-outer" data-aos="fade">
               {/* <!--Sponsors Carousel--> */}
               <ul className="sponsors-carousel">
