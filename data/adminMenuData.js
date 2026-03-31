@@ -63,6 +63,11 @@ module.exports = [
         name: "Manage Services",
         routePath: "/admin/manage-services",
       },
+      {
+        id: 65,
+        name: "Manage Client",
+        routePath: "/admin/manage-client",
+      },
     ],
   },
   // ✅ COLLAPSE MENU END
