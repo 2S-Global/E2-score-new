@@ -62,22 +62,22 @@ export default function Layout({ children }) {
                 </strong>
               </p>
             </div>
-            <div className="d-flex justify-content-center gap-3">
+            {/* <div className="d-flex justify-content-center gap-3">
               <button
-                /*     onClick={() => handleExternalLink("#")} */
+              
                 className="btn btn-outline-primary rounded-circle"
                 aria-label="Facebook"
               >
                 <FaFacebookF />
               </button>
               <button
-                /*  onClick={() => handleExternalLink("#")} */
+              
                 className="btn btn-outline-primary rounded-circle"
                 aria-label="LinkedIn"
               >
                 <FaLinkedinIn />
               </button>
-            </div>
+            </div> */}
           </div>
         </footer>
       </div>

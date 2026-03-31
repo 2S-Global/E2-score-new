@@ -177,7 +177,29 @@ const handelValidation=()=>{
       {/* Phone */}
 
        <div className="mb-3">
-            <label  className="form-label pull-left" style={{fontWeight:'500'}}>Password  <Tooltip title={infromation} placement="right-start" arrow><Info size={15}/> </Tooltip></label>
+            <label  className="form-label pull-left" style={{fontWeight:'500'}}>Password  <Tooltip
+                                      describeChild
+                                      title={
+                                        <div style={{lineHeight: "1.5",  fontSize:"12px"}}>
+                                          <div>1) Password must be at least 8 characters long.</div>
+                                          <div>2) Must contain at least one uppercase letter.</div>
+                                          <div>3) Must contain at least one lowercase letter.</div>
+                                          <div>4) Must contain at least one number.</div>
+                                          <div>5) Must contain at least one special character.</div>
+                                          <div>6) Spaces are not allowed.</div>
+                                        </div>
+                                          }
+                                        placement="right-start" arrow
+                                        lotprops={{
+                                                          tooltip: {
+                                                            sx: {
+                                                              lineHeight: "1",   // adjust line height
+                                                              fontSize:"14px"
+                                                            },
+                                                          },
+                                                        }}
+                      
+                              ><Info size={15}/> </Tooltip></label>
              
           
             <label  className="form-label pull-right generate-pass" style={{cursor:"pointer",fontWeight:'500'}} onClick={()=>generatePassword()}>Password generate</label>

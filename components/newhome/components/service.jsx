@@ -1,7 +1,34 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-
+import {useEffect,useState} from "react"
+import axios from "axios"
 const Services = () => {
+  const [loading, setLoading] = useState(false);
+    const [services, setServices] = useState([]);
+    const apiurl = process.env.NEXT_PUBLIC_API_URL;
+    useEffect(()=>{
+    (async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `${apiurl}/api/home/get-service-details`
+        );
+        if (response?.data?.data?.length>0) {
+          let Data=response?.data?.data?.map((item)=>({...item,readMore:false}))
+          setServices(Data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      setLoading(false);
+    })()
+    },[])
+
+    function ReadMore(row) {  
+  setServices((pre)=>pre.map((item)=>item?._id===row?._id?({...item,readMore:!item.readMore}):item))
+  
+}
   return (
     <>
       <div className="content-column col-md-12 ">
@@ -9,82 +36,25 @@ const Services = () => {
           <div className="row g-4 mt-4">
              {/* <div className="row g-1 mt-1"> */}
             {/* CARD TEMPLATE */}
-            <div className="col-lg-6 col-md-6">
-              <div className="card h-100 p-3 shadow-sm border-0 rounded-4 feature-card ">
-                <div className="d-flex align-items-center gap-1 mb-1">
-                  <span className="fs-4">🌎</span>
-                  <h5 className="m-0 fw-semibold">Global Staffing</h5>
-                </div>
 
-                <p className="text-muted mt-1">
-                  Strategic international talent acquisition and cross-border
-                  recruitment management.
-                </p>
-
-                <p className="fw-semibold mt-1">
-                  Helps secure specialized skills and build a diverse global
-                  workforce.
-                </p>
-              </div>
-            </div>
-
-            {/* CARD 2 */}
-            <div className="col-lg-6 col-md-6">
-              <div className="card h-100 p-3 shadow-sm border-0 rounded-4 feature-card ">
-                <div className="d-flex align-items-center gap-1 mb-1">
-                  <span className="fs-4">📊</span>
-                  <h5 className="m-0 fw-semibold">Employability</h5>
-                </div>
-
-                <p className="text-muted mt-1">
-                  A proprietary AI-driven scoring system to quantify candidate
-                  job readiness.
-                </p>
-
-                <p className="fw-semibold mt-1">
-                  Reduces time-to-hire and ensures unbiased, merit-based talent
-                  selection.
-                </p>
-              </div>
-            </div>
-
-            {/* CARD 3 */}
-            <div className="col-lg-6 col-md-6">
-              <div className="card h-100 p-3 shadow-sm border-0 rounded-4 feature-card ">
-                <div className="d-flex align-items-center gap-1 mb-1">
-                  <span className="fs-4">🛡️</span>
-                  <h5 className="m-0 fw-semibold">Background Check</h5>
-                </div>
-
-                <p className="text-muted mt-1">
-                  Legally compliant verification of employment, education, and
-                  criminal history.
-                </p>
-
-                <p className="fw-semibold mt-1">
-                  Protects your organization and strengthens hiring confidence.
-                </p>
-              </div>
-            </div>
-
-            {/* CARD 4 */}
-            <div className="col-lg-6 col-md-6">
-              <div className="card h-100 p-3 shadow-sm border-0 rounded-4 feature-card">
-                <div className="d-flex align-items-center gap-1 mb-1">
-                  <span className="fs-4">🆔</span>
-                  <h5 className="m-0 fw-semibold">KYC Verification</h5>
-                </div>
-
-                <p className="text-muted mt-1">
-                  Digital identity authentication and screening against global
-                  watchlists.
-                </p>
-
-                <p className="fw-semibold mt-1">
-                  Ensures AML/CTF compliance and prevents financial fraud.
-                </p>
-              </div>
-            </div>
+            {loading?' loading............ ':<>
+                  {services?.map((item) => (
+                  <div className="col-lg-6 col-md-6" key={item?._id}>
+                    <div className="card h-100 p-3 shadow-sm border-0 rounded-4 feature-card ">
+                      <div className="d-flex align-items-center gap-1 mb-1">
+                        <h5 className="m-0 fw-semibold">{item?.title}</h5>
+                      </div>
+                      <p className="text-muted mt-1" dangerouslySetInnerHTML={{__html:item?.readMore ? item?.description+"  " :item?.description?.slice(0, 90)}}>
+                       
+                      </p>
+                      <span onClick={() =>ReadMore(item)} >
+                        {item?.description?.length>90?item?.readMore ? "Read Less" : "Read More":""}
+                      </span>
+                    </div>
+                  </div>
+                  ))}
+            </>}
+         
 
           </div>
             {/* <div className="col-md-6">

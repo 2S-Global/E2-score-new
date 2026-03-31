@@ -30,10 +30,10 @@ function ReadMore(row) {
   const shortText = row?.description?.slice(0, 50); // show first 100 characters
   return (
     <>
-      {row?.readMore ? row?.description+"  " : shortText + "..."}
-      <button onClick={() => setTestimonials((pre)=>pre.map((item)=>item?._id===row?._id?({...item,readMore:!item.readMore}):item))}>
-        {row?.readMore ? "Read Less" : "Read More"}
-      </button>
+      {row?.readMore ? row?.description+"  " : shortText}
+      {row?.description?.length>50?<button onClick={() => setTestimonials((pre)=>pre.map((item)=>item?._id===row?._id?({...item,readMore:!item.readMore}):item))}>
+        {row?.readMore ? "Read Less" : "...Read More"}
+      </button>:""}
     </>
   );
 }
