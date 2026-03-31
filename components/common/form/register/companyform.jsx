@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import {EyeIcon,EyeOff,Search} from "lucide-react"
+import {EyeIcon,EyeOff,Info} from "lucide-react"
 //new component
 import MessageComponent from "../../ResponseMsg";
 //import { Search } from "lucide-react";
 import AutoDetectPhoneInput from "../phonenumber";
 import {generateStrongPassword} from "../../../../utils/generatePassword"
+import Tooltip from '@mui/material/Tooltip';
 const FormContentcom = () => {
   const [formData, setFormData] = useState({
     company_type: "",
@@ -30,7 +31,9 @@ const FormContentcom = () => {
 
   const router = useRouter();
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
-
+ const infromation=`Password must be at least 8 characters long and include at least one uppercase letter, 
+                    one lowercase letter, one number, one special character, 
+                    and no spaces (e.g., Abc@1234).`
   // Handle input changes
   const handleChange = (e) => {
      setErr({ ...err, [e.target.name]:'' });
@@ -61,6 +64,11 @@ const FormContentcom = () => {
   
         return newErrors;
   };
+
+  const handelValidation=()=>{
+   const validationErrors = validate();
+        setErr(validationErrors);
+}
   
     //generate Password
     const generatePassword=()=>{
@@ -314,7 +322,7 @@ const FormContentcom = () => {
 
 
        <div className="mb-3">
-            <label  className="form-label pull-left" style={{fontWeight:'500'}}>Password</label>
+            <label  className="form-label pull-left" style={{fontWeight:'500'}}>Password  <Tooltip title={infromation} placement="right-start" arrow><Info size={15}/> </Tooltip></label>
             <label  className="form-label pull-right generate-pass" style={{cursor:"pointer",fontWeight:'500'}} onClick={()=>generatePassword()}>Password generate</label>
             <div className="input-group input-group-lg">
                 <input
@@ -325,6 +333,7 @@ const FormContentcom = () => {
                   placeholder="Password"
                   value={formData.password}
                   onChange={handleChange}
+                  autoComplete="new-password"
                 />
                 <span className="input-group-text"  
                  onMouseDown={() => setShowPassword(true)}   
@@ -360,7 +369,10 @@ const FormContentcom = () => {
                   id="Confirm-password-field"
                   type={showConfirm ? "text" : "password"}
                   value={confirmPassword}
+                  autoComplete="new-password"
                   onChange={(e) => {setConfirmPassword(e.target.value), setErr({ ...err, confirmPassword:'' });}}
+                  onFocus={()=>handelValidation()}
+                   onKeyUp={()=>handelValidation()}
                 />
                 <span className="input-group-text"
                 onMouseDown={() => setShowConfirm(true)}   
