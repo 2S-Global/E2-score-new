@@ -66,12 +66,12 @@ const Address = () => {
               <Image
                 width={51}
                 height={51}
-                src={`/images/icons/${item.iconName}.svg`}
+                src={`/images/icons/${item?.iconName}.svg`}
                 alt="icon"
               />
             </span>
-            <h4>{item.title}</h4>
-            <p>{item.text}</p>
+            <h4>{item?.title}</h4>
+            <p>{item?.text}</p>
           </div>
         </div>
       ))}
