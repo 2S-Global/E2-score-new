@@ -1,40 +1,62 @@
+"use client";
 import Image from "next/image";
-
+import {useEffect,useState} from "react"
+import axios from "axios";
 const Address = () => {
-  const addressContent = [
-    {
-      id: 1,
-      iconName: "placeholder",
-      title: "Address",
-      text: <> Kolkata | INDIA</>,
-    },
-    {
-      id: 2,
-      iconName: "smartphone",
-      title: "Call Us",
-      text: (
-        <>
-          <a href="tel:+9831823898" className="phone">
-            9831823898
-          </a>
-        </>
-      ),
-    },
-    {
-      id: 3,
-      iconName: "letter",
-      title: "Email",
-      text: (
-        <>
-          {" "}
-          <a href="mailto:info@geisil.com">info@geisil.com</a>
-        </>
-      ),
-    },
-  ];
+   const [contact, setContact] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  useEffect(()=>{
+  (async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${apiurl}/api/contact/all`
+      );
+      if (response?.data?.data?.length>0) {
+        let tel="tel:"+response?.data?.data[0]?.phone
+        let mailto="mailto:"+response?.data?.data[0]?.email
+        const addressContent = [
+                          {
+                            id: 1,
+                            iconName: "placeholder",
+                            title: "Address",
+                            text: <> {response?.data?.data[0]?.address}</>,
+                          },
+                          {
+                            id: 2,
+                            iconName: "smartphone",
+                            title: "Call Us",
+                            text: (
+                              <>
+                                <a href={tel} className="phone">
+                                  {response?.data?.data[0]?.phone}
+                                </a>
+                              </>
+                            ),
+                          },
+                          {
+                            id: 3,
+                            iconName: "letter",
+                            title: "Email",
+                            text: (
+                              <>
+                                <a href={mailto}>{response?.data?.data[0]?.email}</a>
+                              </>
+                            ),
+                          },
+                ];
+        setContact(addressContent);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    setLoading(false);
+  })()
+  },[])
   return (
     <>
-      {addressContent.map((item) => (
+      {contact.map((item) => (
         <div
           className="contact-block col-lg-4 col-md-6 col-sm-12"
           key={item.id}

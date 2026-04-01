@@ -68,6 +68,11 @@ module.exports = [
         name: "Manage Client",
         routePath: "/admin/manage-client",
       },
+      {
+        id: 66,
+        name: "Contact Message",
+        routePath: "/admin/contact-message",
+      },
     ],
   },
   // ✅ COLLAPSE MENU END

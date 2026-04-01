@@ -175,6 +175,7 @@ const FormContent2 = () => {
                   placeholder="Password"
                   value={formData.password}
                   onChange={handleChange}
+                   autoComplete="new-password"
                 />
                 <span className="input-group-text"  
                  onMouseDown={() => setShowPassword(true)}   
