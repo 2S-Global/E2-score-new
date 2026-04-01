@@ -17,6 +17,7 @@ const ContactForm = ({ dispute = false }) => {
   const [success, setSuccess] = useState(null);
   const [errorId, setErrorId] = useState(null);
   const [message_id, setMessageId] = useState(null);
+  
 
   // ✅ Handle input changes
   const handleChange = (e) => {
@@ -35,7 +36,10 @@ const ContactForm = ({ dispute = false }) => {
     /* /api/contacts/add */
     // TODO: send data to backend / API here
     try {
-      const response = await axios.post(`${apiurl}/api/contacts/add`, formData);
+      const response = await axios.post(
+        `${apiurl}/api/home/add-contact`,
+        formData,
+      );
       console.log("Response:", response);
       if (response.data.success) {
         setSuccess(response.data.message || "Message sent successfully.");
