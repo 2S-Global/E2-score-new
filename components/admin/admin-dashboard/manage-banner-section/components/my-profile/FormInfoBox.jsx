@@ -149,7 +149,17 @@ const FormInfoBox = ({ setActiveTab }) => {
 
           <div className="form-group col-lg-12">
             <label>Banner Title</label>
-            <textarea rows="2" value={formdata.banner_title} onChange={(e) => setFormdata({ ...formdata, banner_title: e.target.value })} required />
+            {/* <textarea rows="1" value={formdata.banner_title} onChange={(e) => setFormdata({ ...formdata, banner_title: e.target.value })} required /> */}
+            <input
+              type="text"
+              value={formdata.banner_title}
+              onChange={(e) =>
+                setFormdata({ ...formdata, banner_title: e.target.value })
+              }
+              className="form-control"
+              placeholder="Enter banner title"
+              required
+            />
           </div>
 
           {/* <LogoCoverUploader formdata={formdata} setFormdata={setFormdata} /> */}
