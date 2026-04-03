@@ -6,7 +6,7 @@ import AuthWrapper from "./AuthWrapper";
 export default function Layout({ children }) {
   return (
     <AuthWrapper>
-      <div className="container shadow-lg">{children}</div>
+      <div className="shadow-lg">{children}</div>
     </AuthWrapper>
   );
 }

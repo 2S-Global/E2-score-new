@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { menuToggle } from "../../../../features/toggle/toggleSlice";
 
 import MobileMenu from "../../../header/MobileMenu";
 import LoginPopup from "../../../common/form/login/LoginPopup";
@@ -42,7 +44,7 @@ const index = () => {
   const [showPart4, setShowPart4] = useState(false);
   const [showPart5, setShowPart5] = useState(false);
   const [showPart6, setShowPart6] = useState(false);
-
+   const { menu } = useSelector((state) => state.toggle);
   useEffect(() => {
     const timers = [];
 
@@ -98,6 +100,7 @@ const index = () => {
 
         <MobileMenu />
         {/* End MobileMenu */}
+        {menu && <DashboardCandidatesSidebar />} 
         <div className="row">
           {/*   <DashboardCandidatesSidebar /> */}
           <div className="col-lg-3 col-md-3">
@@ -119,7 +122,7 @@ const index = () => {
               <BreadCrumb title="My Profile" />
               {/* breadCrumb */}
 
-              {/*      <MenuToggler /> */}
+                   <MenuToggler />
               {/* Collapsible sidebar button */}
 
               <div className="row">

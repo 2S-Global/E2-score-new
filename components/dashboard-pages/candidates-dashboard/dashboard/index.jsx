@@ -65,6 +65,8 @@ const Index = () => {
       {/* <!-- Dashboard --> */}
 
       <section className="user-dashboard">
+          <MenuToggler />
+          {/* Collapsible sidebar button */}
         <div className="dashboard-outer">
           <BreadCrumb title={"Hello, " + name } />
 
@@ -72,8 +74,7 @@ const Index = () => {
           {/* Score  section*/}
           <ScoreSection />
 
-          <MenuToggler />
-          {/* Collapsible sidebar button */}
+        
 
           <div className="row"></div>
           {/* End .row top card block */}

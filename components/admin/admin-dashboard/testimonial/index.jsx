@@ -57,7 +57,6 @@ const Index = () => {
                         onClick={openModalRH}
                         style={{
                           cursor: "pointer",
-                          float: "right",
                           color: "#275df5",
                           fontWeight: 700,
                           fontSize: "16px",

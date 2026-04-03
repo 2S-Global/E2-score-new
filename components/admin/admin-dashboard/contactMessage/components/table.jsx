@@ -250,7 +250,7 @@ const Table = ({ setRefresh, refresh }) => {
                   style: {
                     paddingLeft: "10px",
                     paddingRight: "10px",
-                    fontSize: "14px",
+                    fontSize: "15px",
                     color: "#212529",
                     lineHeight: "1.5",
                     borderRight: "1px solid #e0e0e0",
