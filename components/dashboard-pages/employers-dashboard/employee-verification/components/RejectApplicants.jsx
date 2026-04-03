@@ -7,7 +7,7 @@ import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
 import axios from "axios";
 
-const CompleteApplicants = () => {
+const RejectedApplicants = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [candidatesData, setCandidatesData] = useState([]);
@@ -35,38 +35,43 @@ const CompleteApplicants = () => {
   }, []);
 
   // ✅ Fetch data
-useEffect(() => {
-  if (!token) return;
+  useEffect(() => {
+    if (!token) return;
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `${apiurl}/api/companyprofile/get_verified_user`,
-        {
-          params: {
-            user_type: "verified",
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `${apiurl}/api/companyprofile/get_verified_user`,
+          {
+            params: {
+              user_type: "rejected",
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+        );
 
-      if (response.data.success) {
-        setCandidatesData(response.data.data);
+        if (response.data.success) {
+          setCandidatesData(response.data.data);
+        } else {
+          setCandidatesData([]); // ensure empty
+          setError(response.data.message || "No data found");
+        }
+      } catch (error) {
+       setError(
+         error.response?.data?.message ||
+           error.message ||
+           "Something went wrong",
+       );
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-    setError(
-      error.response?.data?.message || error.message || "Something went wrong",
-    );
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  fetchData();
-}, [token]);
+    fetchData();
+  }, [token]);
 
   // ✅ Search filter
   const filteredData = candidatesData.filter((item) => {
@@ -79,11 +84,11 @@ useEffect(() => {
   });
 
   const indexOfLastItem = currentPage * itemsPerPage;
-const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   // ✅ Modal
   const openModalRH = (id, empId) => {
@@ -272,4 +277,4 @@ const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   );
 };
 
-export default CompleteApplicants;
+export default RejectedApplicants;

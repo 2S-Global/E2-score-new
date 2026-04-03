@@ -7,7 +7,7 @@ import CustomizedProgressBars from "@/components/common/loader";
 import MessageComponent from "@/components/common/ResponseMsg";
 import axios from "axios";
 
-const CompleteApplicants = () => {
+const AllApplicants = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [candidatesData, setCandidatesData] = useState([]);
@@ -25,7 +25,8 @@ const CompleteApplicants = () => {
 
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [status, setStatus] = useState(null);
+  const itemsPerPage = 5; // change as needed
 
   // ✅ Get token
   useEffect(() => {
@@ -34,39 +35,36 @@ const CompleteApplicants = () => {
     }
   }, []);
 
+
+
   // ✅ Fetch data
-useEffect(() => {
-  if (!token) return;
+  useEffect(() => {
+    if (!token) return;
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `${apiurl}/api/companyprofile/get_verified_user`,
-        {
-          params: {
-            user_type: "verified",
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `${apiurl}/api/companyprofile/get_verified_user`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+        );
 
-      if (response.data.success) {
-        setCandidatesData(response.data.data);
+        if (response.data.success) {
+          setCandidatesData(response.data.data);
+        }
+      } catch (error) {
+        setError("Failed to fetch candidates");
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-    setError(
-      error.response?.data?.message || error.message || "Something went wrong",
-    );
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  fetchData();
-}, [token]);
+    fetchData();
+  }, [token]);
 
   // ✅ Search filter
   const filteredData = candidatesData.filter((item) => {
@@ -78,18 +76,27 @@ useEffect(() => {
     );
   });
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
 const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
+useEffect(() => {
+  if (currentPage > totalPages) {
+    setCurrentPage(1);
+  }
+}, [filteredData, totalPages]);
+
+  
   // ✅ Modal
-  const openModalRH = (id, empId) => {
+  const openModalRH = (id, empId, statusValue) => {
     setIsModalOpen(true);
     setCanId(id);
     setEmploymentId(empId);
+    setStatus(statusValue); // ✅ store status
     document.body.style.overflow = "hidden";
   };
 
@@ -98,11 +105,17 @@ const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     document.body.style.overflow = "auto";
   };
 
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(1);
+  const getPageNumbers = () => {
+    const pages = [];
+    for (
+      let i = Math.max(1, currentPage - 2);
+      i <= Math.min(totalPages, currentPage + 2);
+      i++
+    ) {
+      pages.push(i);
     }
-  }, [filteredData, totalPages]);
+    return pages;
+  };
 
   return (
     <>
@@ -196,8 +209,16 @@ const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
                     {/* ✅ Status */}
                     <td>
-                      <span className="badge bg-success-subtle text-success">
-                        Verified
+                      <span
+                        className={`badge ${
+                          candidate.status === "Verified"
+                            ? "bg-success-subtle text-success"
+                            : candidate.status === "Pending"
+                              ? "bg-warning-subtle text-warning"
+                              : "bg-danger-subtle text-danger"
+                        }`}
+                      >
+                        {candidate.status}
                       </span>
                     </td>
 
@@ -207,7 +228,11 @@ const totalPages = Math.ceil(filteredData.length / itemsPerPage);
                         className="btn btn-sm btn-light border"
                         title="View"
                         onClick={() =>
-                          openModalRH(candidate.userId, candidate.employmentId)
+                          openModalRH(
+                            candidate.userId,
+                            candidate.employmentId,
+                            candidate.status,
+                          )
                         }
                       >
                         <i className="la la-eye text-primary"></i>
@@ -236,15 +261,15 @@ const totalPages = Math.ceil(filteredData.length / itemsPerPage);
             Prev
           </button>
 
-          {[...Array(totalPages)].map((_, i) => (
+          {getPageNumbers().map((page) => (
             <button
-              key={i}
+              key={page}
               className={`btn btn-sm ${
-                currentPage === i + 1 ? "btn-primary" : "btn-outline-primary"
+                currentPage === page ? "btn-primary" : "btn-outline-primary"
               }`}
-              onClick={() => setCurrentPage(i + 1)}
+              onClick={() => setCurrentPage(page)}
             >
-              {i + 1}
+              {page}
             </button>
           ))}
 
@@ -265,11 +290,11 @@ const totalPages = Math.ceil(filteredData.length / itemsPerPage);
           onClose={closeModalRH}
           can_id={can_id}
           emp_id={employmentId}
-          is_complete={true}
+          is_complete={status?.toLowerCase() !== "pending"}
         />
       )}
     </>
   );
 };
 
-export default CompleteApplicants;
+export default AllApplicants;
