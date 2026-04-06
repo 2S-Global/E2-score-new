@@ -31,11 +31,18 @@ const MobileMenu = () => {
 
           <div className="outer-box">
             <div className="login-box">
-              <a
+             {/*  <a
                 href="#"
                 className="call-modal"
                 data-bs-toggle="modal"
                 data-bs-target="#loginPopupModal"
+              >
+                <span className="icon icon-user"></span>
+              </a> */}
+               <a
+                href="#"
+                className="call-modal"
+                data-bs-toggle="modal"
               >
                 <span className="icon icon-user"></span>
               </a>

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 
 //import mobileMenuData from "../../../data/mobileMenuData";
@@ -7,10 +8,23 @@ import mobileMenuData from "../../../data/mobileMenuDatatry";
 import SidebarFooter from "./SidebarFooter";
 import SidebarHeader from "./SidebarHeader";
 import {
+  isActiveParent,
   isActiveLink,
   isActiveParentChaild,
 } from "../../../utils/linkActiveChecker";
 import { usePathname, useRouter } from "next/navigation";
+import {
+  blogItems,
+  candidateItems,
+  employerItems,
+  findJobItems,
+  homeItems,
+  pageItems,
+  shopItems,
+  about,
+  contact,
+} from "../../../data/mainMenuData";
+;
 
 const Index = () => {
   const router = useRouter();
@@ -58,7 +72,7 @@ const Index = () => {
         </Sidebar> */}
 
       <Sidebar>
-        <Menu>
+        {/* <Menu>
           {mobileMenuData.map((item) =>
             item.items && item.items.length > 0 ? ( // Check if there are submenu items
               <SubMenu
@@ -98,7 +112,77 @@ const Index = () => {
               </MenuItem>
             ),
           )}
+        </Menu> */}
+        <Menu>
+           <MenuItem
+                onClick={() => router.push('/')}
+                className={
+                  isActiveLink('/', usePathname())
+                    ? "menu-active-link"
+                    : ""
+                }
+                key='/'
+              >
+               Home
+              </MenuItem>
+               { typeof window !== "undefined" && localStorage.getItem("employer_token") ? null : ( <MenuItem
+                onClick={() => router.push('/job-list')}
+                className={
+                  isActiveLink('/job-list', usePathname())
+                    ? "menu-active-link"
+                    : ""
+                }
+                key='/job-list'
+              >
+               Jobs
+              </MenuItem> )}
+              { typeof window !== "undefined" && localStorage.getItem("candidate_token") ? null : ( <MenuItem
+                onClick={() => router.push('/candidates-list')}
+                className={
+                  isActiveLink('/candidates-list', usePathname())
+                    ? "menu-active-link"
+                    : ""
+                }
+                key='/candidates-list'
+              >
+               Candidates
+              </MenuItem> )}
+
+                <MenuItem
+                onClick={() => router.push('/candidates-list')}
+                className={
+                  isActiveLink('/blog-list', usePathname())
+                    ? "menu-active-link"
+                    : ""
+                }
+                key='/blog-list'
+              >
+               Blog
+              </MenuItem> 
+               <MenuItem
+                onClick={() => router.push('/about')}
+                className={
+                  isActiveLink('/about', usePathname())
+                    ? "menu-active-link"
+                    : ""
+                }
+                key='/about'
+              >
+               About
+              </MenuItem> 
+               <MenuItem
+                onClick={() => router.push('/contact')}
+                className={
+                  isActiveLink('/contact', usePathname())
+                    ? "menu-active-link"
+                    : ""
+                }
+                key='/contact'
+              >
+               Contact
+              </MenuItem> 
         </Menu>
+        
       </Sidebar>
 
       <SidebarFooter />

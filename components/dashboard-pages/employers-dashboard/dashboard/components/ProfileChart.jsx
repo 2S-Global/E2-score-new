@@ -23,6 +23,7 @@ ChartJS.register(
 
 const options = {
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: { display: false },
   },
@@ -84,7 +85,7 @@ const ProfileChart = () => {
 
       <div
         className="widget-content d-flex justify-content-center align-items-center"
-        style={{ minHeight: "400px" }}
+       
       >
         {loading ? (
           <div className="text-center">
@@ -92,7 +93,7 @@ const ProfileChart = () => {
             <div className="mt-2">Loading statistics...</div>
           </div>
         ) : (
-          chartData && <Line data={chartData} options={options} />
+          chartData && <div className="chart-container"><Line data={chartData} options={options} /></div>
         )}
       </div>
     </div>

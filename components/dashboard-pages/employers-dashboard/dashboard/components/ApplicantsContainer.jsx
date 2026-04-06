@@ -42,11 +42,14 @@ const ApplicantsContainer = () => {
 
   return (
     <div className={styles.tabsBox}>
-      <div
+     {/*  <div
         className="table-responsive"
         style={{ position: "relative", left: "-25px", overflow: "unset" }}
+      > */}
+      <div
+        className="table-responsive"
       >
-        <table className={`table table-hover align-middle ${styles.table}`}>
+        <table className={`table table-hover  align-middle ${styles.table}`}>
           <thead>
             <tr>
               <th style={{ width: "20%" }} className="text-center">

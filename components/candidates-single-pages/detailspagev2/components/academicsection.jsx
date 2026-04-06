@@ -22,7 +22,8 @@ const Academysection = ({ userdata = [] }) => {
             <span className="text-danger fw-semibold">N/A</span>
           ) : (
             <>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+              {/* <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}> */}
+              <div>
                 <div className="resume-content">
                   {userdata.map((item, index) => {
                     // declare variables here (NOT inside JSX)
@@ -39,11 +40,27 @@ const Academysection = ({ userdata = [] }) => {
                               <span className="name"></span>
 
                               {/* title box */}
-                              <div className="title-box">
+                              {/* <div className="title-box"> */}
+                              <div>
                                 <div className="info-box">
-                                  <h3 style={{ maxWidth: "60%" }}>
-                                    {item.level || "Course not specified"}
-                                  </h3>
+                                        <div className="dashboard-title-year">
+                                              <h3>
+                                                {item.level || "Course not specified"}
+                                              </h3>
+                                                 <div
+                                                  className="edit-box"
+                                                >
+                                                  <span
+                                                    className="year"
+                                                    style={{
+                                                      textAlign: "center",
+                                                    }}
+                                                  >
+                                                    {item.year_of_passing ||
+                                                      "Year not specified"}
+                                                  </span>
+                                                </div>
+                                        </div>
 
                                   {/* institute */}
                                   <span>
@@ -93,7 +110,7 @@ const Academysection = ({ userdata = [] }) => {
                                 </div>
 
                                 {/* right side year */}
-                                <div
+                             {/*    <div
                                   className="edit-box"
                                   style={{
                                     position: "absolute",
@@ -111,7 +128,7 @@ const Academysection = ({ userdata = [] }) => {
                                     {item.year_of_passing ||
                                       "Year not specified"}
                                   </span>
-                                </div>
+                                </div> */}
                               </div>
                             </div>
                           </div>
@@ -121,24 +138,55 @@ const Academysection = ({ userdata = [] }) => {
                               <span className="name"></span>
 
                               {/* title box */}
-                              <div className="title-box">
+                              {/* <div className="title-box"> */}
+                              <div>
                                 <div className="info-box">
-                                  <h3 style={{ maxWidth: "60%" }}>
-                                    {item.courseName || "Course not specified"}
-                                    {item.courseName_verified ? (
-                                      <BadgeCheck
-                                        size={14}
-                                        color="green"
-                                        className="ms-2"
-                                      />
-                                    ) : (
-                                      <BadgeAlert
-                                        size={14}
-                                        color="red"
-                                        className="ms-2"
-                                      />
-                                    )}
-                                  </h3>
+                                  <div className="dashboard-title-year">
+                                        <h3>
+                                          {item.courseName || "Course not specified"}
+                                          {item.courseName_verified ? (
+                                            <BadgeCheck
+                                              size={14}
+                                              color="green"
+                                              className="ms-2"
+                                            />
+                                          ) : (
+                                            <BadgeAlert
+                                              size={14}
+                                              color="red"
+                                              className="ms-2"
+                                            />
+                                          )}
+                                        </h3>
+                                          <div className="edit-box">
+                                              <span
+                                                className="year"
+                                                style={{
+                                                  textAlign: "center",
+                                                }}
+                                              >
+                                                {item.duration?.from || item.duration?.to
+                                                  ? `${item.duration?.from || ""} - ${
+                                                      item.duration?.to || "Present"
+                                                    }`
+                                                  : "Year not specified"}
+
+                                                {item.duration_verified ? (
+                                                  <BadgeCheck
+                                                    size={14}
+                                                    color="green"
+                                                    className="ms-2"
+                                                  />
+                                                ) : (
+                                                  <BadgeAlert
+                                                    size={14}
+                                                    color="red"
+                                                    className="ms-2"
+                                                  />
+                                                )}
+                                              </span>
+                                          </div>
+                                  </div>
 
                                   {/* institute */}
                                   <span>
@@ -263,7 +311,7 @@ const Academysection = ({ userdata = [] }) => {
                                 </div>
 
                                 {/* right side year */}
-                                <div
+                                {/* <div
                                   className="edit-box"
                                   style={{
                                     position: "absolute",
@@ -298,7 +346,7 @@ const Academysection = ({ userdata = [] }) => {
                                       />
                                     )}
                                   </span>
-                                </div>
+                                </div> */}
                               </div>
                             </div>
                           </div>

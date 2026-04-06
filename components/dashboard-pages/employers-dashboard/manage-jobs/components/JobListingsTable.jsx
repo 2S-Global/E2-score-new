@@ -1,5 +1,4 @@
 "use client";
-
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import jobs from "../../../../../data/job-featured.js";
@@ -177,7 +176,7 @@ const JobListingsTable = () => {
                 allJobListing.map((job) => (
                   <tr key={job._id}>
                     <td>
-                      <div className="d-flex align-items-center gap-2">
+                      <div className="d-md-flex align-items-center gap-2">
                         <Image
                           width={50}
                           height={49}
