@@ -65,11 +65,11 @@ const Index = () => {
       {/* <!-- Dashboard --> */}
 
       <section className="user-dashboard">
-          <MenuToggler />
+         
           {/* Collapsible sidebar button */}
         <div className="dashboard-outer">
           <BreadCrumb title={"Hello, " + name } />
-
+            <MenuToggler />
           {/* breadCrumb */}
           {/* Score  section*/}
           <ScoreSection />

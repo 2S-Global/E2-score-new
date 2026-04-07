@@ -386,6 +386,7 @@ const Candidatedetails = ({ Newdata }) => {
                             display: "block",
                             color: "#275df5",
                             fontWeight: 500,
+                            wordBreak: "break-all"
                           }}
                         >
                           {item.url}
@@ -442,44 +443,84 @@ const Candidatedetails = ({ Newdata }) => {
                       <span className="name">{/* item.meta || */ ""}</span>
                       <div className="title-box">
                         <div className="info-box">
-                          <h3 style={{ maxWidth: "70%" }}>
-                            {row.job_title || "Untitled Role"}
-                            {row.designationVerified ? (
-                              <>
-                                <BadgeCheck
-                                  size={14}
-                                  color="green"
-                                  className="ms-2"
-                                />
-                              </>
-                            ) : (
-                              <>
-                                <BadgeAlert
-                                  size={14}
-                                  color="orange"
-                                  className="ms-2"
-                                />
-                              </>
-                            )}
-                            {row.isVerified ? (
-                              <>
-                                <span
-                                  data-bs-toggle="tooltip"
-                                  data-bs-placement="top"
-                                  title={row.remarks || "No remarks"}
-                                  style={{ cursor: "pointer" }}
+                          <div className="dashboard-title-year">
+                                <h3>
+                                  {row.job_title || "Untitled Role"}
+                                  {row.designationVerified ? (
+                                    <>
+                                      <BadgeCheck
+                                        size={14}
+                                        color="green"
+                                        className="ms-2"
+                                      />
+                                    </>
+                                  ) : (
+                                    <>
+                                      <BadgeAlert
+                                        size={14}
+                                        color="orange"
+                                        className="ms-2"
+                                      />
+                                    </>
+                                  )}
+                                  {row.isVerified ? (
+                                    <>
+                                      <span
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title={row.remarks || "No remarks"}
+                                        style={{ cursor: "pointer" }}
+                                      >
+                                        <Info
+                                          size={14}
+                                          color="green"
+                                          className="ms-2"
+                                        />
+                                      </span>
+                                    </>
+                                  ) : (
+                                    <></>
+                                  )}
+                                </h3>
+                                <div
+                                  className="edit-box"
+                                 
                                 >
-                                  <Info
-                                    size={14}
-                                    color="green"
-                                    className="ms-2"
-                                  />
-                                </span>
-                              </>
-                            ) : (
-                              <></>
-                            )}
-                          </h3>
+                                          <span
+                                            className="year"
+                                            style={{
+                                              textAlign: "center",
+                                            }}
+                                          >
+                                            {row.joining_month_name} {row.joining_year} to{" "}
+                                            {row.currentlyWorking ? (
+                                              "Present"
+                                            ) : (
+                                              <>
+                                                {" "}
+                                                {row.leaving_month_name} {row.leaving_year}
+                                              </>
+                                            )}{" "}
+                                            {row.jobDurationVerified ? (
+                                              <>
+                                                <BadgeCheck
+                                                  size={14}
+                                                  color="green"
+                                                  className="ms-2"
+                                                />
+                                              </>
+                                            ) : (
+                                              <>
+                                                <BadgeAlert
+                                                  size={14}
+                                                  color="orange"
+                                                  className="ms-2"
+                                                />
+                                              </>
+                                            )}
+                                          </span>
+                              </div>
+                          </div>
                           <span>
                             {row.company_name || "Company not specified"}
                             <img
@@ -524,7 +565,7 @@ const Candidatedetails = ({ Newdata }) => {
                             }}
                           ></span>
                         </div>
-                        <div
+                      {/*   <div
                           className="edit-box"
                           style={{
                             position: "absolute",
@@ -566,7 +607,7 @@ const Candidatedetails = ({ Newdata }) => {
                               </>
                             )}
                           </span>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
