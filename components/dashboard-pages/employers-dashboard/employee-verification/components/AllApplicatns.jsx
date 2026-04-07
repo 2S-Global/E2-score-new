@@ -36,35 +36,32 @@ const AllApplicants = () => {
   }, []);
 
 
+      const fetchCandidates = async () => {
+        setLoading(true);
+        try {
+          const response = await axios.get(
+            `${apiurl}/api/companyprofile/get_verified_user`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          );
+
+          if (response.data.success) {
+            setCandidatesData(response.data.data);
+          }
+        } catch (error) {
+          setError("Failed to fetch candidates");
+        } finally {
+          setLoading(false);
+        }
+      };
 
   // ✅ Fetch data
-  useEffect(() => {
-    if (!token) return;
-
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `${apiurl}/api/companyprofile/get_verified_user`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        if (response.data.success) {
-          setCandidatesData(response.data.data);
-        }
-      } catch (error) {
-        setError("Failed to fetch candidates");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [token]);
+useEffect(() => {
+  if (token) fetchCandidates();
+}, [token]);
 
   // ✅ Search filter
   const filteredData = candidatesData.filter((item) => {
@@ -291,6 +288,7 @@ useEffect(() => {
           can_id={can_id}
           emp_id={employmentId}
           is_complete={status?.toLowerCase() !== "pending"}
+          refreshList={fetchCandidates} // ✅ ADD THIS
         />
       )}
     </>

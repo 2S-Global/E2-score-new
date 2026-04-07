@@ -12,7 +12,14 @@ const getComparableDateValue = (year, month) => {
   return parseInt(year) * 100 + parseInt(month); // e.g., 202405
 };
 
-const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
+const Modal = ({
+  show,
+  onClose,
+  can_id,
+  emp_id,
+  is_complete = false,
+  refreshList,
+}) => {
   if (!show) return null;
 
   const [loading, setLoading] = useState(true);
@@ -59,6 +66,7 @@ const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
     has_noc: false,
     has_due: false,
     remarks: "",
+    workedHere: false,
     _id: can_id,
     employmentId: emp_id,
   });
@@ -78,7 +86,7 @@ const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.data.success) {
@@ -110,6 +118,7 @@ const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
           has_noc: data.hasNOC || false,
           has_due: data.hasDues || false,
           remarks: data.remarks || "",
+          workedHere: data.worked_in_company ?? false, // ✅ stays correct now
         });
       } else {
         console.error("Failed to fetch details:", response.data.message);
@@ -156,22 +165,29 @@ const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
     setError(null);
     setSuccess(null);
 
-    console.log(formdata);
+    const payload = {
+      ...formdata,
+      worked_in_company: formdata.workedHere,
+    };
+
+    console.log(payload);
+
     try {
       const response = await axios.post(
         `${apiurl}/api/companyprofile/add_employee_verification_details`,
-        formdata,
+        payload,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
+
       if (response.data.success) {
         setSuccess(response.data.message);
-        FetchDetails(can_id, emp_id);
-
-        setTimeout(() => onClose(), 3000);
+        await FetchDetails(can_id, emp_id); // modal refresh
+        await refreshList(); // 🔥 parent refresh
+       onClose();
       }
     } catch (error) {
       console.error("Error while submitting form:", error);
@@ -245,11 +261,11 @@ const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
     } else {
       const startValue = getComparableDateValue(
         formdata.joining_year,
-        formdata.joining_month
+        formdata.joining_month,
       );
       const endValue = getComparableDateValue(
         formdata.leaving_year,
-        formdata.leaving_month
+        formdata.leaving_month,
       );
 
       if (startValue && endValue) {
@@ -279,7 +295,7 @@ const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
   const fetchNoticePeriod = async () => {
     try {
       const response = await axios.get(
-        `${apiurl}/api/candidate/employment/get_notice_period`
+        `${apiurl}/api/candidate/employment/get_notice_period`,
       );
       if (response.data.success) {
         setList_notice_period(response.data.data);
@@ -299,6 +315,13 @@ const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
         designation_verified: true,
         employmenttype_verified: true,
         duration_verified: true,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        designation_verified: false,
+        employmenttype_verified: false,
+        duration_verified: false,
       }));
     }
   }, [formdata.Verified]);
@@ -348,9 +371,45 @@ const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
                   <EmployeeInfoCard user={user} />
                 </div>
 
+                {!is_complete && (
+                  <div className="col-md-6 form-group px-2">
+                    <label className="form-label">
+                      <b>Did this person work here?</b>
+                    </label>
+
+                    <div className="d-flex align-items-center gap-3 mb-2 ">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="workedHere"
+                          checked={formdata.workedHere === true}
+                          onChange={() =>
+                            setFormData({ ...formdata, workedHere: true })
+                          }
+                        />
+                        <label className="form-check-label">Yes</label>
+                      </div>
+
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="workedHere"
+                          checked={formdata.workedHere === false}
+                          onChange={() =>
+                            setFormData({ ...formdata, workedHere: false })
+                          }
+                        />
+                        <label className="form-check-label">No</label>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Editable Form Fields */}
-                {is_complete ? null : (
-                  <div className="row g-3">
+                {formdata.workedHere && !is_complete && (
+                  <div className="row g-3 px-2">
                     <div className="form-check form-switch">
                       <input
                         className="form-check-input"
@@ -583,7 +642,7 @@ const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
                         >
                           <option value="">Select Month</option>
                           {generateMonthOptions(
-                            parseInt(formdata.joining_year || currentYear)
+                            parseInt(formdata.joining_year || currentYear),
                           )}
                         </select>
                       </div>
@@ -635,7 +694,7 @@ const Modal = ({ show, onClose, can_id, emp_id, is_complete = false }) => {
                             >
                               <option value="">Select Month</option>
                               {generateMonthOptions(
-                                parseInt(formdata.leaving_year || currentYear)
+                                parseInt(formdata.leaving_year || currentYear),
                               )}
                             </select>
                           </div>

@@ -201,8 +201,8 @@ const RejectedApplicants = () => {
 
                     {/* ✅ Status */}
                     <td>
-                      <span className="badge bg-success-subtle text-success">
-                        Verified
+                      <span className="badge bg-danger-subtle text-danger">
+                       Rejected
                       </span>
                     </td>
 

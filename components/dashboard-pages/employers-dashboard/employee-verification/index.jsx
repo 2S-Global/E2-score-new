@@ -72,7 +72,7 @@ const Index = () => {
                         className={`nav-link ${activeTab === "complete" ? "active" : ""}`}
                         onClick={() => setActiveTab("complete")}
                       >
-                        Completed
+                        Verified
                       </button>
                     </li>
                     <li className="nav-item">
