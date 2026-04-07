@@ -44,10 +44,10 @@ const Services = () => {
                       <div className="d-flex align-items-center gap-1 mb-1">
                         <h5 className="m-0 fw-semibold">{item?.title}</h5>
                       </div>
-                      <p className="text-muted mt-1" dangerouslySetInnerHTML={{__html:item?.readMore ? item?.description+"  " :item?.description?.slice(0, 90)}}>
+                      <p className="text-muted mt-1" style={{ textAlign:"justify" }} dangerouslySetInnerHTML={{__html:item?.readMore ? item?.description+"  " :item?.description?.slice(0, 90)}}>
                        
                       </p>
-                      <span onClick={() =>ReadMore(item)} >
+                      <span onClick={() =>ReadMore(item)} style={{ cursor:"pointer" }}>
                         {item?.description?.length>90?item?.readMore ? "Read Less" : "Read More":""}
                       </span>
                     </div>
