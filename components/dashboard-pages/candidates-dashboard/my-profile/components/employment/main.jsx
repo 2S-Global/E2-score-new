@@ -68,7 +68,7 @@ const Employsectionmain = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        })
+        }),
       );
       if (response.data.success) {
         setUserdata(response.data.data);
@@ -137,7 +137,7 @@ const Employsectionmain = () => {
                               </>
                             )}
                           </span>{" "}
-                          {row.isVerified ? (
+                          {row.workedInCompany ? (
                             <>
                               <span
                                 data-bs-toggle="tooltip"
@@ -174,11 +174,13 @@ const Employsectionmain = () => {
                           {/* Show verified/unverified image */}
                           <img
                             src={
-                              row.isVerified
+                              row.workedInCompany
                                 ? "/images/resource/verified.png"
                                 : "/images/resource/unverified.png"
                             }
-                            alt={row.isVerified ? "Verified" : "Not Verified"}
+                            alt={
+                              row.workedInCompany ? "Verified" : "Not Verified"
+                            }
                             style={{ width: "100px", height: "20px" }}
                             className="ms-2"
                           />
@@ -230,10 +232,10 @@ const Employsectionmain = () => {
                         )}
 
                         {/* Job Description with Read More Toggle */}
-                        <span
+                        {/* <span
                           style={{ textAlign: "justify" }}
                           dangerouslySetInnerHTML={{ __html: row.description }}
-                        ></span>
+                        ></span> */}
                       </div>
                     ))}
                   </div>
