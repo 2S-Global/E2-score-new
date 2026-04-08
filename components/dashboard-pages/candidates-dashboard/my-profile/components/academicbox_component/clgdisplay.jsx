@@ -16,7 +16,7 @@ const ClgDisplay = ({ data, openModalRH }) => {
               )}
             </strong>{" "}
             {/* Edit or Remarks */}
-            {!data.is_verified ? (
+            {data.is_studied_here === undefined ? (
               <i
                 className="la la-pencil-alt ms-2"
                 onClick={() => openModalRH(data.level_id, data._id)}
@@ -30,7 +30,7 @@ const ClgDisplay = ({ data, openModalRH }) => {
                 title={data.remarks || "No remarks"}
                 style={{ cursor: "pointer" }}
               >
-                <Info size={20} color="green" className="ms-2" />
+                {/* <Info size={20} color="green" className="ms-2" /> */}
               </span>
             )}
             <br />
@@ -46,7 +46,7 @@ const ClgDisplay = ({ data, openModalRH }) => {
         <div className="item experienceType typ-14Regular">
           <span className="truncate expType">
             {data.instituteName}
-            {data.is_verified ? (
+            {data.is_studied_here ? (
               <BadgeCheck size={20} color="green" className="ms-2" />
             ) : (
               <BadgeAlert size={20} color="red" className="ms-2" />
