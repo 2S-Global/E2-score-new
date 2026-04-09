@@ -17,6 +17,7 @@ const formModal = ({
       customer_designation: "",
       customer_image:"",
       description: "",
+      linkedin_url:"",
       id: "",
     });
   
@@ -49,6 +50,10 @@ const formModal = ({
       newErrors.description = "Description is required";
     } 
 
+    if (!formData.linkedin_url?.trim()) {
+      newErrors.linkedin_url = "Linkedin URL is required";
+    }
+
     return newErrors;
   };
 
@@ -72,6 +77,7 @@ const formModal = ({
           customer_name: data?.customer_name || "",
           customer_designation: data?.customer_designation || "",
           description: data?.description || "",
+          linkedin_url: data?.linkedin_url || "",
           customer_image: data?.customer_image || "",
           id: data?._id || "",
         });
@@ -106,6 +112,7 @@ const formModal = ({
       sendformData.append("customer_name", formData.customer_name);
       sendformData.append("customer_designation", formData.customer_designation);
       sendformData.append("description", formData.description);
+      sendformData.append("linkedin_url", formData.linkedin_url);
       
 
       console.log('sendformData',sendformData)
@@ -284,6 +291,30 @@ const formModal = ({
                           }}
                         >
                           {err.description}
+                        </div>
+                      )}
+                </div>
+
+                <div className="mb-3 col-md-12">
+                  <label className="form-label">
+                   Linkedin URL<span style={{ color: "red" }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="linkedin_url"
+                    className="form-control"
+                    value={formData.linkedin_url}
+                    onChange={handleChange}
+                  />
+                   {err?.linkedin_url && (
+                        <div
+                          style={{
+                            color: "red",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          {err.linkedin_url}
                         </div>
                       )}
                 </div>
