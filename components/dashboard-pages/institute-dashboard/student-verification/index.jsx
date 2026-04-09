@@ -8,14 +8,16 @@ import TopCardBlock2 from "./components/TopCardBlock2";
 import ProfileChart from "./components/ProfileChart";
 import Notification from "./components/Notification";
 import PendingApplicants from "./components/PendindingApplicants.jsx"; //need to change
-import CompleteApplicants from "./components/CompleteApplicants.jsx"; //need to change
+import AcceptedApplicants from "./components/AcceptedApplicants.jsx"; //need to change
+import AllApplicants from "./components/AllApplicants.jsx"; //need to change
+import RejectedApplicants from "./components/RejectedApplicants.jsx"; //need to change
 import CopyrightFooter from "../../CopyrightFooter";
 import MenuToggler from "../../MenuToggler";
 
 import { useState } from "react";
 
 const Index = () => {
-  const [activeTab, setActiveTab] = useState("pending");
+  const [activeTab, setActiveTab] = useState("all");
   return (
     <div className="page-wrapper dashboard">
       <span className="header-span"></span>
@@ -51,6 +53,14 @@ const Index = () => {
                   <ul className="nav nav-tabs mb-3">
                     <li className="nav-item">
                       <button
+                        className={`nav-link ${activeTab === "all" ? "active" : ""}`}
+                        onClick={() => setActiveTab("all")}
+                      >
+                        All
+                      </button>
+                    </li>
+                    <li className="nav-item">
+                      <button
                         className={`nav-link ${activeTab === "pending" ? "active" : ""}`}
                         onClick={() => setActiveTab("pending")}
                       >
@@ -59,24 +69,42 @@ const Index = () => {
                     </li>
                     <li className="nav-item">
                       <button
-                        className={`nav-link ${activeTab === "complete" ? "active" : ""}`}
-                        onClick={() => setActiveTab("complete")}
+                        className={`nav-link ${activeTab === "accepted" ? "active" : ""}`}
+                        onClick={() => setActiveTab("accepted")}
                       >
-                        Completed
+                        Accepted
+                      </button>
+                    </li>
+                    <li className="nav-item">
+                      <button
+                        className={`nav-link ${activeTab === "rejected" ? "active" : ""}`}
+                        onClick={() => setActiveTab("rejected")}
+                      >
+                        Rejected
                       </button>
                     </li>
                   </ul>
 
                   {/* Tab Content */}
+                   {activeTab === "all" && (
+                    <>
+                      <AllApplicants />
+                    </>
+                  )}
 
                   {activeTab === "pending" && (
                     <>
                       <PendingApplicants />
                     </>
                   )}
-                  {activeTab === "complete" && (
+                  {activeTab === "accepted" && (
                     <>
-                      <CompleteApplicants />
+                      <AcceptedApplicants />
+                    </>
+                  )}
+                   {activeTab === "rejected" && (
+                    <>
+                      <RejectedApplicants />
                     </>
                   )}
                 </div>

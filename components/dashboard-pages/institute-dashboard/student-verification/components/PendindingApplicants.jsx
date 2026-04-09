@@ -19,6 +19,12 @@ const Applicants = () => {
   const [employmentId, setEmploymentId] = useState(null);
   const [token, setToken] = useState(null);
 
+  //pagination & search
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [status, setStatus] = useState(null);
+  const itemsPerPage = 5; // change as needed
+
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
@@ -26,6 +32,36 @@ const Applicants = () => {
       setToken(localStorage.getItem("Institute_token"));
     }
   }, []);
+
+
+
+// ✅ Search filter
+  const filteredData = candidatesData.filter((item) => {
+    const text = search.toLowerCase();
+
+    return (
+      item.name?.toLowerCase().includes(text) ||
+      item.email?.toLowerCase().includes(text) ||
+      item.details?.toLowerCase().includes(text) 
+    );
+  });
+
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+useEffect(() => {
+  if (currentPage > totalPages) {
+    setCurrentPage(1);
+  }
+}, [filteredData, totalPages]);
+
+
+
 
   useEffect(() => {
     fetchData();
@@ -36,8 +72,11 @@ const Applicants = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${apiurl}/api/institutestudent/get_unverfired_students`,
+        `${apiurl}/api/institutestudent/get_students_by_status`,
         {
+          params: {
+            status: "unverified",
+          },
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -85,74 +124,156 @@ const Applicants = () => {
         </div>
       )}
 
-      <div className="container">
-        <div className="row">
-          {candidatesData && candidatesData.length > 0 ? (
-            candidatesData.map((candidate) => (
-              <div className="col-md-6 mb-3" key={candidate.employmentId}>
-                <div className="card shadow-sm border-0 rounded-3 p-3 h-100">
-                  <div className="d-flex align-items-center row">
-                    <div className="me-3 col-md-6 mb-2">
-                      <img
-                        width={70}
-                        height={70}
-                        src={candidate.photo || "/images/resource/no_user.png"}
-                        alt="candidates"
-                        className="rounded-circle border border-primary"
-                      />
-                    </div>
-                    <div className="flex-grow-1 col-md-6">
-                      <h6 className="mb-1 fw-semibold">
+      <div>
+          {/* 🔝 Header + Search */}
+          <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <h5 className="mb-0 fw-semibold">Pending Students</h5>
+
+            <div style={{ minWidth: "210px" }}>
+              <input
+                type="text"
+                className="form-control form-control-sm"
+                placeholder="Search..."
+                value={search}
+                style={{ height: "40px" }}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setCurrentPage(1);
+                }}
+              />
+            </div>
+          </div>
+
+          {/* 📊 Table */}
+          <div className="table-responsive rounded shadow-sm">
+            <table className="table align-middle table-hover mb-0 text-center">
+              <thead className="bg-light">
+                <tr className="text-secondary small">
+                  <th>#</th>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Details</th>
+                  <th>Status</th>
+                  <th>View</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {filteredData.length > 0 ? (
+                  currentItems.map((candidate, index) => (
+                    <tr key={candidate.employmentId}>
+                      <td className="text-muted">
+                        {indexOfFirstItem + index + 1}
+                      </td>
+
+                      {/* 🖼 Image */}
+                      <td>
+                        <img
+                          src={candidate.photo || "/images/resource/no_user.png"}
+                          className="rounded-circle border"
+                          style={{
+                            width: "70px",
+                            height: "70px",
+                            objectFit: "cover",
+                          }}
+                          onError={(e) =>
+                            (e.target.src = "/images/resource/no_user.png")
+                          }
+                        />
+                      </td>
+
+                      {/* 👤 Name */}
+                      <td>
                         <Link
                           href={`/candidates-details/${candidate.userId}`}
-                          className="text-decoration-none text-dark"
+                          className="fw-semibold text-dark text-decoration-none"
                         >
                           {candidate.name}
                         </Link>
-                      </h6>
-                      <p className="mb-1 small text-muted">
-                        {candidate.details}
-                      </p>
+                      </td>
 
-                      {/* ✅ FIX: Bootstrap text-break for long emails */}
-                      <p className="mb-2 small text-muted d-flex align-items-center text-break">
-                        <i className="flaticon-envelope me-1 text-primary"></i>
-                        {candidate.email}
-                      </p>
+                        {/* Email */}
+                      <td className="text-muted small">{candidate.email}</td>
 
-                      <div className="d-flex gap-2">
+                      {/* details */}
+                      <td className="text-muted small">{candidate.details}</td>
+
+                      {/* ✅ Status */}
+                      <td>
+                        <span
+                        style={{textTransform: 'capitalize'}}
+                          className={`badge ${
+                            candidate.status === "verified"
+                              ? "bg-success-subtle text-success"
+                              : candidate.status === "unverified"
+                                ? "bg-warning-subtle text-warning"
+                                : "bg-danger-subtle text-danger"
+                          }`}
+                        >
+                          {candidate.status}
+                        </span>
+                      </td>
+
+                      {/* 👁 View */}
+                      <td>
                         <button
-                          className="btn btn-sm btn-outline-primary"
+                          className="btn btn-sm btn-light border"
+                          title="View"
                           onClick={() =>
                             openModalRH(
                               candidate.userId,
-                              candidate.employmentId
+                              candidate.employmentId,
+                              candidate.status,
                             )
                           }
                         >
-                          <i className="la la-eye me-1"></i> View
+                          <i className="la la-eye text-primary"></i>
                         </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="text-center py-4 text-muted">
+                      No candidates found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+            {totalPages > 1 && (
+              <div className="d-flex justify-content-center align-items-center gap-2 mt-3 flex-wrap">
+                <button
+                  className="btn btn-sm btn-outline-secondary"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                >
+                  Prev
+                </button>
+
+                {getPageNumbers().map((page) => (
+                  <button
+                    key={page}
+                    className={`btn btn-sm ${
+                      currentPage === page ? "btn-primary" : "btn-outline-primary"
+                    }`}
+                    onClick={() => setCurrentPage(page)}
+                  >
+                    {page}
+                  </button>
+                ))}
+
+                <button
+                  className="btn btn-sm btn-outline-secondary"
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                >
+                  Next
+                </button>
               </div>
-            ))
-          ) : (
-            <div className="col-12">
-              <div className="text-center py-5">
-                <img
-                  src="/images/resource/no_user.png"
-                  alt="no data"
-                  width={80}
-                  height={80}
-                  className="mb-3"
-                />
-                <h6 className="fw-semibold">No candidates found</h6>
-              </div>
-            </div>
-          )}
-        </div>
+            )}
       </div>
 
       {isModalOpen && (

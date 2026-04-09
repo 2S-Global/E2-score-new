@@ -1788,10 +1788,14 @@ Chat Widget
 
 .dashboard-title-year{
      display:flex;
-     justify-content:space-between
+     justify-content:space-between;
+     word-break: break-word;
   }
 
 
+  .resume-block .info-box h3, .resume-block .info-box .h3 {
+    width: 60%;
+  }
 
 /* Dasktop and avobe */
 @media (min-width: 768px) {

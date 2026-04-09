@@ -16,8 +16,7 @@ const VerificationFormSection = ({
   setErrorId = () => {},
 }) => {
   // ✅ Skip rendering when complete
-  if (is_complete) return null;
-
+  if (is_complete) return null;   
   const defaultOptions = formdata.course_id
     ? [{ value: formdata.course_id, label: formdata.course_name }]
     : [];
@@ -32,16 +31,38 @@ const VerificationFormSection = ({
   const [levels, setLevels] = useState([]);
   const [courseModes, setCourseModes] = useState([]);
   const [grading_systems, setGradingSystems] = useState([]);
-
+  //validation error
+  const [err, setErr] = useState(null);
   // =============================
   // 🔹 Handlers (Memoized)
   // =============================
   const handleToggle = useCallback(
     (field) => (e) => {
-      setFormData((prev) => ({
-        ...prev,
-        [field]: e.target.checked,
-      }));
+      if(e.target.checked){
+            setFormData((prev) => ({
+              ...prev,
+              level_verified: true,
+              courseType_verified: true,
+              courseName_verified: true,
+              duration_verified: true,
+              gradingSystem_verified: true,
+              marks_verified: true,
+              [field]: e.target.checked,
+            }));
+      }
+      else{
+        setFormData((prev) => ({
+              ...prev,
+              level_verified: false,
+              courseType_verified: false,
+              courseName_verified: false,
+              duration_verified: false,
+              gradingSystem_verified: false,
+              marks_verified: false,
+              [field]: e.target.checked,
+      }))
+    }
+      
     },
     [setFormData]
   );
@@ -57,32 +78,74 @@ const VerificationFormSection = ({
     [setFormData]
   );
 
+    // validation 
+const validate = () => {
+      let newErrors = {};
+
+      if (!formdata?.level_verified) {
+        newErrors.level_verified = "Level is required";
+      } 
+
+       if (!formdata?.courseType_verified) {
+        newErrors.courseType_verified = "Course type is required";
+      } 
+      if (!formdata?.courseName_verified) {
+        newErrors.courseName_verified = "Course name is required";
+      } 
+      if (!formdata?.duration_verified) {
+        newErrors.duration_verified = "Course duration is required";
+      } 
+      if (!formdata?.gradingSystem_verified) {
+        newErrors.gradingSystem_verified = "Grading system is required";
+      } 
+
+      if (!formdata?.marks_verified) {
+        newErrors.marks_verified = "Marks is required";
+      } 
+      
+
+      return newErrors;
+};
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
-      try {
-        const response = await axios.put(
-          `${apiurl}/api/institutestudent/update_student_status`,
-          formdata,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        //  console.log("Form submitted successfully:", response.data);
-
-        if (response.data.success) {
-          setSuccess(response.data.message);
-          onClose();
-        } else {
-          console.error("Submission failed:", response.data.message);
+       const validationErrors = validate();
+        setErr(validationErrors);
+        let isChecked=false;
+        if(formdata.is_studied_here && Object.keys(validationErrors).length === 0){
+          isChecked=true;
         }
-      } catch (error) {
-        console.error("Error submitting form:", error);
-      }
+        if(!formdata.is_studied_here){
+          isChecked=true;
+        }
+        if(isChecked)
+          {
+                try {
+                const response = await axios.put(
+                  `${apiurl}/api/institutestudent/update_student_status`,
+                  formdata,
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${token}`,
+                    },
+                  }
+                );
+
+                //  console.log("Form submitted successfully:", response.data);
+
+                if (response.data.success) {
+                  setSuccess(response.data.message);
+                  onClose();
+                } else {
+                  console.error("Submission failed:", response.data.message);
+                }
+              } catch (error) {
+                console.error("Error submitting form:", error);
+              }
+        }
+          
+      
     },
     [formdata, apiurl, token, onClose]
   );
@@ -90,7 +153,7 @@ const VerificationFormSection = ({
   // =============================
   // 🔹 Auto-enable related flags
   // =============================
-  useEffect(() => {
+/*   useEffect(() => {
     if (formdata.is_verified) {
       setFormData((prev) => ({
         ...prev,
@@ -102,8 +165,10 @@ const VerificationFormSection = ({
         marks_verified: true,
       }));
     }
-  }, [formdata.is_verified, setFormData]);
+   
+  }, [formdata.is_verified, setFormData]); */
 
+  
   // =============================
   // 🔹 Fetch Dropdowns (Levels & Course Modes)
   // =============================
@@ -192,9 +257,58 @@ const VerificationFormSection = ({
     <form onSubmit={handleSubmit} className="default-form  shadow-sm mb-4">
       <div className="row gy-2 p-3">
         <h5 className="card-title mb-3">Verification</h5>
+           {/*  accepted or rejected */}
+            {!is_complete && (
+              <div className="col-md-6 form-group px-2">
+                <label className="form-label">
+                  <b>Did this student study here ?</b>
+                </label>
+
+                <div className="d-flex align-items-center gap-3 mb-2 ">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="studyHere"
+                      checked={formdata.is_studied_here === true}
+                      onChange={() =>
+                        setFormData({ ...formdata, is_studied_here: true })
+                      }
+                    />
+                    <label className="form-check-label">Yes</label>
+                  </div>
+
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="studyHere"
+                      checked={formdata.is_studied_here === false}
+                      onChange={() =>
+                        setFormData({ ...formdata, level_verified: false,
+                                            courseType_verified: false,
+                                            courseName_verified: false,
+                                            duration_verified: false,
+                                            gradingSystem_verified: false,
+                                            marks_verified: false,
+                                            is_studied_here: false 
+                          })
+                      }
+                    />
+                    <label className="form-check-label">No</label>
+                  </div>
+                </div>
+              </div>
+            )}
+
+
+  {/* Editable Form Fields */}
+  {formdata.is_studied_here && !is_complete && (
+ <>
         {/* =========================
     🔹 Overall Verification Switch
     ========================== */}
+   
         <div className="col-12">
           <div className="form-check form-switch">
             <input
@@ -245,16 +359,32 @@ const VerificationFormSection = ({
                   : "btn-outline-secondary"
               }`}
               onClick={() =>
-                setFormData((prev) => ({
+                {
+                  setFormData((prev) => ({
                   ...prev,
                   level_verified: !prev.level_verified,
                 }))
+                  setErr({ ...err, 'level_verified':'' });
+                }
               }
               disabled={formdata.is_verified}
             >
               {formdata.level_verified ? "Verified" : "Verify"}
             </button>
           </div>
+           {err?.level_verified && (
+                  <div
+                    style={{
+                      color: "red",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      lineHeight: '17px',
+                      marginBottom:"7px"
+                    }}
+                  >
+                    {err.level_verified}
+                  </div>
+            )}
         </div>
 
         {/* =========================
@@ -292,16 +422,31 @@ const VerificationFormSection = ({
                   : "btn-outline-secondary"
               }`}
               onClick={() =>
-                setFormData((prev) => ({
+                {setFormData((prev) => ({
                   ...prev,
                   courseType_verified: !prev.courseType_verified,
                 }))
+                 setErr({ ...err, 'courseType_verified':'' });
+              }
               }
               disabled={formdata.is_verified}
             >
               {formdata.courseType_verified ? "Verified" : "Verify"}
             </button>
           </div>
+           {err?.courseType_verified && (
+                  <div
+                    style={{
+                      color: "red",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      lineHeight: '17px',
+                      marginBottom:"7px"
+                    }}
+                  >
+                    {err.courseType_verified}
+                  </div>
+            )}
         </div>
 
         {/* =========================
@@ -354,16 +499,31 @@ const VerificationFormSection = ({
                   : "btn-outline-secondary"
               }`}
               onClick={() =>
-                setFormData((prev) => ({
+                {setFormData((prev) => ({
                   ...prev,
                   courseName_verified: !prev.courseName_verified,
                 }))
+                  setErr({ ...err, 'courseName_verified':'' });
+              }
               }
               disabled={formdata.is_verified}
             >
               {formdata.courseName_verified ? "Verified" : "Verify"}
             </button>
           </div>
+          {err?.courseName_verified && (
+                  <div
+                    style={{
+                      color: "red",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      lineHeight: '17px',
+                      marginBottom:"7px"
+                    }}
+                  >
+                    {err.courseName_verified}
+                  </div>
+            )}
         </div>
 
         {/* =========================
@@ -453,16 +613,31 @@ const VerificationFormSection = ({
                   : "btn-outline-secondary"
               }`}
               onClick={() =>
-                setFormData((prev) => ({
+               { setFormData((prev) => ({
                   ...prev,
                   duration_verified: !prev.duration_verified,
                 }))
+                  setErr({ ...err, 'duration_verified':'' });
+              }
               }
               disabled={formdata.is_verified}
             >
               {formdata.duration_verified ? "Verified" : "Verify"}
             </button>
           </div>
+           {err?.duration_verified && (
+                  <div
+                    style={{
+                      color: "red",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      lineHeight: '17px',
+                      marginBottom:"7px"
+                    }}
+                  >
+                    {err.duration_verified}
+                  </div>
+            )}
         </div>
 
         {/* =========================
@@ -496,16 +671,31 @@ const VerificationFormSection = ({
                   : "btn-outline-secondary"
               }`}
               onClick={() =>
-                setFormData((prev) => ({
+                {setFormData((prev) => ({
                   ...prev,
                   gradingSystem_verified: !prev.gradingSystem_verified,
                 }))
+                setErr({ ...err, 'gradingSystem_verified':'' });
+              }
               }
               disabled={formdata.is_verified}
             >
               {formdata.gradingSystem_verified ? "Verified" : "Verify"}
             </button>
           </div>
+           {err?.gradingSystem_verified && (
+                  <div
+                    style={{
+                      color: "red",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      lineHeight: '17px',
+                      marginBottom:"7px"
+                    }}
+                  >
+                    {err.gradingSystem_verified}
+                  </div>
+            )}
         </div>
 
         {/* =========================
@@ -534,16 +724,31 @@ const VerificationFormSection = ({
                   : "btn-outline-secondary"
               }`}
               onClick={() =>
-                setFormData((prev) => ({
+                {setFormData((prev) => ({
                   ...prev,
                   marks_verified: !prev.marks_verified,
                 }))
+                  setErr({ ...err, 'marks_verified':'' });
+              }
               }
               disabled={formdata.is_verified}
             >
               {formdata.marks_verified ? "Verified" : "Verify"}
             </button>
           </div>
+          {err?.marks_verified && (
+                  <div
+                    style={{
+                      color: "red",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      lineHeight: '17px',
+                      marginBottom:"7px"
+                    }}
+                  >
+                  {err.marks_verified}
+                  </div>
+            )}
         </div>
 
         {/* =========================
@@ -564,6 +769,8 @@ const VerificationFormSection = ({
             placeholder="Add remarks or notes here..."
           />
         </div>
+        </>
+  )}
         {/* =========================
     🔹 Footer Buttons
     ========================== */}
@@ -584,6 +791,8 @@ const VerificationFormSection = ({
             {loading ? "Saving..." : "Save"}
           </button>
         </div>
+        
+
       </div>
     </form>
   );
