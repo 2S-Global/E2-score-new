@@ -20,6 +20,16 @@ import {
 import { usePathname } from "next/navigation";
 
 const HeaderNavContent = () => {
+
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const yOffset = -120; // adjust this
+    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+    window.scrollTo({ top: y, behavior: "smooth" });
+  };
   return (
     <>
       <nav className="nav main-menu">
@@ -35,26 +45,14 @@ const HeaderNavContent = () => {
           >
             <Link href="/home">Home</Link>
           </li>
-          <li
-            className={`${
-              isActiveParent(homeItems, usePathname()) ? "current" : ""
-            } dropdown`}
-          >
-            <Link href="#about">About</Link>
+          <li className="dropdown">
+            <a onClick={() => scrollToSection("about")}>About</a>
           </li>
-          <li
-            className={`${
-              isActiveParent(homeItems, usePathname()) ? "current" : ""
-            } dropdown`}
-          >
-            <Link href="#service">Services</Link>
+          <li className="dropdown">
+            <a onClick={() => scrollToSection("service")}>Services</a>
           </li>
-          <li
-            className={`${
-              isActiveParent(homeItems, usePathname()) ? "current" : ""
-            } dropdown`}
-          >
-            <Link href="#clients">Clients</Link>
+          <li className="dropdown">
+            <a onClick={() => scrollToSection("clients")}>Clients</a>
           </li>
           <li
             className={`${
@@ -63,7 +61,7 @@ const HeaderNavContent = () => {
           >
             <Link href="#testimonials">Testimonials</Link>
           </li>
-        {/*   <li className="dropdown">
+          {/*   <li className="dropdown">
             <Link href="#app-section">App</Link>
           </li> */}
           <li
