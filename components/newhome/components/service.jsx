@@ -25,39 +25,78 @@ const Services = () => {
     })()
     },[])
 
-    function ReadMore(row) {  
-  setServices((pre)=>pre.map((item)=>item?._id===row?._id?({...item,readMore:!item.readMore}):item))
+
   
-}
+
+  const stripHtml = (html) => html.replace(/<[^>]+>/g, "");
+
+  const limitWords = (html, wordLimit = 50) => {
+    const text = stripHtml(html);
+    const words = text.split(" ");
+    return words.slice(0, wordLimit).join(" ");
+  };
+      function ReadMore(row) {
+        setServices((pre) =>
+          pre.map((item) =>
+            item?._id === row?._id
+              ? { ...item, readMore: !item.readMore }
+              : item,
+          ),
+        );
+      }
+
   return (
     <>
       <div className="content-column col-md-12 ">
         <div className="inner-column " data-aos="fade-left">
           <div className="row g-4 mt-4">
-             {/* <div className="row g-1 mt-1"> */}
+            {/* <div className="row g-1 mt-1"> */}
             {/* CARD TEMPLATE */}
 
-            {loading?' loading............ ':<>
-                  {services?.map((item) => (
+            {loading ? (
+              " loading............ "
+            ) : (
+              <>
+                {services?.map((item) => (
                   <div className="col-lg-6 col-md-6" key={item?._id}>
                     <div className="card h-100 p-3 shadow-sm border-0 rounded-4 feature-card ">
                       <div className="d-flex align-items-center gap-1 mb-1">
                         <h5 className="m-0 fw-semibold">{item?.title}</h5>
                       </div>
-                      <p className="text-muted mt-1" style={{ textAlign:"justify" }} dangerouslySetInnerHTML={{__html:item?.readMore ? item?.description+"  " :item?.description?.slice(0, 90)}}>
-                       
-                      </p>
-                      <span onClick={() =>ReadMore(item)} style={{ cursor:"pointer" }}>
-                        {item?.description?.length>90?item?.readMore ? "Read Less" : "Read More":""}
-                      </span>
+                      <p
+                        className="text-muted mt-1"
+                        style={{ textAlign: "justify" }}
+                        dangerouslySetInnerHTML={{
+                          __html: item?.readMore
+                            ? item?.description
+                            : limitWords(item?.description, 50) + "...",
+                        }}
+                      />
+
+                      <div style={{ textAlign: "right" }}>
+                        <span
+                          onClick={() => ReadMore(item)}
+                          style={{
+                            cursor: "pointer",
+                            color: "#007bff",
+                            fontStyle: "italic", // ✅ italic
+                            fontWeight: "400", // optional (lighter look)
+                          }}
+                        >
+                          {stripHtml(item?.description).split(" ").length > 50
+                            ? item?.readMore
+                              ? "Read Less"
+                              : "Read More"
+                            : ""}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  ))}
-            </>}
-         
-
+                ))}
+              </>
+            )}
           </div>
-            {/* <div className="col-md-6">
+          {/* <div className="col-md-6">
               <div className="card h-100 p-3 shadow-sm border-0 rounded-4 feature-card ">
                 <div className="mb-2">
                   <h3 className="mb-4 text-center">
@@ -461,8 +500,8 @@ const Services = () => {
                 </div>
               </div>
             </div> */}
-          </div>
-       {/*  </div> */}
+        </div>
+        {/*  </div> */}
       </div>
     </>
   );
