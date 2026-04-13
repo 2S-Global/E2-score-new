@@ -1,11 +1,11 @@
 "use client";
 import dynamic from "next/dynamic";
-import ManageBannerSection from "@/components/admin/admin-dashboard/manage-banner-section";
+import Banner from "@/components/admin/admin-dashboard/banner";
 
 const index = () => {
   return (
     <>
-      <ManageBannerSection />
+      <Banner />
     </>
   );
 };
