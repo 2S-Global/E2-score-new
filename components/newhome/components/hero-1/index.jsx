@@ -22,11 +22,9 @@ const Index = () => {
     (async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          `${apiurl}/api/home/get-banner-details`,
-        );
+        const response = await axios.get(`${apiurl}/api/home/all-banner`);
 
-        if (response.data.success) {
+        if (response.data) {
           sethomeBanner(response.data.data); // ✅ multiple banners
         }
       } catch (error) {
@@ -50,23 +48,19 @@ const Index = () => {
           navigation
         >
           {homeBanner.map((item, index) => (
-            <SwiperSlide key={index}>
-              {/* 🔥 YOUR SAME DESIGN */}
+            <SwiperSlide key={item._id || index}>
               <div className="auto-container">
                 <div className="row">
                   <div className="content-column col-lg-7 col-md-12 col-sm-12">
-                    <div
-                      className="inner-column"
-                      data-aos="fade-up"
-                      data-aos-delay="500"
-                    >
+                    <div className="inner-column">
                       <div className="title-box">
-                        <h3>{item?.title}</h3>
+                        {/* ✅ FIXED */}
+                        <h3>{item?.banner_title}</h3>
                       </div>
                     </div>
                   </div>
 
-                  <div className=" col-lg-5">
+                  <div className="col-lg-5">
                     <ImageBox data={item} />
                   </div>
                 </div>

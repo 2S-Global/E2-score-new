@@ -4,9 +4,9 @@ const ImageBox = ({ data }) => {
   return (
     <div className="image-box">
       <figure className="main-image" data-aos="fade-in" data-aos-delay="500">
-        {data?.bannerImage && (
+        {data?.banner_image && (
           <Image
-            src={data.bannerImage}
+            src={data.banner_image}
             alt="hero image"
             width={486}
             height={589}
