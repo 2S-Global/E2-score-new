@@ -20,11 +20,18 @@ module.exports = [
     routePath: "/institute-dashboard/student-verification",
     active: "",
   },
-  {
+/*   {
     id: 4,
     name: "All Student List",
     icon: "la-paper-plane",
     routePath: "/institute-dashboard/all-student-list",
+    active: "",
+  }, */
+  {
+    id: 4,
+    name: "All Student List",
+    icon: "la-paper-plane",
+    routePath: "/institute-dashboard/institute-student",
     active: "",
   },
   // {

@@ -1796,6 +1796,9 @@ Chat Widget
   .resume-block .info-box h3, .resume-block .info-box .h3 {
     width: 60%;
   }
+a{
+    word-break: break-word;
+  }
 
 /* Dasktop and avobe */
 @media (min-width: 768px) {

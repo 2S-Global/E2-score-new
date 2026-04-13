@@ -38,6 +38,7 @@ const VerificationFormSection = ({
   // =============================
   const handleToggle = useCallback(
     (field) => (e) => {
+      setErr({});
       if(e.target.checked){
             setFormData((prev) => ({
               ...prev,
@@ -81,26 +82,32 @@ const VerificationFormSection = ({
     // validation 
 const validate = () => {
       let newErrors = {};
+      let d=new Date()
+      let year=d.getFullYear()
 
       if (!formdata?.level_verified) {
-        newErrors.level_verified = "Level is required";
+        newErrors.level_verified = "Level verification is required";
       } 
 
        if (!formdata?.courseType_verified) {
-        newErrors.courseType_verified = "Course type is required";
+        newErrors.courseType_verified = "Course type verification is required";
       } 
       if (!formdata?.courseName_verified) {
-        newErrors.courseName_verified = "Course name is required";
+        newErrors.courseName_verified = "Course name verification is required";
       } 
       if (!formdata?.duration_verified) {
-        newErrors.duration_verified = "Course duration is required";
+        newErrors.duration_verified = "Course duration verification is required";
+      } 
+     
+      if (formdata?.duration?.to > year) {
+        newErrors.duration_verified = "This student is currently pursuing";
       } 
       if (!formdata?.gradingSystem_verified) {
-        newErrors.gradingSystem_verified = "Grading system is required";
+        newErrors.gradingSystem_verified = "Grading system verification is required";
       } 
 
       if (!formdata?.marks_verified) {
-        newErrors.marks_verified = "Marks is required";
+        newErrors.marks_verified = "Marks verification is required";
       } 
       
 
@@ -558,7 +565,7 @@ const validate = () => {
                       const year = new Date().getFullYear() - i;
                       const isDisabled =
                         formdata.duration?.to &&
-                        parseInt(year) > parseInt(formdata.duration.to);
+                        parseInt(year) > parseInt(formdata.duration.to)-1;
                       return (
                         !isDisabled && (
                           <option key={year} value={year}>
@@ -591,7 +598,7 @@ const validate = () => {
                       const year = new Date().getFullYear() + 5 - i;
                       const isDisabled =
                         formdata.duration?.from &&
-                        parseInt(year) < parseInt(formdata.duration.from);
+                        parseInt(year) < parseInt(formdata.duration.from)+1;
                       return (
                         !isDisabled && (
                           <option key={year} value={year}>
