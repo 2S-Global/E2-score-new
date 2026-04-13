@@ -12,17 +12,13 @@ const formModal = ({
    const router = useRouter();
     const apiurl = process.env.NEXT_PUBLIC_API_URL;
     const [formData, setFormData] = useState({
-      subject: "",
-      customer_name: "",
-      customer_designation: "",
-      customer_image:"",
-      description: "",
-      linkedin_url:"",
+      banner_title: "",
+      banner_image:"",
       id: "",
     });
   
      const [selectedImage, setSelectedImage] = useState(
-        data?.customer_image?data.customer_image:null
+        data?.banner_image?data.banner_image:null
       );
      const [file, setFile] = useState(null);
   
@@ -36,22 +32,8 @@ const formModal = ({
    // validation 
   const validate = () => {
     let newErrors = {};
-    if (!formData.subject?.trim()) {
-      newErrors.subject = "Subject is required";
-    } 
-    if (!formData.customer_name?.trim()) {
-      newErrors.customer_name = "Customer name is required";
-    } 
-    if (!formData.customer_designation?.trim()) {
-      newErrors.customer_designation = "Customer Designation is required";
-    } 
-
-    if (!formData.description?.trim()) {
-      newErrors.description = "Description is required";
-    } 
-
-    if (!formData.linkedin_url?.trim()) {
-      newErrors.linkedin_url = "Linkedin URL is required";
+    if (!formData.banner_title?.trim()) {
+      newErrors.banner_title = "Banner title is required";
     }
 
     return newErrors;
@@ -73,12 +55,8 @@ const formModal = ({
     useEffect(() => {
       if (data?._id) {
         setFormData({
-          subject: data?.subject || "",
-          customer_name: data?.customer_name || "",
-          customer_designation: data?.customer_designation || "",
-          description: data?.description || "",
-          linkedin_url: data?.linkedin_url || "",
-          customer_image: data?.customer_image || "",
+          banner_title: data?.banner_title || "",
+          banner_image: data?.banner_image || "",
           id: data?._id || "",
         });
       }
@@ -108,11 +86,7 @@ const formModal = ({
        if (file){
           sendformData.append("image", file);
        }
-      sendformData.append("subject", formData.subject);
-      sendformData.append("customer_name", formData.customer_name);
-      sendformData.append("customer_designation", formData.customer_designation);
-      sendformData.append("description", formData.description);
-      sendformData.append("linkedin_url", formData.linkedin_url);
+      sendformData.append("banner_title", formData.banner_title);
       
 
       console.log('sendformData',sendformData)
@@ -127,7 +101,7 @@ const formModal = ({
         if(data?._id){
           sendformData.append("id", formData.id);
           const response = await axios.post(
-          `${apiurl}/api/testimonials/update-testimonial`,
+          `${apiurl}/api/home/update-banner`,
           sendformData,
           {
             headers: {
@@ -143,7 +117,7 @@ const formModal = ({
       else{
       
         const response = await axios.post(
-          `${apiurl}/api/testimonials/add-testimonial`,
+          `${apiurl}/api/home/add-banner`,
           sendformData,
           {
             headers: {
@@ -201,16 +175,16 @@ const formModal = ({
               <div className="row">
                 <div className="mb-3 col-md-12">
                   <label className="form-label">
-                   Subject<span style={{ color: "red" }}>*</span>
+                   Banner Title<span style={{ color: "red" }}>*</span>
                   </label>
                   <input
                     type="text"
-                    name="subject"
+                    name="banner_title"
                     className="form-control"
-                    value={formData.subject}
+                    value={formData.banner_title}
                     onChange={handleChange}
                   />
-                   {err?.subject && (
+                   {err?.banner_title && (
                         <div
                           style={{
                             color: "red",
@@ -218,103 +192,7 @@ const formModal = ({
                             fontWeight: "500",
                           }}
                         >
-                          {err.subject}
-                        </div>
-                      )}
-                </div>
-
-                <div className="mb-3 col-md-12">
-                  <label className="form-label">
-                   Customer Name<span style={{ color: "red" }}>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="customer_name"
-                    className="form-control"
-                    value={formData.customer_name}
-                    onChange={handleChange}
-                  />
-                   {err?.customer_name && (
-                        <div
-                          style={{
-                            color: "red",
-                            fontSize: "14px",
-                            fontWeight: "500",
-                          }}
-                        >
-                          {err.customer_name}
-                        </div>
-                      )}
-                </div>
-                <div className="mb-3 col-md-12">
-                  <label className="form-label">
-                   Customer Designation<span style={{ color: "red" }}>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="customer_designation"
-                    className="form-control"
-                    value={formData.customer_designation}
-                    onChange={handleChange}
-                  />
-                   {err?.customer_designation && (
-                        <div
-                          style={{
-                            color: "red",
-                            fontSize: "14px",
-                            fontWeight: "500",
-                          }}
-                        >
-                          {err.customer_designation}
-                        </div>
-                      )}
-                </div>
-              
-
-                <div className="mb-3  col-md-12">
-                      <label className="form-label">
-                            Description  <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <textarea
-                        name="description"
-                        className="form-control"
-                        value={formData.description}
-                        onChange={handleChange}
-                        rows={3}
-                      />
-                      {err?.description && (
-                        <div
-                          style={{
-                            color: "red",
-                            fontSize: "14px",
-                            fontWeight: "500",
-                          }}
-                        >
-                          {err.description}
-                        </div>
-                      )}
-                </div>
-
-                <div className="mb-3 col-md-12">
-                  <label className="form-label">
-                   Linkedin URL<span style={{ color: "red" }}>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="linkedin_url"
-                    className="form-control"
-                    value={formData.linkedin_url}
-                    onChange={handleChange}
-                  />
-                   {err?.linkedin_url && (
-                        <div
-                          style={{
-                            color: "red",
-                            fontSize: "14px",
-                            fontWeight: "500",
-                          }}
-                        >
-                          {err.linkedin_url}
+                          {err.banner_title}
                         </div>
                       )}
                 </div>

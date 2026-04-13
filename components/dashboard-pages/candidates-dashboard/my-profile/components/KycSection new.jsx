@@ -285,7 +285,7 @@ const KYCSection = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-md-6 mb-4">
+                  {/* <div className="col-md-6 mb-4">
                     <strong>Passport </strong>
                     {userdata?.passport_number && (
                       <>
@@ -295,16 +295,7 @@ const KYCSection = () => {
                           <>
                             {" "}
                             <FaRegCircleXmark className="ms-2 text-danger" />{" "}
-                            {/*  <button
-                              className="btn btn-primary ms-2"
-                              style={{
-                                fontSize: "10px",
-                                padding: "2px 6px",
-                                lineHeight: 1,
-                              }}
-                            >
-                              Verify Now
-                            </button> */}
+                    
                             <RazorpayPayment
                               onSuccess={handelpaymentsuccess}
                               documentType="passport"
@@ -352,7 +343,7 @@ const KYCSection = () => {
                         )}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   {/* {userdata && ( */}
                   <AadharCardInfo
                     userdata={userdata}

@@ -112,13 +112,13 @@ const Modal = ({
           leaving_month: data.leavingMonth || "",
           Verified: data.isVerified || false,
           designation_verified: data.designationVerified || false,
-          duration_verified: data.durationVerified || false,
+          duration_verified: data.jobDurationVerified || false,
           employmenttype_verified: data.jobTypeVerified || false,
           Serverd_notice_period: data.servedNoticePeriod || false,
           has_noc: data.hasNOC || false,
           has_due: data.hasDues || false,
           remarks: data.remarks || "",
-          workedHere: data.worked_in_company ?? false, // ✅ stays correct now
+          workedHere: data.workedInCompany, // ✅ stays correct now
         });
       } else {
         console.error("Failed to fetch details:", response.data.message);
@@ -159,11 +159,24 @@ const Modal = ({
       [field]: !prev[field],
     }));
 
+    
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+          if (!validateForm()) {
+            setError("Please fill all required fields");
+            return;
+          }
+
+          if (wrongDate) {
+            setError("End date cannot be before start date");
+            return;
+          }
     setLoading(true);
     setError(null);
     setSuccess(null);
+
 
     const payload = {
       ...formdata,
@@ -197,36 +210,35 @@ const Modal = ({
     }
   };
 
-  const validateForm = () => {
-    if (
-      !formdata.joining_year ||
-      formdata.joining_year.toString().trim() === ""
-    ) {
+const validateForm = () => {
+  if (!formdata.joining_year || !formdata.joining_month) {
+    return false;
+  }
+
+  // ✅ If NOT currently employed → leaving required
+  if (!formdata.currentlyemployed) {
+    if (!formdata.leaving_year || !formdata.leaving_month) {
       return false;
-    }
-    if (
-      !formdata.joining_month ||
-      formdata.joining_month.toString().trim() === ""
-    ) {
-      return false;
-    }
-    if (!formdata.currentlyemployed) {
-      if (
-        !formdata.leaving_year ||
-        formdata.leaving_year.toString().trim() === ""
-      ) {
-        return false;
-      }
-      if (
-        !formdata.leaving_month ||
-        formdata.leaving_month.toString().trim() === ""
-      ) {
-        return false;
-      }
     }
 
-    return true;
-  };
+    // ✅ Check date order
+    const start = getComparableDateValue(
+      formdata.joining_year,
+      formdata.joining_month,
+    );
+
+    const end = getComparableDateValue(
+      formdata.leaving_year,
+      formdata.leaving_month,
+    );
+
+    if (start > end) {
+      return false;
+    }
+  }
+
+  return true;
+};
   useEffect(() => {
     setIsFormValid(validateForm());
   }, [formdata]);

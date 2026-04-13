@@ -22,7 +22,7 @@ export const validateDocuments = (formData) => {
     passportnumber;
 
   if (!hasAnyDoc) {
-    return "At least one of PAN,  Driving License, Passport, or EPIC Number is required.";
+    return "At least one of PAN,  Driving License, or EPIC Number is required.";
   }
 
   if (!panname && pannumber)

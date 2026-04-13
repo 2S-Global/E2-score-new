@@ -3,6 +3,7 @@ import Image from "next/image";
 import Slider from "react-slick";
 import {useEffect,useState} from "react"
 import axios from "axios"
+import { FaLinkedin } from "react-icons/fa";
 const Testimonial = () => {
 const [loading, setLoading] = useState(false);
   const [testimonials, setTestimonials] = useState([]);
@@ -48,28 +49,55 @@ function ReadMore(row) {
   };
   return (
     <>
-      {loading?' loading............ ':<Slider {...settings} arrows={false}>
-        {testimonials?.map((item) => (
-          <div className="testimonial-block" key={item?._id}>
-            <div className="inner-box">
-              <h4 className="title">{item?.subject}</h4>
-              <div className="text">{ReadMore(item)}</div>
-              <div className="info-box">
-                <div >
-                  <img
-                    loading="lazy"
-                    className="thumb"
-                    src={item?.customer_image?item?.customer_image:"/images/resource/no_user.png"}
-                    alt="testimonial"
-                  />
+      {loading ? (
+        " loading............ "
+      ) : (
+        <Slider {...settings} arrows={false}>
+          {testimonials?.map((item) => (
+            <div className="testimonial-block" key={item?._id}>
+              <div className="inner-box">
+                <h4 className="title">{item?.subject}</h4>
+                <div className="text">{ReadMore(item)}</div>
+                <div className="info-box">
+                  <div>
+                    <img
+                      loading="lazy"
+                      className="thumb"
+                      src={
+                        item?.customer_image
+                          ? item?.customer_image
+                          : "/images/resource/no_user.png"
+                      }
+                      alt="testimonial"
+                    />
+                  </div>
+
+                  <h4 className="name">{item?.customer_name}</h4>
+                  <span className="designation">
+                    {item?.customer_designation}
+                  </span>
+
+                  {/* ✅ LinkedIn Icon */}
+                  {item?.linkedin_url && (
+                    <a
+                      href={item.linkedin_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        marginLeft: "10px",
+                        color: "#0A66C2",
+                        fontSize: "18px",
+                      }}
+                    >
+                      <FaLinkedin />
+                    </a>
+                  )}
                 </div>
-                <h4 className="name">{item?.customer_name}</h4>
-                <span className="designation">{item?.customer_designation}</span>
               </div>
             </div>
-          </div>
-        ))}
-      </Slider>}
+          ))}
+        </Slider>
+      )}
     </>
   );
 };

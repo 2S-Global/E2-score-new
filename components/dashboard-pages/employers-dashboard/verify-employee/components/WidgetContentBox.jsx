@@ -476,9 +476,9 @@ const WidgetContentBox = () => {
   return (
     <>
       <div className="widget-content">
-        <div className="col-lg-12 col-md-12 py-2">
+        <div className="col-lg-12 col-md-12 py-2 mb-4">
           <h5>
-            <strong>Add Candidate Details</strong>
+            <strong>Add Employee Details</strong>
           </h5>
         </div>
 
@@ -667,7 +667,7 @@ const WidgetContentBox = () => {
                   disabled={!approvedFields.PAN}
                   formData={formData}
                 />
-                <PassdocumentUpload
+                {/* <PassdocumentUpload
                   label="Passport"
                   name="passport"
                   fileId="upload-passport"
@@ -679,7 +679,7 @@ const WidgetContentBox = () => {
                   onfieldValidation={handleValidation}
                   disabled={!approvedFields.PASSPORT}
                   formData={formData}
-                />
+                /> */}
 
                 <DocumentUpload
                   label="Driving License"
