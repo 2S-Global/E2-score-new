@@ -34,8 +34,23 @@ module.exports = [
     routePath: "/institute-dashboard/all-student-list",
     active: "",
   }, */
+ 
   {
     id: 5,
+    name: "Import Student",
+    icon: "las la-file-import",
+    routePath: "/institute-dashboard/institute-student-import",
+    active: "",
+  },
+  {
+    id: 6,
+    name: "Import Semester Marks",
+    icon: "las la-file-import",
+    routePath: "/institute-dashboard/institute-student-import-marks",
+    active: "",
+  },
+   {
+    id: 7,
     name: "Student List",
     icon: "la-paper-plane",
     routePath: "/institute-dashboard/institute-student",

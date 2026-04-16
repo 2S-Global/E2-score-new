@@ -90,7 +90,7 @@ const Index = () => {
                         Add Student
                       </span> */}
 
-                      <span
+       {/*                <span
                         onClick={openCsvModal}
                         style={{
                           cursor: "pointer",
@@ -111,7 +111,7 @@ const Index = () => {
                         }}
                       >
                         Import Student Marks (csv)
-                      </span>
+                      </span> */}
                     </div>
                   </div>
                   <Table setRefresh={setRefresh} refresh={refresh} />
