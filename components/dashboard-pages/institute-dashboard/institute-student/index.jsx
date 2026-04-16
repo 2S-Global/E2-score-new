@@ -7,6 +7,7 @@ import CopyrightFooter from "../../CopyrightFooter";
 import Table from "./components/table";
 
 import CandidateformModal from "./components/modals/formmodal";
+import AddFormModal from "./components/modals/AddFormModal";
 import AddCsvModal from "./components/modals/csv";
 import MarksCsv from "./components/modals/marksCsv";
 import { useState } from "react";
@@ -17,12 +18,12 @@ const Index = () => {
   const [isCsvModalOpenMarks, setIsCsvModalOpenMarks] = useState(false);
 
   const [refresh, setRefresh] = useState(false);
-  const openModalRH = () => {
+  const openModalAdd = () => {
     setIsModalOpen(true);
     document.body.style.overflow = "hidden";
   };
 
-  const closeModalRH = () => {
+  const closeModalAdd = () => {
     setIsModalOpen(false);
     document.body.style.overflow = "auto";
   };
@@ -73,11 +74,11 @@ const Index = () => {
                       alignItems: "center",
                     }}
                   >
-                    <h4>Institute Candidate List</h4>
+                    <h4>Student List</h4>
 
                     <div style={{ display: "flex", gap: "15px" }}>
-                      {/* <span
-                        onClick={openModalRH}
+                    {/*   <span
+                        onClick={openModalAdd}
                         style={{
                           cursor: "pointer",
                           float: "right",
@@ -86,7 +87,7 @@ const Index = () => {
                           fontSize: "16px",
                         }}
                       >
-                        Add Candidate
+                        Add Student
                       </span> */}
 
                       <span
@@ -98,7 +99,7 @@ const Index = () => {
                           fontSize: "16px",
                         }}
                       >
-                        Import Candidate (csv)
+                        Import Student (csv)
                       </span>
                        <span
                         onClick={openCsvModalMarks}
@@ -109,7 +110,7 @@ const Index = () => {
                           fontSize: "16px",
                         }}
                       >
-                        Import Candidate Marks (csv)
+                        Import Student Marks (csv)
                       </span>
                     </div>
                   </div>
@@ -127,9 +128,9 @@ const Index = () => {
       </div>
       {/* Render Modal if isModalOpen is true */}
       {isModalOpen && (
-        <CandidateformModal
+        <AddFormModal
           show={isModalOpen}
-          onClose={closeModalRH}
+          onClose={closeModalAdd}
           setRefresh={setRefresh}
           refresh={refresh}
         />

@@ -13,13 +13,49 @@ const AddCsvModal = ({ show, onClose, setRefresh = () => {} }) => {
   const [message_id, setMessage_id] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [totalSemesters, setTotalSemesters] = useState(0);
 
   const [audit, setAudit] = useState([]);
-
+const [formData, setFormData] = useState({
+    semester: "",
+    program: "",
+    admissionYear: ""
+  });
+  const [err, setErr] = useState(null);
   const router = useRouter();
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
-
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 50 }, (_, i) => currentYear - i);
+  const Semesters = Array.from({ length: totalSemesters }, (_, i) => 1 +i);
   if (!show) return null;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+      setErr((prev)=>({...prev,[name]:""}))
+    let newValue = value;
+    setFormData((prev) => ({ ...prev, [name]: newValue }));
+    if(name==='program'){
+        setTotalSemesters(8)
+    }
+    
+  };
+
+
+   // validation 
+const validate = () => {
+      let newErrors = {};
+      if (!formData.semester?.trim()) {
+        newErrors.semester = "Semester is required";
+      } 
+       if (!formData.program?.trim()) {
+        newErrors.program = "Program is required";
+      } 
+       if (!formData.admissionYear?.trim()) {
+        newErrors.admissionYear = "Admission Year is required";
+      } 
+     
+      return newErrors;
+};
+
 
   // ------------------------------
   // HANDLE FILE SELECTION
@@ -51,7 +87,11 @@ const AddCsvModal = ({ show, onClose, setRefresh = () => {} }) => {
   // ------------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+     const validationErrors = validate();
+    setErr(validationErrors);   
+    console.log(err);
+if (Object.keys(validationErrors).length === 0) {
+  setLoading(true);
     setError(null);
     setSuccess(null);
 
@@ -65,9 +105,12 @@ const AddCsvModal = ({ show, onClose, setRefresh = () => {} }) => {
       return;
     }
 
-    const formPayload = new FormData();
+ const formPayload = new FormData();
     formPayload.append("role", 1);
     formPayload.append("csv", csvFile);
+    formPayload.append("semester", formData.semester);
+    formPayload.append("program", formData.program);
+    formPayload.append("admissionYear", formData.admissionYear);
 
     try {
       const response = await axios.post(
@@ -102,11 +145,14 @@ const AddCsvModal = ({ show, onClose, setRefresh = () => {} }) => {
     } finally {
       setLoading(false);
     }
+  }
   };
 
   // ------------------------------
   // UI
   // ------------------------------
+
+  //fetch program list
   return (
     <div
       className="modal fade show d-block"
@@ -119,7 +165,7 @@ const AddCsvModal = ({ show, onClose, setRefresh = () => {} }) => {
           {/* Header */}
           <div className="modal-header d-flex justify-content-between align-items-center">
             <div className="d-flex align-items-center gap-3">
-              <h5 className="modal-title mb-0">Import New Candidate</h5>
+              <h5 className="modal-title mb-0">Import New Student</h5>
 
               {/* Download Template */}
               <a
@@ -149,22 +195,61 @@ const AddCsvModal = ({ show, onClose, setRefresh = () => {} }) => {
                 errorId={errorId}
                 message_id={message_id}
               />
-
-              <div className="mb-4">
-                <label className="form-label">Upload Csv</label>
-                <input
-                  type="file"
-                  accept=".csv"
-                  className={`form-control ${error ? "is-invalid" : ""}`}
-                  onChange={handleFileChange}
-                />
-                {error && <div className="invalid-feedback">{error}</div>}
+              <div className="row">
+                {/* Program */}
+                <div className="mb-3 col-md-12">
+                  <label className="form-label">Program</label>
+                  <select class="form-select"  name="program"  onChange={handleChange}  value={formData.program || ""}>
+                    <option value="">Please select</option>
+                    <option value="CIVIL ENGINEERING">CIVIL ENGINEERING</option>
+                    <option value="ELECTRICAL ENGINEERING">ELECTRICAL ENGINEERING</option>
+                    <option value="INFORMATION TECHNOLOGY">INFORMATION TECHNOLOGY</option>
+                  </select>
+                  
+                  { err?.program && (
+                    <div style={{color:'red'}}>{err.program}</div>
+                  )}
+                </div>
+                 <div className="mb-3 col-md-6">
+                  <label className="form-label">Admission Year</label>
+                  
+                  <select class="form-select"  name="admissionYear"  onChange={handleChange}  value={formData.admissionYear || ""}>
+                    <option value="">Please select</option>
+                        {years?.map((year) => (
+                          <option key={year}>{year}</option>
+                        ))}
+                  </select>               
+                   { err?.admissionYear && (
+                    <div style={{color:'red'}}>{err.admissionYear}</div>
+                  )}
+                </div>
+                 <div className="mb-3 col-md-6">
+                  <label className="form-label">Semester</label>
+                  <select class="form-select"  name="semester"  onChange={handleChange}  value={formData.semester || ""}>
+                    <option value="">Please select</option>
+                     {Semesters?.map((sem) => (
+                          <option key={sem}>{sem}</option>
+                        ))}
+                  </select>                 
+                   { err?.semester && (
+                    <div style={{color:'red'}}>{err.semester}</div>
+                  )}
+                </div>
+                <div className="mb-4">
+                  <label className="form-label">Upload Csv</label>
+                  <input
+                    type="file"
+                    accept=".csv"
+                    className={`form-control ${error ? "is-invalid" : ""}`}
+                    onChange={handleFileChange}
+                  />
+                  {error && <div className="invalid-feedback">{error}</div>}
+                </div>
               </div>
-
               <button
                 type="submit"
                 className="btn btn-primary w-100"
-                disabled={loading || !csvFile}
+                disabled={loading || !csvFile  }
               >
                 {loading ? "Importing..." : "Import"}
               </button>
