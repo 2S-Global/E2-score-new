@@ -15,12 +15,19 @@ module.exports = [
   },
   {
     id: 3,
+    name: "Manage Courses",
+    icon: "la-user-tie",
+    routePath: "/institute-dashboard/manage-courses",
+    active: "",
+  },
+  {
+    id: 4,
     name: "Student Verification",
     icon: "la-user-tie",
     routePath: "/institute-dashboard/student-verification",
     active: "",
   },
-/*   {
+  /*   {
     id: 4,
     name: "All Student List",
     icon: "la-paper-plane",
@@ -28,8 +35,8 @@ module.exports = [
     active: "",
   }, */
   {
-    id: 4,
-    name: "All Student List",
+    id: 5,
+    name: "Student List",
     icon: "la-paper-plane",
     routePath: "/institute-dashboard/institute-student",
     active: "",
