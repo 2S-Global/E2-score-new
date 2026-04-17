@@ -9,7 +9,6 @@ import { useState } from "react";
 
 const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
 
   const [refresh, setRefresh] = useState(false);
   const openModalRH = () => {
@@ -21,8 +20,6 @@ const Index = () => {
     setIsModalOpen(false);
     document.body.style.overflow = "auto";
   };
-
-
 
   return (
     <>

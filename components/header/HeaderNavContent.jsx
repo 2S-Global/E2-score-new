@@ -49,18 +49,7 @@ const HeaderNavContent = () => {
           )}
           {/* End findjobs menu items */}
 
-          {/* {localStorage.getItem("employer_token") ? null : (
-            <li
-              className={`${
-                isActiveParent(employerItems, usePathname()) ||
-                usePathname()?.split("/")[1] === "employers-dashboard"
-                  ? "current"
-                  : ""
-              } dropdown`}
-            >
-              <Link href="/employers-list">Employers</Link>
-            </li>
-          )} */}
+    
           {/* End Employers menu items */}
           {localStorage.getItem("candidate_token") ? null : (
             <li
@@ -122,7 +111,7 @@ const HeaderNavContent = () => {
             </Link>
           </li>
 
-          {/* End Pages menu items */}
+       
         </ul>
       </nav>
     </>
