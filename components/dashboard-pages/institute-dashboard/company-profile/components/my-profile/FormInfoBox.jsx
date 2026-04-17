@@ -32,7 +32,7 @@ const FormInfoBox = ({ setActiveTab }) => {
     address: "",
     website: "",
     established: "",
-    courses: [],
+
     allowinsearch: true,
     about: "",
     logo: null,
@@ -60,8 +60,6 @@ const FormInfoBox = ({ setActiveTab }) => {
           address: data.address || "",
           website: data.website || "",
           established: data.established || "",
-
-          courses: data.courses || [],
           allowinsearch: data.allowinsearch || true,
           about: data.about || "",
           logo_preview: data.logo || "",
@@ -363,7 +361,7 @@ const FormInfoBox = ({ setActiveTab }) => {
             </select>
           </div>
           {/* <!-- Search Select --> */}
-          <CourseSelect formdata={formdata} setFormdata={setFormdata} />
+          {/* <CourseSelect formdata={formdata} setFormdata={setFormdata} /> */}
 
           {/* <!-- About Company --> */}
           <div className="form-group col-lg-12 col-md-12">

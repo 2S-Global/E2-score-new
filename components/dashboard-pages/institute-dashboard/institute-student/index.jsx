@@ -4,7 +4,7 @@ import DashboardInstituteSidebar from "../../../header/DashboardInstituteSidebar
 
 import CopyrightFooter from "../../CopyrightFooter";
 
-import Table from "./components/table";
+import Table from "./components/table-demo";
 
 import CandidateformModal from "./components/modals/formmodal";
 import AddCsvModal from "./components/modals/csv";
