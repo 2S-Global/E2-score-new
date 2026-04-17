@@ -22,13 +22,12 @@ const formModal = ({ show, onClose, data = {}, setRefresh = () => {} }) => {
   const [success, setSuccess] = useState(null);
   const [err, setErr] = useState({});
 
-
   useEffect(() => {
     if (data?._id) {
       setFormData({
-        course_name: data.course_name || "",
-        duration: data.duration || "",
-        semester: data.semester || "",
+        course_name: data.name || "", // ✅ FIX
+        duration: data.course_durartion || "", // ✅ FIX
+        semester: data.total_number_of_semesters || "", // ✅ FIX
         id: data._id || "",
       });
     }
@@ -48,7 +47,7 @@ const formModal = ({ show, onClose, data = {}, setRefresh = () => {} }) => {
     try {
       setCourseLoading(true);
       const res = await axios.get(
-        `https://api.geisil.com/api/sql/dropdown/CourcesSearch?search=${search}`,
+        `${apiurl}/api/sql/dropdown/CourcesSearch?search=${search}`,
       );
 
       setCourseList(res.data?.data || []);
@@ -83,67 +82,68 @@ const formModal = ({ show, onClose, data = {}, setRefresh = () => {} }) => {
   };
 
   // ✅ Submit
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const validationErrors = validate();
-  setErr(validationErrors);
+    const validationErrors = validate();
+    setErr(validationErrors);
 
-  if (Object.keys(validationErrors).length === 0) {
-    setLoading(true);
-    setError(null);
-    setSuccess(null);
+    if (Object.keys(validationErrors).length === 0) {
+      setLoading(true);
+      setError(null);
+      setSuccess(null);
 
-    const sendformData = new FormData();
-    sendformData.append("course_name", formData.course_name);
-    sendformData.append("duration", formData.duration);
-    sendformData.append("semester", formData.semester);
+      const sendformData = new FormData();
 
-    const token = localStorage.getItem("Institute_token");
+      // ✅ FIXED FIELD NAMES
+      sendformData.append("name", formData.course_name);
+      sendformData.append("course_durartion", formData.duration);
+      sendformData.append("total_number_of_semesters", formData.semester);
 
-    try {
-      let response;
+      const token = localStorage.getItem("Institute_token");
 
-      // ✅ EDIT MODE
-      if (data?._id) {
-        sendformData.append("id", formData.id);
+      try {
+        let response;
 
-        response = await axios.post(
-          `${apiurl}/api/course/update-course`, // 🔥 update API
-          sendformData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "multipart/form-data",
+        // ✅ EDIT MODE
+        if (data?._id) {
+          sendformData.append("courseId", formData.id); // 🔥 FIXED
+
+          response = await axios.put(
+            `${apiurl}/api/institutestudent/update-custom-course`,
+            sendformData,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
+              },
             },
-          },
-        );
-      }
-      // ✅ ADD MODE
-      else {
-        response = await axios.post(
-          `${apiurl}/api/course/add-course`,
-          sendformData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "multipart/form-data",
+          );
+        }
+        // ✅ ADD MODE
+        else {
+          response = await axios.post(
+            `${apiurl}/api/institutestudent/add-custom-course `,
+            sendformData,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
+              },
             },
-          },
-        );
-      }
+          );
+        }
 
-      setSuccess(response.data.message);
-      setRefresh(true);
-      onClose();
-    } catch (err) {
-      setError(err.response?.data?.message || "Something went wrong");
-    } finally {
-      setLoading(false);
+        setSuccess(response.data.message);
+        setRefresh(true);
+        onClose();
+      } catch (err) {
+        setError(err.response?.data?.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
     }
-  }
-};
-
+  };
   if (!show) return null;
 
   return (
@@ -217,7 +217,9 @@ const handleSubmit = async (e) => {
                   )}
 
                   {err?.course_name && (
-                    <div style={{ color: "red" }}>{err.course_name}</div>
+                    <div style={{ color: "red", fontSize: "14px" }}>
+                      {err.course_name}
+                    </div>
                   )}
                 </div>
 
@@ -233,16 +235,18 @@ const handleSubmit = async (e) => {
                     onChange={handleChange}
                   >
                     <option value="">Select Duration</option>
-                    <option value="1 Years">1 Years</option>
-                    <option value="2 Years">2 Years</option>
-                    <option value="3 Years">3 Years</option>
-                    <option value="4 Years">4 Years</option>
-                    <option value="5 Years">5 Years</option>
-                    <option value="6 Years">6 Years</option>
+                    <option value="1">1 Years</option>
+                    <option value="2">2 Years</option>
+                    <option value="3">3 Years</option>
+                    <option value="4">4 Years</option>
+                    <option value="5">5 Years</option>
+                    <option value="6">6 Years</option>
                   </select>
 
                   {err?.duration && (
-                    <div style={{ color: "red" }}>{err.duration}</div>
+                    <div style={{ color: "red", fontSize: "14px" }}>
+                      {err.duration}
+                    </div>
                   )}
                 </div>
 
@@ -268,10 +272,14 @@ const handleSubmit = async (e) => {
                     <option value="8">8</option>
                     <option value="9">9</option>
                     <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
                   </select>
 
                   {err?.semester && (
-                    <div style={{ color: "red" }}>{err.semester}</div>
+                    <div style={{ color: "red", fontSize: "14px" }}>
+                      {err.semester}
+                    </div>
                   )}
                 </div>
               </div>
