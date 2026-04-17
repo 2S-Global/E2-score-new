@@ -73,8 +73,8 @@ const validate = () => {
        if (!formData.admissionYear?.trim()) {
         newErrors.admissionYear = "Admission year is required";
       } 
-        if (formData.admissionYear?.trim()>formData.semesterYear) {
-        newErrors.admissionYear = "Admission year not valid";
+      if (formData.admissionYear?.trim()>formData.semesterYear) {
+        newErrors.admissionYear = "Invalid admission year";
       } 
       if (!formData.semesterMonth?.trim()) {
         newErrors.semesterMonth = "Semester month is required";
@@ -85,6 +85,15 @@ const validate = () => {
       return newErrors;
 };
 
+//admission year
+const errorAdmissionYear=()=>{
+  if (formData.semesterYear && formData.admissionYear && formData.admissionYear?.trim()>formData.semesterYear) {
+        setErr((prev)=>({...prev,admissionYear:"Invalid admission year"}))
+      }
+      else{
+         setErr((prev)=>({...prev,admissionYear:""}))
+      }
+}
 
   // ------------------------------
   // HANDLE FILE SELECTION
@@ -237,7 +246,7 @@ if (Object.keys(validationErrors).length === 0) {
                  <div className="mb-3 col-md-4">
                   <label className="form-label">Admission Year</label>
                   
-                  <select class="form-select"  name="admissionYear"  onChange={handleChange}  value={formData.admissionYear || ""}>
+                  <select class="form-select"  name="admissionYear"  onChange={(e)=>{handleChange(e)}} onBlur={errorAdmissionYear}  value={formData.admissionYear || ""}>
                     <option value="">Please select</option>
                         {years?.map((year) => (
                           <option key={year}>{year}</option>
