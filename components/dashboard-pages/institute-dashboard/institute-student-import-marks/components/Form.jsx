@@ -1,41 +1,51 @@
 "use client";
-
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
-import AuditReport from "../audit";
+import AuditReport from "./audit";
 
-const AddCsvModal = ({ show, onClose, setRefresh = () => {} }) => {
-  const [csvFile, setCsvFile] = useState(null);
+const Form = () => {
+ const [csvFile, setCsvFile] = useState(null);
   const [error, setError] = useState(null);
   const [errorId, setErrorId] = useState(null);
   const [message_id, setMessage_id] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
   const [totalSemesters, setTotalSemesters] = useState(0);
-
-  const [audit, setAudit] = useState([]);
-const [formData, setFormData] = useState({
-    semester: "",
-    program: "",
-    admissionYear: ""
-  });
+  const [formData, setFormData] = useState({
+      semester: "",
+      program: "",
+      semesterYear: "",
+      semesterMonth: "",
+      admissionYear: "",
+    });
   const [err, setErr] = useState(null);
+  const [audit, setAudit] = useState([]);
+
   const router = useRouter();
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 50 }, (_, i) => currentYear - i);
   const Semesters = Array.from({ length: totalSemesters }, (_, i) => 1 +i);
-  if (!show) return null;
-  const handleChange = (e) => {
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const marksTypes = ["DGPA", "CGPA"];
+
+
+
+ const handleChange = (e) => {
     const { name, value } = e.target;
       setErr((prev)=>({...prev,[name]:""}))
     let newValue = value;
     setFormData((prev) => ({ ...prev, [name]: newValue }));
     if(name==='program'){
+      if(value)
         setTotalSemesters(8)
+      else
+        setTotalSemesters(0)
     }
+  
     
   };
 
@@ -49,10 +59,21 @@ const validate = () => {
        if (!formData.program?.trim()) {
         newErrors.program = "Program is required";
       } 
-       if (!formData.admissionYear?.trim()) {
-        newErrors.admissionYear = "Admission Year is required";
+       if (!formData.semesterYear?.trim()) {
+        newErrors.semesterYear = "Semester year is required";
       } 
-     
+       if (!formData.admissionYear?.trim()) {
+        newErrors.admissionYear = "Admission year is required";
+      } 
+        if (formData.admissionYear?.trim()>formData.semesterYear) {
+        newErrors.admissionYear = "Admission year not valid";
+      } 
+      if (!formData.semesterMonth?.trim()) {
+        newErrors.semesterMonth = "Semester month is required";
+      } 
+      if (!formData.marksType?.trim()) {
+        newErrors.marksType = "Grading system is required";
+      } 
       return newErrors;
 };
 
@@ -87,11 +108,11 @@ const validate = () => {
   // ------------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
-     const validationErrors = validate();
+    const validationErrors = validate();
     setErr(validationErrors);   
     console.log(err);
 if (Object.keys(validationErrors).length === 0) {
-  setLoading(true);
+    setLoading(true);
     setError(null);
     setSuccess(null);
 
@@ -105,16 +126,18 @@ if (Object.keys(validationErrors).length === 0) {
       return;
     }
 
- const formPayload = new FormData();
+    const formPayload = new FormData();
     formPayload.append("role", 1);
     formPayload.append("csv", csvFile);
-    formPayload.append("semester", formData.semester);
     formPayload.append("program", formData.program);
+    formPayload.append("semesterYear", formData.semesterYear);
+    formPayload.append("semesterMonth", formData.semesterMonth);
+    formPayload.append("marksType", formData.marksType);
     formPayload.append("admissionYear", formData.admissionYear);
-
+    formPayload.append("semester", formData.semester);
     try {
       const response = await axios.post(
-        `${apiurl}/api/institutestudent/import-candidates`,
+        `${apiurl}/api/institutestudent/import-candidates-marks`,
         formPayload,
         {
           headers: {
@@ -148,56 +171,46 @@ if (Object.keys(validationErrors).length === 0) {
   }
   };
 
-  // ------------------------------
-  // UI
-  // ------------------------------
-
   //fetch program list
+
+  useEffect(()=>{
+  
+   const fetch=async ()=>{
+  try {
+      const response = await axios.get(
+        `${apiurl}/api/institute-course/course`,
+        formPayload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+        setProgram(response)
+    } catch (err) {
+     
+    } finally {
+      setLoading(false);
+    }
+
+ }
+fetch();
+  },[])
+
+  // ================= UI =================
   return (
-    <div
-      className="modal fade show d-block"
-      tabIndex="-1"
-      role="dialog"
-      style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-    >
-      <div className="modal-dialog modal-dialog-centered" role="document">
-        <div className="modal-content">
-          {/* Header */}
-          <div className="modal-header d-flex justify-content-between align-items-center">
-            <div className="d-flex align-items-center gap-3">
-              <h5 className="modal-title mb-0">Import New Student</h5>
-
-              {/* Download Template */}
-              <a
-                href="/institute-student-import.csv"
-                download
-                className="btn btn-sm btn-outline-primary"
-              >
-                Download Template Csv
-              </a>
-            </div>
-
-            <button
-              type="button"
-              className="btn-close"
-              onClick={onClose}
-            ></button>
-          </div>
-
-          {/* Body */}
-          <div className="modal-body">
-           {/*  {audit.length > 0 && <AuditReport audit={audit} />} */}
-
-            <form onSubmit={handleSubmit}>
+    <>
+    
+         <form onSubmit={handleSubmit}>
               <MessageComponent
                 error={error}
                 success={success}
                 errorId={errorId}
                 message_id={message_id}
               />
-              <div className="row">
-                {/* Program */}
-                <div className="mb-3 col-md-12">
+              <div  className="row">
+                 <div className="mb-3 col-md-12">
                   <label className="form-label">Program</label>
                   <select class="form-select"  name="program"  onChange={handleChange}  value={formData.program || ""}>
                     <option value="">Please select</option>
@@ -209,7 +222,7 @@ if (Object.keys(validationErrors).length === 0) {
                   { err?.program && (
                     <div style={{color:'red'}}>{err.program}</div>
                   )}
-                </div>
+                 </div>
                  <div className="mb-3 col-md-6">
                   <label className="form-label">Admission Year</label>
                   
@@ -223,7 +236,7 @@ if (Object.keys(validationErrors).length === 0) {
                     <div style={{color:'red'}}>{err.admissionYear}</div>
                   )}
                 </div>
-                 <div className="mb-3 col-md-6">
+                  <div className="mb-3 col-md-6">
                   <label className="form-label">Semester</label>
                   <select class="form-select"  name="semester"  onChange={handleChange}  value={formData.semester || ""}>
                     <option value="">Please select</option>
@@ -235,7 +248,44 @@ if (Object.keys(validationErrors).length === 0) {
                     <div style={{color:'red'}}>{err.semester}</div>
                   )}
                 </div>
-                <div className="mb-4">
+                 <div className="mb-3 col-md-6">
+                  <label className="form-label">Semester Year</label>
+                  
+                  <select class="form-select"  name="semesterYear"  onChange={handleChange}  value={formData.semesterYear || ""}>
+                    <option value="">Please select</option>
+                        {years?.map((year) => (
+                          <option key={year}>{year}</option>
+                        ))}
+                  </select>               
+                   { err?.semesterYear && (
+                    <div style={{color:'red'}}>{err.semesterYear}</div>
+                  )}
+                 </div>
+                <div className="mb-3 col-md-6">
+                  <label className="form-label">Semester Month</label>
+                  <select class="form-select"  name="semesterMonth"  onChange={handleChange}  value={formData.semesterMonth || ""}>
+                    <option value="">Please select</option>
+                     {months?.map((item,i) => (
+                          <option key={item}>{item}</option>
+                        ))}
+                  </select>                 
+                   { err?.semesterMonth && (
+                    <div style={{color:'red'}}>{err.semesterMonth}</div>
+                  )}
+                </div>
+                <div className="mb-3 col-md-6">
+                  <label className="form-label">Grading System</label>
+                  <select class="form-select"  name="marksType"  onChange={handleChange}  value={formData.marksType || ""}>
+                    <option value="">Please select</option>
+                     {marksTypes?.map((item,i) => (
+                          <option key={item}>{item}</option>
+                        ))}
+                  </select>                 
+                   { err?.marksType && (
+                    <div style={{color:'red'}}>{err.marksType}</div>
+                  )}
+                </div>
+                <div className="mb-3 col-md-6">
                   <label className="form-label">Upload Csv</label>
                   <input
                     type="file"
@@ -249,23 +299,13 @@ if (Object.keys(validationErrors).length === 0) {
               <button
                 type="submit"
                 className="btn btn-primary w-100"
-                disabled={loading || !csvFile  }
+                disabled={loading || !csvFile}
               >
                 {loading ? "Importing..." : "Import"}
               </button>
             </form>
-          </div>
-
-          {/* Footer */}
-          <div className="modal-footer">
-            <button className="btn btn-secondary" onClick={onClose}>
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 
-export default AddCsvModal;
+export default Form;

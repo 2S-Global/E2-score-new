@@ -1,13 +1,13 @@
 "use client";
-
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
-import AuditReport from "../audit";
+import AuditReport from "./audit";
 
-const AddCsvModal = ({ show, onClose, setRefresh = () => {} }) => {
+const Form = () => {
   const [csvFile, setCsvFile] = useState(null);
+  const [program, setProgram] = useState([]);
   const [error, setError] = useState(null);
   const [errorId, setErrorId] = useState(null);
   const [message_id, setMessage_id] = useState(null);
@@ -27,7 +27,7 @@ const [formData, setFormData] = useState({
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 50 }, (_, i) => currentYear - i);
   const Semesters = Array.from({ length: totalSemesters }, (_, i) => 1 +i);
-  if (!show) return null;
+
   const handleChange = (e) => {
     const { name, value } = e.target;
       setErr((prev)=>({...prev,[name]:""}))
@@ -128,17 +128,6 @@ if (Object.keys(validationErrors).length === 0) {
 
       setSuccess(response.data.message);
       setMessage_id(Date.now());
-
-     /*  if (response.data.total === response.data.created) {
-        setTimeout(() => {
-          setRefresh(true);
-        }, 1000);
-      } else if (response.data.audit) {
-        setAudit(response.data.audit);
-      } */
-      setTimeout(() => {
-          setRefresh(true);
-        }, 1000);
     } catch (err) {
       setError(err.response?.data?.message || "Import failed. Try again.");
       setErrorId(Date.now());
@@ -153,42 +142,38 @@ if (Object.keys(validationErrors).length === 0) {
   // ------------------------------
 
   //fetch program list
+
+useEffect(()=>{
+
+ const fetch=async ()=>{
+  try {
+      const response = await axios.get(
+        `${apiurl}/api/institute-course/course`,
+        formPayload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+        setProgram(response)
+    } catch (err) {
+     
+    } finally {
+      setLoading(false);
+    }
+
+ }
+fetch();
+},[])
+
+
+  // ================= UI =================
   return (
-    <div
-      className="modal fade show d-block"
-      tabIndex="-1"
-      role="dialog"
-      style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-    >
-      <div className="modal-dialog modal-dialog-centered" role="document">
-        <div className="modal-content">
-          {/* Header */}
-          <div className="modal-header d-flex justify-content-between align-items-center">
-            <div className="d-flex align-items-center gap-3">
-              <h5 className="modal-title mb-0">Import New Student</h5>
-
-              {/* Download Template */}
-              <a
-                href="/institute-student-import.csv"
-                download
-                className="btn btn-sm btn-outline-primary"
-              >
-                Download Template Csv
-              </a>
-            </div>
-
-            <button
-              type="button"
-              className="btn-close"
-              onClick={onClose}
-            ></button>
-          </div>
-
-          {/* Body */}
-          <div className="modal-body">
-           {/*  {audit.length > 0 && <AuditReport audit={audit} />} */}
-
-            <form onSubmit={handleSubmit}>
+    <>
+    
+       <form onSubmit={handleSubmit}>
               <MessageComponent
                 error={error}
                 success={success}
@@ -254,18 +239,8 @@ if (Object.keys(validationErrors).length === 0) {
                 {loading ? "Importing..." : "Import"}
               </button>
             </form>
-          </div>
-
-          {/* Footer */}
-          <div className="modal-footer">
-            <button className="btn btn-secondary" onClick={onClose}>
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 
-export default AddCsvModal;
+export default Form;
