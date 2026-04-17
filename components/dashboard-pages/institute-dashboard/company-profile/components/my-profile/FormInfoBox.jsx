@@ -343,6 +343,9 @@ const FormInfoBox = ({ setActiveTab }) => {
               dateFormat="dd/MM/yyyy"
               className="form-control"
               required
+              showYearDropdown
+              showMonthDropdown
+              dropdownMode="select" // ✅ clean select dropdown
             />
           </div>
 
