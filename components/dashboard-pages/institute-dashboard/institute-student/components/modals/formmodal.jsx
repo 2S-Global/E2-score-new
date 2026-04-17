@@ -1,168 +1,25 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import MessageComponent from "@/components/common/ResponseMsg";
-import AutoDetectPhoneInput from "@/components/common/form/phonenumber";
+"use client";
+import React from "react";
 
-const CandidateformModal = ({
-  show,
-  onClose,
-  data = {},
-  setRefresh = () => {},
-}) => {
-  const [formData, setFormData] = useState({
-    _id: data._id || "",
-    name: data.name || "",
-    email: data.email || "",
-    phone_number: data.phone_number || "",
-  });
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
-
-  const [formErrors, setFormErrors] = useState({});
-  const [touched, setTouched] = useState({});
-  const [disableSubmit, setDisableSubmit] = useState(false);
-
-  const apiurl = process.env.NEXT_PUBLIC_API_URL;
-
+const CandidateformModal = ({ show, onClose, data = {} }) => {
   if (!show) return null;
 
-  // ------------------------------
-  // VALIDATION
-  // ------------------------------
-  const validateField = (name, value) => {
-    switch (name) {
-      case "email":
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-          ? ""
-          : "Please enter a valid email.";
-
-      case "name":
-        return value ? "" : "Name is required.";
-
-      default:
-        return "";
-    }
+  const toTitleCase = (str) => {
+    if (!str) return "-";
+    return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
   };
-
-  // ------------------------------
-  // HANDLE INPUT CHANGE
-  // ------------------------------
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    let newValue = value;
-
-    setFormData((prev) => ({ ...prev, [name]: newValue }));
-    setFormErrors((prev) => ({
-      ...prev,
-      [name]: validateField(name, newValue),
-    }));
-  };
-
-  const setPhone = (phone) => {
-    setFormData((prev) => ({ ...prev, phone_number: phone }));
-    setFormErrors((prev) => ({
-      ...prev,
-      phone_number: validateField("phone_number", phone),
-    }));
-  };
-
-  // ------------------------------
-  // FORM SUBMIT
-  // ------------------------------
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setSuccess(null);
-
-    const token = localStorage.getItem("Super_token");
-    if (!token) {
-      setError("Token not found. Please log in again.");
-      setLoading(false);
-      return;
-    }
-
-    // -------------------------
-    // Validate fields
-    // -------------------------
-    const validationErrors = {};
-    ["name", "email", "phone_number"].forEach((key) => {
-      validationErrors[key] = validateField(key, formData[key]);
-    });
-
-    const hasErrors = Object.values(validationErrors).some(Boolean);
-    if (hasErrors) {
-      setFormErrors(validationErrors);
-      setTouched({
-        name: true,
-        email: true,
-        phone_number: true,
-      });
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const isUpdate = Boolean(formData._id);
-
-      const url = isUpdate
-        ? `${apiurl}/api/useradmin/update_user`
-        : `${apiurl}/api/useradmin/add_user`;
-
-      const payload = {
-        ...formData,
-        ...(isUpdate ? {} : { role: 1 }),
-      };
-
-      const method = isUpdate ? "put" : "post";
-
-      const response = await axios({
-        method,
-        url,
-        data: payload,
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      // Backend does not return success: true
-      if (response.status !== 200 && response.status !== 201) {
-        throw new Error(response.data?.message || "Operation failed");
-      }
-
-      setSuccess(response.data.message);
-      setRefresh(true);
-
-      setTimeout(() => {
-        onClose();
-      }, 1500);
-    } catch (err) {
-      setError(
-        err.response?.data?.message || "Request failed. Please try again."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // ------------------------------
-  // UI
-  // ------------------------------
+  
   return (
     <div
       className="modal fade show d-block"
       tabIndex="-1"
       style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
     >
-      <div className="modal-dialog modal-dialog-centered">
+      <div className="modal-dialog modal-lg modal-dialog-centered">
         <div className="modal-content">
           {/* Header */}
           <div className="modal-header">
-            <h5 className="modal-title">
-              {formData._id ? "Update Candidate" : "Add New Candidate"}
-            </h5>
+            <h5 className="modal-title">Candidate Details</h5>
             <button
               type="button"
               className="btn-close"
@@ -171,90 +28,118 @@ const CandidateformModal = ({
           </div>
 
           {/* Body */}
-          <div className="modal-body">
-            <form onSubmit={handleSubmit}>
-              <MessageComponent error={error} success={success} />
+          <div className="modal-body text-">
+            {/* ================= Candidate Information ================= */}
+            <h6 className="mb-3 border-bottom pb-2 text-primary">
+              Candidate Information
+            </h6>
 
-              <div className="row">
-                {/* Name */}
-                <div className="mb-3 col-md-6">
-                  <label className="form-label">Candidate Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    className={`form-control ${
-                      touched.name && formErrors.name ? "is-invalid" : ""
-                    }`}
-                    placeholder="Candidate Name"
-                    value={formData.name || ""}
-                    onChange={handleChange}
-                    onBlur={() =>
-                      setTouched((prev) => ({ ...prev, name: true }))
-                    }
-                  />
-                  {touched.name && formErrors.name && (
-                    <div className="invalid-feedback">{formErrors.name}</div>
-                  )}
-                </div>
-
-                {/* Email */}
-                <div className="mb-3 col-md-6">
-                  <label className="form-label">Email Address</label>
-                  <input
-                    type="email"
-                    name="email"
-                    className={`form-control ${
-                      touched.email && formErrors.email ? "is-invalid" : ""
-                    }`}
-                    placeholder="Email Address"
-                    value={formData.email || ""}
-                    onChange={handleChange}
-                    onBlur={() =>
-                      setTouched((prev) => ({ ...prev, email: true }))
-                    }
-                  />
-                  {touched.email && formErrors.email && (
-                    <div className="invalid-feedback">{formErrors.email}</div>
-                  )}
-                </div>
-
-                {/* Phone */}
-                <div className="mb-3 col-md-12">
-                  <AutoDetectPhoneInput
-                    phone={formData.phone_number}
-                    setPhone={setPhone}
-                    setDisableSubmit={setDisableSubmit}
-                  />
-                  {touched.phone_number && formErrors.phone_number && (
-                    <div className="invalid-feedback">
-                      {formErrors.phone_number}
-                    </div>
-                  )}
-                </div>
+            <div className="row g-3 mb-3">
+              <div className="col-md-6">
+                <b>Name:</b> {toTitleCase(data.name)}
               </div>
 
-              <button
-                type="submit"
-                className="btn btn-primary w-100"
-                disabled={loading || disableSubmit}
-                style={{
-                  pointerEvents: loading || disableSubmit ? "none" : "auto",
-                  opacity: loading || disableSubmit ? 0.5 : 1,
-                }}
-              >
-                {loading ? (
-                  <>{formData._id ? "Updating" : "Registering"}</>
-                ) : (
-                  <>{formData._id ? "Update" : "Register"}</>
-                )}
-              </button>
-            </form>
+              <div className="col-md-6">
+                <b>USN:</b> {data.USN || "-"}
+              </div>
+
+              <div className="col-md-6">
+                <b>Program:</b> {toTitleCase(data.program)}
+              </div>
+
+              <div className="col-md-6">
+                <b>Admission Year:</b> {data.admissionYear || "-"}
+              </div>
+
+              <div className="col-md-6">
+                <b>Gender:</b> {toTitleCase(data.gender)}
+              </div>
+
+              <div className="col-md-6">
+                <b>DOB:</b>{" "}
+                {data.dob
+                  ? new Date(data.dob).toLocaleDateString("en-GB")
+                  : "-"}
+              </div>
+
+              <div className="col-md-6">
+                <b>Status:</b>{" "}
+                <span
+                  className={`badge ${
+                    data.status ? "bg-success" : "bg-danger"
+                  }`}
+                >
+                  {data.status ? "Active" : "Inactive"}
+                </span>
+              </div>
+            </div>
+
+            {/* ================= Educational Information ================= */}
+            <h6 className="mb-3 border-bottom pb-2 text-success">
+              Educational Information
+            </h6>
+
+            <div className="row g-3 mb-3">
+              <div className="col-md-6">
+                <b>10th Marks:</b> {data.tenTh || "-"}(%)
+              </div>
+
+              <div className="col-md-6">
+                <b>12th Marks :</b> {data.twelveTh || "-"}(%)
+              </div>
+            </div>
+
+            {/* ================= Semester Section ================= */}
+            <h6 className="mt-3 fw-bold mb-3">Semester Marks</h6>
+
+            {data.semesters && data.semesters.length > 0 ? (
+              <div className="row g-3">
+                {data.semesters.map((sem, index) => {
+                  const marks = Number(sem.marks) || 0;
+                  const percentage = (marks / 10) * 100;
+
+                  // color based on marks
+                  let barColor = "bg-danger";
+                  if (marks >= 7.5) barColor = "bg-success";
+                  else if (marks >= 5.0) barColor = "bg-warning";
+
+                  return (
+                    <div className="col-md-4 col-sm-6" key={index}>
+                      <div className="card border-0 shadow-sm h-100">
+                        <div className="card-body">
+                          {/* Semester Title */}
+                          <div className="d-flex justify-content-between align-items-center mb-2">
+                            <h6 className="mb-0 text-muted">
+                              Semester {sem.semester}
+                            </h6>
+                            <span className="fw-bold">{marks}</span>
+                          </div>
+
+                          {/* Progress Bar */}
+                          <div className="progress" style={{ height: "10px" }}>
+                            <div
+                              className={`progress-bar ${barColor}`}
+                              role="progressbar"
+                              style={{ width: `${percentage}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-center text-muted py-3">
+                No semester data available
+              </div>
+            )}
           </div>
 
           {/* Footer */}
           <div className="modal-footer">
             <button className="btn btn-secondary" onClick={onClose}>
-              Cancel
+              Close
             </button>
           </div>
         </div>
