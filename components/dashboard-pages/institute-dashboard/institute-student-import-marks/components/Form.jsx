@@ -3,8 +3,9 @@ import React, { useState ,useEffect} from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
+import Select from "react-select";
 import AuditReport from "./audit";
-
+import "../institue.css"
 const Form = () => {
  const [csvFile, setCsvFile] = useState(null);
   const [error, setError] = useState(null);
@@ -13,6 +14,9 @@ const Form = () => {
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
   const [totalSemesters, setTotalSemesters] = useState(0);
+  const [programData, setProgramData] = useState([]);
+  const [programDataResp, setProgramDataResp] = useState([]);
+  const [selectProgram, setSelectProgram] = useState([])
   const [formData, setFormData] = useState({
       semester: "",
       program: "",
@@ -34,21 +38,25 @@ const Form = () => {
 
 
 
- const handleChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
       setErr((prev)=>({...prev,[name]:""}))
     let newValue = value;
     setFormData((prev) => ({ ...prev, [name]: newValue }));
-    if(name==='program'){
-      if(value)
-        setTotalSemesters(8)
-      else
-        setTotalSemesters(0)
-    }
-  
-    
   };
 
+  const handleProgramSelect = (selectedOptions) => {
+    if(selectedOptions?.value){
+        setErr((prev)=>({...prev,program:""}))
+        setFormData((prev) => ({ ...prev, program: selectedOptions?.value }));
+        const findData = programDataResp.find(u => u._id === selectedOptions?.value);
+        setTotalSemesters(findData?.total_number_of_semesters||0)
+    }
+    else{
+      setTotalSemesters(0)
+    }
+      setSelectProgram(selectedOptions);
+  };
 
    // validation 
 const validate = () => {
@@ -103,6 +111,17 @@ const validate = () => {
     setCsvFile(file);
   };
 
+      const token =
+      typeof window !== "undefined"
+        ? localStorage.getItem("Institute_token")
+        : null;
+    if (!token) {
+      setError("Token not found. Please log in again.");
+      setLoading(false);
+      return;
+    }
+
+
   // ------------------------------
   // SUBMIT CSV IMPORT
   // ------------------------------
@@ -115,16 +134,6 @@ if (Object.keys(validationErrors).length === 0) {
     setLoading(true);
     setError(null);
     setSuccess(null);
-
-    const token =
-      typeof window !== "undefined"
-        ? localStorage.getItem("Institute_token")
-        : null;
-    if (!token) {
-      setError("Token not found. Please log in again.");
-      setLoading(false);
-      return;
-    }
 
     const formPayload = new FormData();
     formPayload.append("role", 1);
@@ -175,28 +184,29 @@ if (Object.keys(validationErrors).length === 0) {
 
   useEffect(()=>{
   
-   const fetch=async ()=>{
-  try {
-      const response = await axios.get(
-        `${apiurl}/api/institute-course/course`,
-        formPayload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-        setProgram(response)
-    } catch (err) {
+     const fetchData = async () => {
+              try {
+                const response = await axios.get( `${apiurl}/api/institute-course/course`,   {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                });
+               
+              const responseData = response?.data?.data.map((item) => ({
+                                  label: item?.name,
+                                  value: item?._id,
+                                }));
+                 setProgramData(responseData ||[])
+                 setProgramDataResp(response?.data?.data||[])
+              } catch (error) {
+                console.error(error);
+              }
+            };
      
-    } finally {
-      setLoading(false);
-    }
-
- }
-fetch();
+           
+        fetchData()
   },[])
+
 
   // ================= UI =================
   return (
@@ -210,20 +220,21 @@ fetch();
                 message_id={message_id}
               />
               <div  className="row">
-                 <div className="mb-3 col-md-12">
+                 <div className="mb-3 col-md-4">
                   <label className="form-label">Program</label>
-                  <select class="form-select"  name="program"  onChange={handleChange}  value={formData.program || ""}>
-                    <option value="">Please select</option>
-                    <option value="CIVIL ENGINEERING">CIVIL ENGINEERING</option>
-                    <option value="ELECTRICAL ENGINEERING">ELECTRICAL ENGINEERING</option>
-                    <option value="INFORMATION TECHNOLOGY">INFORMATION TECHNOLOGY</option>
-                  </select>
-                  
+                  <Select
+                    options={programData}
+                    value={selectProgram}
+                    onChange={handleProgramSelect}
+                    placeholder="Please select"
+                    className="basic-multi-select"
+                    classNamePrefix="select"
+                  />
                   { err?.program && (
                     <div style={{color:'red'}}>{err.program}</div>
                   )}
                  </div>
-                 <div className="mb-3 col-md-6">
+                 <div className="mb-3 col-md-4">
                   <label className="form-label">Admission Year</label>
                   
                   <select class="form-select"  name="admissionYear"  onChange={handleChange}  value={formData.admissionYear || ""}>
@@ -236,7 +247,7 @@ fetch();
                     <div style={{color:'red'}}>{err.admissionYear}</div>
                   )}
                 </div>
-                  <div className="mb-3 col-md-6">
+                  <div className="mb-3 col-md-4">
                   <label className="form-label">Semester</label>
                   <select class="form-select"  name="semester"  onChange={handleChange}  value={formData.semester || ""}>
                     <option value="">Please select</option>
@@ -248,7 +259,7 @@ fetch();
                     <div style={{color:'red'}}>{err.semester}</div>
                   )}
                 </div>
-                 <div className="mb-3 col-md-6">
+                 <div className="mb-3 col-md-4">
                   <label className="form-label">Semester Year</label>
                   
                   <select class="form-select"  name="semesterYear"  onChange={handleChange}  value={formData.semesterYear || ""}>
@@ -261,7 +272,7 @@ fetch();
                     <div style={{color:'red'}}>{err.semesterYear}</div>
                   )}
                  </div>
-                <div className="mb-3 col-md-6">
+                <div className="mb-3 col-md-4">
                   <label className="form-label">Semester Month</label>
                   <select class="form-select"  name="semesterMonth"  onChange={handleChange}  value={formData.semesterMonth || ""}>
                     <option value="">Please select</option>
@@ -273,7 +284,7 @@ fetch();
                     <div style={{color:'red'}}>{err.semesterMonth}</div>
                   )}
                 </div>
-                <div className="mb-3 col-md-6">
+                <div className="mb-3 col-md-4">
                   <label className="form-label">Grading System</label>
                   <select class="form-select"  name="marksType"  onChange={handleChange}  value={formData.marksType || ""}>
                     <option value="">Please select</option>
@@ -285,7 +296,7 @@ fetch();
                     <div style={{color:'red'}}>{err.marksType}</div>
                   )}
                 </div>
-                <div className="mb-3 col-md-6">
+                <div className="mb-3 col-md-12">
                   <label className="form-label">Upload Csv</label>
                   <input
                     type="file"

@@ -4,17 +4,18 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
 import AuditReport from "./audit";
-
+import Select from "react-select";
 const Form = () => {
   const [csvFile, setCsvFile] = useState(null);
-  const [program, setProgram] = useState([]);
   const [error, setError] = useState(null);
   const [errorId, setErrorId] = useState(null);
   const [message_id, setMessage_id] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
   const [totalSemesters, setTotalSemesters] = useState(0);
-
+  const [programData, setProgramData] = useState([]);
+  const [programDataResp, setProgramDataResp] = useState([]);
+  const [selectProgram, setSelectProgram] = useState([])
   const [audit, setAudit] = useState([]);
 const [formData, setFormData] = useState({
     semester: "",
@@ -33,10 +34,19 @@ const [formData, setFormData] = useState({
       setErr((prev)=>({...prev,[name]:""}))
     let newValue = value;
     setFormData((prev) => ({ ...prev, [name]: newValue }));
-    if(name==='program'){
-        setTotalSemesters(8)
+  };
+
+  const handleProgramSelect = (selectedOptions) => {
+    if(selectedOptions?.value){
+        setErr((prev)=>({...prev,program:""}))
+        setFormData((prev) => ({ ...prev, program: selectedOptions?.value }));
+        const findData = programDataResp.find(u => u._id === selectedOptions?.value);
+        setTotalSemesters(findData?.total_number_of_semesters||0)
     }
-    
+    else{
+      setTotalSemesters(0)
+    }
+      setSelectProgram(selectedOptions);
   };
 
 
@@ -81,7 +91,15 @@ const validate = () => {
     setError(null);
     setCsvFile(file);
   };
-
+   const token =
+      typeof window !== "undefined"
+        ? localStorage.getItem("Institute_token")
+        : null;
+    if (!token) {
+      setError("Token not found. Please log in again.");
+      setLoading(false);
+      return;
+    }
   // ------------------------------
   // SUBMIT CSV IMPORT
   // ------------------------------
@@ -94,16 +112,6 @@ if (Object.keys(validationErrors).length === 0) {
   setLoading(true);
     setError(null);
     setSuccess(null);
-
-    const token =
-      typeof window !== "undefined"
-        ? localStorage.getItem("Institute_token")
-        : null;
-    if (!token) {
-      setError("Token not found. Please log in again.");
-      setLoading(false);
-      return;
-    }
 
  const formPayload = new FormData();
     formPayload.append("role", 1);
@@ -143,30 +151,32 @@ if (Object.keys(validationErrors).length === 0) {
 
   //fetch program list
 
-useEffect(()=>{
 
- const fetch=async ()=>{
-  try {
-      const response = await axios.get(
-        `${apiurl}/api/institute-course/course`,
-        formPayload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-        setProgram(response)
-    } catch (err) {
+  useEffect(()=>{
+  
+     const fetchData = async () => {
+              try {
+                const response = await axios.get( `${apiurl}/api/institute-course/course`,   {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                });
+               
+              const responseData = response?.data?.data.map((item) => ({
+                                  label: item?.name,
+                                  value: item?._id,
+                                }));
+                 setProgramData(responseData ||[])
+                 setProgramDataResp(response?.data?.data||[])
+              } catch (error) {
+                console.error(error);
+              }
+            };
      
-    } finally {
-      setLoading(false);
-    }
+           
+        fetchData()
+  },[])
 
- }
-fetch();
-},[])
 
 
   // ================= UI =================
@@ -182,20 +192,21 @@ fetch();
               />
               <div className="row">
                 {/* Program */}
-                <div className="mb-3 col-md-12">
+                <div className="mb-3 col-md-4">
                   <label className="form-label">Program</label>
-                  <select class="form-select"  name="program"  onChange={handleChange}  value={formData.program || ""}>
-                    <option value="">Please select</option>
-                    <option value="CIVIL ENGINEERING">CIVIL ENGINEERING</option>
-                    <option value="ELECTRICAL ENGINEERING">ELECTRICAL ENGINEERING</option>
-                    <option value="INFORMATION TECHNOLOGY">INFORMATION TECHNOLOGY</option>
-                  </select>
-                  
+                     <Select
+                    options={programData}
+                    value={selectProgram}
+                    onChange={handleProgramSelect}
+                    placeholder="Please select"
+                    className="basic-multi-select"
+                    classNamePrefix="select"
+                  />
                   { err?.program && (
                     <div style={{color:'red'}}>{err.program}</div>
                   )}
                 </div>
-                 <div className="mb-3 col-md-6">
+                 <div className="mb-3 col-md-4">
                   <label className="form-label">Admission Year</label>
                   
                   <select class="form-select"  name="admissionYear"  onChange={handleChange}  value={formData.admissionYear || ""}>
@@ -208,7 +219,7 @@ fetch();
                     <div style={{color:'red'}}>{err.admissionYear}</div>
                   )}
                 </div>
-                 <div className="mb-3 col-md-6">
+                 <div className="mb-3 col-md-4">
                   <label className="form-label">Semester</label>
                   <select class="form-select"  name="semester"  onChange={handleChange}  value={formData.semester || ""}>
                     <option value="">Please select</option>

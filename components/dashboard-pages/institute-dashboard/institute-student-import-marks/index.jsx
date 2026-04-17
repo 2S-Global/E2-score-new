@@ -4,42 +4,9 @@ import DashboardHeader from "../../../header/DashboardAdminheader";
 import DashboardInstituteSidebar from "../../../header/DashboardInstituteSidebar";
 
 import CopyrightFooter from "../../CopyrightFooter";
-import axios from "axios";
 import Form from "./components/Form";
-import { useState,useEffect } from "react";
 const Index = () => {
-    const apiurl = process.env.NEXT_PUBLIC_API_URL;
-    useEffect(()=>{
-    
-    const token =
-      typeof window !== "undefined"
-        ? localStorage.getItem("Institute_token")
-        : null;
-    if (!token) {
-      setError("Token not found. Please log in again.");
-      setLoading(false);
-      return;
-    }
-    const fetchData = async () => {
-              try {
-                const response = await axios.get( `${apiurl}/api/institute-course/course`,   {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                });
-                console.log(response.data);
-                 setProgram(response)
-              } catch (error) {
-                console.error(error);
-              }
-            };
-     
-           
-        fetchData()
-    
-    
- 
-    },[])
+
   return (
     <>
       <div className="page-wrapper dashboard ">
@@ -58,7 +25,7 @@ const Index = () => {
           <div className="dashboard-outer">
             
             <div className="row">
-              <div className="col-lg-6 mx-auto" >
+              <div className="col-lg-12 mx-auto" >
                 <div className="applicants-widget ls-widget">
                   <div
                     className="widget-title"

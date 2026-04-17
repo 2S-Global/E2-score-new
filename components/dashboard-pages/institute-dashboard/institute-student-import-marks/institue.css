@@ -1,0 +1,9 @@
+select.form-select {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.selectOption {
+  width: 100%;
+}

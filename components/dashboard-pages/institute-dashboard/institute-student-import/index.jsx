@@ -25,7 +25,7 @@ const Index = () => {
         <section className="user-dashboard">
           <div className="dashboard-outer">
             <div className="row">
-              <div className="col-lg-6 mx-auto">
+              <div className="col-lg-12 mx-auto">
                 <div className="applicants-widget ls-widget">
                   <div
                     className="widget-title"
