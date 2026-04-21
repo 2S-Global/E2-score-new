@@ -35,7 +35,7 @@ const AddFormModal = ({
     USN: data.USN || "",
     program: data.program || "",
     gender: data.gender || "",
-    dob: YMD(data.dob) || "",
+    dob: data?.dob?YMD(data.dob):data.dob || "",
     admissionYear: data.admissionYear || "",
     tenTh: data.tenTh || "",
     twelveTh: data.twelveTh || "",
@@ -151,9 +151,7 @@ const validate = () => {
     const { name, value } = e.target;
       setErr((prev)=>({...prev,[name]:""}))
     let newValue = value;
-    if(name==="dob"){
-        newValue=DMY(value)
-    }
+   
     setFormData((prev) => ({ ...prev, [name]: newValue }));
   };
 
@@ -164,7 +162,6 @@ const validate = () => {
   // ------------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
     setSuccess(null);
     const validationErrors = validate();
@@ -178,6 +175,8 @@ const validate = () => {
     if (Object.keys(validationErrors).length === 0) {
 
     try {
+      
+    setLoading(true);
         const isUpdate = (formData._id)?true:false;
        /*  const url = isUpdate
           ? `${apiurl}/api/useradmin/update_user`
@@ -192,22 +191,22 @@ const validate = () => {
               }
             });
         let payload ={}
-        if(formData._id){
-          let editData={...formData};
-          editData.dob= DMY(data.dob) 
+        //if(formData._id){
+          let AddData={...formData};
+          AddData.dob= DMY(formData.dob) 
            payload = {
-                    ...editData,
+                    ...AddData,
                     semesters,
                     ...(isUpdate ? {} : { role: 1 }),
                   };
 
-        }else{
+       /*  }else{
              payload = {
                         ...formData,
                         semesters,
                         ...(isUpdate ? {} : { role: 1 }),
                       };
-        }
+        } */
         
 
         ///const method = isUpdate ? "put" : "post";
@@ -496,10 +495,10 @@ const validate = () => {
               <button
                 type="submit"
                 className="btn btn-primary w-100"
-                disabled={loading || disableSubmit}
+                disabled={loading}
                 style={{
-                  pointerEvents: loading || disableSubmit ? "none" : "auto",
-                  opacity: loading || disableSubmit ? 0.5 : 1,
+                  pointerEvents: loading  ? "none" : "auto",
+                  opacity: loading  ? 0.5 : 1,
                 }}
               >
                 {loading ? (
