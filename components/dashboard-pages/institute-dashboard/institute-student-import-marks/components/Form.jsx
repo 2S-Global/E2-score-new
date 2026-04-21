@@ -202,7 +202,7 @@ if (Object.keys(validationErrors).length === 0) {
                 });
                
               const responseData = response?.data?.data.map((item) => ({
-                                  label: item?.name+'('+item?.type+')',
+                                  label: item?.type!=='custom'?item?.name+'('+item?.type+')':item?.name,
                                   value: item?._id,
                                 }));
                  setProgramData(responseData ||[])

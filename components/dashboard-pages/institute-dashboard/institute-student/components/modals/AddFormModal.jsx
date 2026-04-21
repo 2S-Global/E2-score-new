@@ -252,7 +252,7 @@ const validate = () => {
                     });
                   
                   const responseData = response?.data?.data.map((item) => ({
-                                      label: item?.name+'('+item?.type+')',
+                                      label: item?.type!=='custom'?item?.name+'('+item?.type+')':item?.name,
                                       value: item?._id,
                                     }));
                     setProgramData(responseData ||[])
@@ -299,7 +299,7 @@ const validate = () => {
       tabIndex="-1"
       style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
     >
-      <div className="modal-dialog modal-dialog-centered">
+      <div className="modal-dialog modal-dialog-centered modal-lg">
         <div className="modal-content">
           {/* Header */}
           <div className="modal-header">

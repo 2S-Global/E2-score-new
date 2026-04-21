@@ -1,6 +1,6 @@
 "use client";
 import React, { useMemo, useEffect, useState } from "react";
-
+import Select from "react-select";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
@@ -35,6 +35,11 @@ const Table = ({ setRefresh, refresh }) => {
   /*  const  */
   const [message_id, setMessage_id] = useState(null);
   const [errorId, setErrorId] = useState(null);
+const [programData, setProgramData] = useState([]);
+    const [selectProgram, setSelectProgram] = useState([])
+   const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 50 }, (_, i) => currentYear - i);
+
   const openModalRH = (data) => {
     setEdit(data);
     setIsModalOpen(true);
@@ -249,7 +254,32 @@ const Table = ({ setRefresh, refresh }) => {
 
   const [searchText, setSearchText] = useState("");
 
- 
+ // course list
+  
+  useEffect(()=>{
+     const token = localStorage.getItem("Institute_token");
+     const fetchData = async () => {
+              try {
+                    const response = await axios.get( `${apiurl}/api/institute-course/course`,   {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                    });
+                  
+                  const responseData = response?.data?.data.map((item) => ({
+                                      label: item?.type!=='custom'?item?.name+'('+item?.type+')':item?.name,
+                                      value: item?._id,
+                                    }));
+                    setProgramData(responseData ||[])
+                    
+              } catch (error) {
+                console.error(error);
+              }
+            };
+     
+           
+        fetchData()
+  },[])
 
 const [filters, setFilters] = useState({
   usn: "",
@@ -285,6 +315,7 @@ const resetFilters = () => {
     max12: 100,
     admissionYear: "",
   });
+   setSelectProgram([])
 };
 
   // ⚡ Optimized filtering using useMemo
@@ -298,12 +329,17 @@ const resetFilters = () => {
     filters.max10 !== 100 ||
     filters.min12 !== 0 ||
     filters.max12 !== 100;
+
+      const handleProgramSelect = (selectedOptions) => {
+  setFilters((prev) => ({ ...prev, course: selectedOptions?.value }));
+      setSelectProgram(selectedOptions);
+  };
 const filteredData = useMemo(() => {
   // ❌ No filter → return empty
   if (!isFilterApplied) return [];
 
   return students.filter((row) => {
-    if (filters.course && row.course !== filters.course) return false;
+    if (filters.course && row.program !== filters.course) return false;
 
     if (filters.admissionYear && row.admissionYear !== filters.admissionYear)
       return false;
@@ -526,40 +562,37 @@ const filteredData = useMemo(() => {
                         />
                       </div>
 
-                      {/* Course */}
-                      <div className="col-md-3">
-                        <label className="form-label">Course</label>
-                        <select
-                          className="form-select"
-                          name="course"
-                          value={filters.course}
-                          onChange={handleChange}
-                        >
-                          <option value="">All</option>
-                          <option value="BCA">BCA</option>
-                          <option value="BBA">BBA</option>
-                          <option value="BSc">BSc</option>
-                        </select>
+                       <div className="col-md-3">
+                        <label className="form-label"> Admission Year</label>
+                        
+                            <select
+                              className="form-select"
+                              name="admissionYear"
+                              value={filters.admissionYear}
+                              onChange={handleChange}
+                            >
+                              <option value="">Select Year</option>
+                              {years?.map((year) => (
+                              <option key={year}>{year}</option>
+                            ))}
+                            </select>
                       </div>
 
+                      {/* Course */}
                       <div className="col-md-3">
-                        <label className="form-label"> Admission Year</label>
-                        <select
-                          className="form-select"
-                          name="admissionYear"
-                          value={filters.admissionYear}
-                          onChange={handleChange}
-                        >
-                          <option value="">All Years</option>
-                          {[
-                            ...new Set(students.map((s) => s.admissionYear)),
-                          ].map((year) => (
-                            <option key={year} value={year}>
-                              {year}
-                            </option>
-                          ))}
-                        </select>
+                        <label className="form-label">Program</label>
+                          <Select
+                          options={programData}
+                          value={selectProgram}
+                          onChange={handleProgramSelect}
+                          placeholder="Please select"
+                          className="basic-multi-select"
+                          classNamePrefix="select"
+                        />
+                      
                       </div>
+
+                     
 
                       {/* 10th Slider */}
                       <div className="col-md-6">
