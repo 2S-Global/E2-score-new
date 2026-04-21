@@ -11,6 +11,8 @@ const formModal = ({ show, onClose, data = {}, setRefresh = () => {} }) => {
     duration: "",
     semester: "",
     id: "",
+    exam_type: "year", // NEW
+    marks_type: "", // NEW
   });
 
   const [courseList, setCourseList] = useState([]);
@@ -22,16 +24,31 @@ const formModal = ({ show, onClose, data = {}, setRefresh = () => {} }) => {
   const [success, setSuccess] = useState(null);
   const [err, setErr] = useState({});
 
-  useEffect(() => {
-    if (data?._id) {
-      setFormData({
-        course_name: data.name || "", // ✅ FIX
-        duration: data.course_durartion || "", // ✅ FIX
-        semester: data.total_number_of_semesters || "", // ✅ FIX
-        id: data._id || "",
-      });
+useEffect(() => {
+  if (data?._id) {
+    const duration = data.course_durartion || "";
+    const examType = data.courseStructure || "year";
+
+    let calculatedSemester = "";
+
+    if (duration) {
+      if (examType === "year") {
+        calculatedSemester = Number(duration);
+      } else if (examType === "semester") {
+        calculatedSemester = Number(duration) * 2;
+      }
     }
-  }, [data]);
+
+    setFormData({
+      course_name: data.name || "",
+      duration: duration,
+      semester: calculatedSemester, // ✅ FIXED
+      exam_type: examType, // ✅ IMPORTANT
+      marks_type: data.marksType || "", // ✅ IMPORTANT
+      id: data._id || "",
+    });
+  }
+}, [data]);
 
   // ✅ Validation
   const validate = () => {
@@ -39,6 +56,8 @@ const formModal = ({ show, onClose, data = {}, setRefresh = () => {} }) => {
     if (!formData.course_name) newErrors.course_name = "Course is required";
     if (!formData.duration) newErrors.duration = "Duration is required";
     if (!formData.semester) newErrors.semester = "Semester is required";
+    if (!formData.exam_type) newErrors.exam_type = "Exam type is required";
+    if (!formData.marks_type) newErrors.marks_type = "Marks type is required";
     return newErrors;
   };
 
@@ -60,26 +79,43 @@ const formModal = ({ show, onClose, data = {}, setRefresh = () => {} }) => {
   };
 
   // ✅ Handle input change
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+const handleChange = (e) => {
+  const { name, value } = e.target;
 
-    setErr((prev) => ({ ...prev, [name]: "" }));
+  setErr((prev) => ({ ...prev, [name]: "" }));
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    // Autocomplete trigger
-    if (name === "course_name") {
-      if (value.length > 0) {
-        fetchCourses(value);
-      } else {
-        setShowDropdown(false);
-        setCourseList([]);
-      }
-    }
+  let updatedForm = {
+    ...formData,
+    [name]: value,
   };
+
+  // ✅ Always calculate (fix blank issue)
+  const duration = name === "duration" ? value : formData.duration;
+  const examType = name === "exam_type" ? value : formData.exam_type;
+
+  if (duration && examType) {
+    if (examType === "year") {
+   updatedForm.semester = String(duration);
+    } else if (examType === "semester") {
+      updatedForm.semester = String(Number(duration) * 2);
+    }
+  } else {
+    // ✅ IMPORTANT: reset when empty
+    updatedForm.semester = "";
+  }
+
+  setFormData(updatedForm);
+
+  // autocomplete (same)
+  if (name === "course_name") {
+    if (value.length > 0) {
+      fetchCourses(value);
+    } else {
+      setShowDropdown(false);
+      setCourseList([]);
+    }
+  }
+};
 
   // ✅ Submit
   const handleSubmit = async (e) => {
@@ -99,6 +135,8 @@ const formModal = ({ show, onClose, data = {}, setRefresh = () => {} }) => {
       sendformData.append("name", formData.course_name);
       sendformData.append("course_durartion", formData.duration);
       sendformData.append("total_number_of_semesters", formData.semester);
+      sendformData.append("courseStructure", formData.exam_type); // ✅ FIX
+      sendformData.append("marksType", formData.marks_type); // ✅ FIX
 
       const token = localStorage.getItem("Institute_token");
 
@@ -193,9 +231,23 @@ const formModal = ({ show, onClose, data = {}, setRefresh = () => {} }) => {
                         <li className="list-group-item">Loading...</li>
                       )}
 
-                      {!courseLoading && courseList.length === 0 && (
-                        <li className="list-group-item">No data found</li>
-                      )}
+                      {!courseLoading &&
+                        courseList.length === 0 &&
+                        formData.course_name && (
+                          <li
+                            className="list-group-item list-group-item-action text-primary"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              setFormData((prev) => ({
+                                ...prev,
+                                course_name: formData.course_name, // keep typed value
+                              }));
+                              setShowDropdown(false);
+                            }}
+                          >
+                            Create new: "{formData.course_name}"
+                          </li>
+                        )}
 
                       {courseList.map((item, index) => (
                         <li
@@ -223,10 +275,72 @@ const formModal = ({ show, onClose, data = {}, setRefresh = () => {} }) => {
                   )}
                 </div>
 
-                {/* ✅ Duration */}
-                <div className="mb-3 col-md-12">
+                {/* ✅ Exam Type */}
+                <div className="mb-3 col-md-6">
                   <label className="form-label">
-                    Duration <span style={{ color: "red" }}>*</span>
+                    Exam Type <span style={{ color: "red" }}>*</span>
+                  </label>
+
+                  <div>
+                    <label className="me-3">
+                      <input
+                        type="radio"
+                        name="exam_type"
+                        value="year"
+                        checked={formData.exam_type === "year"}
+                        onChange={handleChange}
+                      />{" "}
+                      Yearly
+                    </label>
+
+                    <label>
+                      <input
+                        type="radio"
+                        name="exam_type"
+                        value="semester"
+                        checked={formData.exam_type === "semester"}
+                        onChange={handleChange}
+                      />{" "}
+                      Semester
+                    </label>
+                  </div>
+
+                  {err?.exam_type && (
+                    <div style={{ color: "red", fontSize: "14px" }}>
+                      {err.exam_type}
+                    </div>
+                  )}
+                </div>
+
+                {/* ✅ Marks Type */}
+                <div className="mb-3 col-md-6">
+                  <label className="form-label">
+                    Marks Type <span style={{ color: "red" }}>*</span>
+                  </label>
+
+                  <select
+                    name="marks_type"
+                    className="form-control"
+                    value={formData.marks_type}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Marks Type</option>
+                    <option value="dgpa">DGPA</option>
+                    <option value="cgpa">CGPA</option>
+                    <option value="percentage">Percentage</option>
+                  </select>
+
+                  {err?.marks_type && (
+                    <div style={{ color: "red", fontSize: "14px" }}>
+                      {err.marks_type}
+                    </div>
+                  )}
+                </div>
+
+                {/* ✅ Duration */}
+                <div className="mb-3 col-md-6">
+                  <label className="form-label">
+                    Duration (Years) <span style={{ color: "red" }}> *</span>
                   </label>
                   <select
                     name="duration"
@@ -251,7 +365,7 @@ const formModal = ({ show, onClose, data = {}, setRefresh = () => {} }) => {
                 </div>
 
                 {/* ✅ Semester */}
-                <div className="mb-3 col-md-12">
+                <div className="mb-3 col-md-6">
                   <label className="form-label">
                     Total Semester <span style={{ color: "red" }}>*</span>
                   </label>
@@ -259,7 +373,7 @@ const formModal = ({ show, onClose, data = {}, setRefresh = () => {} }) => {
                     name="semester"
                     className="form-control"
                     value={formData.semester}
-                    onChange={handleChange}
+                    disabled
                   >
                     <option value="">Select Semester</option>
                     <option value="1">1</option>
@@ -276,11 +390,11 @@ const formModal = ({ show, onClose, data = {}, setRefresh = () => {} }) => {
                     <option value="12">12</option>
                   </select>
 
-                  {err?.semester && (
+                  {/* {err?.semester && (
                     <div style={{ color: "red", fontSize: "14px" }}>
                       {err.semester}
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
 
