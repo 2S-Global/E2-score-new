@@ -14,7 +14,8 @@ import AddFormModal from "./modals/AddFormModal";
 import CircularProgress from "@mui/material/CircularProgress";
 import { se } from "date-fns/locale/se";
 import { set } from "date-fns/set";
-
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
 const Table = ({ setRefresh, refresh }) => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -56,12 +57,12 @@ const Table = ({ setRefresh, refresh }) => {
     document.body.style.overflow = "auto"; // Re-enable background scrolling
     console.log("close modal plan");
   };
-//edit modal
-    const openModalEdit = (data) => {
-      setEdit(data);
-      setIsEditModalOpen(true);
-      document.body.style.overflow = "hidden"; // Disable background scrolling
-    };
+  //edit modal
+  const openModalEdit = (data) => {
+    setEdit(data);
+    setIsEditModalOpen(true);
+    document.body.style.overflow = "hidden"; // Disable background scrolling
+  };
   const closeModalEdit = () => {
     setIsEditModalOpen(false);
     document.body.style.overflow = "auto"; // Re-enable background scrolling
@@ -247,93 +248,87 @@ const Table = ({ setRefresh, refresh }) => {
   };
 
   const [searchText, setSearchText] = useState("");
- const [apply, setApply] = useState(false);
-  // 🔎 Filter data based on search text
-/*   const filteredStudent = useMemo(() => {
-    return students.filter((data) => {
-      const search = searchText.toLowerCase();
-      return (
-        data.name?.toLowerCase().includes(search) ||
-        data.admissionYear?.toLowerCase().includes(search) ||
-        data.program?.toLowerCase().includes(search) ||
-        data.USN?.toLowerCase().includes(search) ||
-        String(data.tenTh)?.toLowerCase().includes(search) ||
-        String(data.twelveTh)?.toLowerCase().includes(search) ||
-        data.email?.toLowerCase().includes(search)
-      );
-    });
-  }, [students, searchText]); */
 
+ 
 
-   const [filters, setFilters] = useState({
-    usn: "",
-    name: "",
-    course: "",
-    minAge: "",
-    maxAge: "",
-    min10: "",
-    max10: "",
-    min12: "",
-    max12: "",
-    minYear: "",
-    maxYear: "",
-    year: "",
-  });
+const [filters, setFilters] = useState({
+  usn: "",
+  name: "",
+  course: "",
+  minAge: "",
+  maxAge: "",
+  min10: 0,
+  max10: 100,
+  min12: 0,
+  max12: 100,
+  admissionYear: "", // ✅ FIXED
+});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-   const resetFilters = () => {
-    setFilters({
-      usn: "",
-      name: "",
-      course: "",
-      minAge: "",
-      maxAge: "",
-      min10: "",
-      max10: "",
-      min12: "",
-      max12: "",
-      minYear: "",
-      maxYear: "",
-      year: "",
-    });
-     setApply(false);
-  };
+const resetFilters = () => {
+  setFilters({
+    usn: "",
+    name: "",
+    course: "",
+    minAge: "",
+    maxAge: "",
+    min10: 0,
+    max10: 100,
+    min12: 0,
+    max12: 100,
+    admissionYear: "",
+  });
+};
 
-   // ⚡ Optimized filtering using useMemo
-  const filteredData = useMemo(() => {
-     if (!apply) return students;
-    return students.filter(row => {
+  // ⚡ Optimized filtering using useMemo
 
-      // 🔥 Early exit (faster filtering)
-      if (filters.course && row.course !== filters.course) return false;
-      if (filters.year && row.admissionYear !== Number(filters.year)) return false;
+  const isFilterApplied =
+    filters.usn ||
+    filters.name ||
+    filters.course ||
+    filters.admissionYear ||
+    filters.min10 !== 0 ||
+    filters.max10 !== 100 ||
+    filters.min12 !== 0 ||
+    filters.max12 !== 100;
+const filteredData = useMemo(() => {
+  // ❌ No filter → return empty
+  if (!isFilterApplied) return [];
 
-      if (filters.minAge && row.age < Number(filters.minAge)) return false;
-      if (filters.maxAge && row.age > Number(filters.maxAge)) return false;
+  return students.filter((row) => {
+    if (filters.course && row.course !== filters.course) return false;
 
-      if (filters.min10 && row.tenTh < Number(filters.min10)) return false;
-      if (filters.max10 && row.tenTh > Number(filters.max10)) return false;
+    if (filters.admissionYear && row.admissionYear !== filters.admissionYear)
+      return false;
 
-      if (filters.min12 && row.twelveTh < Number(filters.min12)) return false;
-      if (filters.max12 && row.twelveTh > Number(filters.max12)) return false;
+    if (filters.min10 && row.tenTh < Number(filters.min10)) return false;
+    if (filters.max10 && row.tenTh > Number(filters.max10)) return false;
 
-      if (filters.minYear && row.admissionYear < Number(filters.minYear)) return false;
-      if (filters.maxYear && row.admissionYear > Number(filters.maxYear)) return false;
+    if (filters.min12 && row.twelveTh < Number(filters.min12)) return false;
+    if (filters.max12 && row.twelveTh > Number(filters.max12)) return false;
 
-      // 🔍 Text search (kept last)
-      if (filters.usn && !row.USN.toLowerCase().includes(filters.usn.toLowerCase())) return false;
-      if (filters.name && !row.name.toLowerCase().includes(filters.name.toLowerCase())) return false;
+    if (
+      filters.usn &&
+      !row.USN.toLowerCase().includes(filters.usn.toLowerCase())
+    )
+      return false;
 
-      return true;
-    });
-  }, [filters,apply]);
+    if (
+      filters.name &&
+      !row.name.toLowerCase().includes(filters.name.toLowerCase())
+    )
+      return false;
+
+    return true;
+  });
+}, [filters, students]);
 
   const columns = [
     {
@@ -392,13 +387,13 @@ const Table = ({ setRefresh, refresh }) => {
     },
     {
       name: "Program",
-      selector: (row) => row?.programDetails?.name||"",
+      selector: (row) => row?.programDetails?.name || "",
       sortable: true,
       width: "",
       center: true,
       cell: (row) => (
         <div
-          title={row?.programDetails?.name||""} // ✅ native tooltip on hover
+          title={row?.programDetails?.name || ""} // ✅ native tooltip on hover
           style={{
             whiteSpace: "nowrap",
             overflow: "hidden",
@@ -406,7 +401,7 @@ const Table = ({ setRefresh, refresh }) => {
             maxWidth: "140px",
           }}
         >
-          {row?.programDetails?.name ||""}
+          {row?.programDetails?.name || ""}
         </div>
       ),
     },
@@ -461,7 +456,7 @@ const Table = ({ setRefresh, refresh }) => {
             title="View"
             onClick={() => openModalRH(row)} // 👈 open your modal
           />
-           <Pencil
+          <Pencil
             size={18}
             style={{ cursor: "pointer", color: "#0d6efd" }}
             title="View"
@@ -490,151 +485,157 @@ const Table = ({ setRefresh, refresh }) => {
         <div className="widget-content">
           <div className="table-wrapper">
             {/* 🔍 Filters */}
-     <div className="row g-2 mb-3">
+            <div className="accordion mb-3" id="filterAccordion">
+              <div className="accordion-item">
+                <h2 className="accordion-header">
+                  <button
+                    className="accordion-button"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#filterCollapse"
+                  >
+                    🔍 Filter Students
+                  </button>
+                </h2>
 
-        <div className="col-md-2">
-          <input className="form-control" name="usn" placeholder="USN" value={filters.usn} onChange={handleChange} />
-        </div>
+                <div
+                  id="filterCollapse"
+                  className="accordion-collapse collapse show"
+                >
+                  <div className="accordion-body px-4 py-3">
+                    <div className="row g-4">
+                      {/* USN */}
+                      <div className="col-md-3">
+                        <label className="form-label">USN</label>
+                        <input
+                          className="form-control"
+                          name="usn"
+                          value={filters.usn}
+                          onChange={handleChange}
+                        />
+                      </div>
 
-        <div className="col-md-2">
-          <input className="form-control" name="name" placeholder="Name" value={filters.name} onChange={handleChange} />
-        </div>
+                      {/* Name */}
+                      <div className="col-md-3">
+                        <label className="form-label">Name</label>
+                        <input
+                          className="form-control"
+                          name="name"
+                          value={filters.name}
+                          onChange={handleChange}
+                        />
+                      </div>
 
-        <div className="col-md-2">
-          <select className="form-select" name="course" value={filters.course} onChange={handleChange}>
-            <option value="">All Courses</option>
-            <option value="BCA">BCA</option>
-            <option value="BBA">BBA</option>
-            <option value="BSc">BSc</option>
-          </select>
-        </div>
+                      {/* Course */}
+                      <div className="col-md-3">
+                        <label className="form-label">Course</label>
+                        <select
+                          className="form-select"
+                          name="course"
+                          value={filters.course}
+                          onChange={handleChange}
+                        >
+                          <option value="">All</option>
+                          <option value="BCA">BCA</option>
+                          <option value="BBA">BBA</option>
+                          <option value="BSc">BSc</option>
+                        </select>
+                      </div>
 
-        <div className="col-md-1">
-          <input className="form-control" name="min12" placeholder="12th Min" value={filters.min12} onChange={handleChange} />
-        </div>
+                      <div className="col-md-3">
+                        <label className="form-label"> Admission Year</label>
+                        <select
+                          className="form-select"
+                          name="admissionYear"
+                          value={filters.admissionYear}
+                          onChange={handleChange}
+                        >
+                          <option value="">All Years</option>
+                          {[
+                            ...new Set(students.map((s) => s.admissionYear)),
+                          ].map((year) => (
+                            <option key={year} value={year}>
+                              {year}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
 
-        <div className="col-md-1">
-          <input className="form-control" name="max12" placeholder="12th Max" value={filters.max12} onChange={handleChange} />
-        </div>
+                      {/* 10th Slider */}
+                      <div className="col-md-6">
+                        <label className="form-label fw-semibold">
+                          10th % ({filters.min10} - {filters.max10})
+                        </label>
 
-        <div className="col-md-1">
-          <input className="form-control" name="min10" placeholder="10th Min" value={filters.min10} onChange={handleChange} />
-        </div>
+                        <Slider
+                          range
+                          min={0}
+                          max={100}
+                          value={[filters.min10, filters.max10]}
+                          onChange={(value) =>
+                            setFilters((prev) => ({
+                              ...prev,
+                              min10: value[0],
+                              max10: value[1],
+                            }))
+                          }
+                        />
+                      </div>
 
-        <div className="col-md-1">
-          <input className="form-control" name="max10" placeholder="10th Max" value={filters.max10} onChange={handleChange} />
-        </div>
+                      {/* 12th Slider */}
+                      <div className="col-md-6">
+                        <label className="form-label fw-semibold">
+                          12th % ({filters.min12} - {filters.max12})
+                        </label>
 
-        <div className="col-md-1">
-          <input className="form-control" name="minYear" placeholder="Admission Year Min" value={filters.minYear} onChange={handleChange} />
-        </div>
+                        <Slider
+                          range
+                          min={0}
+                          max={100}
+                          value={[filters.min12, filters.max12]}
+                          onChange={(value) =>
+                            setFilters((prev) => ({
+                              ...prev,
+                              min12: value[0],
+                              max12: value[1],
+                            }))
+                          }
+                        />
+                      </div>
 
-        <div className="col-md-1">
-          <input className="form-control" name="maxYear" placeholder="Admission Year  Max" value={filters.maxYear} onChange={handleChange} />
-        </div>
+                      {/* Buttons */}
+                      <hr className="mt-4 mb-3" />
 
-        {/* Buttons */}
-        <div className="col-md-2 d-flex gap-2">
-          <button className="btn btn-primary w-100" onClick={() => setApply(true)}>
-            Search
-          </button>
-
-          <button className="btn btn-secondary w-100" onClick={resetFilters}>
-            Reset
-          </button>
-        </div>
-
-      </div>
-            <DataTable
-              columns={columns}
-              data={filteredData}
-              pagination
-              highlightOnHover
-              dense
-              fixedHeader
-              subHeader
-             
-              customStyles={{
-                table: {
-                  style: {
-                    borderRadius: "5px",
-                    overflow: "hidden",
-                    border: "1px solid #e5e5e5",
-                    boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
-                  },
-                },
-                rows: {
-                  style: {
-                    minHeight: "58px",
-                    borderBottom: "1px solid #f3f3f3",
-                    transition: "background-color 0.2s ease",
-                    "&:hover": {
-                      backgroundColor: "#f9fafb",
-                    },
-                  },
-                },
-                head: {
-                  style: {
-                    borderBottom: "2px solid #e5e5e5",
-                  },
-                },
-                headCells: {
-                  style: {
-                    backgroundColor: "#f8f9fa",
-                    fontWeight: "700",
-                    fontSize: "10px",
-                    color: "#343a40",
-                    paddingTop: "14px",
-                    paddingBottom: "14px",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.3px",
-                    borderBottom: "1px solid #dee2e6",
-                    borderRight: "1px solid #e0e0e0",
-                  },
-                },
-                cells: {
-                  style: {
-                    paddingLeft: "10px",
-                    paddingRight: "10px",
-                    fontSize: "14px",
-                    color: "#212529",
-                    lineHeight: "1.5",
-                    borderRight: "1px solid #e0e0e0",
-                  },
-                },
-                pagination: {
-                  style: {
-                    borderTop: "1px solid #dee2e6",
-                    padding: "10px 20px",
-                  },
-                  pageButtonsStyle: {
-                    borderRadius: "5px",
-                    height: "35px",
-                    width: "35px",
-                    padding: "6px",
-                    margin: "2px",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                    "&:hover:not(:disabled)": {
-                      backgroundColor: "#46b171",
-                      color: "#fff",
-                    },
-                    "&:focus": {
-                      outline: "none",
-                      backgroundColor: "#46b171",
-                      color: "#fff",
-                    },
-                  },
-                },
-                subHeader: {
-                  style: {
-                    backgroundColor: "#ffffff",
-                    borderBottom: "1px solid #f1f1f1",
-                    padding: "10px 15px",
-                  },
-                },
-              }}
-            />
+                      <div className="d-flex justify-content-start gap-2">
+                        <button
+                          className="btn btn-outline-secondary px-4"
+                          onClick={resetFilters}
+                        >
+                          Reset
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+            {isFilterApplied ? (
+              <DataTable
+                columns={columns}
+                data={filteredData}
+                pagination
+                highlightOnHover
+                dense
+                fixedHeader
+                subHeader
+            
+              />
+            ) : (
+              <div className="text-center py-4 text-muted">
+                🔍 Please apply filters to see results
+              </div>
+            )}
           </div>
         </div>
       )}
