@@ -10,6 +10,7 @@ import EditfieldModal from "./modals/editfield";
 import EditplanModal from "./modals/planmodal";
 import VerifiedlistModal from "./modals/verifiedlistModal";
 import CandidateformModal from "./modals/formmodal";
+import AddFormModal from "./modals/AddFormModal";
 import CircularProgress from "@mui/material/CircularProgress";
 import { se } from "date-fns/locale/se";
 import { set } from "date-fns/set";
@@ -24,17 +25,17 @@ const Table = ({ setRefresh, refresh }) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  const [editcompany, setEditcompany] = useState(null);
+  const [edit, setEdit] = useState(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isModalplanOpen, setIsModalplanOpen] = useState(false);
   const [isModalvlOpen, setIsModalvlOpen] = useState(false);
   /*  const  */
   const [message_id, setMessage_id] = useState(null);
   const [errorId, setErrorId] = useState(null);
-
-  const openModalRH = (companydetails) => {
-    setEditcompany(companydetails);
+  const openModalRH = (data) => {
+    setEdit(data);
     setIsModalOpen(true);
     document.body.style.overflow = "hidden"; // Disable background scrolling
   };
@@ -54,6 +55,16 @@ const Table = ({ setRefresh, refresh }) => {
     setIsModalplanOpen(false);
     document.body.style.overflow = "auto"; // Re-enable background scrolling
     console.log("close modal plan");
+  };
+//edit modal
+    const openModalEdit = (data) => {
+      setEdit(data);
+      setIsEditModalOpen(true);
+      document.body.style.overflow = "hidden"; // Disable background scrolling
+    };
+  const closeModalEdit = () => {
+    setIsEditModalOpen(false);
+    document.body.style.overflow = "auto"; // Re-enable background scrolling
   };
 
   useEffect(() => {
@@ -236,22 +247,93 @@ const Table = ({ setRefresh, refresh }) => {
   };
 
   const [searchText, setSearchText] = useState("");
-
+ const [apply, setApply] = useState(false);
   // 🔎 Filter data based on search text
-  const filteredStudent = useMemo(() => {
-    return students.filter((company) => {
+/*   const filteredStudent = useMemo(() => {
+    return students.filter((data) => {
       const search = searchText.toLowerCase();
       return (
-        company.name?.toLowerCase().includes(search) ||
-        company.admissionYear?.toLowerCase().includes(search) ||
-        company.program?.toLowerCase().includes(search) ||
-        company.USN?.toLowerCase().includes(search) ||
-        String(company.tenTh)?.toLowerCase().includes(search) ||
-        String(company.twelveTh)?.toLowerCase().includes(search) ||
-        company.email?.toLowerCase().includes(search)
+        data.name?.toLowerCase().includes(search) ||
+        data.admissionYear?.toLowerCase().includes(search) ||
+        data.program?.toLowerCase().includes(search) ||
+        data.USN?.toLowerCase().includes(search) ||
+        String(data.tenTh)?.toLowerCase().includes(search) ||
+        String(data.twelveTh)?.toLowerCase().includes(search) ||
+        data.email?.toLowerCase().includes(search)
       );
     });
-  }, [students, searchText]);
+  }, [students, searchText]); */
+
+
+   const [filters, setFilters] = useState({
+    usn: "",
+    name: "",
+    course: "",
+    minAge: "",
+    maxAge: "",
+    min10: "",
+    max10: "",
+    min12: "",
+    max12: "",
+    minYear: "",
+    maxYear: "",
+    year: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+   const resetFilters = () => {
+    setFilters({
+      usn: "",
+      name: "",
+      course: "",
+      minAge: "",
+      maxAge: "",
+      min10: "",
+      max10: "",
+      min12: "",
+      max12: "",
+      minYear: "",
+      maxYear: "",
+      year: "",
+    });
+     setApply(false);
+  };
+
+   // ⚡ Optimized filtering using useMemo
+  const filteredData = useMemo(() => {
+     if (!apply) return students;
+    return students.filter(row => {
+
+      // 🔥 Early exit (faster filtering)
+      if (filters.course && row.course !== filters.course) return false;
+      if (filters.year && row.admissionYear !== Number(filters.year)) return false;
+
+      if (filters.minAge && row.age < Number(filters.minAge)) return false;
+      if (filters.maxAge && row.age > Number(filters.maxAge)) return false;
+
+      if (filters.min10 && row.tenTh < Number(filters.min10)) return false;
+      if (filters.max10 && row.tenTh > Number(filters.max10)) return false;
+
+      if (filters.min12 && row.twelveTh < Number(filters.min12)) return false;
+      if (filters.max12 && row.twelveTh > Number(filters.max12)) return false;
+
+      if (filters.minYear && row.admissionYear < Number(filters.minYear)) return false;
+      if (filters.maxYear && row.admissionYear > Number(filters.maxYear)) return false;
+
+      // 🔍 Text search (kept last)
+      if (filters.usn && !row.USN.toLowerCase().includes(filters.usn.toLowerCase())) return false;
+      if (filters.name && !row.name.toLowerCase().includes(filters.name.toLowerCase())) return false;
+
+      return true;
+    });
+  }, [filters,apply]);
 
   const columns = [
     {
@@ -379,6 +461,12 @@ const Table = ({ setRefresh, refresh }) => {
             title="View"
             onClick={() => openModalRH(row)} // 👈 open your modal
           />
+           <Pencil
+            size={18}
+            style={{ cursor: "pointer", color: "#0d6efd" }}
+            title="View"
+            onClick={() => openModalEdit(row)} // 👈 open your modal
+          />
         </div>
       ),
     },
@@ -401,23 +489,71 @@ const Table = ({ setRefresh, refresh }) => {
       ) : (
         <div className="widget-content">
           <div className="table-wrapper">
+            {/* 🔍 Filters */}
+     <div className="row g-2 mb-3">
+
+        <div className="col-md-2">
+          <input className="form-control" name="usn" placeholder="USN" value={filters.usn} onChange={handleChange} />
+        </div>
+
+        <div className="col-md-2">
+          <input className="form-control" name="name" placeholder="Name" value={filters.name} onChange={handleChange} />
+        </div>
+
+        <div className="col-md-2">
+          <select className="form-select" name="course" value={filters.course} onChange={handleChange}>
+            <option value="">All Courses</option>
+            <option value="BCA">BCA</option>
+            <option value="BBA">BBA</option>
+            <option value="BSc">BSc</option>
+          </select>
+        </div>
+
+        <div className="col-md-1">
+          <input className="form-control" name="min12" placeholder="12th Min" value={filters.min12} onChange={handleChange} />
+        </div>
+
+        <div className="col-md-1">
+          <input className="form-control" name="max12" placeholder="12th Max" value={filters.max12} onChange={handleChange} />
+        </div>
+
+        <div className="col-md-1">
+          <input className="form-control" name="min10" placeholder="10th Min" value={filters.min10} onChange={handleChange} />
+        </div>
+
+        <div className="col-md-1">
+          <input className="form-control" name="max10" placeholder="10th Max" value={filters.max10} onChange={handleChange} />
+        </div>
+
+        <div className="col-md-1">
+          <input className="form-control" name="minYear" placeholder="Admission Year Min" value={filters.minYear} onChange={handleChange} />
+        </div>
+
+        <div className="col-md-1">
+          <input className="form-control" name="maxYear" placeholder="Admission Year  Max" value={filters.maxYear} onChange={handleChange} />
+        </div>
+
+        {/* Buttons */}
+        <div className="col-md-2 d-flex gap-2">
+          <button className="btn btn-primary w-100" onClick={() => setApply(true)}>
+            Search
+          </button>
+
+          <button className="btn btn-secondary w-100" onClick={resetFilters}>
+            Reset
+          </button>
+        </div>
+
+      </div>
             <DataTable
               columns={columns}
-              data={filteredStudent}
+              data={filteredData}
               pagination
               highlightOnHover
               dense
               fixedHeader
               subHeader
-              subHeaderComponent={
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="form-control w-25"
-                  value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)} // ✅ Live filtering
-                />
-              }
+             
               customStyles={{
                 table: {
                   style: {
@@ -504,36 +640,32 @@ const Table = ({ setRefresh, refresh }) => {
       )}
 
       {isModalOpen && (
-        /*   <EditfieldModal
-          show={isModalOpen}
-          onClose={closeModalRH}
-          field={editcompany}
-          refresh={refresh}
-          setRefresh={setRefresh}
-        /> */
         <CandidateformModal
           show={isModalOpen}
           onClose={closeModalRH}
-          field={editcompany}
+          field={edit}
           refresh={refresh}
           setRefresh={setRefresh}
-          data={editcompany}
+          data={edit}
         />
       )}
 
-      {/* {isModalplanOpen && (
-        <EditplanModal
-          show={isModalplanOpen}
-          onClose={closeModalPlanRH}
-          field={editcompany}
+      {isEditModalOpen && (
+        <AddFormModal
+          show={isEditModalOpen}
+          onClose={closeModalEdit}
+          field={edit}
+          refresh={refresh}
+          setRefresh={setRefresh}
+          data={edit}
         />
-      )} */}
+      )}
 
       {/* {isModalvlOpen && (
         <VerifiedlistModal
           show={isModalvlOpen}
           onClose={closeModalVL}
-          company={editcompany}
+          company={edit}
         />
       )} */}
     </>

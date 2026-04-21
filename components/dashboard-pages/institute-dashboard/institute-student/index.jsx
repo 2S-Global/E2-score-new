@@ -77,7 +77,7 @@ const Index = () => {
                     <h4>Student List</h4>
 
                     <div style={{ display: "flex", gap: "15px" }}>
-                    {/*   <span
+                      <span
                         onClick={openModalAdd}
                         style={{
                           cursor: "pointer",
@@ -88,7 +88,7 @@ const Index = () => {
                         }}
                       >
                         Add Student
-                      </span> */}
+                      </span>
 
        {/*                <span
                         onClick={openCsvModal}

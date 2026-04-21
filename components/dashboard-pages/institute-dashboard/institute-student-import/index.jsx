@@ -1,6 +1,6 @@
 "use client";
 import MobileMenu from "../../../header/AdminMobileMenu";
-import DashboardHeader from "../../../header/DashboardAdminheader";
+import DashboardHeader from "../../../header/InstituteDashboardHeader";
 import DashboardInstituteSidebar from "../../../header/DashboardInstituteSidebar";
 
 import CopyrightFooter from "../../CopyrightFooter";

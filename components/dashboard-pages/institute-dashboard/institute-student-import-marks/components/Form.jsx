@@ -67,33 +67,33 @@ const validate = () => {
        if (!formData.program?.trim()) {
         newErrors.program = "Program is required";
       } 
-       if (!formData.semesterYear?.trim()) {
+     /*   if (!formData.semesterYear?.trim()) {
         newErrors.semesterYear = "Semester year is required";
-      } 
+      }  */
        if (!formData.admissionYear?.trim()) {
         newErrors.admissionYear = "Admission year is required";
       } 
-      if (formData.admissionYear?.trim()>formData.semesterYear) {
+      /* if (formData.admissionYear?.trim()>formData.semesterYear) {
         newErrors.admissionYear = "Invalid admission year";
-      } 
-      if (!formData.semesterMonth?.trim()) {
+      } */ 
+      /* if (!formData.semesterMonth?.trim()) {
         newErrors.semesterMonth = "Semester month is required";
       } 
       if (!formData.marksType?.trim()) {
         newErrors.marksType = "Grading system is required";
-      } 
+      }  */
       return newErrors;
 };
 
 //admission year
-const errorAdmissionYear=()=>{
+/* const errorAdmissionYear=()=>{
   if (formData.semesterYear && formData.admissionYear && formData.admissionYear?.trim()>formData.semesterYear) {
         setErr((prev)=>({...prev,admissionYear:"Invalid admission year"}))
       }
       else{
          setErr((prev)=>({...prev,admissionYear:""}))
       }
-}
+} */
 
   // ------------------------------
   // HANDLE FILE SELECTION
@@ -202,7 +202,7 @@ if (Object.keys(validationErrors).length === 0) {
                 });
                
               const responseData = response?.data?.data.map((item) => ({
-                                  label: item?.name,
+                                  label: item?.name+'('+item?.type+')',
                                   value: item?._id,
                                 }));
                  setProgramData(responseData ||[])
@@ -246,7 +246,7 @@ if (Object.keys(validationErrors).length === 0) {
                  <div className="mb-3 col-md-4">
                   <label className="form-label">Admission Year</label>
                   
-                  <select class="form-select"  name="admissionYear"  onChange={(e)=>{handleChange(e)}} onBlur={errorAdmissionYear}  value={formData.admissionYear || ""}>
+                  <select className="form-select"  name="admissionYear"  onChange={(e)=>{handleChange(e)}}   value={formData.admissionYear || ""}>
                     <option value="">Please select</option>
                         {years?.map((year) => (
                           <option key={year}>{year}</option>
@@ -268,7 +268,7 @@ if (Object.keys(validationErrors).length === 0) {
                     <div style={{color:'red'}}>{err.semester}</div>
                   )}
                 </div>
-                 <div className="mb-3 col-md-4">
+               {/*   <div className="mb-3 col-md-4">
                   <label className="form-label">Semester Year</label>
                   
                   <select class="form-select"  name="semesterYear"  onChange={handleChange}  value={formData.semesterYear || ""}>
@@ -280,8 +280,8 @@ if (Object.keys(validationErrors).length === 0) {
                    { err?.semesterYear && (
                     <div style={{color:'red'}}>{err.semesterYear}</div>
                   )}
-                 </div>
-                <div className="mb-3 col-md-4">
+                 </div> */}
+               {/*  <div className="mb-3 col-md-4">
                   <label className="form-label">Semester Month</label>
                   <select class="form-select"  name="semesterMonth"  onChange={handleChange}  value={formData.semesterMonth || ""}>
                     <option value="">Please select</option>
@@ -292,8 +292,8 @@ if (Object.keys(validationErrors).length === 0) {
                    { err?.semesterMonth && (
                     <div style={{color:'red'}}>{err.semesterMonth}</div>
                   )}
-                </div>
-                <div className="mb-3 col-md-4">
+                </div> */}
+               {/*  <div className="mb-3 col-md-4">
                   <label className="form-label">Grading System</label>
                   <select class="form-select"  name="marksType"  onChange={handleChange}  value={formData.marksType || ""}>
                     <option value="">Please select</option>
@@ -304,7 +304,7 @@ if (Object.keys(validationErrors).length === 0) {
                    { err?.marksType && (
                     <div style={{color:'red'}}>{err.marksType}</div>
                   )}
-                </div>
+                </div> */}
                 <div className="mb-3 col-md-12">
                   <label className="form-label">Upload Csv</label>
                   <input
@@ -315,14 +315,17 @@ if (Object.keys(validationErrors).length === 0) {
                   />
                   {error && <div className="invalid-feedback">{error}</div>}
                 </div>
+                 <div className="mb-3 col-md-12">
+                    <button
+                      type="submit"
+                      className="btn btn-primary float-end"
+                      disabled={loading || !csvFile}
+                    >
+                      {loading ? "Importing..." : "Import"}
+                    </button>
+                  </div>
               </div>
-              <button
-                type="submit"
-                className="btn btn-primary w-100"
-                disabled={loading || !csvFile}
-              >
-                {loading ? "Importing..." : "Import"}
-              </button>
+             
             </form>
     </>
   );

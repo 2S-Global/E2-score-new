@@ -1,6 +1,6 @@
 "use client";
 import MobileMenu from "../../../header/AdminMobileMenu";
-import DashboardHeader from "../../../header/DashboardAdminheader";
+import DashboardHeader from "../../../header/InstituteDashboardHeader";
 import DashboardInstituteSidebar from "../../../header/DashboardInstituteSidebar";
 
 import CopyrightFooter from "../../CopyrightFooter";
@@ -35,7 +35,7 @@ const Index = () => {
                       alignItems: "center",
                     }}
                   >
-                    <h4>Import Student Marks</h4>
+                    <h4>Import Semester Marks</h4>
                           <a
                       href="/institute-student-import-marks.csv"
                       download

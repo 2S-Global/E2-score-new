@@ -1,5 +1,5 @@
 import MobileMenu from "../../../header/MobileMenu";
-import DashboardHeader from "../../../header/DashboardHeader";
+import DashboardHeader from "../../../header/InstituteDashboardHeader";
 import LoginPopup from "../../../common/form/login/LoginPopup";
 import DashboardInstituteSidebar from "../../../header/DashboardInstituteSidebar";
 import BreadCrumb from "../../BreadCrumb";

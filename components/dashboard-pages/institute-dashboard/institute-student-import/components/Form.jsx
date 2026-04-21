@@ -163,7 +163,7 @@ if (Object.keys(validationErrors).length === 0) {
                 });
                
               const responseData = response?.data?.data.map((item) => ({
-                                  label: item?.name,
+                                  label: item?.name+'('+item?.type+')',
                                   value: item?._id,
                                 }));
                  setProgramData(responseData ||[])
@@ -209,7 +209,7 @@ if (Object.keys(validationErrors).length === 0) {
                  <div className="mb-3 col-md-4">
                   <label className="form-label">Admission Year</label>
                   
-                  <select class="form-select"  name="admissionYear"  onChange={handleChange}  value={formData.admissionYear || ""}>
+                  <select className="form-select"  name="admissionYear"  onChange={handleChange}  value={formData.admissionYear || ""}>
                     <option value="">Please select</option>
                         {years?.map((year) => (
                           <option key={year}>{year}</option>
@@ -241,14 +241,18 @@ if (Object.keys(validationErrors).length === 0) {
                   />
                   {error && <div className="invalid-feedback">{error}</div>}
                 </div>
+                 <div className="mb-3 col-md-12">
+                    <button
+                      type="submit"
+                      className="btn btn-primary float-end"
+                      disabled={loading || !csvFile  }
+                      style={{cursor:"pointer"}}
+                    >
+                      {loading ? "Importing..." : "Import"}
+                    </button>
+                  </div>
               </div>
-              <button
-                type="submit"
-                className="btn btn-primary w-100"
-                disabled={loading || !csvFile  }
-              >
-                {loading ? "Importing..." : "Import"}
-              </button>
+              
             </form>
     </>
   );
