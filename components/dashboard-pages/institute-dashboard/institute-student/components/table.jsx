@@ -35,9 +35,9 @@ const Table = ({ setRefresh, refresh }) => {
   /*  const  */
   const [message_id, setMessage_id] = useState(null);
   const [errorId, setErrorId] = useState(null);
-const [programData, setProgramData] = useState([]);
-    const [selectProgram, setSelectProgram] = useState([])
-   const currentYear = new Date().getFullYear();
+  const [programData, setProgramData] = useState([]);
+  const [selectProgram, setSelectProgram] = useState([]);
+  const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 50 }, (_, i) => currentYear - i);
 
   const openModalRH = (data) => {
@@ -254,56 +254,38 @@ const [programData, setProgramData] = useState([]);
 
   const [searchText, setSearchText] = useState("");
 
- // course list
-  
-  useEffect(()=>{
-     const token = localStorage.getItem("Institute_token");
-     const fetchData = async () => {
-              try {
-                    const response = await axios.get( `${apiurl}/api/institute-course/course`,   {
-                      headers: {
-                        Authorization: `Bearer ${token}`,
-                      },
-                    });
-                  
-                  const responseData = response?.data?.data.map((item) => ({
-                                      label: item?.type!=='custom'?item?.name+'('+item?.type+')':item?.name,
-                                      value: item?._id,
-                                    }));
-                    setProgramData(responseData ||[])
-                    
-              } catch (error) {
-                console.error(error);
-              }
-            };
-     
-           
-        fetchData()
-  },[])
+  // course list
 
-const [filters, setFilters] = useState({
-  usn: "",
-  name: "",
-  course: "",
-  minAge: "",
-  maxAge: "",
-  min10: 0,
-  max10: 100,
-  min12: 0,
-  max12: 100,
-  admissionYear: "", // ✅ FIXED
-});
+  useEffect(() => {
+    const token = localStorage.getItem("Institute_token");
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${apiurl}/api/institute-course/course`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+        const responseData = response?.data?.data.map((item) => ({
+          label:
+            item?.type !== "custom"
+              ? item?.name + "(" + item?.type + ")"
+              : item?.name,
+          value: item?._id,
+        }));
+        setProgramData(responseData || []);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-const resetFilters = () => {
-  setFilters({
+    fetchData();
+  }, []);
+
+  const [filters, setFilters] = useState({
     usn: "",
     name: "",
     course: "",
@@ -313,10 +295,32 @@ const resetFilters = () => {
     max10: 100,
     min12: 0,
     max12: 100,
-    admissionYear: "",
+    admissionYear: "", // ✅ FIXED
   });
-   setSelectProgram([])
-};
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const resetFilters = () => {
+    setFilters({
+      usn: "",
+      name: "",
+      course: "",
+      minAge: "",
+      maxAge: "",
+      min10: 0,
+      max10: 100,
+      min12: 0,
+      max12: 100,
+      admissionYear: "",
+    });
+    setSelectProgram([]);
+  };
 
   // ⚡ Optimized filtering using useMemo
 
@@ -330,41 +334,41 @@ const resetFilters = () => {
     filters.min12 !== 0 ||
     filters.max12 !== 100;
 
-      const handleProgramSelect = (selectedOptions) => {
-  setFilters((prev) => ({ ...prev, course: selectedOptions?.value }));
-      setSelectProgram(selectedOptions);
+  const handleProgramSelect = (selectedOptions) => {
+    setFilters((prev) => ({ ...prev, course: selectedOptions?.value }));
+    setSelectProgram(selectedOptions);
   };
-const filteredData = useMemo(() => {
-  // ❌ No filter → return empty
-  if (!isFilterApplied) return [];
+  const filteredData = useMemo(() => {
+    // ❌ No filter → return empty
+    if (!isFilterApplied) return [];
 
-  return students.filter((row) => {
-    if (filters.course && row.program !== filters.course) return false;
+    return students.filter((row) => {
+      if (filters.course && row.program !== filters.course) return false;
 
-    if (filters.admissionYear && row.admissionYear !== filters.admissionYear)
-      return false;
+      if (filters.admissionYear && row.admissionYear !== filters.admissionYear)
+        return false;
 
-    if (filters.min10 && row.tenTh < Number(filters.min10)) return false;
-    if (filters.max10 && row.tenTh > Number(filters.max10)) return false;
+      if (filters.min10 && row.tenTh < Number(filters.min10)) return false;
+      if (filters.max10 && row.tenTh > Number(filters.max10)) return false;
 
-    if (filters.min12 && row.twelveTh < Number(filters.min12)) return false;
-    if (filters.max12 && row.twelveTh > Number(filters.max12)) return false;
+      if (filters.min12 && row.twelveTh < Number(filters.min12)) return false;
+      if (filters.max12 && row.twelveTh > Number(filters.max12)) return false;
 
-    if (
-      filters.usn &&
-      !row.USN.toLowerCase().includes(filters.usn.toLowerCase())
-    )
-      return false;
+      if (
+        filters.usn &&
+        !row.USN.toLowerCase().includes(filters.usn.toLowerCase())
+      )
+        return false;
 
-    if (
-      filters.name &&
-      !row.name.toLowerCase().includes(filters.name.toLowerCase())
-    )
-      return false;
+      if (
+        filters.name &&
+        !row.name.toLowerCase().includes(filters.name.toLowerCase())
+      )
+        return false;
 
-    return true;
-  });
-}, [filters, students]);
+      return true;
+    });
+  }, [filters, students]);
 
   const columns = [
     {
@@ -376,7 +380,7 @@ const filteredData = useMemo(() => {
     },
     {
       name: "Student Name",
-      selector: (row) => row.name,
+      selector: (row) => row.name?.toUpperCase(),
       sortable: true,
       width: "",
       center: true,
@@ -405,11 +409,10 @@ const filteredData = useMemo(() => {
       name: "USN",
       selector: (row) => row.USN,
       sortable: true,
-      width: "",
       center: true,
       cell: (row) => (
         <div
-          title={row.USN} // ✅ native tooltip on hover
+          title={row.USN}
           style={{
             whiteSpace: "nowrap",
             overflow: "hidden",
@@ -417,7 +420,7 @@ const filteredData = useMemo(() => {
             maxWidth: "140px",
           }}
         >
-          {row.USN}
+          {row.USN?.toUpperCase()}
         </div>
       ),
     },
@@ -562,26 +565,26 @@ const filteredData = useMemo(() => {
                         />
                       </div>
 
-                       <div className="col-md-3">
+                      <div className="col-md-3">
                         <label className="form-label"> Admission Year</label>
-                        
-                            <select
-                              className="form-select"
-                              name="admissionYear"
-                              value={filters.admissionYear}
-                              onChange={handleChange}
-                            >
-                              <option value="">Select Year</option>
-                              {years?.map((year) => (
-                              <option key={year}>{year}</option>
-                            ))}
-                            </select>
+
+                        <select
+                          className="form-select"
+                          name="admissionYear"
+                          value={filters.admissionYear}
+                          onChange={handleChange}
+                        >
+                          <option value="">Select Year</option>
+                          {years?.map((year) => (
+                            <option key={year}>{year}</option>
+                          ))}
+                        </select>
                       </div>
 
                       {/* Course */}
                       <div className="col-md-3">
                         <label className="form-label">Program</label>
-                          <Select
+                        <Select
                           options={programData}
                           value={selectProgram}
                           onChange={handleProgramSelect}
@@ -589,10 +592,7 @@ const filteredData = useMemo(() => {
                           className="basic-multi-select"
                           classNamePrefix="select"
                         />
-                      
                       </div>
-
-                     
 
                       {/* 10th Slider */}
                       <div className="col-md-6">
@@ -652,7 +652,7 @@ const filteredData = useMemo(() => {
                 </div>
               </div>
             </div>
-    
+
             {isFilterApplied ? (
               <DataTable
                 columns={columns}
@@ -662,7 +662,6 @@ const filteredData = useMemo(() => {
                 dense
                 fixedHeader
                 subHeader
-            
               />
             ) : (
               <div className="text-center py-4 text-muted">

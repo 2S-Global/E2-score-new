@@ -38,8 +38,8 @@ const Index = () => {
 
         {/* <!-- Dashboard --> */}
         <section className="user-dashboard">
-             <MenuToggler />
           <div className="dashboard-outer">
+            <MenuToggler />
             <div className="row">
               <div className="col-lg-12">
                 <div className="applicants-widget ls-widget">

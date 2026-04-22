@@ -23,8 +23,8 @@ const Index = () => {
 
         {/* <!-- Dashboard --> */}
         <section className="user-dashboard">
-             <MenuToggler />
           <div className="dashboard-outer">
+            <MenuToggler />
             <div className="row">
               <div className="col-lg-12 mx-auto">
                 <div className="applicants-widget ls-widget">
@@ -37,20 +37,18 @@ const Index = () => {
                     }}
                   >
                     <h4>Import New Student</h4>
-                     <a
-                href="/institute-student-import.csv"
-                download
-                className="btn btn-sm btn-outline-primary"
-              >
-                Download Template Csv
-              </a>
+                    <a
+                      href="/institute-student-import.csv"
+                      download
+                      className="btn btn-sm btn-outline-primary"
+                    >
+                      Download Template Csv
+                    </a>
                   </div>
-                 
+
                   <div className="widget-content">
-                        <Form/>
+                    <Form />
                   </div>
-                 
-                  
                 </div>
               </div>
             </div>

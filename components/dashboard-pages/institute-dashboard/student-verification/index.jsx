@@ -37,9 +37,9 @@ const Index = () => {
 
       {/* <!-- Dashboard --> */}
       <section className="user-dashboard">
-           <MenuToggler />
         <div className="dashboard-outer">
-          <BreadCrumb title="Student Verification!" />
+          <MenuToggler />
+          <BreadCrumb title="Student Verification" />
           {/* breadCrumb */}
           <div className="row">
             <div className="col-lg-12">
@@ -87,7 +87,7 @@ const Index = () => {
                   </ul>
 
                   {/* Tab Content */}
-                   {activeTab === "all" && (
+                  {activeTab === "all" && (
                     <>
                       <AllApplicants />
                     </>
@@ -103,7 +103,7 @@ const Index = () => {
                       <AcceptedApplicants />
                     </>
                   )}
-                   {activeTab === "rejected" && (
+                  {activeTab === "rejected" && (
                     <>
                       <RejectedApplicants />
                     </>
