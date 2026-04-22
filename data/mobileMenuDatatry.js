@@ -1,4 +1,4 @@
-module.exports = [
+/* module.exports = [
   {
     id: 1,
     label: "Home",
@@ -18,6 +18,30 @@ module.exports = [
     id: 4,
     label: "Candidates",
     routePath: "/candidates-list",
+  },
+  {
+    id: 5,
+    label: "Blog",
+    routePath: "/blog-list",
+  },
+  {
+    id: 6,
+    label: "About",
+    routePath: "/about",
+  },
+  {
+    id: 7,
+    label: "Contact",
+    routePath: "/contact",
+  },
+]; */
+
+
+module.exports = [
+  {
+    id: 1,
+    label: "Home",
+    routePath: "/",
   },
   {
     id: 5,

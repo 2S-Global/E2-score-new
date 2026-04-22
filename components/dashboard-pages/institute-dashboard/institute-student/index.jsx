@@ -1,4 +1,4 @@
-import MobileMenu from "../../../header/AdminMobileMenu";
+import MobileMenu from "../../../header/InstituteMobileMenu";
 import DashboardHeader from "../../../header/InstituteDashboardHeader";
 import DashboardInstituteSidebar from "../../../header/DashboardInstituteSidebar";
 
@@ -11,6 +11,7 @@ import AddFormModal from "./components/modals/AddFormModal";
 import AddCsvModal from "./components/modals/csv";
 import MarksCsv from "./components/modals/marksCsv";
 import { useState } from "react";
+import MenuToggler from "../../MenuToggler";
 // import { display } from "html2canvas/dist/types/css/property-descriptors/display";
 const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,6 +63,7 @@ const Index = () => {
 
         {/* <!-- Dashboard --> */}
         <section className="user-dashboard">
+          <MenuToggler/>
           <div className="dashboard-outer">
             <div className="row">
               <div className="col-lg-12">

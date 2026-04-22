@@ -375,7 +375,7 @@ const filteredData = useMemo(() => {
       sortable: false,
     },
     {
-      name: "Candidate Name",
+      name: "Student Name",
       selector: (row) => row.name,
       sortable: true,
       width: "",

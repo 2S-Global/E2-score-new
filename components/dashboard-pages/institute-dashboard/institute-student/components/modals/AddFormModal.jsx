@@ -3,6 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
 import Select from "react-select";
+import { FaBuildingShield } from "react-icons/fa6";
 let YMD=(input)=>{
 const date = new Date(input);
 const year = date.getFullYear();
@@ -101,11 +102,18 @@ const validate = () => {
 
   //add all filed selected program
     useEffect(()=>{
-   let totalSem=totalSemesters||0;
+/*    let totalSem=totalSemesters||0;
     let fieldsLen=fields?.length||0;
     let remaining=(totalSem-fieldsLen)==totalSem?totalSem:totalSem-fieldsLen
       if(remaining >0 ){
           for(let i=0;i<remaining;i++){
+            setFields((fields)=>[...fields, { value: "" }]);
+          }
+        } */
+
+        let totalSem=totalSemesters||0;
+      if(totalSem >0 ){
+          for(let i=0;i<totalSem;i++){
             setFields((fields)=>[...fields, { value: "" }]);
           }
         }
@@ -276,19 +284,44 @@ const validate = () => {
         value: data?.programDetails?._id,
       }
       setSelectProgram(obj)
-        if(editSemesterCount){
+      //console.log('fields',fields,data?.semesters)
+        /* if(editSemesterCount){
           let semestersData=[]
           for (let item of data?.semesters) {
              semestersData.push({value: item.marks})
           }
+
            setFields(semestersData)
            
-        }
+        } */
+          let semestersData=data?.semesters||[]
+          console.log('semestersData',semestersData)
+           const updatedData = fields.map((item,index) => {
+                               const found = semestersData.find((element) => index+1 === element.semester);
+                              
+                               return found?{value:found.marks}:item
+                              });
+                              
+                              if(updatedData?.length >0){
+                                  setFields(updatedData)
+                              }
+          /*   if(editSemesterCount){
+              let semestersData=[...fields]
+              for (let item of data?.semesters) {
+                //semestersData.push({value: item.marks})
+               const updatedArr = semestersData.map((obj, index) =>
+                  index === 1 ? { ...obj, status: "done" } : obj
+                );
+              }
+                
+              setFields(semestersData)
+              
+            } */
        
         setTotalSemesters(data?.programDetails?.total_number_of_semesters||0)
         setCourseStructure(data?.programDetails?.courseStructure||'')
     }
-  },[data?.program])
+  },[data?.program,fields?.length])
 
   // ------------------------------
   // UI
@@ -467,8 +500,10 @@ const validate = () => {
                        Add Semester
                       </span>
                               <div className="container">
-                                      {fields.map((field, index) => (
-                                        <div className="input-group mb-3" key={index}>
+                                      {fields.map((field, index) =>  {
+                                      const isDisabled =
+                                        index !== 0 && fields[index - 1]?.value === "";
+                                       return (<div className="input-group mb-3" key={index}>
                                          <span className="pe-2">{courseStructure==='year'?'Year':'Semester'} {index+1} </span> 
                                           <input
                                             type="number"
@@ -476,17 +511,18 @@ const validate = () => {
                                             placeholder="Enter value"
                                             value={field.value}
                                             onChange={(e) => handleSemesterChange(index, e)}
+                                            disabled={isDisabled}
                                           />
 
-                                          {( !(editSemesterCount >index)) && <span
+                                          {( !(formData._id)) && <span
                                             className="btn btn-danger"
                                             style={{zIndex: 0}}
                                             onClick={() => removeField(index)}
                                           >
                                             Delete
                                           </span>}
-                                        </div>
-                                      ))}
+                                        </div>)}
+                                      )}
 
                                       
                               </div>

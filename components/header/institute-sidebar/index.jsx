@@ -11,7 +11,8 @@ import {
   isActiveParentChaild,
 } from "../../../utils/linkActiveChecker";
 import { usePathname, useRouter } from "next/navigation";
-
+import Image from "next/image";
+import Link from "next/link";
 const Index = () => {
   const router = useRouter();
 
@@ -22,7 +23,7 @@ const Index = () => {
       id="offcanvasMenu"
       data-bs-scroll="true"
     >
-      <SidebarHeader />
+      {/* <SidebarHeader /> */}
       {/* End pro-header */}
 
       {/*   <Sidebar>
@@ -56,8 +57,18 @@ const Index = () => {
             ))}
           </Menu>
         </Sidebar> */}
-
-
+            <div className="logo-box" style={{paddingLeft: '15px'}}>
+                <div className="logo">
+                    <Link href="/">
+                      <Image
+                        width={154}
+                        height={50}
+                        src="/images/Logo3.png"
+                        alt="brand"
+                      />
+                    </Link>
+                  </div>
+              </div>
 
 <p
         style={{

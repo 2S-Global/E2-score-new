@@ -1,4 +1,4 @@
-import MobileMenu from "../../../header/MobileMenu";
+import MobileMenu from "../../../header/InstituteMobileMenu";
 import DashboardHeader from "../../../header/InstituteDashboardHeader";
 import LoginPopup from "../../../common/form/login/LoginPopup";
 import DashboardInstituteSidebar from "../../../header/DashboardInstituteSidebar";
@@ -37,6 +37,7 @@ const Index = () => {
 
       {/* <!-- Dashboard --> */}
       <section className="user-dashboard">
+           <MenuToggler />
         <div className="dashboard-outer">
           <BreadCrumb title="Student Verification!" />
           {/* breadCrumb */}

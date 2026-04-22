@@ -1,11 +1,13 @@
-import MobileMenu from "../../../header/AdminMobileMenu";
+import MobileMenu from "../../../header/InstituteMobileMenu";
 import DashboardHeader from "../../../header/InstituteDashboardHeader";
 import DashboardInstituteSidebar from "../../../header/DashboardInstituteSidebar";
+
 
 import CopyrightFooter from "../../CopyrightFooter";
 import Testimonialtable from "./components/table";
 import TestimonialformModal from "./components/modals/formmodal";
 import { useState } from "react";
+import MenuToggler from "../../MenuToggler";
 
 const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,6 +38,7 @@ const Index = () => {
 
         {/* <!-- Dashboard --> */}
         <section className="user-dashboard">
+             <MenuToggler />
           <div className="dashboard-outer">
             <div className="row">
               <div className="col-lg-12">

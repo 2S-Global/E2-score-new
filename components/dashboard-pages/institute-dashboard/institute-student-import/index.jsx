@@ -1,10 +1,10 @@
 "use client";
-import MobileMenu from "../../../header/AdminMobileMenu";
+import MobileMenu from "../../../header/InstituteMobileMenu";
 import DashboardHeader from "../../../header/InstituteDashboardHeader";
 import DashboardInstituteSidebar from "../../../header/DashboardInstituteSidebar";
 
 import CopyrightFooter from "../../CopyrightFooter";
-
+import MenuToggler from "../../MenuToggler";
 import Form from "./components/Form";
 import { useState } from "react";
 const Index = () => {
@@ -23,6 +23,7 @@ const Index = () => {
 
         {/* <!-- Dashboard --> */}
         <section className="user-dashboard">
+             <MenuToggler />
           <div className="dashboard-outer">
             <div className="row">
               <div className="col-lg-12 mx-auto">

@@ -1,10 +1,11 @@
 "use client";
-import MobileMenu from "../../../header/AdminMobileMenu";
+import MobileMenu from "../../../header/InstituteMobileMenu";
 import DashboardHeader from "../../../header/InstituteDashboardHeader";
 import DashboardInstituteSidebar from "../../../header/DashboardInstituteSidebar";
 
 import CopyrightFooter from "../../CopyrightFooter";
 import Form from "./components/Form";
+import MenuToggler from "../../MenuToggler";
 const Index = () => {
 
   return (
@@ -23,7 +24,7 @@ const Index = () => {
         {/* <!-- Dashboard --> */}
         <section className="user-dashboard">
           <div className="dashboard-outer">
-            
+            <MenuToggler/>
             <div className="row">
               <div className="col-lg-12 mx-auto" >
                 <div className="applicants-widget ls-widget">
