@@ -132,7 +132,27 @@ if (Object.keys(validationErrors).length === 0) {
         }
       );
 
-      if (!response.data.success) throw new Error(response.data.message);
+    if (!response.data.success) throw new Error(response.data.message);
+
+    // ✅ success message
+    setSuccess(response.data.message);
+    setMessage_id(Date.now());
+
+    // ✅ RESET FORM (IMPORTANT)
+    setFormData({
+      semester: "",
+      program: "",
+      admissionYear: "",
+    });
+
+    setSelectProgram(null); // reset react-select
+    setTotalSemesters(0); // reset semester list
+    setCsvFile(null); // reset file
+    setErr(null); // clear validation errors
+
+    // ✅ clear file input manually
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput) fileInput.value = "";
 
       setSuccess(response.data.message);
       setMessage_id(Date.now());
@@ -220,7 +240,7 @@ if (Object.keys(validationErrors).length === 0) {
                   )}
                 </div>
                  <div className="mb-3 col-md-4">
-                  <label className="form-label">Semester</label>
+                  <label className="form-label">Exam/Semester</label>
                   <select class="form-select"  name="semester"  onChange={handleChange}  value={formData.semester || ""}>
                     <option value="">Please select</option>
                      {Semesters?.map((sem) => (

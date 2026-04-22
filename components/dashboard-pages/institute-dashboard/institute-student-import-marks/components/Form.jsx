@@ -169,6 +169,18 @@ if (Object.keys(validationErrors).length === 0) {
 
       setSuccess(response.data.message);
       setMessage_id(Date.now());
+      setFormData({
+        semester: "",
+        program: "",
+        semesterYear: "",
+        semesterMonth: "",
+        admissionYear: "",
+      });
+
+      setSelectProgram(null);
+      setCsvFile(null);
+      setTotalSemesters(0);
+      setErr({});
 
      /*  if (response.data.total === response.data.created) {
         setTimeout(() => {
@@ -220,55 +232,64 @@ if (Object.keys(validationErrors).length === 0) {
   // ================= UI =================
   return (
     <>
-    
-         <form onSubmit={handleSubmit}>
-              <MessageComponent
-                error={error}
-                success={success}
-                errorId={errorId}
-                message_id={message_id}
-              />
-              <div  className="row">
-                 <div className="mb-3 col-md-4">
-                  <label className="form-label">Program</label>
-                  <Select
-                    options={programData}
-                    value={selectProgram}
-                    onChange={handleProgramSelect}
-                    placeholder="Please select"
-                    className="basic-multi-select"
-                    classNamePrefix="select"
-                  />
-                  { err?.program && (
-                    <div style={{color:'red'}}>{err.program}</div>
-                  )}
-                 </div>
-                 <div className="mb-3 col-md-4">
-                  <label className="form-label">Admission Year</label>
-                  
-                  <select className="form-select"  name="admissionYear"  onChange={(e)=>{handleChange(e)}}   value={formData.admissionYear || ""}>
-                    <option value="">Please select</option>
-                        {years?.map((year) => (
-                          <option key={year}>{year}</option>
-                        ))}
-                  </select>               
-                   { err?.admissionYear && (
-                    <div style={{color:'red'}}>{err.admissionYear}</div>
-                  )}
-                </div>
-                  <div className="mb-3 col-md-4">
-                  <label className="form-label">Semester</label>
-                  <select class="form-select"  name="semester"  onChange={handleChange}  value={formData.semester || ""}>
-                    <option value="">Please select</option>
-                     {Semesters?.map((sem) => (
-                          <option key={sem}>{sem}</option>
-                        ))}
-                  </select>                 
-                   { err?.semester && (
-                    <div style={{color:'red'}}>{err.semester}</div>
-                  )}
-                </div>
-               {/*   <div className="mb-3 col-md-4">
+      <form onSubmit={handleSubmit}>
+        <MessageComponent
+          error={error}
+          success={success}
+          errorId={errorId}
+          message_id={message_id}
+        />
+        <div className="row">
+          <div className="mb-3 col-md-4">
+            <label className="form-label">Program</label>
+            <Select
+              options={programData}
+              value={selectProgram}
+              onChange={handleProgramSelect}
+              placeholder="Please select"
+              className="basic-multi-select"
+              classNamePrefix="select"
+            />
+            {err?.program && <div style={{ color: "red" }}>{err.program}</div>}
+          </div>
+          <div className="mb-3 col-md-4">
+            <label className="form-label">Admission Year</label>
+
+            <select
+              className="form-select"
+              name="admissionYear"
+              onChange={(e) => {
+                handleChange(e);
+              }}
+              value={formData.admissionYear || ""}
+            >
+              <option value="">Please select</option>
+              {years?.map((year) => (
+                <option key={year}>{year}</option>
+              ))}
+            </select>
+            {err?.admissionYear && (
+              <div style={{ color: "red" }}>{err.admissionYear}</div>
+            )}
+          </div>
+          <div className="mb-3 col-md-4">
+            <label className="form-label">Semester</label>
+            <select
+              class="form-select"
+              name="semester"
+              onChange={handleChange}
+              value={formData.semester || ""}
+            >
+              <option value="">Please select</option>
+              {Semesters?.map((sem) => (
+                <option key={sem}>{sem}</option>
+              ))}
+            </select>
+            {err?.semester && (
+              <div style={{ color: "red" }}>{err.semester}</div>
+            )}
+          </div>
+          {/*   <div className="mb-3 col-md-4">
                   <label className="form-label">Semester Year</label>
                   
                   <select class="form-select"  name="semesterYear"  onChange={handleChange}  value={formData.semesterYear || ""}>
@@ -281,7 +302,7 @@ if (Object.keys(validationErrors).length === 0) {
                     <div style={{color:'red'}}>{err.semesterYear}</div>
                   )}
                  </div> */}
-               {/*  <div className="mb-3 col-md-4">
+          {/*  <div className="mb-3 col-md-4">
                   <label className="form-label">Semester Month</label>
                   <select class="form-select"  name="semesterMonth"  onChange={handleChange}  value={formData.semesterMonth || ""}>
                     <option value="">Please select</option>
@@ -293,7 +314,7 @@ if (Object.keys(validationErrors).length === 0) {
                     <div style={{color:'red'}}>{err.semesterMonth}</div>
                   )}
                 </div> */}
-               {/*  <div className="mb-3 col-md-4">
+          {/*  <div className="mb-3 col-md-4">
                   <label className="form-label">Grading System</label>
                   <select class="form-select"  name="marksType"  onChange={handleChange}  value={formData.marksType || ""}>
                     <option value="">Please select</option>
@@ -305,28 +326,28 @@ if (Object.keys(validationErrors).length === 0) {
                     <div style={{color:'red'}}>{err.marksType}</div>
                   )}
                 </div> */}
-                <div className="mb-3 col-md-12">
-                  <label className="form-label">Upload Csv</label>
-                  <input
-                    type="file"
-                    accept=".csv"
-                    className={`form-control ${error ? "is-invalid" : ""}`}
-                    onChange={handleFileChange}
-                  />
-                  {error && <div className="invalid-feedback">{error}</div>}
-                </div>
-                 <div className="mb-3 col-md-12">
-                    <button
-                      type="submit"
-                      className="btn btn-primary float-end"
-                      disabled={loading || !csvFile}
-                    >
-                      {loading ? "Importing..." : "Import"}
-                    </button>
-                  </div>
-              </div>
-             
-            </form>
+          <div className="mb-3 col-md-12">
+            <label className="form-label">Upload Csv</label>
+            <input
+              key={csvFile ? csvFile.name : "file"} // 👈 important
+              type="file"
+              accept=".csv"
+              className={`form-control ${error ? "is-invalid" : ""}`}
+              onChange={handleFileChange}
+            />
+            {error && <div className="invalid-feedback">{error}</div>}
+          </div>
+          <div className="mb-3 col-md-12">
+            <button
+              type="submit"
+              className="btn btn-primary float-end"
+              disabled={loading || !csvFile}
+            >
+              {loading ? "Importing..." : "Import"}
+            </button>
+          </div>
+        </div>
+      </form>
     </>
   );
 };
