@@ -80,8 +80,10 @@ const Modal = ({
           employmentId: emp_id,
         });
       }
+      setSuccess(true)
     } catch (error) {
       console.error("Error while fetching details:", error);
+      setError(true)
     } finally {
       setLoading(false);
     }

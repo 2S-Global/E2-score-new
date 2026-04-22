@@ -36,7 +36,7 @@ const Applicants = () => {
 
   useEffect(() => {
     fetchData();
-  }, [token, apiurl]);
+  }, [token, apiurl,success,error]);
 
   // ✅ Search filter
   const filteredData = candidatesData.filter((item) => {
@@ -87,7 +87,17 @@ useEffect(() => {
       setLoading(false);
     }
   };
-
+  const getPageNumbers = () => {
+    const pages = [];
+    for (
+      let i = Math.max(1, currentPage - 2);
+      i <= Math.min(totalPages, currentPage + 2);
+      i++
+    ) {
+      pages.push(i);
+    }
+    return pages;
+  };
   const openModalRH = (id, empId) => {
     setIsModalOpen(true);
     setCanId(id);

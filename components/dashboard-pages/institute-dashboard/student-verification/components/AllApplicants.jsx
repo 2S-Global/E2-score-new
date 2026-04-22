@@ -61,7 +61,7 @@ const AllApplicants = () => {
   // ✅ Fetch data
 useEffect(() => {
   if (token) fetchCandidates();
-}, [token]);
+}, [token,error,success]);
 
   // ✅ Search filter
   const filteredData = candidatesData.filter((item) => {
@@ -295,6 +295,10 @@ useEffect(() => {
           emp_id={employmentId}
           is_complete={status?.toLowerCase() !== "unverified"}
           refreshList={fetchCandidates} // ✅ ADD THIS
+            setSuccess={setSuccess}
+          setError={setError}
+           setErrorId={setErrorId}
+          setMessageId={setMessageId}
         />
       )}
 

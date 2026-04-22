@@ -84,7 +84,7 @@ const Index = () => {
       >
         Institute Panel
       </p>
-      <Sidebar>
+     {/*  <Sidebar>
         <Menu>
           {mobileMenuData.map((item) =>
             item.items && item.items.length > 0 ? ( // Check if there are submenu items
@@ -126,9 +126,9 @@ const Index = () => {
             ),
           )}
         </Menu>
-      </Sidebar>
+      </Sidebar> */}
 
-      <SidebarFooter />
+      {/* <SidebarFooter /> */}
     </div>
   );
 };

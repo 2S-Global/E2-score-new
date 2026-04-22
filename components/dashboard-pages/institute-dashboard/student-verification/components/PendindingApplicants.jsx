@@ -60,12 +60,22 @@ useEffect(() => {
   }
 }, [filteredData, totalPages]);
 
-
+  const getPageNumbers = () => {
+    const pages = [];
+    for (
+      let i = Math.max(1, currentPage - 2);
+      i <= Math.min(totalPages, currentPage + 2);
+      i++
+    ) {
+      pages.push(i);
+    }
+    return pages;
+  };
 
 
   useEffect(() => {
     fetchData();
-  }, [token, apiurl]);
+  }, [token, apiurl,success,error]);
 
   const fetchData = async () => {
     if (!token) return;
