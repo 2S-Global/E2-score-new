@@ -63,8 +63,8 @@ const Index = () => {
 
         {/* <!-- Dashboard --> */}
         <section className="user-dashboard">
-          <MenuToggler/>
           <div className="dashboard-outer">
+            <MenuToggler />
             <div className="row">
               <div className="col-lg-12">
                 <div className="applicants-widget ls-widget">
@@ -92,7 +92,7 @@ const Index = () => {
                         Add Student
                       </span>
 
-       {/*                <span
+                      {/*                <span
                         onClick={openCsvModal}
                         style={{
                           cursor: "pointer",
@@ -145,7 +145,7 @@ const Index = () => {
           setRefresh={setRefresh}
         />
       )}
-        {isCsvModalOpenMarks && (
+      {isCsvModalOpenMarks && (
         <MarksCsv
           show={openCsvModalMarks}
           onClose={closeModalCsvMarks}
@@ -153,7 +153,6 @@ const Index = () => {
         />
       )}
     </>
-    
   );
 };
 
