@@ -30,7 +30,7 @@ const DashboardEmployerSidebar = () => {
       </div>
       {/* End sidebar close icon */}
       <p
-   className={styles.adminTitle}
+        className={styles.adminTitle}
       >
         Institute Panel
       </p>

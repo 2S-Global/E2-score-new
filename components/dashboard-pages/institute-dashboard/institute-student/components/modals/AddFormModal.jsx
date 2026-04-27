@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import MessageComponent from "@/components/common/ResponseMsg";
 import Select from "react-select";
 import { FaBuildingShield } from "react-icons/fa6";
+import "../../ins.css"
 let YMD=(input)=>{
 const date = new Date(input);
 const year = date.getFullYear();
@@ -358,7 +359,7 @@ const validate = () => {
                   <input
                     type="text"
                     name="name"
-                    className={`form-control ${
+                    className={`form-control uppercase-text${
                        err?.name ? "is-invalid" : ""
                     }`}
                     placeholder="Candidate Name"
@@ -376,7 +377,7 @@ const validate = () => {
                     type="date"
                     max={new Date()?.toISOString().split('T')[0]}
                     name="dob"
-                    className={`form-control ${
+                    className={`form-control uppercase-text${
                        err?.dob ? "is-invalid" : ""
                     }`}
                     placeholder="DOB"
@@ -424,7 +425,7 @@ const validate = () => {
                   <input
                     type="text"
                     name="USN"
-                    className={`form-control ${
+                    className={`form-control uppercase-text${
                        err?.USN ? "is-invalid" : ""
                     }`}
                     placeholder="USN"
@@ -456,7 +457,7 @@ const validate = () => {
                   <input
                     type="number"
                     name="tenTh"
-                    className={`form-control ${
+                    className={`form-control uppercase-text${
                        err?.tenTh ? "is-invalid" : ""
                     }`}
                     placeholder="10Th(%)"

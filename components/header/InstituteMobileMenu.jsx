@@ -39,13 +39,13 @@ const InstituteMenu = () => {
               >
                 <span className="icon icon-user"></span>
               </a> */}
-              <a
+             {/*  <a
                 href="#"
                 className="call-modal"
                 data-bs-toggle="modal"
               >
                 <span className="icon icon-user"></span>
-              </a>
+              </a> */}
             </div>
             {/* login popup end */}
 

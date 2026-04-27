@@ -82,7 +82,7 @@ const Index = () => {
           borderRadius: "5px", // Optional: rounded corners
         }}
       >
-        Institute Panel
+        Institute Panel 
       </p>
      {/*  <Sidebar>
         <Menu>

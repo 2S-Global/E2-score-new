@@ -60,6 +60,7 @@ const FormContent2 = () => {
       if (!response.data.success) {
         throw new Error(response.data.message || "An error occurred");
       }
+      localStorage.setItem("user_name", response?.data?.data?.name || "");
       setSuccess(response.data.message || "Log In successful!");
       setMessageId(Date.now());
       const token = response.data.token;

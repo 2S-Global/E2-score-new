@@ -85,9 +85,10 @@ const DashboardHeader = () => {
 
             {/* <HeaderNavContent /> */}
             {/* <!-- Main Menu End--> */}
+              
           </div>
           {/* End .nav-outer */}
-
+          <p style={{fontSize:"18px",fontWeight:"600", color:"#29398a"}}>{localStorage.getItem("user_name")}</p>
           <div className="outer-box">
             {/* <button className="menu-btn">
               <span className="count">1</span>
