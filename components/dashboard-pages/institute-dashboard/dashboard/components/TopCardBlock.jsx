@@ -3,8 +3,8 @@ import React, { useState } from "react";
 
 const TopCardBlock = () => {
   const [TotalCompany] = useState(12);
-  const [totalPayment] = useState(158.75); // Large number example
-  const [TotalCandidate] = useState(256);
+  const [totalPayment] = useState(15); // Large number example
+  const [TotalCandidate] = useState(20);
   const [TotalInstitution] = useState(8);
 
   const cardContent = [
@@ -12,33 +12,40 @@ const TopCardBlock = () => {
       id: 1,
       icon: "la-building",
       countNumber: TotalCompany,
-      metaName: "Total Company",
+      metaName: "Total Student Verification  Request",
       uiClass: "bg-success text-white",
     },
     {
       id: 2,
-      icon: "la-credit-card",
+      icon: "las la-hourglass-start",
       countNumber: TotalInstitution,
       metaName: "Pending Request",
       uiClass: "bg-primary text-white",
     },
     {
       id: 3,
-      icon: "la-file-alt",
+      icon: "las la-calendar-check",
       countNumber: TotalCandidate,
-      metaName: "Approved Candidate",
+      metaName: "Approved Request",
+      uiClass: "bg-success text-white",
+    },
+     {
+      id: 4,
+      icon: "las la-calendar-times",
+      countNumber: totalPayment,
+      metaName: "Rejected Request",
       uiClass: "bg-danger text-white",
     },
-    {
+    /* {
       id: 4,
       icon: "la-hourglass-half",
       countNumber: `₹${Number(totalPayment).toLocaleString("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
-      metaName: "Total Transaction",
+      metaName: "Rejected Request",
       uiClass: "bg-warning text-dark",
-    },
+    }, */
   ];
 
   return (

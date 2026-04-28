@@ -64,22 +64,22 @@ const Index = () => {
               </div>
             </div>
             {/* End .col */}
-
+        {/* 
             <div className="col-lg-12">
-              {/* <!-- applicants Widget --> */}
+              {/* <!-- applicants Widget --> 
               <div className="applicants-widget ls-widget">
                 <div className="widget-title">
                   <h4>Recent Applicants</h4>
                 </div>
                 <div className="widget-content">
                   <div className="row">
-                    {/* <!-- Candidate block three --> */}
+                    {/* <!-- Candidate block three --> 
 
                     <Applicants />
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
             {/* End .col */}
           </div>
           {/* End .row profile and notificatins */}

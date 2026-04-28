@@ -69,7 +69,7 @@ const ProfileChart = () => {
   return (
     <div className="tabs-box">
       <div className="widget-title">
-        <h4>Your Profile Views</h4>
+        <h4> Student Verification Profile Views</h4>
         <div className="chosen-outer">
           {/* <!--Tabs Box--> */}
           <select className="chosen-single form-select">

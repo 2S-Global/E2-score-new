@@ -1,0 +1,405 @@
+import React, { useState, useEffect,useRef } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import MessageComponent from "@/components/common/ResponseMsg";
+import Select from "react-select";
+import { FaBuildingShield } from "react-icons/fa6";
+import "../../ins.css"
+let YMD=(input)=>{
+const date = new Date(input);
+const year = date.getFullYear();
+const month = String(date.getMonth() + 1).padStart(2, '0');
+const day = String(date.getDate()).padStart(2, '0');
+return `${year}-${month}-${day}`;
+}
+let DMY=(input)=>{
+const date = new Date(input);
+const year = date.getFullYear();
+const month = String(date.getMonth() + 1).padStart(2, '0');
+const day = String(date.getDate()).padStart(2, '0');
+return `${day}-${month}-${year}`;
+}
+
+function validateEmail(email) {
+  const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return pattern.test(email);
+}
+
+function validatePhone(phone) {
+  const pattern = /^[6-9]\d{9}$/; // Indian mobile numbers
+  return pattern.test(phone);
+}
+
+ 
+const AddFormModal = ({
+  show,
+  onClose,
+  data = {},
+  setRefresh = () => {},
+}) => {
+   const [totalSemesters, setTotalSemesters] = useState(0);
+   const [courseStructure, setCourseStructure] = useState();
+    const [programData, setProgramData] = useState([]);
+    const [programDataResp, setProgramDataResp] = useState([]);
+    
+  const [formData, setFormData] = useState({
+    _id: data._id || "",
+    name: data.name || "",
+    email: data.email || "",
+    contactPerson: data.contactPerson || "",
+    phoneNumber: data.phoneNumber || "",   
+    address: data.address || ""
+  });
+  console.log('formData',formData)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  
+//validation error
+  const [err, setErr] = useState(null);
+  const [disableSubmit, setDisableSubmit] = useState(false);
+  const [fields, setFields] = useState([]);
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const textareaRef = useRef(null);
+  
+  if (!show) return null;
+ // validation 
+const validate = () => {
+      let newErrors = {};
+      if (!formData.name?.trim()) {
+        newErrors.name = "Name is required";
+      } 
+       if (!formData.email?.trim()) {
+        newErrors.email = "Email is required";
+      } 
+       if (formData.email?.trim() && !validateEmail(formData.email?.trim())) {
+             newErrors.email = "Invalid email";
+      } 
+       if (!formData.contactPerson?.trim()) {
+        newErrors.contactPerson = "Contact Person is required";
+      } 
+       if (!formData.phoneNumber?.trim()) {
+        newErrors.phoneNumber = "Phone Number is required";
+      } 
+      if (formData.phoneNumber?.trim() && !validatePhone(formData.phoneNumber?.trim())) {
+             newErrors.phoneNumber = "Invalid phone number";
+      } 
+       if (!formData.address?.trim()) {
+        newErrors.address = "Address is required";
+      } 
+      
+      return newErrors;
+};
+
+
+// Add new field
+  const addField = () => {
+    let totalSem=totalSemesters||0;
+    let fieldsLen=fields?.length||0;
+    if(fieldsLen < totalSem ){
+          setFields([...fields, { value: "" }]);
+    }
+    else{
+      setErr((prev)=>({...prev,program:""}))
+    }
+  };
+
+  // ------------------------------
+  // HANDLE INPUT CHANGE
+  // ------------------------------
+
+
+    const handleChange = (e) => {
+    const { name, value } = e.target;
+      setErr((prev)=>({...prev,[name]:""}))
+    let newValue = value;
+   
+    setFormData((prev) => ({ ...prev, [name]: newValue }));
+  };
+
+    const handleTextArea = () => {
+      const el = textareaRef.current;
+      el.style.height = "auto";              // reset height
+      el.style.height = el.scrollHeight + "px"; // set new height
+    };
+  const token = localStorage.getItem("Institute_token");
+
+  // ------------------------------
+  // FORM SUBMIT
+  // ------------------------------
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setSuccess(null);
+    const validationErrors = validate();
+      setErr(validationErrors);
+    if (!token) {
+      setError("Token not found. Please log in again.");
+      setLoading(false);
+      return;
+    }
+
+    if (Object.keys(validationErrors).length === 0) {
+
+    try {
+      
+    setLoading(true);
+        const isUpdate = (formData._id)?true:false;
+       /*  const url = isUpdate
+          ? `${apiurl}/api/useradmin/update_user`
+          : `${apiurl}/api/useradmin/add_user`; */
+          const url =`${apiurl}/api/institutestudent/add-institute-student-manually`
+       let semesters=[]
+           fields.forEach((field, index) => {
+                let sem=index+1
+              if (field.value) {
+                let newValue={[sem]:field?.value};
+                semesters.push(newValue)
+              }
+            });
+        let payload ={}
+        //if(formData._id){
+          let AddData={...formData};
+          AddData.dob= DMY(formData.dob) 
+           payload = {
+                    ...AddData,
+                    semesters,
+                    ...(isUpdate ? {} : { role: 1 }),
+                  };
+
+       /*  }else{
+             payload = {
+                        ...formData,
+                        semesters,
+                        ...(isUpdate ? {} : { role: 1 }),
+                      };
+        } */
+        
+
+        ///const method = isUpdate ? "put" : "post";
+        const method ="post";
+
+        const response = await axios({
+          method,
+          url,
+          data: payload,
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        // Backend does not return success: true
+        if (response.status !== 200 && response.status !== 201) {
+          throw new Error(response.data?.message || "Operation failed");
+        }
+
+        setSuccess(response.data.message);
+        setRefresh(()=>true);
+
+        setTimeout(() => {
+          onClose();
+        }, 1500);
+    } catch (err) {
+        setError(
+          err.response?.data?.message || "Request failed. Please try again."
+        );
+    } finally {
+      setLoading(false);
+    }
+  }
+  };
+
+// course list
+  
+  useEffect(()=>{
+     const fetchData = async () => {
+              try {
+                    const response = await axios.get( `${apiurl}/api/institute-course/course`,   {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                    });
+                  
+                  const responseData = response?.data?.data.map((item) => ({
+                                      label: item?.type!=='custom'?item?.name+'('+item?.type+')':item?.name,
+                                      value: item?._id,
+                                    }));
+                    setProgramData(responseData ||[])
+                    setProgramDataResp(response?.data?.data||[])
+                    
+              } catch (error) {
+                console.error(error);
+              }
+            };
+     
+           
+        fetchData()
+  },[])
+
+// edit selected course
+
+
+
+  // ------------------------------
+  // UI
+  // ------------------------------
+  return (
+    <div
+      className="modal fade show d-block"
+      tabIndex="-1"
+      style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+    >
+      <div className="modal-dialog modal-dialog-centered modal-lg">
+        <div className="modal-content">
+          {/* Header */}
+          <div className="modal-header">
+            <h5 className="modal-title">
+              {formData._id ? "Update Company" : "Add New Company"}
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={onClose}
+            ></button>
+          </div>
+
+          {/* Body */}
+          <div className="modal-body">
+            <form onSubmit={handleSubmit}>
+              <MessageComponent error={error} success={success} />
+
+              <div className="row">
+                {/* Name */}
+                <div className="mb-3 col-md-6">
+                  <label className="form-label">Company Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    className={`form-control uppercase-text${
+                       err?.name ? "is-invalid" : ""
+                    }`}
+                    placeholder="Candidate Name"
+                    value={formData?.name || ""}
+                    onChange={handleChange}                   
+                  />
+                  { err?.name && (
+                    <div style={{color:'red'}}>{err.name}</div>
+                  )}
+                </div>
+
+                {/* type */}
+              {/*   <div className="mb-3 col-md-6">
+                  <label className="form-label">Company Type</label>
+                   <select class="form-select"  name="gender"  onChange={handleChange}  value={formData.gender || ""}>
+                    <option value="">Please select</option>
+                     <option value="Pvt Ltd">Private Limited Company</option>
+                    <option value="Ltd">Public Limited Company</option>
+                    <option value="OPC">One Person Company</option>
+                    <option value="Partnership">Partnership</option>
+                  </select>
+                  {err?.gender && (
+                    <div style={{color:'red'}}>{err.gender}</div>
+                  )}
+                </div> */}
+                {/* email */}
+                <div className="mb-3 col-md-6">
+                  <label className="form-label">Email</label>
+                  <input
+                    type="text"
+                    name="email"
+                    className={`form-control uppercase-text${
+                       err?.email ? "is-invalid" : ""
+                    }`}
+                    placeholder="email"
+                    value={formData?.email || ""}
+                    onChange={handleChange}
+                  />
+                  { err?.email && (
+                    <div style={{color:'red'}}>{err?.email}</div>
+                  )}
+                </div>
+              {/* contact person */}
+                <div className="mb-3 col-md-6">
+                  <label className="form-label">Contact Person</label>
+                  <input
+                    type="text"
+                    name="contactPerson"
+                    className={`form-control uppercase-text${
+                       err?.contactPerson ? "is-invalid" : ""
+                    }`}
+                    placeholder="Contact Person"
+                    value={formData?.contactPerson || ""}
+                    onChange={handleChange}
+                  />
+                  { err?.contactPerson && (
+                    <div style={{color:'red'}}>{err?.contactPerson}</div>
+                  )}
+                </div>
+                
+               {/* Phone number */}
+                <div className="mb-3 col-md-6">
+                  <label className="form-label">Phone Number</label>
+                  <input
+                    type="text"
+                    name="phoneNumber"
+                    className={`form-control uppercase-text${
+                       err?.phoneNumber ? "is-invalid" : ""
+                    }`}
+                    placeholder="Phone  Number"
+                    value={formData?.phoneNumber || ""}
+                    onChange={handleChange}
+                    maxLength={10}
+                  />
+                  { err?.phoneNumber && (
+                    <div style={{color:'red'}}>{err?.phoneNumber}</div>
+                  )}
+                </div>
+
+                 {/* address */}
+                <div className="mb-3 col-md-12">
+                  <label className="form-label">Address</label>
+                  <textarea
+                  name="address"
+                    ref={textareaRef}
+                     className={`form-control uppercase-text${
+                       err?.address ? "is-invalid" : ""
+                    }`}
+                    onInput={handleTextArea}
+                    onChange={handleChange}
+                    placeholder="Address..."
+                  />
+                  { err?.address && (
+                    <div style={{color:'red'}}>{err?.address}</div>
+                  )}
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="btn btn-primary w-100"
+                disabled={loading}
+                style={{
+                  pointerEvents: loading  ? "none" : "auto",
+                  opacity: loading  ? 0.5 : 1,
+                }}
+              >
+                {loading ? (
+                  <>{formData._id ? "Updating" : "Submiting"}</>
+                ) : (
+                  <>{formData._id ? "Update" : "Submit"}</>
+                )}
+              </button>
+            </form>
+          </div>
+
+          {/* Footer */}
+          <div className="modal-footer">
+            <button className="btn btn-secondary" onClick={onClose}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AddFormModal;

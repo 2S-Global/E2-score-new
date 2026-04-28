@@ -20,7 +20,8 @@ const Form = () => {
 const [formData, setFormData] = useState({
     semester: "",
     program: "",
-    admissionYear: ""
+    admissionYear: "",
+    //presentYear: "",
   });
   const [err, setErr] = useState(null);
   const router = useRouter();
@@ -62,6 +63,9 @@ const validate = () => {
        if (!formData.admissionYear?.trim()) {
         newErrors.admissionYear = "Admission Year is required";
       } 
+    /*   if (!formData.presentYear?.trim()) {
+        newErrors.presentYear = "Present Year is required";
+      }  */
      
       return newErrors;
 };
@@ -239,6 +243,17 @@ if (Object.keys(validationErrors).length === 0) {
                     <div style={{color:'red'}}>{err.admissionYear}</div>
                   )}
                 </div>
+                {/*  <div className="mb-3 col-md-2">
+                  <label className="form-label">Present Year</label>
+                  
+                  <select className="form-select"  name="presentYear"  onChange={handleChange}  value={formData.presentYear || ""}>
+                    <option value="">Please select</option>
+                    <option key={`${currentYear}-p`}>{currentYear}</option>
+                  </select>               
+                   { err?.presentYear && (
+                    <div style={{color:'red'}}>{err.presentYear}</div>
+                  )}
+                </div> */}
                  <div className="mb-3 col-md-4">
                   <label className="form-label">Exam/Semester</label>
                   <select class="form-select"  name="semester"  onChange={handleChange}  value={formData.semester || ""}>

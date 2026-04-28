@@ -56,6 +56,13 @@ module.exports = [
     routePath: "/institute-dashboard/institute-student",
     active: "",
   },
+  {
+    id: 8,
+    name: "Company",
+    icon: "la-paper-plane",
+    routePath: "/institute-dashboard/institute-company",
+    active: "",
+  },
    //do not use id 11 anywhere other than logout
   {
     id: 11,
