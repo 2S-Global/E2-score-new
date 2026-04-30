@@ -34,7 +34,7 @@ module.exports = [
     routePath: "/institute-dashboard/all-student-list",
     active: "",
   }, */
- 
+
   {
     id: 5,
     name: "Import Student",
@@ -49,7 +49,7 @@ module.exports = [
     routePath: "/institute-dashboard/institute-student-import-marks",
     active: "",
   },
-   {
+  {
     id: 7,
     name: "Student List",
     icon: "la-paper-plane",
@@ -63,14 +63,22 @@ module.exports = [
     routePath: "/institute-dashboard/institute-company",
     active: "",
   },
-   //do not use id 11 anywhere other than logout
+
+  {
+    id: 9,
+    name: "Search Student(Placement)",
+    icon: "la-paper-plane",
+    routePath: "/institute-dashboard/search-students",
+    active: "",
+  },
+  //do not use id 11 anywhere other than logout
   {
     id: 11,
     name: "Logout",
     icon: "la-sign-out",
     routePath: "/logout",
     active: "",
-  }, 
+  },
   // {
   //   id: 4,
   //   name: "Manage Jobs",
