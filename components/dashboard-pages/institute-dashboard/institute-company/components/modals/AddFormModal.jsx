@@ -37,20 +37,15 @@ const AddFormModal = ({
   data = {},
   setRefresh = () => {},
 }) => {
-   const [totalSemesters, setTotalSemesters] = useState(0);
-   const [courseStructure, setCourseStructure] = useState();
-    const [programData, setProgramData] = useState([]);
-    const [programDataResp, setProgramDataResp] = useState([]);
     
   const [formData, setFormData] = useState({
-    _id: data._id || "",
+    id: data._id || "",
     name: data.name || "",
     email: data.email || "",
     contactPerson: data.contactPerson || "",
-    phoneNumber: data.phoneNumber || "",   
+    phone: data.phone || "",   
     address: data.address || ""
   });
-  console.log('formData',formData)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -78,11 +73,11 @@ const validate = () => {
        if (!formData.contactPerson?.trim()) {
         newErrors.contactPerson = "Contact Person is required";
       } 
-       if (!formData.phoneNumber?.trim()) {
-        newErrors.phoneNumber = "Phone Number is required";
+       if (!formData.phone?.trim()) {
+        newErrors.phone = "Phone Number is required";
       } 
-      if (formData.phoneNumber?.trim() && !validatePhone(formData.phoneNumber?.trim())) {
-             newErrors.phoneNumber = "Invalid phone number";
+      if (formData.phone?.trim() && !validatePhone(formData.phone?.trim())) {
+             newErrors.phone = "Invalid phone number";
       } 
        if (!formData.address?.trim()) {
         newErrors.address = "Address is required";
@@ -92,17 +87,6 @@ const validate = () => {
 };
 
 
-// Add new field
-  const addField = () => {
-    let totalSem=totalSemesters||0;
-    let fieldsLen=fields?.length||0;
-    if(fieldsLen < totalSem ){
-          setFields([...fields, { value: "" }]);
-    }
-    else{
-      setErr((prev)=>({...prev,program:""}))
-    }
-  };
 
   // ------------------------------
   // HANDLE INPUT CHANGE
@@ -144,40 +128,17 @@ const validate = () => {
     try {
       
     setLoading(true);
-        const isUpdate = (formData._id)?true:false;
-       /*  const url = isUpdate
-          ? `${apiurl}/api/useradmin/update_user`
-          : `${apiurl}/api/useradmin/add_user`; */
-          const url =`${apiurl}/api/institutestudent/add-institute-student-manually`
-       let semesters=[]
-           fields.forEach((field, index) => {
-                let sem=index+1
-              if (field.value) {
-                let newValue={[sem]:field?.value};
-                semesters.push(newValue)
-              }
-            });
+        const isUpdate = (formData.id)?true:false;
+        const url = isUpdate ?  `${apiurl}/api/instituteprofile/update_company_by_institute`: `${apiurl}/api/instituteprofile/add_company`;
         let payload ={}
-        //if(formData._id){
+
           let AddData={...formData};
-          AddData.dob= DMY(formData.dob) 
            payload = {
                     ...AddData,
-                    semesters,
                     ...(isUpdate ? {} : { role: 1 }),
                   };
 
-       /*  }else{
-             payload = {
-                        ...formData,
-                        semesters,
-                        ...(isUpdate ? {} : { role: 1 }),
-                      };
-        } */
-        
-
-        ///const method = isUpdate ? "put" : "post";
-        const method ="post";
+        const method = isUpdate ? "put" : "post";
 
         const response = await axios({
           method,
@@ -207,35 +168,9 @@ const validate = () => {
   }
   };
 
-// course list
-  
-  useEffect(()=>{
-     const fetchData = async () => {
-              try {
-                    const response = await axios.get( `${apiurl}/api/institute-course/course`,   {
-                      headers: {
-                        Authorization: `Bearer ${token}`,
-                      },
-                    });
-                  
-                  const responseData = response?.data?.data.map((item) => ({
-                                      label: item?.type!=='custom'?item?.name+'('+item?.type+')':item?.name,
-                                      value: item?._id,
-                                    }));
-                    setProgramData(responseData ||[])
-                    setProgramDataResp(response?.data?.data||[])
-                    
-              } catch (error) {
-                console.error(error);
-              }
-            };
-     
-           
-        fetchData()
-  },[])
-
-// edit selected course
-
+useEffect(()=>{
+  handleTextArea()
+},[formData.id])
 
 
   // ------------------------------
@@ -273,7 +208,7 @@ const validate = () => {
                   <input
                     type="text"
                     name="name"
-                    className={`form-control uppercase-text${
+                    className={`form-control ${
                        err?.name ? "is-invalid" : ""
                     }`}
                     placeholder="Candidate Name"
@@ -305,7 +240,7 @@ const validate = () => {
                   <input
                     type="text"
                     name="email"
-                    className={`form-control uppercase-text${
+                    className={`form-control ${
                        err?.email ? "is-invalid" : ""
                     }`}
                     placeholder="email"
@@ -322,7 +257,7 @@ const validate = () => {
                   <input
                     type="text"
                     name="contactPerson"
-                    className={`form-control uppercase-text${
+                    className={`form-control ${
                        err?.contactPerson ? "is-invalid" : ""
                     }`}
                     placeholder="Contact Person"
@@ -339,17 +274,17 @@ const validate = () => {
                   <label className="form-label">Phone Number</label>
                   <input
                     type="text"
-                    name="phoneNumber"
-                    className={`form-control uppercase-text${
-                       err?.phoneNumber ? "is-invalid" : ""
+                    name="phone"
+                    className={`form-control ${
+                       err?.phone ? "is-invalid" : ""
                     }`}
                     placeholder="Phone  Number"
-                    value={formData?.phoneNumber || ""}
+                    value={formData?.phone || ""}
                     onChange={handleChange}
                     maxLength={10}
                   />
-                  { err?.phoneNumber && (
-                    <div style={{color:'red'}}>{err?.phoneNumber}</div>
+                  { err?.phone && (
+                    <div style={{color:'red'}}>{err?.phone}</div>
                   )}
                 </div>
 
@@ -359,11 +294,12 @@ const validate = () => {
                   <textarea
                   name="address"
                     ref={textareaRef}
-                     className={`form-control uppercase-text${
+                     className={`form-control ${
                        err?.address ? "is-invalid" : ""
                     }`}
                     onInput={handleTextArea}
                     onChange={handleChange}
+                    value={formData?.address || ""}
                     placeholder="Address..."
                   />
                   { err?.address && (
