@@ -30,7 +30,7 @@ const Table = ({ setRefresh, refresh }) => {
   const [message_id, setMessage_id] = useState(null);
   const [errorId, setErrorId] = useState(null);
   const [programData, setProgramData] = useState([]);
-  const [selectProgram, setSelectProgram] = useState([]);
+ const [selectProgram, setSelectProgram] = useState(null);
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 50 }, (_, i) => currentYear - i);
   const [semesterOptions, setSemesterOptions] = useState([]);
@@ -115,139 +115,6 @@ const Table = ({ setRefresh, refresh }) => {
     }
   };
 
-  const handleDelete = async (id) => {
-    const token = localStorage.getItem("Super_token");
-    if (!token) {
-      setError("Token not found. Please log in again.");
-      setErrorId(Date.now());
-      return;
-    }
-
-    try {
-      const response = await axios.post(
-        `${apiurl}/api/companyRoutes/delete-students`,
-        { companyId: id, role: 1 },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      if (response.data.success) {
-        setRefresh(true);
-        setSuccess(response.data.message);
-        setMessage_id(Date.now());
-      } else {
-        setError(response.data.message);
-        setErrorId(Date.now());
-      }
-    } catch (err) {
-      setError("Error deleting company. Please try again.");
-      setErrorId(Date.now());
-    }
-  };
-
-  const toggleStatus = async (id, currentStatus) => {
-    const token = localStorage.getItem("Super_token");
-
-    // console.log("Token:", token);
-    // console.log("ID:", id);
-    // console.log("Current Status:", currentStatus);
-
-    if (!token) {
-      setError("Token not found. Please log in again.");
-      setErrorId(Date.now());
-      return;
-    }
-
-    try {
-      const response = await axios.post(
-        `${apiurl}/api/companyRoutes/togglestatus-students`,
-        {
-          companyId: id,
-          status: !currentStatus,
-          role: 1,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      if (response.data.success) {
-        setStudents((prev) =>
-          prev.map((comp) =>
-            comp._id === id ? { ...comp, is_active: !currentStatus } : comp,
-          ),
-        );
-        setSuccess(response.data.message);
-        setMessage_id(Date.now());
-      } else {
-        setError("Failed to toggle status.");
-        setErrorId(Date.now());
-      }
-    } catch (error) {
-      setError("Something went wrong while toggling status.");
-      setErrorId(Date.now());
-    }
-  };
-
-  const handleDownload = async (id, name = "user") => {
-    setDownloading(true);
-    setDownloadingid(id);
-    try {
-      const token = localStorage.getItem("Super_token");
-      if (!token) {
-        setError("Token not found. Please log in again.");
-        setErrorId(Date.now());
-        return;
-      }
-
-      const response = await axios({
-        url: `${apiurl}/api/candidate/resume/get_resume_admin`,
-        method: "GET",
-        params: { userId: id },
-        responseType: "blob",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const url = window.URL.createObjectURL(
-        new Blob([response.data], { type: "application/pdf" }),
-      );
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `${name}_Report.pdf`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } catch (error) {
-      console.error("Error downloading resume:", error);
-
-      if (error.response) {
-        // Server responded with an error status
-        setError(
-          `Download failed: ${error.response.data.message || "Server error"}`,
-        );
-        setErrorId(Date.now());
-      } else if (error.request) {
-        // Request made but no response received
-        setError("No response from server. Please try again later.");
-        setErrorId(Date.now());
-      } else {
-        // Something else happened
-        setError("An unexpected error occurred. Please try again.");
-        setErrorId(Date.now());
-      }
-    } finally {
-      setDownloading(false);
-      setDownloadingid(null);
-    }
-  };
-
   const [searchText, setSearchText] = useState("");
 
   // course list
@@ -303,32 +170,33 @@ const Table = ({ setRefresh, refresh }) => {
       [name]: value,
     }));
   };
+const resetFilters = () => {
+  setSelectProgram(null);
+  setSelectedSemester(null);
+  setSemesterOptions([]);
+};
 
-  const resetFilters = () => {
-    setFilters({
-      usn: "",
-      name: "",
-      course: "",
-      minAge: "",
-      maxAge: "",
-      min10: 0,
-      max10: 100,
-      min12: 0,
-      max12: 100,
-      admissionYear: "",
-    });
-    setSelectProgram([]);
-  };
+const handleSearch = () => {
+  // ❌ validation
+  if (!selectProgram) {
+    setError("Program is required");
+    setErrorId(Date.now());
+    return;
+  }
 
-  const handleSearch = () => {
-    const query = new URLSearchParams();
+  if (!selectedSemester) {
+    setError("Semester is required");
+    setErrorId(Date.now());
+    return;
+  }
 
-    if (filters.course) query.append("course", filters.course);
-    if (selectedSemester) query.append("semester", selectedSemester.value);
+  // ✅ proceed if valid
+  const query = new URLSearchParams();
+  query.append("course", selectProgram.value);
+  query.append("semester", selectedSemester.value);
 
-    router.push(`/institute-dashboard/search-details?${query.toString()}`);
-  };
-
+  router.push(`/institute-dashboard/search-details?${query.toString()}`);
+};
 
   const handleProgramSelect = (selectedOption) => {
     setSelectProgram(selectedOption);
@@ -364,7 +232,6 @@ const Table = ({ setRefresh, refresh }) => {
       semester: option?.value || "",
     }));
   };
-
 
   return (
     <>
@@ -442,6 +309,7 @@ const Table = ({ setRefresh, refresh }) => {
                         <button
                           className="btn btn-primary px-4"
                           onClick={handleSearch}
+                          disabled={!selectProgram || !selectedSemester}
                         >
                           Search
                         </button>

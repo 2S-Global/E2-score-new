@@ -18,7 +18,7 @@ const SearchBox = () => {
     <>
       <input
         type="text"
-        placeholder="Search by Student Name or USN"
+        placeholder="Search by Student Name"
         value={studentList.keyword}
         onChange={keywordHandler}
       />

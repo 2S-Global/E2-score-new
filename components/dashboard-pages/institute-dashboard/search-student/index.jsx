@@ -96,29 +96,7 @@ const Index = () => {
         {/* <!-- End Copyright --> */}
       </div>
       {/* Render Modal if isModalOpen is true */}
-      {isModalOpen && (
-        <AddFormModal
-          show={isModalOpen}
-          onClose={closeModalAdd}
-          setRefresh={setRefresh}
-          refresh={refresh}
-        />
-      )}
 
-      {isCsvModalOpen && (
-        <AddCsvModal
-          show={openCsvModal}
-          onClose={closeModalCsv}
-          setRefresh={setRefresh}
-        />
-      )}
-      {isCsvModalOpenMarks && (
-        <MarksCsv
-          show={openCsvModalMarks}
-          onClose={closeModalCsvMarks}
-          setRefresh={setRefresh}
-        />
-      )}
     </>
   );
 };

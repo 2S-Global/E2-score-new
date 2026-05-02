@@ -11,9 +11,9 @@ const GenderBox = () => {
   );
 
   const genderOptions = [
-    { id: 1, name: "Male", value: "Male" },
-    { id: 2, name: "Female", value: "Female" },
-    { id: 3, name: "Other", value: "Other" },
+    { id: 1, name: "Male", value: "male" },
+    { id: 2, name: "Female", value: "female" },
+    { id: 3, name: "Other", value: "other" },
   ];
 
   const handleChange = (value) => {

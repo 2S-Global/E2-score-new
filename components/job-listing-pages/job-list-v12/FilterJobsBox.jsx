@@ -1,201 +1,237 @@
 "use client";
 
 import Link from "next/link";
-import jobs from "../../../data/job-featured";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
-  addCategory,
-  addDatePosted,
-  addDestination,
   addKeyword,
-  addLocation,
-  addPerPage,
-  addSalary,
-  addSort,
-  addTag,
-  clearExperience,
-  clearJobType,
-} from "../../../features/filter/filterSlice";
-import {
-  clearDatePostToggle,
-  clearExperienceToggle,
-  clearJobTypeToggle,
-} from "../../../features/job/jobSlice";
-import Image from "next/image";
+  addGender,
+  addAdmissionYear,
+  setMarksRange,
+  clearInstituteFilter,
+  setExclude,
+} from "../../../features/filter/filterInstitute";
 
 const FilterJobsBox = () => {
-  const { jobList, jobSort } = useSelector((state) => state.filter);
-  const {
-    keyword,
-    location,
-    destination,
-    category,
-    jobType,
-    datePosted,
-    experience,
-    salary,
-    tag,
-  } = jobList || {};
-
-  const { sort, perPage } = jobSort;
-
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const course = searchParams.get("course");
+  const semester = Number(searchParams.get("semester"));
+  const { studentList } = useSelector((state) => state.filterInstitute);
+  const { keyword, gender, admissionYear, marks, exclude } = studentList;
   const dispatch = useDispatch();
-
-  // keyword filter on title
   const keywordFilter = (item) =>
     keyword !== ""
-      ? item.jobTitle.toLocaleLowerCase().includes(keyword.toLocaleLowerCase())
-      : item;
+      ? item.name.toLowerCase().includes(keyword.toLowerCase()) ||
+        item.USN.toLowerCase().includes(keyword.toLowerCase())
+      : true;
+  const genderMap = {
+    m: "male",
+    f: "female",
+    o: "other",
+  };
 
-  // location filter
-  const locationFilter = (item) =>
-    location !== ""
-      ? item?.location
-          ?.toLocaleLowerCase()
-          .includes(location?.toLocaleLowerCase())
-      : item;
+  const genderFilter = (item) =>
+    gender.length
+      ? gender.includes(genderMap[item.gender] || item.gender)
+      : true;
 
-  // location filter
-  const destinationFilter = (item) =>
-    item?.destination?.min >= destination?.min &&
-    item?.destination?.max <= destination?.max;
+  const admissionYearFilter = (item) =>
+    admissionYear !== "" ? item.admissionYear === admissionYear : true;
 
-  // category filter
-  const categoryFilter = (item) =>
-    category !== ""
-      ? item?.category?.toLocaleLowerCase() === category?.toLocaleLowerCase()
-      : item;
+  const [currentPage, setCurrentPage] = useState(1);
+  const studentsPerPage = 10; // change as needed
 
-  // job-type filter
-  const jobTypeFilter = (item) =>
-    jobType?.length !== 0 && item?.jobType !== undefined
-      ? jobType?.includes(
-          item?.jobType[0]?.type.toLocaleLowerCase().split(" ").join("-"),
-        )
-      : item;
+  const marksFilter = (item) =>
+    item.tenTh >= marks.tenth[0] &&
+    item.tenTh <= marks.tenth[1] &&
+    item.twelveTh >= marks.twelfth[0] &&
+    item.twelveTh <= marks.twelfth[1] &&
+    item.graduationMarks >= marks.graduation[0] &&
+    item.graduationMarks <= marks.graduation[1];
 
-  // date-posted filter
-  const datePostedFilter = (item) =>
-    datePosted !== "all" && datePosted !== ""
-      ? item?.created_at
-          ?.toLocaleLowerCase()
-          .split(" ")
-          .join("-")
-          .includes(datePosted)
-      : item;
+  const handleSendInterview = (student) => {
+    console.log("Send to interview:", student);
 
-  // experience level filter
-  const experienceFilter = (item) =>
-    experience?.length !== 0
-      ? experience?.includes(
-          item?.experience?.split(" ").join("-").toLocaleLowerCase(),
-        )
-      : item;
+    // Example API call
+    // axios.post("/api/send-interview", student)
 
-  // salary filter
-  const salaryFilter = (item) =>
-    item?.totalSalary?.min >= salary?.min &&
-    item?.totalSalary?.max <= salary?.max;
+    alert(`${student.name} sent for interview`);
+  };
 
-  // tag filter
-  const tagFilter = (item) => (tag !== "" ? item?.tag === tag : item);
+  const excludeFilter = (item) => {
+    // ❌ exclude interview given students
+    if (exclude.interview && item.attendInterview > 0) {
+      return false;
+    }
 
-  // sort filter
-  const sortFilter = (a, b) =>
-    sort === "des" ? a.id > b.id && -1 : a.id < b.id && -1;
+    // ❌ exclude placed students
+    if (exclude.placed && item.placement > 0) {
+      return false;
+    }
 
-  let content = jobs
-    ?.filter(keywordFilter)
-    ?.filter(locationFilter)
-    ?.filter(destinationFilter)
-    ?.filter(categoryFilter)
-    ?.filter(jobTypeFilter)
-    ?.filter(datePostedFilter)
-    ?.filter(experienceFilter)
-    ?.filter(salaryFilter)
-    ?.filter(tagFilter)
-    ?.sort(sortFilter)
-    .slice(perPage.start, perPage.end !== 0 ? perPage.end : 10)
-    ?.map((item) => (
-      <div className="job-block" key={item.id}>
-        <div className="inner-box">
-          <div className="content">
-            <span className="company-logo">
-              <Image width={50} height={49} src={item.logo} alt="item brand" />
-            </span>
-            <h4>
-              <Link href={`/job-single-v1/${item.id}`}>{item.jobTitle}</Link>
-            </h4>
+    return true;
+  };
+  const filteredStudents = students
+    .filter(keywordFilter)
+    .filter(genderFilter)
+    .filter(admissionYearFilter)
+    .filter(marksFilter)
+    .filter(excludeFilter);
 
-            <ul className="job-info">
+  const indexOfLast = currentPage * studentsPerPage;
+  const indexOfFirst = indexOfLast - studentsPerPage;
+
+  const currentStudents = filteredStudents.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
+  const getPageNumbers = () => {
+    const pages = [];
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    pages.push(1);
+
+    if (currentPage > 4) {
+      pages.push("...");
+    }
+
+    const start = Math.max(2, currentPage - 1);
+    const end = Math.min(totalPages - 1, currentPage + 1);
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (currentPage < totalPages - 3) {
+      pages.push("...");
+    }
+
+    pages.push(totalPages);
+
+    return pages;
+  };
+
+  const fetchStudents = async () => {
+    try {
+      setLoading(true);
+
+      // ✅ get token from localStorage
+      const token = localStorage.getItem("Institute_token");
+
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/institutestudent/institute-student-search`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ IMPORTANT
+          },
+          params: {
+            course,
+            semester,
+          },
+        },
+      );
+
+      setStudents(res.data?.data || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatDOB = (dob) => {
+    if (!dob) return "-";
+
+    const date = new Date(dob);
+    return date.toLocaleDateString("en-GB");
+  };
+
+  useEffect(() => {
+    if (course && semester) {
+      fetchStudents();
+    }
+  }, [course, semester]);
+
+  let content = currentStudents.map((item) => (
+    <div className="job-block" key={item._id}>
+      <div className="inner-box">
+        <div className="content" style={{ paddingLeft: "0px" }}>
+          <div className="d-flex align-items-center gap-2 mb-2">
+            {/* 👤 Name */}
+            <h4 className="mb-0">{item.name?.toUpperCase()}</h4>
+
+            {/* 🔘 Buttons */}
+            <div className="d-flex gap-3 align-items-center ms-5">
+              <Link href={`/student/${item.id}`}>
+                <i className="fas fa-eye action-icon" title="View Details"></i>
+              </Link>
+
+              <i
+                className="fas fa-paper-plane action-icon text-success"
+                title="Send for Interview"
+                onClick={() => handleSendInterview(item)}
+                style={{ cursor: "pointer" }}
+              ></i>
+            </div>
+          </div>
+
+          <div className="d-flex align-items-start flex-wrap gap-3">
+            <ul className="job-info mb-0">
+              {/* <li>
+                <span className="icon flaticon-user"></span>
+                <span className="label">Program:</span>{" "}
+                {item.programDetails?.name}
+              </li> */}
+
               <li>
-                <span className="icon flaticon-briefcase"></span>
-                {item.company}
+                <span className="icon flaticon-user"></span>
+                <span className="label">DOB:</span> {formatDOB(item.dob)}
               </li>
-              {/* compnay info */}
               <li>
-                <span className="icon flaticon-map-locator"></span>
-                {item.location}
+                <span className="icon flaticon-user"></span>
+                <span className="label">Gender:</span>{" "}
+                {item.gender.toUpperCase()}
               </li>
-              {/* location info */}
               <li>
-                <span className="icon flaticon-clock-3"></span> {item.time}
+                <span className="icon flaticon-user"></span>
+                <span className="label">Admission Year:</span>{" "}
+                {item.admissionYear}
               </li>
-              {/* time info */}
-              <li>
-                <span className="icon flaticon-money"></span> {item.salary}
-              </li>
-              {/* salary info */}
             </ul>
-            {/* End .job-info */}
 
-            <ul className="job-other-info">
-              {item?.jobType?.map((val, i) => (
-                <li key={i} className={`${val.styleClass}`}>
-                  {val.type}
-                </li>
-              ))}
+            <ul className="job-other-info mb-0">
+              <li className="time">10th: {item.tenTh}%</li>
+              <li className="privacy">12th: {item.twelveTh}%</li>
+              <li className="required">Graduation: {item.graduationMarks}%</li>
             </ul>
-            {/* End .job-other-info */}
-
-            <button className="bookmark-btn">
-              <span className="flaticon-bookmark"></span>
-            </button>
           </div>
         </div>
       </div>
-      // End all jobs
-    ));
+    </div>
+  ));
 
   // sort handler
-  const sortHandler = (e) => {
-    dispatch(addSort(e.target.value));
-  };
-
-  // per page handler
-  const perPageHandler = (e) => {
-    const pageData = JSON.parse(e.target.value);
-    dispatch(addPerPage(pageData));
-  };
 
   // clear all filters
   const clearAll = () => {
-    dispatch(addKeyword(""));
-    dispatch(addLocation(""));
-    dispatch(addDestination({ min: 0, max: 100 }));
-    dispatch(addCategory(""));
-    dispatch(clearJobType());
-    dispatch(clearJobTypeToggle());
-    dispatch(addDatePosted(""));
-    dispatch(clearDatePostToggle());
-    dispatch(clearExperience());
-    dispatch(clearExperienceToggle());
-    dispatch(addSalary({ min: 0, max: 20000 }));
-    dispatch(addTag(""));
-    dispatch(addSort(""));
-    dispatch(addPerPage({ start: 0, end: 0 }));
+    dispatch(clearInstituteFilter());
   };
 
+  const hasActiveFilters =
+    keyword !== "" ||
+    gender.length !== 0 ||
+    admissionYear !== "" ||
+    marks.tenth[0] !== 0 ||
+    marks.tenth[1] !== 100 ||
+    marks.twelfth[0] !== 0 ||
+    marks.twelfth[1] !== 100 ||
+    marks.graduation[0] !== 0 ||
+    marks.graduation[1] !== 100 ||
+    Object.values(exclude || {}).some(Boolean); // ✅ FIX
   return (
     <>
       <div className="ls-switcher">
@@ -210,29 +246,15 @@ const FilterJobsBox = () => {
               <span className="icon icon-filter"></span> Filter
             </button>
           </div>
-          {/* Collapsible sidebar button */}
 
           <div className="text">
-            Show <strong>{content?.length}</strong> jobs
+            Showing <strong>{currentStudents.length}</strong> of{" "}
+            <strong>{filteredStudents.length}</strong> students
           </div>
         </div>
-        {/* End show-result */}
 
         <div className="sort-by">
-          {keyword !== "" ||
-          location !== "" ||
-          destination?.min !== 0 ||
-          destination?.max !== 100 ||
-          category !== "" ||
-          jobType?.length !== 0 ||
-          datePosted !== "" ||
-          experience?.length !== 0 ||
-          salary?.min !== 0 ||
-          salary?.max !== 20000 ||
-          tag !== "" ||
-          sort !== "" ||
-          perPage.start !== 0 ||
-          perPage.end !== 0 ? (
+          {hasActiveFilters && (
             <button
               onClick={clearAll}
               className="btn btn-danger text-nowrap me-2"
@@ -240,70 +262,70 @@ const FilterJobsBox = () => {
             >
               Clear All
             </button>
-          ) : undefined}
-
-          <select
-            value={sort}
-            className="chosen-single form-select"
-            onChange={sortHandler}
-          >
-            <option value="">Sort by (default)</option>
-            <option value="asc">Newest</option>
-            <option value="des">Oldest</option>
-          </select>
-          {/* End select */}
-
-          <select
-            onChange={perPageHandler}
-            className="chosen-single form-select ms-3 "
-            value={JSON.stringify(perPage)}
-          >
-            <option
-              value={JSON.stringify({
-                start: 0,
-                end: 0,
-              })}
-            >
-              All
-            </option>
-            <option
-              value={JSON.stringify({
-                start: 0,
-                end: 10,
-              })}
-            >
-              10 per page
-            </option>
-            <option
-              value={JSON.stringify({
-                start: 0,
-                end: 20,
-              })}
-            >
-              20 per page
-            </option>
-            <option
-              value={JSON.stringify({
-                start: 0,
-                end: 30,
-              })}
-            >
-              30 per page
-            </option>
-          </select>
-          {/* End select */}
+          )}
         </div>
       </div>
-      {/* End top filter bar box */}
+
+      {/* ✅ Student List */}
       {content}
-      {/* <!-- List Show More --> */}
-{/*       <div className="ls-show-more">
-        <p>Show 36 of 497 Jobs</p>
-        <div className="bar">
-          <span className="bar-inner" style={{ width: "40%" }}></span>
-        </div>
-        <button className="show-more">Show More</button>
-      </div> */}
+
+      {/* ✅ Pagination UI (MOVED HERE) */}
+      <div className="pagination-area mt-4 text-center flex-wrap d-flex justify-content-center">
+        <button
+          className="btn btn-outline-secondary me-2"
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((prev) => prev - 1)}
+        >
+          ← Prev
+        </button>
+
+        {getPageNumbers().map((page, index) =>
+          page === "..." ? (
+            <span key={index} className="mx-2">
+              ...
+            </span>
+          ) : (
+            <button
+              key={index}
+              className={`btn me-1 ${
+                currentPage === page ? "btn-primary" : "btn-outline-primary"
+              }`}
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+            </button>
+          ),
+        )}
+
+        <button
+          className="btn btn-outline-secondary ms-2"
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage((prev) => prev + 1)}
+        >
+          Next →
+        </button>
+      </div>
+
+      <>
+        {/* your existing JSX */}
+
+        <style jsx global>{`
+          @media only screen and (max-width: 599px) {
+            .job-block .job-other-info {
+              margin-top: 0px !important;
+              margin-left: 0px !important;
+            }
+          }
+          .pagination-area {
+            flex-wrap: wrap;
+            gap: 5px;
+          }
+
+          .pagination-area button {
+            min-width: 40px;
+          }
+        `}</style>
+      </>
     </>
   );
 };

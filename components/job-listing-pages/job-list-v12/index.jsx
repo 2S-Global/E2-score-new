@@ -9,9 +9,10 @@ import FilterJobsBox from "./FilterJobsBox";
 import FilterSidebar from "./FilterSidebar";
 import MapJobFinder from "../components/MapJobFinder";
 import Select from "react-select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
+import { useSearchParams } from "next/navigation";
+import axios from "axios";
 const index = () => {
   const router = useRouter();
 
@@ -19,6 +20,11 @@ const index = () => {
   const [selectProgram, setSelectProgram] = useState(null);
   const [semesterOptions, setSemesterOptions] = useState([]);
   const [selectedSemester, setSelectedSemester] = useState(null);
+
+  const searchParams = useSearchParams();
+
+  const courseParam = searchParams.get("course");
+  const semesterParam = searchParams.get("semester");
   const handleProgramSelect = (selectedOption) => {
     setSelectProgram(selectedOption);
 
@@ -35,6 +41,65 @@ const index = () => {
     setSelectedSemester(null);
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem("Institute_token");
+
+    const fetchPrograms = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/institute-course/course`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+
+        const data = res?.data?.data.map((item) => ({
+          label:
+            item?.type !== "custom"
+              ? item?.name + "(" + item?.type + ")"
+              : item?.name,
+          value: item?._id,
+          totalSem: Number(item?.total_number_of_semesters || 0),
+          structure: item?.courseStructure || "semester",
+        }));
+
+        setProgramData(data || []);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchPrograms();
+  }, []);
+
+  useEffect(() => {
+    if (programData.length && courseParam) {
+      const selected = programData.find(
+        (p) => String(p.value) === String(courseParam),
+      );
+
+      if (selected) {
+        setSelectProgram(selected);
+
+        // generate semesters
+        const sems = Array.from({ length: selected.totalSem }, (_, i) => ({
+          label: `${i + 1}`,
+          value: i + 1,
+        }));
+
+        setSemesterOptions(sems);
+
+        // set semester from param
+        if (semesterParam) {
+          const sem = sems.find(
+            (s) => String(s.value) === String(semesterParam),
+          );
+          setSelectedSemester(sem || null);
+        }
+      }
+    }
+  }, [programData, courseParam, semesterParam]);
+
   const handleSemesterSelect = (option) => {
     setSelectedSemester(option);
   };
@@ -47,12 +112,12 @@ const index = () => {
   const handleSearch = () => {
     const query = new URLSearchParams();
 
-    if (filters.course) query.append("course", filters.course);
+    if (selectProgram) query.append("course", selectProgram.value);
+
     if (selectedSemester) query.append("semester", selectedSemester.value);
 
     router.push(`/institute-dashboard/search-details?${query.toString()}`);
   };
-
   return (
     <>
       {/* <!-- Header Span --> */}
@@ -117,19 +182,25 @@ const index = () => {
                             <hr className="mt-4 mb-3" />
 
                             <div className="d-flex gap-2">
-                              <button
+                              {/* <button
                                 className="btn btn-outline-secondary px-4"
                                 onClick={resetFilters}
                               >
                                 Reset
-                              </button>
+                              </button> */}
 
                               <button
-                                className="btn btn-primary px-4"
+                                className={`btn px-4 ${
+                                  !selectProgram || !selectedSemester
+                                    ? "btn-secondary"
+                                    : "btn-primary"
+                                }`}
                                 onClick={handleSearch}
+                                disabled={!selectProgram || !selectedSemester}
                               >
                                 Search
                               </button>
+                              
                             </div>
                           </div>
                         </div>
@@ -153,12 +224,12 @@ const index = () => {
             </div>
             {/* End filter column for tablet and mobile devices */}
 
-            <div className="filters-column hidden-1023 col-lg-4 col-md-12 col-sm-12">
+            <div className="filters-column hidden-1023 col-lg-3 col-md-12 col-sm-12">
               <FilterSidebar />
             </div>
             {/* <!-- End Filters Column --> */}
 
-            <div className="content-column col-lg-8 col-md-12 col-sm-12">
+            <div className="content-column col-lg-9 col-md-12 col-sm-12">
               <div className="ls-outer">
                 <FilterJobsBox />
                 {/* <!-- ls Switcher --> */}

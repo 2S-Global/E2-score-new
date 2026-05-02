@@ -62,6 +62,11 @@ const filterInstitute = createSlice({
         twelfth: [0, 100],
         graduation: [0, 100],
       };
+
+      state.studentList.exclude = {
+        interview: false,
+        placed: false,
+      }; // ✅ FIX
     },
   },
 });

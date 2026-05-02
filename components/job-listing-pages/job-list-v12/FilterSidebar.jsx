@@ -27,7 +27,7 @@ const FilterSidebar = () => {
         {/* End .close filter */}
 
         <div className="filter-block">
-          <h4>Search Student (Name / USN)</h4>
+          <h4>Search Student (Name )</h4>
           <div className="form-group">
             <SearchBox />
           </div>
