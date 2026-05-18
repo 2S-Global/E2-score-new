@@ -40,9 +40,12 @@ const FormContent2 = () => {
       router.push("/admin/dashboard");
     } else if (localStorage.getItem("employer_token")) {
       router.push("/employers-dashboard/dashboard");
-    } else if (localStorage.getItem("Institute_token")) {
-      router.push("/institute-dashboard/dashboard");
-    } else {
+    } 
+    
+    // else if (localStorage.getItem("Institute_token")) {
+    //   router.push("/institute-dashboard/dashboard");
+    // } 
+    else {
       setHasToken(false);
     }
   }, []);
