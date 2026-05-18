@@ -32,7 +32,6 @@ const FormInfoBox = ({ setActiveTab }) => {
     address: "",
     website: "",
     established: "",
-
     allowinsearch: true,
     about: "",
     logo: null,

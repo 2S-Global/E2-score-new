@@ -54,7 +54,9 @@ const FormContent2 = () => {
     setSuccess(null);
 
     try {
-      const response = await axios.post(`${apiurl}/api/auth/login`, formData);
+      const response = await axios.post(`${apiurl}/api/auth/login`, formData,{
+        withCredentials: true
+      });
 
       //check if response is successful
       if (!response.data.success) {
@@ -90,7 +92,8 @@ const FormContent2 = () => {
         }
       } else if (role == "3") {
         localStorage.setItem("Institute_token", token);
-        router.push("/institute-dashboard/dashboard");
+        window.location.href = "https://services.geisil.com/";
+        //router.push("/institute-dashboard/dashboard");
       }
     } catch (err) {
       setError(err.response?.data?.message || "Login failed. Try again.");
