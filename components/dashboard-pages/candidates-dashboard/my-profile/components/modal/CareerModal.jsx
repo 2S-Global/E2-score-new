@@ -109,9 +109,7 @@ const CareerModal = ({
   const fetchLocations = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        `${apiurl}/api/sql/dropdown/get_india_cities `
-      );
+      const response = await axios.get(`${apiurl}/api/sql/dropdown/get_cities`);
       if (response.data.success) {
         const data = response.data.data;
         setLocations(
@@ -119,7 +117,7 @@ const CareerModal = ({
             label: city.city_name,
             value: city.id,
             popular_location: city.popular_location,
-          }))
+          })),
         );
       }
     } catch (error) {
@@ -132,7 +130,7 @@ const CareerModal = ({
   useEffect(() => {
     if (!locations) return;
     const popularLocationsineffect = locations.filter(
-      (loc) => loc.popular_location === 1
+      (loc) => loc.popular_location === 1,
     );
     setPopularLocations(popularLocationsineffect);
   }, [locations]);
@@ -149,7 +147,7 @@ const CareerModal = ({
 
   const loadOptions = (inputValue, callback) => {
     const filtered = locations.filter((loc) =>
-      loc.label.toLowerCase().includes(inputValue.toLowerCase())
+      loc.label.toLowerCase().includes(inputValue.toLowerCase()),
     );
 
     const popular = filtered.filter((loc) => loc.popular_location === 1);
@@ -182,7 +180,7 @@ const CareerModal = ({
     setLoading(true);
     try {
       const response = await axios.get(
-        `${apiurl}/api/sql/dropdown/get_industry `
+        `${apiurl}/api/sql/dropdown/get_industry `,
       );
       if (response.data.success) {
         setIndustry(response.data.data);
@@ -197,7 +195,7 @@ const CareerModal = ({
     setLoading(true);
     try {
       const response = await axios.get(
-        `${apiurl}/api/sql/dropdown/get_job_departments?industry_id=${formData.industry} `
+        `${apiurl}/api/sql/dropdown/get_job_departments?industry_id=${formData.industry} `,
       );
       if (response.data.success) {
         setDepartment(response.data.data);
@@ -212,7 +210,7 @@ const CareerModal = ({
     setLoading(true);
     try {
       const response = await axios.get(
-        `${apiurl}/api/sql/dropdown/get_job_roles?department_id=${formData.department} `
+        `${apiurl}/api/sql/dropdown/get_job_roles?department_id=${formData.department} `,
       );
       if (response.data.success) {
         setJob_role(response.data.data);
@@ -291,7 +289,7 @@ const CareerModal = ({
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.data.success) {
@@ -465,7 +463,7 @@ const CareerModal = ({
                         onChange={() =>
                           handleCommaSeparatedCheckbox(
                             "job_type",
-                            "Contractual"
+                            "Contractual",
                           )
                         }
                       />
@@ -495,7 +493,7 @@ const CareerModal = ({
                         onChange={() =>
                           handleCommaSeparatedCheckbox(
                             "employment_type",
-                            "Full-time"
+                            "Full-time",
                           )
                         }
                       />
@@ -518,7 +516,7 @@ const CareerModal = ({
                         onChange={() =>
                           handleCommaSeparatedCheckbox(
                             "employment_type",
-                            "Part-time"
+                            "Part-time",
                           )
                         }
                       />
@@ -573,7 +571,7 @@ const CareerModal = ({
                     defaultOptions={groupedDefaultOptions}
                     loadOptions={loadOptions}
                     value={locations.filter((option) =>
-                      formData.work_location.includes(option.value)
+                      formData.work_location.includes(String(option.value)),
                     )}
                     placeholder="Tell us your location preferences to work"
                     className="basic-multi-select"
@@ -621,7 +619,7 @@ const CareerModal = ({
                       type="text"
                       inputMode="numeric"
                       value={Number(
-                        formData.expected_salary || 0
+                        formData.expected_salary || 0,
                       ).toLocaleString("en-IN")}
                       className="form-control"
                       placeholder="Enter expected salary"
