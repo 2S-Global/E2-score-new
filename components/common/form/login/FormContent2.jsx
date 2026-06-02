@@ -38,9 +38,10 @@ const FormContent2 = () => {
       router.push("/candidates-dashboard/dashboard");
     } else if (localStorage.getItem("Super_token")) {
       router.push("/admin/dashboard");
-    } else if (localStorage.getItem("employer_token")) {
-      router.push("/employers-dashboard/dashboard");
     } 
+    /* else if (localStorage.getItem("employer_token")) {
+      router.push("/employers-dashboard/dashboard");
+    }  */
     
     // else if (localStorage.getItem("Institute_token")) {
     //   router.push("/institute-dashboard/dashboard");
