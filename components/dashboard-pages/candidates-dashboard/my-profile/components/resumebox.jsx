@@ -35,7 +35,7 @@ const ResumeBox = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       const { fileUrl, fileName, updatedAt } = response.data.data;
@@ -79,7 +79,7 @@ const ResumeBox = () => {
           month: "short",
           day: "2-digit",
           year: "numeric",
-        })
+        }),
       );
 
       const formData = new FormData();
@@ -102,7 +102,7 @@ const ResumeBox = () => {
               "Content-Type": "multipart/form-data",
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         if (!response.data.success) {
           setError(response.data.message);
@@ -120,7 +120,7 @@ const ResumeBox = () => {
         setLoading(false);
       }
     },
-    [apiurl]
+    [apiurl],
   );
 
   const UploadButton = ({
@@ -170,7 +170,7 @@ const ResumeBox = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (!response.data.success) {
@@ -277,47 +277,53 @@ const ResumeBox = () => {
             {transcriptFile ? (
               <>
                 <div className="row align-items-center">
-                  <div className="col-md-6">
+                  <div className="col-md-5">
                     <p className="resume-file fw-semibold mb-1">
                       {transcriptFile.name}
                     </p>
+
                     {uploadDate && (
-                      <p className="upload-date text-muted">
+                      <p className="upload-date text-muted mb-0">
                         Uploaded on {uploadDate}
                       </p>
                     )}
                   </div>
-                  <div className="col-md-6 d-flex gap-3 justify-content-md-end mt-3 mt-md-0">
-                    {resumeUrl && (
-                      <a
-                        href={resumeUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn-outline-success btn-sm d-flex align-items-center gap-2"
+
+                  <div className="col-md-7 mt-3 mt-md-0">
+                    <div className="d-flex flex-wrap gap-2 justify-content-md-end">
+                      {resumeUrl && (
+                        <a
+                          href={resumeUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-outline-success btn-sm d-flex align-items-center justify-content-center gap-2"
+                        >
+                          <Download size={16} />
+                          <span>Download</span>
+                        </a>
+                      )}
+
+                      <button
+                        onClick={handledownloadfullpdf}
+                        className="btn btn-outline-success btn-sm d-flex align-items-center justify-content-center gap-2"
+                        disabled={downloadLoading}
                       >
                         <Download size={16} />
-                        Download
-                      </a>
-                    )}
-                    <button
-                      onClick={handledownloadfullpdf}
-                      className="btn btn-outline-success btn-sm d-flex align-items-center gap-2"
-                      disabled={downloadLoading}
-                      style={{ opacity: downloadLoading ? 0.5 : 1 }}
-                    >
-                      <Download size={16} />
-                      {downloadLoading
-                        ? "Downloading..."
-                        : "Download Report PDF"}
-                    </button>
+                        <span>
+                          {downloadLoading
+                            ? "Downloading..."
+                            : "Download Report PDF"}
+                        </span>
+                      </button>
 
-                    <button
-                      onClick={confirmDelete}
-                      className="btn btn-outline-danger btn-sm d-flex align-items-center gap-2"
-                    >
-                      <Trash2 size={16} />
-                      Delete
-                    </button>
+                      <button
+                        onClick={confirmDelete}
+                        className="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center gap-2"
+                      >
+                        <Trash2 size={16} />
+                        <span>Delete</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </>

@@ -30,7 +30,7 @@ const DashboardCandidatesSidebar = () => {
       </div>
       {/* End sidebar close icon */}
 
-      <div className="sidebar-inner">
+      <div className="sidebar-inner" style={{ overflowY: "auto" }}>
         <ul className="navigation">
           {candidatesuData.map((item) => (
             <li
