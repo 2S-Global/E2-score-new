@@ -157,7 +157,10 @@ const QuickActionSidebar = ({
           position: "fixed", // ✅ valid here now
         }}
       >
-        <div className="sidebar-inner">
+        <div className="sidebar-inner" style={{
+            overflowY: "auto",
+            height: "109vh"
+          }}>
           <h5>Quick Actions</h5>
           <ul className="navigation">
             {sections.map((section) => (
