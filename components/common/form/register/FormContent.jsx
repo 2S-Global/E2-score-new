@@ -7,6 +7,7 @@ import MessageComponent from "../../ResponseMsg";
 import AutoDetectPhoneInput from "../phonenumber";
 import {generateStrongPassword} from "../../../../utils/generatePassword"
 import Tooltip from '@mui/material/Tooltip';
+import "./from.css"
 const FormContent = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -146,6 +147,30 @@ const handelValidation=()=>{
         />
       </div>
 
+       <div className="form-group mb-1">
+        <label>DOB</label>
+        <input
+          type="date"
+          name="dob"
+          placeholder="dob"
+          required
+          value={formData.dob}
+          onChange={handleChange}
+        />
+      </div>
+
+       <div className="form-group mb-1">
+        <label>Father Name</label>
+        <input
+          type="text"
+          name="father_name"
+          placeholder="father name"
+          required
+          value={formData.father_name}
+          onChange={handleChange}
+        />
+      </div>
+
       <div className="form-group mb-1">
         <label>Email Address</label>
         <input
@@ -168,6 +193,9 @@ const handelValidation=()=>{
           required
         />
       </div> */}
+
+
+
 
       <AutoDetectPhoneInput
         phone={formData.phone_number}
