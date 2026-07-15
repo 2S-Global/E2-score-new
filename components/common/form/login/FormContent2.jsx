@@ -81,7 +81,8 @@ const FormContent2 = () => {
       } else if (role == "1") {
         localStorage.setItem("candidate_token", token);
           localStorage.setItem("Role", role);
-        router.push("/candidates-dashboard/dashboard");
+       // router.push("/candidates-dashboard/dashboard");
+       window.location.href = "https://services.geisil.com/loading";
       } else if (role == "2") {
         localStorage.setItem("employer_token", token);
         localStorage.setItem("employer_name", employerName);
@@ -94,10 +95,10 @@ const FormContent2 = () => {
         } else {
           router.push("/employers-dashboard/dashboard");
         } */
-        window.location.href = "https://services.geisil.com/employer";
+        window.location.href = "https://services.geisil.com/loading";
       } else if (role == "3") {
         localStorage.setItem("Institute_token", token);
-        window.location.href = "https://services.geisil.com/institute";
+        window.location.href = "https://services.geisil.com/loading";
         //router.push("/institute-dashboard/dashboard");
       }
     } catch (err) {
